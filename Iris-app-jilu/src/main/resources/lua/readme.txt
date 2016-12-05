@@ -1,1 +1,1 @@
-用户可以在这里编写自己的 lua 脚本文件，然后在 luaCache 类中通过 构造方法指定 classpath:lua 来加载这些脚本文件
+用户可以在这里编写自己的 lua 脚本文件，然后在 LuaCache 类中通过 构造方法指定 classpath:lua 来加载这些脚本文件
