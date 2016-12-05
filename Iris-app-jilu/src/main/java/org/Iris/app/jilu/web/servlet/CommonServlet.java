@@ -26,7 +26,7 @@ public class CommonServlet extends IrisServlet<IrisSession> {
 		super.init(config);
 		
 		// 初始化普通模块的 action
-		actions.put("mobileCodeGet", 				new CAPTCHA_GET());
+		actions.put("captchaGet", 				new CAPTCHA_GET());
 	}
 
 	@Override

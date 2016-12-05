@@ -27,6 +27,8 @@
 		<property name="captchaCountLifeTime" value="${captcha.count.lift.time}" />
 	</bean>
 	
+	<bean id="userService" class="org.Iris.app.jilu.service.realm.user.UserService" />
+	
 	<import resource="spring-mybatis.xml" />
 	<import resource="spring-redis.xml"/>
 </beans>

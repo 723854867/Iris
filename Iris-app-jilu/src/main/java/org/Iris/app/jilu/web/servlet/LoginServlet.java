@@ -5,12 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.common.JiLuParams;
 import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.service.realm.user.User;
+import org.Iris.app.jilu.service.realm.user.UserService;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.app.jilu.web.IrisServlet;
 import org.Iris.app.jilu.web.IrisSession;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
+import org.Iris.core.service.locale.ICode;
 import org.Iris.redis.operate.lua.LuaOperate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +23,8 @@ public class LoginServlet extends IrisServlet<IrisSession> {
 	
 	@Autowired
 	private LuaOperate luaOperate;
+	@Autowired
+	private UserService userService;
 
 	@Override
 	protected IrisSession buildSession(HttpServletRequest req, HttpServletResponse resp) {
@@ -34,12 +39,16 @@ public class LoginServlet extends IrisServlet<IrisSession> {
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
-			if (!luaOperate.delIfEquals(RedisKeyGenerator.getCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA))) {
+			if (!luaOperate.delIfEquals(RedisKeyGenerator.getAccountCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA))) {
 				session.write(Result.jsonError(JiLuCode.CAPTCHA_ERROR));
 				return;
 			}
 			
-			
+			User user = userService.login(type, account);
+			if (null == user) {
+				session.write(Result.jsonError(ICode.Code.USER_NOT_EXIST));
+				return;
+			}
 			break;
 		case WECHAT:
 			break;

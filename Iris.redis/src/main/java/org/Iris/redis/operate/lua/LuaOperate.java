@@ -17,6 +17,13 @@ public class LuaOperate {
 		return evalLua(command.name(), keyNum, params);
 	}
 	
+	/**
+	 * 如果 key 值存在并且值等于 value 则删除 value 然后返回 true，否则什么也不做返回 false
+	 * 
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public boolean delIfEquals(String key, String value) {
 		long flag = evalLua(LuaCommand.DEL_IF_EQUALS, 1, key, value);
 		return flag == 1;
