@@ -1,0 +1,12 @@
+/target/
+.svn
+META-INF
+target
+build
+*.class
+.*
+*.log
+*.log.*
+.idea
+*.iml
+bin
