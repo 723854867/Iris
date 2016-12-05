@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Error>
+	<RequestId>B1CD8F5A-8889-437D-ABAB-995019DE7CF4</RequestId>
+	<HostId>ram.aliyuncs.com</HostId>
+	<Code>InvalidTimeStamp.Format</Code>
+	<Message>Specified time stamp or date value is not well formatted.</Message>
+</Error>

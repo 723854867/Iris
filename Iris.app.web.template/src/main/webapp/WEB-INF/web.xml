@@ -1,0 +1,30 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>template</display-name>
+	<context-param>
+		<param-name>logbackConfigLocation</param-name>
+		<param-value>classpath:conf/logback.xml</param-value>
+	</context-param>	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:conf/spring/spring-context.xml</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.Iris.app.jilu.web.listener.IrisContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>hello</servlet-name>
+		<servlet-class>org.Iris.app.jilu.web.servlet.HelloWorld</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>hello</servlet-name>
+		<url-pattern>/hello</url-pattern>
+	</servlet-mapping>
+</web-app>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.Iris</groupId>
+		<artifactId>Iris</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>Iris.dispatcher</artifactId>
+	<name>Iris.dispatcher</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.Iris</groupId>
+			<artifactId>Iris.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.jetlang</groupId>
+			<artifactId>jetlang</artifactId>
+		</dependency>
+	</dependencies>
+</project>
