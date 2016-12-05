@@ -39,7 +39,7 @@ public class LuaCache {
 				String content = new String(buffer);
 				String sha1Key = DigestUtils.sha1Hex(content);
 				scripts.put(command.name(), new LuaScript(sha1Key, content));
-				logger.info("Lua script {} loaded!", command.name());
+				logger.info("Lua script {} is loaded!", command.name());
 			} catch (IOException e) {
 				logger.info("Lua script {} load failure!", command.name());
 			}
@@ -66,17 +66,25 @@ public class LuaCache {
 				return name.endsWith(LUA_SCRIPT_SUFFIX);
 			}
 		});
-		for (File f : files) 
-			addLuaScript(f.getName().replaceAll(LUA_SCRIPT_SUFFIX, StringUtil.EMPTY), f);
-		File[] directories = file.listFiles(new FileFilter() {
+		if (null != files) {
+			for (File f : files) 
+				addLuaScript(f.getName().replaceAll(LUA_SCRIPT_SUFFIX, StringUtil.EMPTY), f);
+			logger.info("Load {} lua script from {}!", files.length, file.getAbsoluteFile());
+		}
+		files = file.listFiles(new FileFilter() {
 			@Override
 			public boolean accept(File pathname) {
 				return file.isDirectory();
 			}
 		});
-		for (File directory : directories)
-			_scanning(directory);
-		logger.info("Load {} lua script from {}!", files.length, file.getAbsoluteFile());
+		if (null == files) 
+			return;
+		
+		for (File f : files) {
+			if (!f.exists() || f.isFile())
+				continue;
+			_scanning(f);
+		}
 	}
 	
 	public boolean addLuaScript(String cacheName, File file) throws IOException {
