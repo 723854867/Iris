@@ -2,7 +2,6 @@
 .svn
 META-INF
 target
-build
 *.class
 .*
 *.log
