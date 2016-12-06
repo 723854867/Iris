@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+	
+	</bean>
+
+	<bean id="defaultExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="150" />
+		<property name="maxPoolSize" value="300" />
+		<property name="daemon" value="true" />
+		<property name="keepAliveSeconds" value="120" />
+	</bean>
+
+	<bean id="messageContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer" scope="prototype">
+		<property name="connectionFactory" ref="jmsFactory" />
+		<property name="destinationName" value="" />
+		<property name="receiveTimeout" value="1000" />
+		<property name="taskExecutor" ref="defaultExecutor"/>
+		<property name="concurrentConsumers" value="5"/>
+	</bean>
+
+</beans>
