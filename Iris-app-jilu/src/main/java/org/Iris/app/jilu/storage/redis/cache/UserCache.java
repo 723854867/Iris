@@ -38,6 +38,6 @@ public class UserCache {
 	}
 	
 	private void _flushCache(MemMerchant memUser) { 
-		redisOperate.hmset(RedisKeyGenerator.getMemMerchantDataKey(memUser.getUid()), BeanUtils.beanToMap(memUser));
+		redisOperate.hmset(RedisKeyGenerator.getMemMerchantDataKey(memUser.getMerchat_id()), BeanUtils.beanToMap(memUser));
 	}
 }

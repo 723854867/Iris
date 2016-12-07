@@ -16,11 +16,11 @@ public class User {
 	
 	public User(MemMerchant memUser) {
 		this.memUser = memUser;
-		this.lock = RedisKeyGenerator.getUserLockKey(memUser.getUid());
+		this.lock = RedisKeyGenerator.getUserLockKey(memUser.getMerchat_id());
 	}
 	
-	public long getUid() { 
-		return memUser.getUid();
+	public long getMerchat_id() { 
+		return memUser.getMerchat_id();
 	}
 	
 	public String tryLock() { 
