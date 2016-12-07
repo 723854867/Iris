@@ -22,7 +22,7 @@ public class ListenerPostProcessor implements BeanPostProcessor, ApplicationCont
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 		if (bean instanceof JiLuMessageListener) {
-			JiLuMessageListener listener = (JiLuMessageListener)bean;
+			JiLuMessageListener<?> listener = (JiLuMessageListener<?>)bean;
 			DefaultMessageListenerContainer container = applicationContext.getBean(DefaultMessageListenerContainer.class);
 			container.setMessageListener(listener);
 			container.setDestination(new ActiveMQQueue(listener.getDestinationName()));

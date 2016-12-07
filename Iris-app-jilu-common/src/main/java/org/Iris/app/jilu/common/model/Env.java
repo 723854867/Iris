@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.model;
+package org.Iris.app.jilu.common.model;
 
 public enum Env {
 

@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.common;
 
-import org.Iris.app.jilu.model.Env;
+import org.Iris.app.jilu.common.model.Env;
 
 public class JiLuConfig {
 

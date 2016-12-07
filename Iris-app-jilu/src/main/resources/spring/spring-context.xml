@@ -9,16 +9,6 @@
 		<constructor-arg index="0" value="classpath:locale/locale_${locale}.properties" />
 	</bean>
 	
-	<bean id="jiLu" class="org.Iris.app.jilu.service.JiLu" init-method="start" destroy-method="stop">
-		<constructor-arg index="0" value="${app.name}" />
-	</bean>
-	
-	<bean id="errorHandler" class="org.Iris.app.jilu.web.handler.GsonResultErrorhandler" />
-	
-	<bean class="org.Iris.core.util.SpringContextUtil" />
-	
-	<bean id="userAuthenticator" class="org.Iris.app.jilu.web.auth.UserAuthenticator" />
-	
 	<bean class="org.Iris.app.jilu.common.JiLuConfig">
 		<property name="env" value="${env}" />
 		<property name="captchaDigit" value="${captcha.digit}" />
@@ -26,6 +16,17 @@
 		<property name="captchaCountMaximum" value="${captcha.count.maximum}" />
 		<property name="captchaCountLifeTime" value="${captcha.count.lift.time}" />
 	</bean>
+	
+	<bean id="jiLu" class="org.Iris.app.jilu.service.JiLu" init-method="start" destroy-method="stop">
+		<constructor-arg index="0" value="${app.name}" />
+		<property name="jmsService" ref="jmsService" />
+	</bean>
+	
+	<bean id="errorHandler" class="org.Iris.app.jilu.web.handler.GsonResultErrorhandler" />
+	
+	<bean class="org.Iris.core.util.SpringContextUtil" />
+	
+	<bean id="userAuthenticator" class="org.Iris.app.jilu.web.auth.UserAuthenticator" />
 	
 	<bean id="userService" class="org.Iris.app.jilu.service.realm.user.UserService" />
 	

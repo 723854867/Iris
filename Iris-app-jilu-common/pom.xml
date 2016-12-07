@@ -8,10 +8,25 @@
 		<artifactId>Iris</artifactId>
 		<version>1.0</version>
 	</parent>
-	
+
 	<artifactId>Iris-app-jilu-common</artifactId>
 	<name>Iris-app-jilu-common</name>
-	
+
 	<dependencies>
+		<dependency>
+			<groupId>org.Iris</groupId>
+			<artifactId>Iris.util</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.101tec</groupId>
+			<artifactId>zkclient</artifactId>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 	</dependencies>
 </project>

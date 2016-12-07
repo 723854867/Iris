@@ -1,16 +1,19 @@
 package org.Iris.app.jilu.service.jms;
 
-import java.io.IOException;
-
+import org.I0Itec.zkclient.ZkClient;
 import org.Iris.app.jilu.common.model.AccountType;
+import org.Iris.app.jilu.common.model.Env;
 import org.Iris.app.jilu.common.model.jms.CaptchaMessage;
 import org.Iris.app.jilu.common.model.jms.QueueName;
+import org.Iris.app.jilu.common.util.ZkUtil;
 import org.Iris.core.util.SpringActiveMQOperator;
 
 public class JmsService extends SpringActiveMQOperator {
-
-	public JmsService(String queueNamesConfigurationLocation) throws IOException {
-		super(queueNamesConfigurationLocation);
+	
+	private ZkClient zkClient;
+	
+	public void init(Env env) { 
+		this.queueNames = ZkUtil.loadConfiguration(zkClient, env);
 	}
 
 	/**
@@ -22,5 +25,9 @@ public class JmsService extends SpringActiveMQOperator {
 	 */
 	public void sendCaptchaMessage(AccountType type, String account, String captcha) {
 		sendMessage(QueueName.CAPTCHA, generateObjectCreator(new CaptchaMessage(type, account, captcha)));
+	}
+	
+	public void setZkClient(ZkClient zkClient) {
+		this.zkClient = zkClient;
 	}
 }

@@ -1,5 +1,12 @@
 package org.Iris.app.jilu;
 
+import java.util.List;
+import java.util.Map;
+
+import org.I0Itec.zkclient.ZkClient;
+import org.I0Itec.zkclient.serialize.BytesPushThroughSerializer;
+import org.I0Itec.zkclient.serialize.SerializableSerializer;
+
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
@@ -9,6 +16,7 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.google.gson.Gson;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
@@ -16,7 +24,11 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		testPhone("+86138888888");
+		ZkClient zkClient = new ZkClient("121.42.155.96:2181", 5000, 5000, new BytesPushThroughSerializer());
+		byte[] buffer = zkClient.readData("/configuration/jilu", true);
+		System.out.println(new String(buffer));
+		Map<String, String> map = new Gson().fromJson(new String(buffer), Map.class);
+		System.out.println(map);
 	}
 	
 	public static void testPhone(String mobile) throws NumberParseException { 

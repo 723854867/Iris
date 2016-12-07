@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.Iris</groupId>
@@ -23,6 +24,7 @@
 		<mybatis.version>3.4.1</mybatis.version>
 		<logback.version>1.1.7</logback.version>
 		<logback.version>1.1.7</logback.version>
+		<zkclient.version>0.10</zkclient.version>
 		<jetlang.version>0.2.17</jetlang.version>
 		<HikariCP.version>2.5.1</HikariCP.version>
 		<activemq.version>5.14.1</activemq.version>
@@ -265,6 +267,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
+			<dependency>
+				<groupId>com.101tec</groupId>
+				<artifactId>zkclient</artifactId>
+				<version>${zkclient.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -331,6 +339,6 @@
 		<module>Iris.core</module>
 		<module>Iris-app-jilu</module>
 		<module>Iris-app-jilu-consumer</module>
-    <module>Iris-app-jilu-common</module>
-  </modules>
+		<module>Iris-app-jilu-common</module>
+	</modules>
 </project>
