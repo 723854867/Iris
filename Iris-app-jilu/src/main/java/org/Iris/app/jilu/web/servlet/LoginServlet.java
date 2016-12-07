@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.common.JiLuParams;
-import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.user.User;
 import org.Iris.app.jilu.service.realm.user.UserService;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;

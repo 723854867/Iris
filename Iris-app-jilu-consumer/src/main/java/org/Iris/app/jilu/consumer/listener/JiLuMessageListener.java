@@ -1,12 +1,15 @@
 package org.Iris.app.jilu.consumer.listener;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class JiLuMessageListener implements MessageListener {
+public abstract class JiLuMessageListener<T> implements MessageListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(JiLuMessageListener.class);
 	
@@ -22,11 +25,22 @@ public abstract class JiLuMessageListener implements MessageListener {
 	@Override
 	public void onMessage(Message message) {
 		try {
-			logger.info("ActiveMQ message received, id={}", message.getJMSMessageID());
+			logger.info("ActiveMQ message received, id = {}", message.getJMSMessageID());
 			handleMessage(message);
 		} catch (Throwable e) {
 			logger.error("ActiveMQ message process error!", e);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T getObject(Message message) throws JMSException { 
+		ObjectMessage om = (ObjectMessage) message;
+		return (T) om.getObject();
+	}
+	
+	protected String getText(Message message) throws JMSException { 
+		TextMessage tm = (TextMessage) message;
+		return tm.getText();
 	}
 	
 	public void setDestinationName(String destinationName) {

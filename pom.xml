@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.Iris</groupId>
@@ -39,6 +38,7 @@
 		<httpclient.async.version>4.1.2</httpclient.async.version>
 		<mysql-connector-java.version>6.0.5</mysql-connector-java.version>
 
+		<assembly.version>2.6</assembly.version>
 		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -290,6 +290,35 @@
 						<skipTests>true</skipTests>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<excludes>
+							<exclude>src/main/resources/</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${assembly.version}</version>
+					<executions>
+						<execution>
+							<id>make-assembly</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<descriptors>
+									<descriptor>src/main/assembly/assembly.xml</descriptor>
+								</descriptors>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -301,7 +330,7 @@
 		<module>Iris.app.web.template</module>
 		<module>Iris.core</module>
 		<module>Iris-app-jilu</module>
-		<module>Iris.aliyun</module>
 		<module>Iris-app-jilu-consumer</module>
-	</modules>
+    <module>Iris-app-jilu-common</module>
+  </modules>
 </project>
