@@ -3,7 +3,7 @@ package org.Iris.app.jilu.service.action.common;
 import org.Iris.app.jilu.common.ContentCheckUtil;
 import org.Iris.app.jilu.common.JiLuConfig;
 import org.Iris.app.jilu.common.JiLuParams;
-import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.model.Env;
 import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;

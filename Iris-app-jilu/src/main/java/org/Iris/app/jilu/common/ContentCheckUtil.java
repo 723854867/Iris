@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.common;
 
-import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.core.exception.IllegalConstException;
 
 import com.google.i18n.phonenumbers.NumberParseException;

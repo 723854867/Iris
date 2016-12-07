@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+		<constructor-arg index="0">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL" value="failover:(tcp://121.42.155.96:61616)" />
+				<property name="useAsyncSend" value="true" />
+				<property name="userName" value="admin" />
+				<property name="password" value="admin" />
+			</bean>
+		</constructor-arg>
+		<property name="maxConnections" value="100"/>
+	</bean>
+	
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="jmsFactory" />
+		<property name="explicitQosEnabled" value="true" /> 
+		<property name="deliveryPersistent" value="true" />
+	</bean>
+	
+</beans>

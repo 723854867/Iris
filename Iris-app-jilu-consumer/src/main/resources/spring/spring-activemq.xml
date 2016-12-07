@@ -4,7 +4,15 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
-	
+		<constructor-arg index="0">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL" value="failover:(tcp://121.42.155.96:61616)" />
+				<property name="useAsyncSend" value="true" />
+				<property name="userName" value="admin" />
+				<property name="password" value="admin" />
+			</bean>
+		</constructor-arg>
+		<property name="maxConnections" value="100"/>
 	</bean>
 
 	<bean id="defaultExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">

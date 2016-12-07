@@ -31,4 +31,5 @@
 	
 	<import resource="spring-mybatis.xml" />
 	<import resource="spring-redis.xml"/>
+	<import resource="spring-activemq.xml"/>
 </beans>

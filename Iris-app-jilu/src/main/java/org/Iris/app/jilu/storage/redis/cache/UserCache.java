@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.storage.redis.cache;
 
-import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.storage.mybatis.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;

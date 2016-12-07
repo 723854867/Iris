@@ -2,7 +2,7 @@ package org.Iris.app.jilu.storage.redis;
 
 import java.text.MessageFormat;
 
-import org.Iris.app.jilu.model.AccountType;
+import org.Iris.app.jilu.common.model.AccountType;
 
 public class RedisKeyGenerator {
 
