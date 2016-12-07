@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 public interface MemMerchantMapper {
 	
 	@SelectProvider(type = MemMerchantSQLBuilder.class, method = "getById")
-	MemMerchant getById(long uid);
+	MemMerchant getById(long merchat_id);
 	
 	MemMerchant getByAccount(@Param("type") int type, @Param("account") String account);
 	
