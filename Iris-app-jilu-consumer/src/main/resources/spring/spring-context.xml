@@ -18,6 +18,15 @@
 			</bean>
 		</property>
    	</bean>
+   	
+   	<bean id="emailSender" class="org.Iris.util.network.email.SmtpEmailSender" init-method="init">
+   		<property name="auth" value="${mail.smtp.auth}"/>
+   		<property name="host" value="${mail.smtp.host} "/>
+   		<property name="username" value="${mail.username}" />
+   		<property name="password" value="${mail.passowrd} "/>
+   		<property name="senderName" value="${mail.sender.name}" />
+   		<property name="senderEmail" value="${mail.sender.email}" />
+   	</bean>
     
     <context:component-scan base-package="org.Iris.app.jilu.consumer" /> 
 </beans>

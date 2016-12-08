@@ -9,6 +9,7 @@ import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.app.jilu.web.IrisSession;
 import org.Iris.app.jilu.web.JiLuCode;
+import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.util.common.KeyUtil;
@@ -25,6 +26,8 @@ public class CAPTCHA_GET extends CommonAction {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
 		// 检验 手机/邮箱 格式 
 		String account = ContentCheckUtil.INSTANCE.checkAccount(type, session.getKVParam(JiLuParams.ACCOUNT));
+		if (null == account)
+			throw IllegalConstException.errorException(JiLuParams.ACCOUNT);
 		String captchaKey = RedisKeyGenerator.getAccountCaptchaKey(type, account);
 		String captchaCountKey = RedisKeyGenerator.getAccountCaptchaCountKey(type, account);
 		

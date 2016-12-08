@@ -48,4 +48,9 @@ public class CaptchaMessage implements Serializable {
 	public void setCaptcha(String captcha) {
 		this.captcha = captcha;
 	}
+	
+	@Override
+	public String toString() {
+		return type.name() + "-" + account + "-" + captcha;
+	}
 }

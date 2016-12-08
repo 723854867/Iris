@@ -15,8 +15,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
 import org.Iris.util.network.Protocol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SmtpEmailSender {
+	
+	private static final Logger logger = LoggerFactory.getLogger(SmtpEmailSender.class);
 	
 	private int port = 25;
 	private String host;
@@ -44,6 +48,7 @@ public class SmtpEmailSender {
 			};
 		}
 		this.from = String.format("%1$s <%2$s>", MimeUtility.encodeText(this.senderName, "UTF-8", "B"), this.senderEmail);
+		logger.info("SMTP email sender init success!");
 	}
 	
 	/**
