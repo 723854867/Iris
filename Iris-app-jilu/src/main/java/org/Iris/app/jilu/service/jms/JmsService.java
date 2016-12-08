@@ -24,7 +24,7 @@ public class JmsService extends SpringActiveMQOperator {
 	 * @param code
 	 */
 	public void sendCaptchaMessage(AccountType type, String account, String captcha) {
-		sendMessage(QueueName.CAPTCHA, generateObjectCreator(new CaptchaMessage(type, account, captcha)));
+		sendMessage(getQueueName(QueueName.CAPTCHA), generateObjectCreator(new CaptchaMessage(type, account, captcha)));
 	}
 	
 	public void setZkClient(ZkClient zkClient) {

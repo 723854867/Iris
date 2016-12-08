@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.common;
 
 import org.Iris.app.jilu.common.ContentCheckUtil;
-import org.Iris.app.jilu.common.JiLuConfig;
+import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.JiLuParams;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.common.model.Env;
@@ -29,20 +29,21 @@ public class CAPTCHA_GET extends CommonAction {
 		String captchaCountKey = RedisKeyGenerator.getAccountCaptchaCountKey(type, account);
 		
 		// 生成验证码并且缓存验证码
-		String captcha = KeyUtil.randomCaptcha(JiLuConfig.getCaptchaDigit());
+		String captcha = KeyUtil.randomCaptcha(AppConfig.getCaptchaDigit());
 		long flag = luaOperate.recordCaptcha(captchaKey, captchaCountKey, captcha, 
-				JiLuConfig.getCaptchaLifeTime(), JiLuConfig.getCaptchaCountMaximum(), JiLuConfig.getCaptchaCountLifeTime());
+				AppConfig.getCaptchaLifeTime(), AppConfig.getCaptchaCountMaximum(), AppConfig.getCaptchaCountLifeTime());
 		if (-1 == flag) 
 			return Result.jsonError(JiLuCode.CAPTCHA_GET_CD);
 		if (-2 == flag)
 			return Result.jsonError(JiLuCode.CAPTCHA_COUNT_LIMIT);
-		Env env = JiLuConfig.getEnv();
+		Env env = AppConfig.getEnv();
 		switch (env) {
 		case LOCAL:											// 测试环境下直接返回验证码
 		case TEST:
+			jmsService.sendCaptchaMessage(type, account, captcha);
 			return Result.jsonSuccess(captcha);				
 		case ONLINE:										// 线上环境需要发送短信
-			// TODO: 发送短信代码
+			jmsService.sendCaptchaMessage(type, account, captcha);
 			return Result.jsonSuccess();					
 		default:
 			return Result.jsonError(ICode.Code.SYSTEM_ERROR);

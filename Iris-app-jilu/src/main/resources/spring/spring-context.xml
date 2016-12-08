@@ -4,17 +4,17 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     			 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-        
-	<bean id="lang" class="org.Iris.app.jilu.service.JiLuLang">
-		<constructor-arg index="0" value="classpath:locale/locale_${locale}.properties" />
-	</bean>
-	
-	<bean class="org.Iris.app.jilu.common.JiLuConfig">
+    			 
+    <bean class="org.Iris.app.jilu.common.AppConfig">
 		<property name="env" value="${env}" />
 		<property name="captchaDigit" value="${captcha.digit}" />
 		<property name="captchaLifeTime" value="${captcha.life.time}" />
 		<property name="captchaCountMaximum" value="${captcha.count.maximum}" />
 		<property name="captchaCountLifeTime" value="${captcha.count.lift.time}" />
+	</bean>
+        
+	<bean id="lang" class="org.Iris.app.jilu.service.JiLuLang">
+		<constructor-arg index="0" value="classpath:locale/locale_${locale}.properties" />
 	</bean>
 	
 	<bean id="jiLu" class="org.Iris.app.jilu.service.JiLu" init-method="start" destroy-method="stop">

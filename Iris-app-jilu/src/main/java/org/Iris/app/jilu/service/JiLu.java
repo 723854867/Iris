@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.service;
 
-import org.Iris.app.jilu.common.JiLuConfig;
+import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.service.jms.JmsService;
 import org.Iris.core.App;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class JiLu extends App {
 		logger.info("App - {} startup!", name);
 		
 		// init jms service
-		this.jmsService.init(JiLuConfig.getEnv());
+		this.jmsService.init(AppConfig.getEnv());
 	}
 
 	@Override

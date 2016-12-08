@@ -25,7 +25,7 @@ public class ListenerPostProcessor implements BeanPostProcessor, ApplicationCont
 			JiLuMessageListener<?> listener = (JiLuMessageListener<?>)bean;
 			DefaultMessageListenerContainer container = applicationContext.getBean(DefaultMessageListenerContainer.class);
 			container.setMessageListener(listener);
-			container.setDestination(new ActiveMQQueue(listener.getDestinationName()));
+			container.setDestination(new ActiveMQQueue(listener.getDestination()));
 			if (listener.getConcurrentConsumers() > 0) 
 				container.setConcurrentConsumers(listener.getConcurrentConsumers());
 			container.start();

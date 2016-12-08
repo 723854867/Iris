@@ -4,6 +4,20 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     			 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    			 
+   	<bean id="queueNames" class="org.Iris.app.jilu.consumer.QueueNames" init-method="init">
+   		<property name="env" value="${env}" />
+   		<property name="zkClient">
+			<bean class="org.I0Itec.zkclient.ZkClient">
+				<constructor-arg name="zkServers" value="121.42.155.96:2181" />
+				<constructor-arg name="sessionTimeout" value="5000" />
+				<constructor-arg name="connectionTimeout" value="5000" />
+				<constructor-arg name="zkSerializer" >
+					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
+				</constructor-arg>
+			</bean>
+		</property>
+   	</bean>
     
     <context:component-scan base-package="org.Iris.app.jilu.consumer" /> 
 </beans>

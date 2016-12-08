@@ -12,6 +12,7 @@ public class Main {
 	private static volatile boolean running = true;
 
 	public static void main(String[] args) {
+		System.setProperty("logback.configurationFile", "classpath:logback.xml");
 		context = new ClassPathXmlApplicationContext("classpath:spring/spring-*.xml");
 		context.start();
 		logger.info("JiLu mqconsumer start!");
