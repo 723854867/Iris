@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.web.handler;
 
-import org.Iris.app.jilu.web.IrisSession;
+import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

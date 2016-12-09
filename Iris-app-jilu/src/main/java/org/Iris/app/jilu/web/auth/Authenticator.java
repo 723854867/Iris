@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.web.auth;
 
-import org.Iris.app.jilu.web.IrisSession;
+import org.Iris.app.jilu.web.session.IrisSession;
 
 /**
  * 请求验证器

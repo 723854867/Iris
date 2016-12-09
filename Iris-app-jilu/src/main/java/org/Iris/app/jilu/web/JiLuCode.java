@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.web;
 
-import org.Iris.app.jilu.common.JiLuParams;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.util.lang.StringUtil;
 

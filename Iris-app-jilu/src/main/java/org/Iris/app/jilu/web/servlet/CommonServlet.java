@@ -8,11 +8,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.Iris.app.jilu.common.JiLuParams;
 import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.service.action.common.CAPTCHA_GET;
+import org.Iris.app.jilu.service.action.common.CREATE;
+import org.Iris.app.jilu.service.action.common.LOGIN;
 import org.Iris.app.jilu.web.IrisServlet;
-import org.Iris.app.jilu.web.IrisSession;
+import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
 
 public class CommonServlet extends IrisServlet<IrisSession> {
@@ -26,7 +28,9 @@ public class CommonServlet extends IrisServlet<IrisSession> {
 		super.init(config);
 		
 		// 初始化普通模块的 action
-		actions.put("captchaGet", 				new CAPTCHA_GET());
+		actions.put("captchaGet", 				CAPTCHA_GET.INSTANCE);
+		actions.put("login", 					LOGIN.INSTANCE);
+		actions.put("create", 					CREATE.INSTANCE);
 	}
 
 	@Override

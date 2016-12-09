@@ -22,13 +22,9 @@
 		<property name="jmsService" ref="jmsService" />
 	</bean>
 	
-	<bean id="errorHandler" class="org.Iris.app.jilu.web.handler.GsonResultErrorhandler" />
+	<context:component-scan base-package="org.Iris.app.jilu" /> 
 	
 	<bean class="org.Iris.core.util.SpringContextUtil" />
-	
-	<bean id="userAuthenticator" class="org.Iris.app.jilu.web.auth.UserAuthenticator" />
-	
-	<bean id="userService" class="org.Iris.app.jilu.service.realm.user.UserService" />
 	
 	<import resource="spring-mybatis.xml" />
 	<import resource="spring-redis.xml"/>

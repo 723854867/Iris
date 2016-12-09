@@ -75,17 +75,6 @@
 	</dependencies>
 
 	<build>
-		<filters>
-			<filter>${basedir}/build/${env}.properties</filter>
-		</filters>
-
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +85,17 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<filters>
+			<filter>${basedir}/build/${env}.properties</filter>
+		</filters>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 
 	<profiles>

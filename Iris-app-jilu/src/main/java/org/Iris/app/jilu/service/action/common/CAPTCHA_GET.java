@@ -1,15 +1,13 @@
 package org.Iris.app.jilu.service.action.common;
 
-import org.Iris.app.jilu.common.ContentCheckUtil;
 import org.Iris.app.jilu.common.AppConfig;
-import org.Iris.app.jilu.common.JiLuParams;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.common.model.Env;
 import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
-import org.Iris.app.jilu.web.IrisSession;
 import org.Iris.app.jilu.web.JiLuCode;
-import org.Iris.core.exception.IllegalConstException;
+import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.util.common.KeyUtil;
@@ -20,14 +18,15 @@ import org.Iris.util.common.KeyUtil;
  * @author ahab
  */
 public class CAPTCHA_GET extends CommonAction {
+	
+	public static final CAPTCHA_GET INSTANCE				= new CAPTCHA_GET();
+	
+	private CAPTCHA_GET() {}
 
 	@Override
 	protected String execute0(IrisSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
-		// 检验 手机/邮箱 格式 
-		String account = ContentCheckUtil.INSTANCE.checkAccount(type, session.getKVParam(JiLuParams.ACCOUNT));
-		if (null == account)
-			throw IllegalConstException.errorException(JiLuParams.ACCOUNT);
+		String account = type == AccountType.MOBILE ? session.getKVParam(JiLuParams.MOBILE) : session.getKVParam(JiLuParams.EMAIL);
 		String captchaKey = RedisKeyGenerator.getAccountCaptchaKey(type, account);
 		String captchaCountKey = RedisKeyGenerator.getAccountCaptchaCountKey(type, account);
 		
@@ -43,7 +42,6 @@ public class CAPTCHA_GET extends CommonAction {
 		switch (env) {
 		case LOCAL:											// 测试环境下直接返回验证码
 		case TEST:
-			jmsService.sendCaptchaMessage(type, account, captcha);
 			return Result.jsonSuccess(captcha);				
 		case ONLINE:										// 线上环境需要发送短信
 			jmsService.sendCaptchaMessage(type, account, captcha);

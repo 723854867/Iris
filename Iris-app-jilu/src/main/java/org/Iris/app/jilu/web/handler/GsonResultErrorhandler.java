@@ -2,14 +2,16 @@ package org.Iris.app.jilu.web.handler;
 
 import java.text.MessageFormat;
 
-import org.Iris.app.jilu.web.IrisSession;
+import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.consts.IrisConst;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+@Component(value = "errorHandler")
 public class GsonResultErrorhandler implements ErrorHandler {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GsonResultErrorhandler.class);

@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.service.action;
 
-import org.Iris.app.jilu.web.IrisSession;
+import org.Iris.app.jilu.web.session.IrisSession;
 
 public abstract class CommonAction implements IAction<IrisSession> {
 

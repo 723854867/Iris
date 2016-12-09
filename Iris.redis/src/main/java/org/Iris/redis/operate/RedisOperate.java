@@ -13,11 +13,29 @@ public class RedisOperate {
 
 	protected JedisPool pool;
 	
+	public long del(String... keys) { 
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.del(keys);
+			}
+		});
+	}
+	
 	public String get(String key) {
 		return invoke(new RedisInvocation<String>() {
 			@Override
 			public String invok(Jedis jedis) {
 				return jedis.get(key);
+			}
+		});
+	}
+	
+	public String set(String key, String value) { 
+		return invoke(new RedisInvocation<String>() {
+			@Override
+			public String invok(Jedis jedis) {
+				return jedis.set(key, value);
 			}
 		});
 	}
