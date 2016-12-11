@@ -5,14 +5,27 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class MemMerchantSQLBuilder {
 	
-	public String getById() {
+	public String getByMerchantId() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(Table.MEM_MERCHANT.mark());
-				WHERE("merchant_id=#{id}");
+				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
 	}
-	
+
+	public String insert() { 
+		return new SQL() {
+			{
+				INSERT_INTO(Table.MEM_MERCHANT.mark());
+				VALUES("name", 				"#{name}");
+				VALUES("address", 			"#{address}");
+				VALUES("avatar", 			"#{avatar}");
+				VALUES("last_login_time", 	"#{lastLoginTime}");
+				VALUES("created", 			"#{created}");
+				VALUES("updated", 			"#{updated}");
+			}
+		}.toString();
+	}
 }

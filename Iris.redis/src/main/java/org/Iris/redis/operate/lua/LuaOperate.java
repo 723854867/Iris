@@ -1,9 +1,15 @@
 package org.Iris.redis.operate.lua;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.Iris.redis.RedisConsts;
 import org.Iris.redis.RedisHashLuaSerializableBean;
 import org.Iris.redis.operate.RedisOperate;
 import org.Iris.redis.operate.RedisOperate.RedisInvocation;
+import org.Iris.util.reflect.BeanUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisNoScriptException;
@@ -52,6 +58,17 @@ public class LuaOperate {
 	 */
 	public long recordCaptcha(String codeKey, String countKey, String code, long codeLifeTime, long countMaxinum, long countLiftTime) {
 		return evalLua(LuaCommand.RECORD_CAPTCHA, 2, codeKey, countKey, code, String.valueOf(codeLifeTime), String.valueOf(countMaxinum), String.valueOf(countLiftTime));
+	}
+	
+	public <T> T hdelAndGet(String key, T bean) { 
+		List<String> list = evalLua(LuaCommand.HDEL_AND_GET, 1, key);
+		if (list.isEmpty())
+			return null;
+	    Map<String, String> hash = new HashMap<String, String>(list.size()/2, 1);
+	    Iterator<String> iterator = list.iterator();
+	    while (iterator.hasNext())
+	    	hash.put(iterator.next(), iterator.next());
+	    return BeanUtils.mapToBean(hash, bean);
 	}
 	
 	@SuppressWarnings("unchecked")

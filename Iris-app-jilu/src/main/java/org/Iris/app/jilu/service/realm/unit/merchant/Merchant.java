@@ -20,15 +20,24 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 	 * 商户登陆动作
 	 * 
 	 */
-	public void login(String account) {
-		// 删除老的 token
-		if (null != unit.getToken()) 
-			redisOperate.del(RedisKeyGenerator.getTokenUidKey(unit.getToken()));
+	public boolean login(String account) {
+		String lockId = tryLock();
+		if (null == lockId) 
+			return false;
 		
-		// 生成新的 token 并且写入
-		String token = IrisSecurity.encodeToken(account);
-		unit.setToken(token);
-		unitCache.flushHashBean(unit);
-		redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
+		try {
+			// 删除老的 token
+			if (null != unit.getToken()) 
+				redisOperate.del(RedisKeyGenerator.getTokenUidKey(unit.getToken()));
+			
+			// 生成新的 token 并且写入
+			String token = IrisSecurity.encodeToken(account);
+			unit.setToken(token);
+			unitCache.flushHashBean(unit);
+			redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
+			return true;
+		} finally {
+			unLock(lockId);
+		}
 	}
 }

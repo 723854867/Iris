@@ -44,4 +44,6 @@ public interface JiLuParams {
 	final IrisStrConst CAPTCHA								= new IrisStrConst("captcha", 107);
 	final IrisStrConst AVATAR								= new IrisStrConst("avatar", 108);
 	final IrisStrConst ADDRESS								= new IrisStrConst("address", 109);
+	final IrisStrConst TOKEN								= new IrisStrConst("token", 110);
+	final IrisStrConst NAME									= new IrisStrConst("name", 111);
 }
