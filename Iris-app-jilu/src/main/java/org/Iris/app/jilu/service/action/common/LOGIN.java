@@ -1,12 +1,12 @@
 package org.Iris.app.jilu.service.action.common;
 
+import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.app.jilu.web.form.MerchantForm;
 import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;

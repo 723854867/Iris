@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.web.form;
+package org.Iris.app.jilu.common.bean.form;
 
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
