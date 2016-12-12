@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.storage.redis.cache;
 
 import org.Iris.app.jilu.common.model.AccountType;
-import org.Iris.app.jilu.storage.mybatis.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.operate.RedisOperate;
@@ -21,7 +21,7 @@ public class UserCache {
 		MemMerchant memUser = redisOperate.hgetAll(RedisKeyGenerator.getMemMerchantDataKey(uid), new MemMerchant());
 		if (null != memUser)
 			return memUser;
-		memUser = memUserMapper.getById(uid);
+		memUser = memUserMapper.getByMerchantId(uid);
 		if (null == memUser)
 			return null;
 		_flushCache(memUser);
@@ -38,6 +38,6 @@ public class UserCache {
 	}
 	
 	private void _flushCache(MemMerchant memUser) { 
-		redisOperate.hmset(RedisKeyGenerator.getMemMerchantDataKey(memUser.getMerchatId()), BeanUtils.beanToMap(memUser));
+		redisOperate.hmset(RedisKeyGenerator.getMemMerchantDataKey(memUser.getMerchantId()), BeanUtils.beanToMap(memUser));
 	}
 }
