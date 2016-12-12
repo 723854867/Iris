@@ -21,7 +21,7 @@ public interface ICode extends IrisConst<String> {
 		AUTH_FAIL(4, "auth fail"),
 		REQUEST_FREQUENTLY(5, "request frequently"),
 		
-		USER_NOT_EXIST(50, "user not exist");
+		UNIT_NOT_EXIST(50, "unit not exist");
 		
 		private int code;
 		private String defaultVaule;

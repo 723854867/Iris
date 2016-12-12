@@ -46,6 +46,4 @@
 		<property name="luaOperate" ref="luaOperate" />
 		<property name="lockTimeout" value="${redis.lock.timeout}" />
 	</bean>
-
-
 </beans>

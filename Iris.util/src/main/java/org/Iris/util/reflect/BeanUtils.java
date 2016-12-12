@@ -17,8 +17,12 @@ public class BeanUtils {
 	public static <T> Map<String, String> beanToMap(T bean) {
 		Map<String, String> map = new HashMap<String, String>();
 		BeanMap beanMap = BeanMap.create(bean);
-		for (Object key : beanMap.keySet())  
-			map.put(key.toString(), beanMap.get(key).toString());
+		for (Object key : beanMap.keySet())  {
+			Object value = beanMap.get(key);
+			if (null == value)
+				continue;
+			map.put(key.toString(), value.toString());
+		}
 		return map;
 	}
 

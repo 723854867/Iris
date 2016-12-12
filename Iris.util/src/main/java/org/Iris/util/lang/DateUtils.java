@@ -10,6 +10,10 @@ public class DateUtils {
 	public static final String yyyyMMdd = "yyyyMMdd";
 	public static final String ISO8601_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	
+	public static int currentTime() {
+		return (int) (System.currentTimeMillis() / 1000);
+	}
+	
 	/**
 	 * {@link #getUTCDate(long)}
 	 * @return

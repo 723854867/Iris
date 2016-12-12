@@ -119,6 +119,11 @@
 			<groupId>com.101tec</groupId>
 			<artifactId>zkclient</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -170,9 +175,9 @@
 		</profile>
 
 		<profile>
-			<id>onlie</id>
+			<id>online</id>
 			<properties>
-				<env>onlie</env>
+				<env>online</env>
 			</properties>
 		</profile>
 	</profiles>

@@ -3,6 +3,8 @@ package org.Iris.app.jilu.common;
 import org.Iris.app.jilu.common.model.Config;
 
 public class AppConfig extends Config {
+	
+	public static final int CREATE_WAIT_TIMEOUT					= 180;
 
 	private static int captchaDigit;							// 验证码位数
 	private static int captchaLifeTime;							// 验证码有效时间
