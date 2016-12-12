@@ -9,10 +9,52 @@ public class MemMerchantSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Table.MEM_USER.mark());
+				FROM(Table.MEM_MERCHANT.mark());
 				WHERE("uid=${uid}");
 			}
 		}.toString();
 	}
 	
+	public String getByAccount(){
+		return "select a.* from "+Table.MEM_MERCHANT.mark()+" a,"+Table.MEM_ACCOUNT.mark()+" b "
+				+ "where a.merchant_id = b.merchant_id and b.account='${account}' and b.type='${type}'";
+	}
+	
+	public String insert(){
+		return new SQL(){
+			{
+				INSERT_INTO(Table.MEM_MERCHANT.mark());
+				VALUES("merchant_id","${merchantId}");
+				VALUES("statusMod","${statusMod}");
+				VALUES("name","${name}");
+				VALUES("mobile","${mobile}");
+				VALUES("address","${address}");
+				VALUES("avatar","${avatar}");
+				VALUES("QRCode","${QRCode}");
+				VALUES("lastLoginTime","${lastLoginTime}");
+				VALUES("lastPurchaseTime","${lastPurchaseTime}");
+				VALUES("created","${created}");
+				VALUES("updated","${updated}");
+			}
+		}.toString();
+	}
+	
+	public String update(){
+		return new SQL(){
+			{
+				UPDATE(Table.MEM_MERCHANT.mark());
+				SET("merchant_id=${merchantId}");
+				SET("statusMod=${statusMod}");
+				SET("name=${name}");
+				SET("mobile=${mobile}");
+				SET("address=${address}");
+				SET("avatar=${avatar}");
+				SET("QRCode=${QRCode}");
+				SET("lastLoginTime=${lastLoginTime}");
+				SET("lastPurchaseTime=${lastPurchaseTime}");
+				SET("updated=${updated}");
+				WHERE("merchant_id=${merchantId}");
+			}
+		}.toString();
+	}
 }

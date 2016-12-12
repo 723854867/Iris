@@ -2,7 +2,8 @@ package org.Iris.app.jilu.storage.mybatis;
 
 public enum Table {
 
-	MEM_USER("mem_merchant");
+	MEM_MERCHANT("mem_merchant"),
+	MEM_ACCOUNT("mem_account");
 	
 	private String mark;
 	
