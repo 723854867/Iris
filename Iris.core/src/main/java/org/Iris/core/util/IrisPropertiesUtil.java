@@ -60,7 +60,7 @@ public class IrisPropertiesUtil {
 		try {
 			File f = ResourceUtil.getFile(file);
 			in = new FileInputStream(f);
-			properties.load(in);
+			properties.load(new InputStreamReader(in, CharsetUtil.UTF_8));
 		} catch (FileNotFoundException e) {
 			throw new IrisIOException(file + " not found!", e);
 		} catch (IOException e) {

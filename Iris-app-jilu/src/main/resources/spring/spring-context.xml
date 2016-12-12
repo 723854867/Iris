@@ -20,6 +20,7 @@
 	<bean id="jiLu" class="org.Iris.app.jilu.service.JiLu" init-method="start" destroy-method="stop">
 		<constructor-arg index="0" value="${app.name}" />
 		<property name="jmsService" ref="jmsService" />
+		<property name="locale" ref="lang" />
 	</bean>
 	
 	<context:component-scan base-package="org.Iris.app.jilu" /> 
