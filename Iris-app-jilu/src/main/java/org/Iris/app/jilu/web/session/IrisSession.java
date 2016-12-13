@@ -5,11 +5,14 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.consts.IrisConst;
+import org.Iris.core.consts.IrisStrConst;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.exception.IrisRuntimeException;
 import org.Iris.util.common.ConstsPool;
 import org.Iris.util.common.MiMeType;
+import org.Iris.util.lang.StringUtil;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -79,6 +82,13 @@ public class IrisSession {
 	public IrisSession setHeader(String name, String value) {
 		response.setHeader(name, value);
 		return this;
+	}
+	
+	public String getHeader(IrisStrConst constant) {
+		String value = request.getHeader(constant.key());
+		if (!StringUtil.hasText(value))
+			throw IllegalConstException.errorException(JiLuParams.TOKEN);
+		return constant.parse(value);
 	}
 
 	public IrisSession write(String reply) {

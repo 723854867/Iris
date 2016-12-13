@@ -13,8 +13,6 @@ import org.Iris.app.jilu.web.handler.ErrorHandler;
 import org.Iris.app.jilu.web.handler.ErrorHandler.DefaultErrorHandler;
 import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
-import org.Iris.core.service.bean.Result;
-import org.Iris.core.service.locale.ICode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -41,7 +39,7 @@ public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServl
 	@Autowired
 	private ErrorHandler errorHandler;
 	
-	protected Authenticator authenticator;
+	protected Authenticator<SESSION> authenticator;
 	
 	@Override
 	public void init() throws ServletException {
@@ -73,10 +71,8 @@ public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServl
 	private void _receive(HttpServletRequest request, HttpServletResponse response) {
 		SESSION session = buildSession(request, response);
 		try {
-			if (null != authenticator && !authenticator.auth(session)) {
-				session.write(Result.jsonError(ICode.Code.AUTH_FAIL));
+			if (null != authenticator && !authenticator.auth(session))
 				return;
-			}
 			
 			receive(session);
 		} catch (IllegalConstException e) {

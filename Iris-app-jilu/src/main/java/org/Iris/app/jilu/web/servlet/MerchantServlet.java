@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.action.UnitAction;
+import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
+import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
+import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_UPDATE;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.web.IrisServlet;
 import org.Iris.app.jilu.web.JiLuParams;
@@ -39,6 +42,11 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 	public void init() throws ServletException {
 		super.init();
 		this.authenticator = SpringContextUtil.getBean("merchantAuthenticator", MerchantAuthenticator.class);
+		
+		serialActions.put("logout", 			LOGOUT.INSTANCE);
+		serialActions.put("merchantUpdate", 	MERCHANT_UPDATE.INSTANCE);
+		
+		parallelActions.put("merchantQuery", 	MERCHANT_QUERY.INSTANCE);
 	}
 	
 	@Override

@@ -2,10 +2,12 @@ package org.Iris.app.jilu.storage.redis.cache;
 
 import javax.annotation.Resource;
 
+import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
+import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,5 +57,18 @@ public class UnitCache extends RedisCache {
 		}
 	
 		return getMerchantByMerchantId(memAccount.getMerchantId());
+	}
+	
+	/**
+	 * 根据 Token 获取用户数据
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public Merchant getMerchantByToken(String token) {
+		String val = redisOperate.get(RedisKeyGenerator.getTokenUidKey(token));
+		if (null == val)
+			return null;
+		return new Merchant(getMerchantByMerchantId(Long.valueOf(val)));
 	}
 }

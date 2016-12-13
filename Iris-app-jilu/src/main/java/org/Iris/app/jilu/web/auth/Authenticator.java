@@ -7,7 +7,7 @@ import org.Iris.app.jilu.web.session.IrisSession;
  * 
  * @author Ahab
  */
-public interface Authenticator {
+public interface Authenticator<SESSION extends IrisSession> {
 	
 	/**
 	 * 请求验证
@@ -15,5 +15,5 @@ public interface Authenticator {
 	 * @param session
 	 * @return
 	 */
-	boolean auth(IrisSession session);
+	boolean auth(SESSION session);
 }

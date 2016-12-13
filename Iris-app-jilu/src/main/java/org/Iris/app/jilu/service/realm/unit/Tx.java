@@ -42,22 +42,15 @@ public class Tx {
 		unitCache.flushHashBean(account);
 		return new Merchant(merchant);
 	}
+	
 	/**
 	 * 更新商户
 	 * @param merchant
 	 * @return
 	 */
 	@Transactional
-	public void updateMerchant(MemMerchant merchant){
+	public void updateMerchant(MemMerchant merchant) {
 		memMerchantMapper.update(merchant);
 		unitCache.flushHashBean(merchant);
-	}
-	/**
-	 * 通过商户id获取商户信息
-	 * @param merchantId
-	 * @return
-	 */
-	public MemMerchant queryMemMerchantById(long merchantId){
-		return unitCache.getMerchantByMerchantId(merchantId);
 	}
 }
