@@ -4,6 +4,7 @@ import org.Iris.app.jilu.service.realm.unit.UnitAdapter;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.util.common.IrisSecurity;
+import org.Iris.util.lang.DateUtils;
 
 /**
  * 商户
@@ -33,6 +34,7 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 			// 生成新的 token 并且写入
 			String token = IrisSecurity.encodeToken(account);
 			unit.setToken(token);
+			unit.setLastLoginTime(DateUtils.currentTime());
 			unitCache.flushHashBean(unit);
 			redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
 			return true;

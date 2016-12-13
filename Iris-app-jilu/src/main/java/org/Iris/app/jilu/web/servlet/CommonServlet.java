@@ -12,6 +12,9 @@ import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.service.action.common.CAPTCHA_GET;
 import org.Iris.app.jilu.service.action.common.CREATE;
 import org.Iris.app.jilu.service.action.common.LOGIN;
+import org.Iris.app.jilu.service.action.common.LOGINOUT;
+import org.Iris.app.jilu.service.action.common.MERCHANT_QUERY;
+import org.Iris.app.jilu.service.action.common.MERCHANT_UPDATE;
 import org.Iris.app.jilu.web.IrisServlet;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
@@ -31,6 +34,9 @@ public class CommonServlet extends IrisServlet<IrisSession> {
 		actions.put("captchaGet", 				CAPTCHA_GET.INSTANCE);
 		actions.put("login", 					LOGIN.INSTANCE);
 		actions.put("create", 					CREATE.INSTANCE);
+		actions.put("loginout", 				LOGINOUT.INSTANCE);
+		actions.put("merchantUpdate", 			MERCHANT_UPDATE.INSTANCE);
+		actions.put("merchantQuery", 			MERCHANT_QUERY.INSTANCE);
 	}
 
 	@Override

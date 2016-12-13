@@ -34,6 +34,15 @@ public class LuaOperate {
 		long flag = evalLua(LuaCommand.DEL_IF_EQUALS, 1, key, value);
 		return flag == 1;
 	}
+	/**
+	 * 如果key 存在 则删除 然后返回true 否则什么也不做返回false
+	 * @param key
+	 * @return
+	 */
+	public boolean delIfExist(String key){
+		long flag = evalLua(LuaCommand.DEL_IF_EXIST, 1, key);
+		return flag == 1;
+	}
 	
 	public boolean hmsetIfExist(RedisHashLuaSerializableBean bean) {
 		String result = evalLua(LuaCommand.HMSET_IF_EXIST.name(), 1, bean.serializeToLuaParams());

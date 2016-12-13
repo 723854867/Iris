@@ -28,4 +28,18 @@ public class MemMerchantSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String update(){
+		return new SQL(){
+			{
+				UPDATE(Table.MEM_MERCHANT.mark());
+				SET("name=#{name}");
+				SET("address=#{address}");
+				SET("avatar=#{avatar}");
+				SET("updated=#{updated}");
+				WHERE("merchant_id=#{merchantId}");
+				
+			}
+		}.toString();
+	}
 }

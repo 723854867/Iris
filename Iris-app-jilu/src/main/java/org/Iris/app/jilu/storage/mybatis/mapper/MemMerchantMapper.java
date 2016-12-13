@@ -5,6 +5,7 @@ import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemMerchantSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 public interface MemMerchantMapper {
 	
@@ -14,6 +15,6 @@ public interface MemMerchantMapper {
 	@InsertProvider(type = MemMerchantSQLBuilder.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "merchant_id", keyProperty = "merchantId")
 	void insert(MemMerchant memMerchant);
-	
+	@UpdateProvider(type = MemMerchantSQLBuilder.class, method = "update")
 	void update(MemMerchant memMerchant);
 }
