@@ -21,7 +21,7 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 	 * 商户登陆动作
 	 * 
 	 */
-	public boolean login(String account) {
+	public boolean login(String account, boolean create) {
 		String lockId = tryLock();
 		if (null == lockId) 
 			return false;
@@ -34,8 +34,12 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 			// 生成新的 token 并且写入
 			String token = IrisSecurity.encodeToken(account);
 			unit.setToken(token);
-			unit.setLastLoginTime(DateUtils.currentTime());
-			unitCache.flushHashBean(unit);
+			// 如果是正常的登录(创建用户也会调用  login)，则还需要更新最近一次登录时间
+			if (!create) {
+				unit.setLastLoginTime(DateUtils.currentTime());
+				tx.updateMerchant(unit);
+			} else 
+				unitCache.flushHashBean(unit);
 			redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
 			return true;
 		} finally {

@@ -29,7 +29,7 @@ public class CREATE extends CommonAction {
 		if (null == am)
 			throw IllegalConstException.errorException(JiLuParams.TOKEN);
 		Merchant merchant = tx.createMerchant(BeanCreator.newMemMerchant(name, avatar, address), am);
-		if (!merchant.login(am.getAccount()))
+		if (!merchant.login(am.getAccount(), true))
 			return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
 		return Result.jsonSuccess(new MerchantForm(merchant));
 	}

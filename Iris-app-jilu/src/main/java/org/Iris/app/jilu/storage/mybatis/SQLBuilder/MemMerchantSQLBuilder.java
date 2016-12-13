@@ -34,11 +34,14 @@ public class MemMerchantSQLBuilder {
 			{
 				UPDATE(Table.MEM_MERCHANT.mark());
 				SET("name=#{name}");
-				SET("address=#{address}");
 				SET("avatar=#{avatar}");
+				SET("QR_code=#{QRCode}");
 				SET("updated=#{updated}");
+				SET("address=#{address}");
+				SET("status_mod=#{statusMod}");
+				SET("last_login_time=#{lastLoginTime}");
+				SET("last_purchase_time=#{lastPurchaseTime}");
 				WHERE("merchant_id=#{merchantId}");
-				
 			}
 		}.toString();
 	}

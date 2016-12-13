@@ -10,6 +10,7 @@ import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.cache.UnitCache;
+import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +51,7 @@ public class Tx {
 	 */
 	@Transactional
 	public void updateMerchant(MemMerchant merchant) {
+		merchant.setUpdated(DateUtils.currentTime());
 		memMerchantMapper.update(merchant);
 		unitCache.flushHashBean(merchant);
 	}

@@ -49,7 +49,7 @@ public class LOGIN extends CommonAction {
 				return SerializeUtil.JsonUtil.GSON.toJson(result);
 			}
 			
-			if (!merchant.login(account))
+			if (!merchant.login(account, false))
 				return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
 			return Result.jsonSuccess(new MerchantForm(merchant));
 		case WECHAT:
