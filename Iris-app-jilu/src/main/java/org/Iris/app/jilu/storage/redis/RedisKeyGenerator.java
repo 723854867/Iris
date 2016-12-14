@@ -17,6 +17,8 @@ public class RedisKeyGenerator {
 	private static final String MEM_MERCHANT_DATA					= "hash:db:mem:merchant:{0}";
 	private static final String MEM_ACCOUNT_DATA					= "hash:db:mem:account:{0}";				
 	
+	private static final String ORDER_DATA							= "hash:db:order:{0}";
+	
 	public static String getUnitLockKey(UnitType type, long uid) { 
 		return MessageFormat.format(LOCK_UNIT, type.name(), String.valueOf(uid));
 	}
@@ -43,5 +45,9 @@ public class RedisKeyGenerator {
 	
 	public static String getMemAccountDataKey(String account) { 
 		return MessageFormat.format(MEM_ACCOUNT_DATA, account);
+	}
+	
+	public static String getOrderDataKey(String orderId){
+		return MessageFormat.format(ORDER_DATA, orderId);
 	}
 }

@@ -7,11 +7,11 @@ import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.lang.DateUtils;
 
-public class MERCHANT_UPDATE extends UnitAction<MerchantSession> {
+public class MERCHANT_EDIT extends UnitAction<MerchantSession> {
 	
-	public static final MERCHANT_UPDATE INSTANCE						 = new MERCHANT_UPDATE();
+	public static final MERCHANT_EDIT INSTANCE						 = new MERCHANT_EDIT();
 	
-	private MERCHANT_UPDATE() {}
+	private MERCHANT_EDIT() {}
 
 	@Override
 	protected String execute0(MerchantSession session) {
