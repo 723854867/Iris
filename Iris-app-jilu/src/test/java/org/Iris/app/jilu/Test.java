@@ -24,11 +24,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		ZkClient zkClient = new ZkClient("121.42.155.96:2181", 5000, 5000, new BytesPushThroughSerializer());
-		byte[] buffer = zkClient.readData("/configuration/jilu", true);
-		System.out.println(new String(buffer));
-		Map<String, String> map = new Gson().fromJson(new String(buffer), Map.class);
-		System.out.println(map);
+		testOss();
 	}
 	
 	public static void testPhone(String mobile) throws NumberParseException { 
@@ -40,31 +36,31 @@ public class Test {
 	}
 
 	public static void testOss() throws ServerException, ClientException {
-		// String policy = "{\n" +
-		// " \"Version\": \"1\", \n" +
-		// " \"Statement\": [\n" +
-		// " {\n" +
-		// " \"Action\": [\n" +
-		// " \"oss:GetBucket\", \n" +
-		// " \"oss:GetObject\" \n" +
-		// " ], \n" +
-		// " \"Resource\": [\n" +
-		// " \"acs:oss:*:*:*\"\n" +
-		// " ], \n" +
-		// " \"Effect\": \"Allow\"\n" +
-		// " }\n" +
-		// " ]\n" +
-		// "}";
-		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LWddt7duyV1fBG6W",
-				"zRJymjB8WNWOLhbBZQSUFQHJ2JdTEw");
+//		 String policy = "{\n" +
+//		 " \"Version\": \"1\", \n" +
+//		 " \"Statement\": [\n" +
+//		 " {\n" +
+//		 " \"Action\": [\n" +
+//		 " \"oss:GetBucket\", \n" +
+//		 " \"oss:GetObject\" \n" +
+//		 " ], \n" +
+//		 " \"Resource\": [\n" +
+//		 " \"acs:oss:*:*:*\"\n" +
+//		 " ], \n" +
+//		 " \"Effect\": \"Allow\"\n" +
+//		 " }\n" +
+//		 " ]\n" +
+//		 "}";
+		IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIvRMCnfXziorE",
+				"UigI9zkDhrQTqNLT9Nw5tS1XqwXwev");
 		DefaultAcsClient client = new DefaultAcsClient(profile);
 		final AssumeRoleRequest request = new AssumeRoleRequest();
 		request.setVersion("2015-04-01");
 		request.setMethod(MethodType.POST);
 		request.setProtocol(ProtocolType.HTTPS);
-		request.setRoleArn("acs:ram::1328034689228937:role/jilu");
+		request.setRoleArn("acs:ram::1328034689228937:role/jilu-oss");
 		request.setRoleSessionName("alice-001");
-		// request.setPolicy(policy);
+//		 request.setPolicy(policy);
 		AssumeRoleResponse response = client.getAcsResponse(request);
 		System.out.println(response.getRequestId());
 		System.out.println(response.getCredentials().getAccessKeyId());

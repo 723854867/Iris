@@ -2,6 +2,8 @@ package org.Iris.util.network;
 
 public enum Protocol {
 
+	HTTP("http"),
+	HTTPS("https"),
 	SMTP("smtp");
 	
 	private String mark;
