@@ -46,4 +46,6 @@ public interface JiLuParams {
 	final IrisStrConst ADDRESS								= new IrisStrConst("address", 109);
 	final IrisStrConst TOKEN								= new IrisStrConst("token", 110);
 	final IrisStrConst NAME									= new IrisStrConst("name", 111);
+	final IrisStrConst RECEIVEId							= new IrisStrConst("receiveId", 112);
+	final IrisStrConst GOODSLIST							= new IrisStrConst("goodsList", 113);
 }
