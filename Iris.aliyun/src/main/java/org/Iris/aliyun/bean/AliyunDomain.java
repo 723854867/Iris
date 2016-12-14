@@ -1,11 +1,11 @@
 package org.Iris.aliyun.bean;
 
-public enum SignatureVersion {
+public enum AliyunDomain {
 
-	V_1_POINT_0("1.0");
+	STS("sts.aliyuncs.com");
 	
 	private String mark;
-	private SignatureVersion(String mark) {
+	private AliyunDomain(String mark) {
 		this.mark = mark;
 	}
 	public String mark() {

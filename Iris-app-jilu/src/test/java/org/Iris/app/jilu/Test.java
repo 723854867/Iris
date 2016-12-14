@@ -6,8 +6,10 @@ import java.util.Map;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.serialize.BytesPushThroughSerializer;
 import org.I0Itec.zkclient.serialize.SerializableSerializer;
+import org.Iris.util.lang.DateUtils;
 
 import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.auth.ShaHmac1;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
@@ -24,7 +26,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public class Test {
 
 	public static void main(String[] args) throws Exception {
-		testOss();
+		System.out.println(DateUtils.getUTCDate());
 	}
 	
 	public static void testPhone(String mobile) throws NumberParseException { 

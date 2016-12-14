@@ -1,13 +1,14 @@
 package org.Iris.aliyun.bean;
 
-public enum Version {
+public enum Region {
 
-	V_2015_04_01("2015-04-01");
+	CN_HANGZHOU("cn-hangzhou");
 	
 	private String mark;
-	private Version(String mark) {
+	private Region(String mark) {
 		this.mark = mark;
 	}
+	
 	public String mark() {
 		return mark;
 	}

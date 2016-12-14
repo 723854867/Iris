@@ -3,12 +3,36 @@ package org.Iris.util.lang;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 public class DateUtils {
 
+	private final static String GMT_ZONE = "GMT";
+	
 	public static final String yyyyMMdd = "yyyyMMdd";
 	public static final String ISO8601_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	
+	/**
+	 * 获取当前时间的 iso 8601 格式
+	 * 
+	 * @return
+	 */
+	public static String getISO8601Time() {
+        return getISO8601Time(new Date());
+    }
+	
+	/**
+	 * 获取指定时间的 iso 8601 格式
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String getISO8601Time(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat(ISO8601_UTC);
+        df.setTimeZone(new SimpleTimeZone(0, GMT_ZONE));
+        return df.format(date);
+    }
 	
 	public static int currentTime() {
 		return (int) (System.currentTimeMillis() / 1000);
