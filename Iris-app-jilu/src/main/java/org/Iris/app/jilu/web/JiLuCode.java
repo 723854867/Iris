@@ -12,7 +12,8 @@ public enum JiLuCode implements ICode {
 	
 	CAPTCHA_GET_CD(201, "captcha get frequently"),
 	CAPTCHA_COUNT_LIMIT(202, "captcha count limit"),
-	CAPTCHA_ERROR(203, "captcha error");
+	CAPTCHA_ERROR(203, "captcha error"),
+	ORDER_IS_LOCK(204, "order is lock");
 	
 	private int code;
 	private String defaultVaule;

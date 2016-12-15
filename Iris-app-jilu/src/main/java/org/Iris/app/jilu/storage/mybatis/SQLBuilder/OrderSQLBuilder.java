@@ -5,11 +5,11 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class OrderSQLBuilder {
 
-	public String getOrderById(){
+	public String getByOrderId(){
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.ORDER.mark());
+				FROM(Table.ORDER_BASEINFO.mark());
 				WHERE("order_id=#{orderId}");
 			}
 		}.toString();
@@ -18,11 +18,11 @@ public class OrderSQLBuilder {
 	public String insert(){
 		return new SQL() {
 			{
-				INSERT_INTO(Table.ORDER.mark());
+				INSERT_INTO(Table.ORDER_BASEINFO.mark());
 				VALUES("order_id", 			"#{orderId}");
 				VALUES("receive_id", 		"#{receiveId}");
 				VALUES("parent_order_id", 	"#{parentOrderId}");
-				VALUES("not", 				"#{not}");
+				VALUES("note", 				"#{note}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
 			}
