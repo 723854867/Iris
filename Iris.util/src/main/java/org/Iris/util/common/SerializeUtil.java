@@ -25,11 +25,15 @@ public interface SerializeUtil {
 		 * @throws JAXBException
 		 */
 		@SuppressWarnings("unchecked")
-		public static <T> T xmlToBean(String xml, Class<T> clazz) throws JAXBException {
-			JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			T instance = (T) unmarshaller.unmarshal(new StringReader(xml));
-			return instance;
+		public static <T> T xmlToBean(String xml, Class<T> clazz)  {
+			try {
+				JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+				T instance = (T) unmarshaller.unmarshal(new StringReader(xml));
+				return instance;
+			} catch (JAXBException e) {
+				throw new RuntimeException("Serial failure!", e);
+			}
 		}
 	}
 }

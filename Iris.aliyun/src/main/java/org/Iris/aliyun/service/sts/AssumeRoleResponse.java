@@ -1,8 +1,14 @@
 package org.Iris.aliyun.service.sts;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.Iris.aliyun.bean.AssumedRoleUser;
 import org.Iris.aliyun.bean.Credentials;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "AssumeRoleResponse")
 public class AssumeRoleResponse {
 
 	private String RequestId;

@@ -42,6 +42,7 @@ public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServl
 	protected Authenticator<SESSION> authenticator;
 	
 	@Override
+	@SuppressWarnings("resource")
 	public void init() throws ServletException {
 		super.init();
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
