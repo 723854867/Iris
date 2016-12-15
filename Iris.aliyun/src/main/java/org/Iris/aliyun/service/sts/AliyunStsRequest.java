@@ -1,4 +1,4 @@
-package org.Iris.aliyun.service;
+package org.Iris.aliyun.service.sts;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -23,7 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 
-public class AliyunRequest {
+public class AliyunStsRequest {
 
 	private HttpMethod method = HttpMethod.POST;
 	private Protocol protocol = Protocol.HTTPS;
@@ -42,7 +42,7 @@ public class AliyunRequest {
 	 * @param accessKeyId
 	 * @param accessKeySecret
 	 */
-	public AliyunRequest(Action action, AliyunDomain domain, String accessKeyId, String accessKeySecret) {
+	public AliyunStsRequest(Action action, AliyunDomain domain, String accessKeyId, String accessKeySecret) {
 		this.domain = domain;
 		this.accessKeySecret = accessKeySecret;
 		this.params = new TreeMap<String, String>();
@@ -132,12 +132,12 @@ public class AliyunRequest {
 		}
 	}
 	
-	public AliyunRequest setMethod(HttpMethod method) {
+	public AliyunStsRequest setMethod(HttpMethod method) {
 		this.method = method;
 		return this;
 	}
 	
-	public AliyunRequest setRegion(Region region) { 
+	public AliyunStsRequest setRegion(Region region) { 
 		return addAliyunParam(AliyunParam.RegionId, region.mark());
 	}
 	
@@ -145,38 +145,38 @@ public class AliyunRequest {
 		return format;
 	}
 
-	public AliyunRequest setFormat(Format format) {
+	public AliyunStsRequest setFormat(Format format) {
 		this.format = format;
 		return addAliyunParam(AliyunParam.Format, format.name());
 	}
 	
-	public AliyunRequest setVersion(String version) {
+	public AliyunStsRequest setVersion(String version) {
 		return addAliyunParam(AliyunParam.Version, version);
 	}
 
-	public AliyunRequest setSignatureMethod(SignatureMethod signatureMethod) {
+	public AliyunStsRequest setSignatureMethod(SignatureMethod signatureMethod) {
 		this.signatureMethod = signatureMethod;
 		return addAliyunParam(AliyunParam.SignatureMethod, signatureMethod.mark());
 	}
 
-	public AliyunRequest setSignatureVersion(String signatureVersion) {
+	public AliyunStsRequest setSignatureVersion(String signatureVersion) {
 		return addAliyunParam(AliyunParam.SignatureVersion, signatureVersion);
 	}
 
-	public AliyunRequest setSignatureNonce(String signatureNonce) {
+	public AliyunStsRequest setSignatureNonce(String signatureNonce) {
 		return addAliyunParam(AliyunParam.SignatureNonce, signatureNonce);
 	}
 
-	public AliyunRequest setTimestamp(String timestamp) {
+	public AliyunStsRequest setTimestamp(String timestamp) {
 		return addAliyunParam(AliyunParam.Timestamp, timestamp);
 	}
 
-	protected AliyunRequest addAliyunParam(AliyunParam param, String value) {
+	protected AliyunStsRequest addAliyunParam(AliyunParam param, String value) {
 		this.params.put(param.key(), param.parse(value));
 		return this;
 	}
 
-	protected AliyunRequest addAliyunParamWithDefault(AliyunParam param) {
+	protected AliyunStsRequest addAliyunParamWithDefault(AliyunParam param) {
 		return addAliyunParam(param, param.defaultValue());
 	}
 

@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.common;
 
 import org.Iris.app.jilu.service.jms.JmsService;
-import org.Iris.app.jilu.service.realm.unit.Tx;
+import org.Iris.app.jilu.service.realm.Tx;
 import org.Iris.app.jilu.service.realm.unit.merchant.MerchantService;
 import org.Iris.app.jilu.storage.redis.cache.UnitCache;
 import org.Iris.core.util.SpringContextUtil;

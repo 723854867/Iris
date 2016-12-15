@@ -2,6 +2,7 @@ package org.Iris.aliyun;
 
 import org.Iris.aliyun.bean.Region;
 import org.Iris.core.consts.IrisConst;
+import org.Iris.core.exception.IllegalConstException;
 import org.Iris.util.common.uuid.AlternativeJdkIdGenerator;
 import org.Iris.util.lang.DateUtils;
 
@@ -43,7 +44,35 @@ public enum AliyunParam implements IrisConst<String> {
 	
 	Policy,
 	
-	DurationSeconds("3600");
+	DurationSeconds("3600") {
+		@Override
+		public String parse(String value) {
+			int val = Integer.valueOf(value);
+			if (val >= 900 && val <= 3600)
+				return value;
+			throw IllegalConstException.errorException(this);
+		}
+	},
+	
+	Authorization,
+	
+	Content_Length {
+		@Override
+		public String key() {
+			return "Content-Length";
+		}
+	},
+	
+	Content_Type {
+		@Override
+		public String key() {
+			return "Content-Type";
+		}
+	},
+	
+	Date,
+	
+	Host;
 	
 	private String defaultValue;
 	

@@ -11,6 +11,12 @@
 		<property name="captchaLifeTime" value="${captcha.life.time}" />
 		<property name="captchaCountMaximum" value="${captcha.count.maximum}" />
 		<property name="captchaCountLifeTime" value="${captcha.count.lift.time}" />
+		
+		<property name="aliyunOssBucket" value="${aliyun.oss.bucket}" />
+		<property name="aliyunStsRoleArn" value="${aliyun.sts.role.arn}" />
+		<property name="aliyunOssEndpoint" value="${aliyun.oss.endpoint}" />
+		<property name="aliyunStsAccessKeyId" value="${aliyun.sts.access.key.id}" />
+		<property name="aliyunStsAccessKeySecret" value="${aliyun.sts.access.key.secret}" />
 	</bean>
         
 	<bean id="lang" class="org.Iris.app.jilu.service.JiLuLang">

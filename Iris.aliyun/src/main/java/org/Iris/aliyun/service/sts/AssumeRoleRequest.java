@@ -3,9 +3,8 @@ package org.Iris.aliyun.service.sts;
 import org.Iris.aliyun.AliyunParam;
 import org.Iris.aliyun.bean.Action;
 import org.Iris.aliyun.bean.AliyunDomain;
-import org.Iris.aliyun.service.AliyunRequest;
 
-public class AssumeRoleRequest extends AliyunRequest {
+public class AssumeRoleRequest extends AliyunStsRequest {
 
 	public AssumeRoleRequest(String accessKeyId, String accessKeySecret) {
 		super(Action.AssumeRole, AliyunDomain.STS, accessKeyId, accessKeySecret);
@@ -23,7 +22,7 @@ public class AssumeRoleRequest extends AliyunRequest {
 		return (AssumeRoleRequest) addAliyunParam(AliyunParam.Policy, policy);
 	}
 	
-	public AssumeRoleRequest setDurationSeconds(String durationSeconds) { 
-		return (AssumeRoleRequest) addAliyunParam(AliyunParam.DurationSeconds, durationSeconds);
+	public AssumeRoleRequest setDurationSeconds(int durationSeconds) { 
+		return (AssumeRoleRequest) addAliyunParam(AliyunParam.DurationSeconds, String.valueOf(durationSeconds));
 	}
 }

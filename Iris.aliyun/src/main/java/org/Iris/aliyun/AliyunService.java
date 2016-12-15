@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.Iris.aliyun.bean.Format;
 import org.Iris.aliyun.exception.AliyunException;
-import org.Iris.aliyun.service.AliyunRequest;
+import org.Iris.aliyun.service.sts.AliyunStsRequest;
 import org.Iris.util.network.http.HttpProxy;
 import org.Iris.util.network.http.handler.SyncStrRespHandler;
 
@@ -12,7 +12,7 @@ public class AliyunService {
 
 	private HttpProxy httpProxy;
 	
-	public <T> T syncRequest(AliyunRequest request, Class<T> clazz) {
+	public <T> T syncRequest(AliyunStsRequest request, Class<T> clazz) {
 		Format format = request.getFormat();
 		try {
 			String result = httpProxy.syncRequest(request.httpRequest(), SyncStrRespHandler.INSTANCE);

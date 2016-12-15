@@ -3,7 +3,6 @@ package org.Iris.app.jilu.service.action.common;
 import org.Iris.app.jilu.service.action.CommonAction;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
-import org.Iris.util.common.uuid.JdkIdGenerator;
 
 /**
  * 创建订单

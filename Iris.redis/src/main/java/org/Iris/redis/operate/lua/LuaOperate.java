@@ -69,6 +69,13 @@ public class LuaOperate {
 		return evalLua(LuaCommand.RECORD_CAPTCHA, 2, codeKey, countKey, code, String.valueOf(codeLifeTime), String.valueOf(countMaxinum), String.valueOf(countLiftTime));
 	}
 	
+	/**
+	 * 如果 hash key 存在则获取该 hash key 对应的值并且删除该 hash key
+	 * 
+	 * @param key
+	 * @param bean
+	 * @return
+	 */
 	public <T> T hdelAndGet(String key, T bean) { 
 		List<String> list = evalLua(LuaCommand.HDEL_AND_GET, 1, key);
 		if (list.isEmpty())

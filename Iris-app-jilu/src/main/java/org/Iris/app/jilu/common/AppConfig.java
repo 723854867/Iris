@@ -11,6 +11,12 @@ public class AppConfig extends Config {
 	private static int captchaCountMaximum;						// 验证码获取次数限制，一般和 codeCountLifeTime 一起限制验证码的获取频率
 	private static int captchaCountLifeTime;					// 验证码次数累加超时时间，超过该时间没有获取验证码则次数清零
 	
+	private static String aliyunOssBucket;						// 阿里云 oss 对应的 bucket name
+	private static String aliyunStsRoleArn;						// 阿里云 sts 的 roleArn
+	private static String aliyunOssEndpoint;					// 阿里云 oss 的 endpoint
+	private static String aliyunStsAccessKeyId;					// 阿里云 sts 鉴权的 accessKeyId
+	private static String aliyunStsAccessKeySecret;				// 阿里云 sts 鉴权的 accessKeySecret
+	
 	public static int getCaptchaDigit() {
 		return captchaDigit;
 	}
@@ -41,5 +47,45 @@ public class AppConfig extends Config {
 	
 	public static void setCaptchaCountLifeTime(int captchaCountLifeTime) {
 		AppConfig.captchaCountLifeTime = captchaCountLifeTime;
+	}
+	
+	public static String getAliyunOssBucket() {
+		return aliyunOssBucket;
+	}
+	
+	public static void setAliyunOssBucket(String aliyunOssBucket) {
+		AppConfig.aliyunOssBucket = aliyunOssBucket;
+	}
+	
+	public static String getAliyunStsRoleArn() {
+		return aliyunStsRoleArn;
+	}
+	
+	public static void setAliyunStsRoleArn(String aliyunStsRoleArn) {
+		AppConfig.aliyunStsRoleArn = aliyunStsRoleArn;
+	}
+	
+	public static String getAliyunOssEndpoint() {
+		return aliyunOssEndpoint;
+	}
+	
+	public static void setAliyunOssEndpoint(String aliyunOssEndpoint) {
+		AppConfig.aliyunOssEndpoint = aliyunOssEndpoint;
+	}
+	
+	public static String getAliyunStsAccessKeyId() {
+		return aliyunStsAccessKeyId;
+	}
+	
+	public static void setAliyunStsAccessKeyId(String aliyunStsAccessKeyId) {
+		AppConfig.aliyunStsAccessKeyId = aliyunStsAccessKeyId;
+	}
+	
+	public static String getAliyunStsAccessKeySecret() {
+		return aliyunStsAccessKeySecret;
+	}
+	
+	public static void setAliyunStsAccessKeySecret(String aliyunStsAccessKeySecret) {
+		AppConfig.aliyunStsAccessKeySecret = aliyunStsAccessKeySecret;
 	}
 }
