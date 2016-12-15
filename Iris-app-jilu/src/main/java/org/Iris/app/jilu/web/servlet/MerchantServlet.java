@@ -11,6 +11,9 @@ import org.Iris.app.jilu.service.action.UnitAction;
 import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
 import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
 import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_EDIT;
+import org.Iris.app.jilu.service.action.merchant.serial.ORDER_ADD;
+import org.Iris.app.jilu.service.action.merchant.serial.ORDER_EDIT;
+import org.Iris.app.jilu.service.action.merchant.serial.ORDER_LOCK;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.web.IrisServlet;
 import org.Iris.app.jilu.web.JiLuParams;
@@ -44,7 +47,10 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		this.authenticator = SpringContextUtil.getBean("merchantAuthenticator", MerchantAuthenticator.class);
 		
 		serialActions.put("logout", 			LOGOUT.INSTANCE);
-		serialActions.put("merchantEdit", 	MERCHANT_EDIT.INSTANCE);
+		serialActions.put("merchantEdit", 		MERCHANT_EDIT.INSTANCE);
+		serialActions.put("orderAdd", 			ORDER_ADD.INSTANCE);
+		serialActions.put("orderEdit", 			ORDER_EDIT.INSTANCE);
+		serialActions.put("orderLock", 			ORDER_LOCK.INSTANCE);
 		
 		parallelActions.put("merchantQuery", 	MERCHANT_QUERY.INSTANCE);
 	}

@@ -18,6 +18,8 @@ public class RedisKeyGenerator {
 	private static final String MEM_ACCOUNT_DATA					= "hash:db:mem:account:{0}";				
 	
 	private static final String ORDER_DATA							= "hash:db:order:{0}";
+	private static final String ORDER_GOODS							= "hash:db:order:goods:{0}:{1}";			//0代表 orderId 1 代表goodsId
+	private static final String ORDER_GOODS_SET					= "list:db:order:goods:{0}";				//订单 id与商品id对应关系 一对多
 	
 	public static String getUnitLockKey(UnitType type, long uid) { 
 		return MessageFormat.format(LOCK_UNIT, type.name(), String.valueOf(uid));
@@ -49,5 +51,13 @@ public class RedisKeyGenerator {
 	
 	public static String getOrderDataKey(String orderId){
 		return MessageFormat.format(ORDER_DATA, orderId);
+	}
+	
+	public static String getOrderGoodsDataKey(String orderId,long goodsId){
+		return MessageFormat.format(ORDER_GOODS, orderId,String.valueOf(goodsId));
+	}
+	
+	public static String getOrderGoodsSetKey(String orderId){
+		return MessageFormat.format(ORDER_GOODS_SET, orderId);
 	}
 }

@@ -1,6 +1,7 @@
 package org.Iris.redis.operate;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.Iris.redis.model.EXPX;
 import org.Iris.redis.model.NXXX;
@@ -103,6 +104,25 @@ public class RedisOperate {
 			@Override
 			public String invok(Jedis jedis) {
 				return jedis.hmset(key, BeanUtils.beanToMap(bean));
+			}
+		});
+	}
+
+	
+	public Long sadd(String key,String... members){
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.sadd(key, members);
+			}
+		});
+	}
+	
+	public Set<String> sdiff(String key){
+		return invoke(new RedisInvocation<Set<String>>() {
+			@Override
+			public Set<String> invok(Jedis jedis) {
+				return jedis.sdiff(key);
 			}
 		});
 	}

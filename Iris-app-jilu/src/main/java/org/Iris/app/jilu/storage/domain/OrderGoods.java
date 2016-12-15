@@ -1,5 +1,8 @@
 package org.Iris.app.jilu.storage.domain;
 
+import java.util.List;
+
+import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
 public class OrderGoods implements RedisHashBean {
@@ -11,6 +14,12 @@ public class OrderGoods implements RedisHashBean {
 
 	public OrderGoods() {
 	}
+	
+	public OrderGoods(String orderId, int goodsId) {
+		this.orderId = orderId;
+		this.goodsId = goodsId;
+	}
+
 
 	public String getOrderId() {
 		return orderId;
@@ -47,6 +56,10 @@ public class OrderGoods implements RedisHashBean {
 	@Override
 	public String redisKey() {
 		// TODO Auto-generated method stub
+		return RedisKeyGenerator.getOrderGoodsDataKey(orderId, goodsId);
+	}
+
+	public List<OrderGoods> getByJson(String json) {
 		return null;
 	}
 

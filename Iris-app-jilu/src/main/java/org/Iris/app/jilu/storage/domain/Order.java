@@ -1,6 +1,8 @@
 package org.Iris.app.jilu.storage.domain;
 
+import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.RedisHashBean;
+import org.Iris.util.lang.DateUtils;
 
 public class Order implements RedisHashBean{
 
@@ -10,8 +12,18 @@ public class Order implements RedisHashBean{
 	private String note;
 	private int created;
 	private int updated;
+	
+	// 只存在 redis 的字段 
+	/*
+	 * status 1 表示待确认 0表示已确认
+	 */
+	private int status;
 
 	public Order() {
+	}
+
+	public Order(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public Order(String orderId, String receiveId, String note) {
@@ -19,6 +31,8 @@ public class Order implements RedisHashBean{
 		this.orderId = orderId;
 		this.receiveId = receiveId;
 		this.note = note;
+		this.created = DateUtils.currentTime();
+		this.updated = DateUtils.currentTime();
 	}
 
 	public String getOrderId() {
@@ -69,10 +83,18 @@ public class Order implements RedisHashBean{
 		this.updated = updated;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String redisKey() {
 		// TODO Auto-generated method stub
-		return null;
+		return RedisKeyGenerator.getOrderDataKey(orderId);
 	}
 
 }
