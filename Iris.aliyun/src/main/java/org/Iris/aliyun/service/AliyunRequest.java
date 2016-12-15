@@ -30,6 +30,7 @@ public class AliyunRequest {
 	private AliyunDomain domain;
 	private SignatureMethod signatureMethod;
 
+	private Format format;
 	private Map<String, String> params;
 
 	private String accessKeySecret;
@@ -139,11 +140,16 @@ public class AliyunRequest {
 	public AliyunRequest setRegion(Region region) { 
 		return addAliyunParam(AliyunParam.RegionId, region.mark());
 	}
-
-	public AliyunRequest setFormat(Format format) {
-		return addAliyunParam(AliyunParam.Format, format.name());
+	
+	public Format getFormat() {
+		return format;
 	}
 
+	public AliyunRequest setFormat(Format format) {
+		this.format = format;
+		return addAliyunParam(AliyunParam.Format, format.name());
+	}
+	
 	public AliyunRequest setVersion(String version) {
 		return addAliyunParam(AliyunParam.Version, version);
 	}
