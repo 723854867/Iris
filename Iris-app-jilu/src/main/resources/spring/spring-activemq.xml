@@ -22,7 +22,7 @@
 		<property name="deliveryPersistent" value="true" />
 	</bean>
 	
-	<bean id="jmsService" class="org.Iris.app.jilu.service.jms.JmsService">
+	<bean id="jmsService" class="org.Iris.app.jilu.service.realm.jms.JmsService">
 		<property name="jmsTemplate" ref="jmsTemplate" />
 		<property name="zkClient">
 			<bean class="org.I0Itec.zkclient.ZkClient">

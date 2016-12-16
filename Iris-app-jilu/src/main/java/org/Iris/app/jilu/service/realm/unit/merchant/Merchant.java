@@ -37,9 +37,9 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 			// 如果是正常的登录(创建用户也会调用  login)，则还需要更新最近一次登录时间
 			if (!create) {
 				unit.setLastLoginTime(DateUtils.currentTime());
-				tx.updateMerchant(unit);
+				merchantCache.updateMerchant(unit);
 			} else 
-				unitCache.flushHashBean(unit);
+				merchantCache.flushHashBean(unit);
 			redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
 			return true;
 		} finally {

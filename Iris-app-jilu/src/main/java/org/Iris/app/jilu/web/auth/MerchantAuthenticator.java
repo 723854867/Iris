@@ -3,7 +3,7 @@ package org.Iris.app.jilu.web.auth;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
-import org.Iris.app.jilu.storage.redis.cache.UnitCache;
+import org.Iris.app.jilu.storage.redis.cache.MerchantCache;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class MerchantAuthenticator implements Authenticator<MerchantSession> {
 	
 	@Resource
-	private UnitCache unitCache;
+	private MerchantCache unitCache;
 
 	@Override
 	public boolean auth(MerchantSession session) {

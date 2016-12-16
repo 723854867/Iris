@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.service.jms;
+package org.Iris.app.jilu.service.realm.jms;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.Iris.app.jilu.common.model.AccountType;

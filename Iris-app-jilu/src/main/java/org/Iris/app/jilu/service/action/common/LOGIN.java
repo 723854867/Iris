@@ -38,7 +38,7 @@ public class LOGIN extends CommonAction {
 			if (!luaOperate.delIfEquals(RedisKeyGenerator.getAccountCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA)))
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
 			
-			Merchant merchant = merchantService.getMerhantByAccount(account);
+			Merchant merchant = merchantCache.getMerchantByAccount(account);
 			if (null == merchant) {
 				String token = IrisSecurity.encodeToken(account);
 				String key = RedisKeyGenerator.getTokenAccountKey(token);

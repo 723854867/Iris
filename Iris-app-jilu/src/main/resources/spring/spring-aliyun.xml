@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    			 
+   	<bean id="stsService" class="org.Iris.aliyun.service.StsService">
+   		<property name="region" value="${aliyun.sts.region}" />
+   		<property name="version" value="${aliyun.sts.edition}" />
+   		<property name="accessKeyId" value="${aliyun.sts.access.key.id}" />
+   		<property name="accessKeySecret" value="${aliyun.sts.access.key.secret}" />
+   	</bean>
+   	
+   	<bean id="ossService" class="org.Iris.aliyun.service.OssService">
+   		<property name="endpoint" value="${aliyun.oss.endpoint}" />
+   		<property name="accessKeyId" value="${aliyun.oss.access.key.id}" />
+   		<property name="accessKeySecret" value="${aliyun.oss.access.key.secret}" />
+   	</bean>
+</beans>

@@ -13,9 +13,8 @@ public class AppConfig extends Config {
 	
 	private static String aliyunOssBucket;						// 阿里云 oss 对应的 bucket name
 	private static String aliyunStsRoleArn;						// 阿里云 sts 的 roleArn
-	private static String aliyunOssEndpoint;					// 阿里云 oss 的 endpoint
-	private static String aliyunStsAccessKeyId;					// 阿里云 sts 鉴权的 accessKeyId
-	private static String aliyunStsAccessKeySecret;				// 阿里云 sts 鉴权的 accessKeySecret
+	private static String aliyunOssEndpoint;					// 阿里云 oss 的endpoint
+	private static String aliyunOssUserFolderPrefix;			// 阿里云 oss 用户文件夹前缀
 	
 	public static int getCaptchaDigit() {
 		return captchaDigit;
@@ -73,19 +72,11 @@ public class AppConfig extends Config {
 		AppConfig.aliyunOssEndpoint = aliyunOssEndpoint;
 	}
 	
-	public static String getAliyunStsAccessKeyId() {
-		return aliyunStsAccessKeyId;
+	public static void setAliyunOssUserFolderPrefix(String aliyunOssUserFolderPrefix) {
+		AppConfig.aliyunOssUserFolderPrefix = aliyunOssUserFolderPrefix;
 	}
 	
-	public static void setAliyunStsAccessKeyId(String aliyunStsAccessKeyId) {
-		AppConfig.aliyunStsAccessKeyId = aliyunStsAccessKeyId;
-	}
-	
-	public static String getAliyunStsAccessKeySecret() {
-		return aliyunStsAccessKeySecret;
-	}
-	
-	public static void setAliyunStsAccessKeySecret(String aliyunStsAccessKeySecret) {
-		AppConfig.aliyunStsAccessKeySecret = aliyunStsAccessKeySecret;
+	public static String getAliyunOssUserFolderPrefix() {
+		return aliyunOssUserFolderPrefix;
 	}
 }

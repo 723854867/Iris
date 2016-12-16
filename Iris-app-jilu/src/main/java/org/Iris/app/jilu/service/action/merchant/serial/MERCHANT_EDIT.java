@@ -24,7 +24,7 @@ public class MERCHANT_EDIT extends UnitAction<MerchantSession> {
 		memMerchant.setName(name);
 		memMerchant.setAvatar(avatar);
 		memMerchant.setUpdated(DateUtils.currentTime());
-		tx.updateMerchant(memMerchant);
+		merchantCache.updateMerchant(memMerchant);
 		return Result.jsonSuccess();
 	}
 }

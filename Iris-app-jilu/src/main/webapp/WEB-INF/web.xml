@@ -31,13 +31,13 @@
     </filter-mapping>  
 	
 	<servlet>
-		<servlet-name>user</servlet-name>
+		<servlet-name>merchant</servlet-name>
 		<servlet-class>org.Iris.app.jilu.web.servlet.MerchantServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>user</servlet-name>
-		<url-pattern>/user</url-pattern>
+		<servlet-name>merchant</servlet-name>
+		<url-pattern>/merchant</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
