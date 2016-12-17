@@ -26,9 +26,9 @@
 		<property name="jmsTemplate" ref="jmsTemplate" />
 		<property name="zkClient">
 			<bean class="org.I0Itec.zkclient.ZkClient">
-				<constructor-arg name="zkServers" value="121.42.155.96:2181" />
-				<constructor-arg name="sessionTimeout" value="5000" />
-				<constructor-arg name="connectionTimeout" value="5000" />
+				<constructor-arg name="zkServers" value="${zookeeper.servers}" />
+				<constructor-arg name="sessionTimeout" value="${zookeeper.session.timeout}" />
+				<constructor-arg name="connectionTimeout" value="${zookeeper.connection.timeout}" />
 				<constructor-arg name="zkSerializer" >
 					<bean class="org.I0Itec.zkclient.serialize.BytesPushThroughSerializer" />
 				</constructor-arg>

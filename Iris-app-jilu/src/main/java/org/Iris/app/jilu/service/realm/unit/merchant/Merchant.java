@@ -29,7 +29,7 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 		try {
 			// 删除老的 token
 			if (null != unit.getToken()) 
-				redisOperate.del(RedisKeyGenerator.getTokenUidKey(unit.getToken()));
+				redisOperate.del(RedisKeyGenerator.getMerchantTokenKey(unit.getToken()));
 			
 			// 生成新的 token 并且写入
 			String token = IrisSecurity.encodeToken(account);
@@ -37,10 +37,10 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 			// 如果是正常的登录(创建用户也会调用  login)，则还需要更新最近一次登录时间
 			if (!create) {
 				unit.setLastLoginTime(DateUtils.currentTime());
-				merchantCache.updateMerchant(unit);
+				unitCache.updateMerchant(unit);
 			} else 
-				merchantCache.flushHashBean(unit);
-			redisOperate.set(RedisKeyGenerator.getTokenUidKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
+				unitCache.flushHashBean(unit);
+			redisOperate.set(RedisKeyGenerator.getMerchantTokenKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
 			return true;
 		} finally {
 			unLock(lockId);

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.Iris.app.jilu.service.action.UnitAction;
 import org.Iris.app.jilu.service.action.merchant.parallel.ALIYUN_ASSUME_ROLE;
 import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
+import org.Iris.app.jilu.service.action.merchant.serial.CUSTOMER_ADD;
 import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
 import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_EDIT;
 import org.Iris.app.jilu.service.action.merchant.serial.ORDER_ADD;
@@ -47,14 +48,15 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		super.init();
 		this.authenticator = SpringContextUtil.getBean("merchantAuthenticator", MerchantAuthenticator.class);
 		
-		serialActions.put("logout", 			LOGOUT.INSTANCE);
-		serialActions.put("merchantEdit", 		MERCHANT_EDIT.INSTANCE);
-		serialActions.put("orderAdd", 			ORDER_ADD.INSTANCE);
-		serialActions.put("orderEdit", 			ORDER_EDIT.INSTANCE);
-		serialActions.put("orderLock", 			ORDER_LOCK.INSTANCE);
-		
-		parallelActions.put("merchantQuery", 	MERCHANT_QUERY.INSTANCE);
-		parallelActions.put("aliyunAssumeRole", ALIYUN_ASSUME_ROLE.INSTANCE);
+		_addSerialAction(LOGOUT.INSTANCE);
+		_addSerialAction(MERCHANT_EDIT.INSTANCE);
+		_addSerialAction(ORDER_ADD.INSTANCE);
+		_addSerialAction(ORDER_EDIT.INSTANCE);
+		_addSerialAction(ORDER_LOCK.INSTANCE);
+		_addSerialAction(CUSTOMER_ADD.INSTANCE);
+
+		_addParallelAction(MERCHANT_QUERY.INSTANCE);
+		_addParallelAction(ALIYUN_ASSUME_ROLE.INSTANCE);
 	}
 	
 	@Override
@@ -80,5 +82,13 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 			}
 		} else 
 			unitAction.execute(session);
+	}
+	
+	private void _addSerialAction(UnitAction<?> action) { 
+		this.serialActions.put(action.name().toLowerCase(), action);
+	}
+	
+	private void _addParallelAction(UnitAction<?> action) { 
+		this.parallelActions.put(action.name().toLowerCase(), action);
 	}
 }

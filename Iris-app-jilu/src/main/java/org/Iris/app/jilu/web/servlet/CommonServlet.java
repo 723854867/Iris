@@ -28,9 +28,9 @@ public class CommonServlet extends IrisServlet<IrisSession> {
 		super.init(config);
 		
 		// 初始化普通模块的 action
-		actions.put("captchaGet", 				CAPTCHA_GET.INSTANCE);
-		actions.put("login", 					LOGIN.INSTANCE);
-		actions.put("create", 					CREATE.INSTANCE);
+		_addAction(CAPTCHA_GET.INSTANCE);
+		_addAction(LOGIN.INSTANCE);
+		_addAction(CREATE.INSTANCE);
 	}
 
 	@Override
@@ -44,5 +44,9 @@ public class CommonServlet extends IrisServlet<IrisSession> {
 		if (null == action) 
 			throw IllegalConstException.errorException(JiLuParams.ACTION);
 		action.execute(session);
+	}
+	
+	private void _addAction(CommonAction action) { 
+		this.actions.put(action.name(), action);
 	}
 }

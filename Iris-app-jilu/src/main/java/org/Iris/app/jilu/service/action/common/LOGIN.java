@@ -38,10 +38,10 @@ public class LOGIN extends CommonAction {
 			if (!luaOperate.delIfEquals(RedisKeyGenerator.getAccountCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA)))
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
 			
-			Merchant merchant = merchantCache.getMerchantByAccount(account);
+			Merchant merchant = unitCache.getMerchantByAccount(account);
 			if (null == merchant) {
 				String token = IrisSecurity.encodeToken(account);
-				String key = RedisKeyGenerator.getTokenAccountKey(token);
+				String key = RedisKeyGenerator.getRegisterTokenDataKey(token);
 				redisOperate.hmset(key, new AccountModel(type, account));
 				redisOperate.expire(key, AppConfig.CREATE_WAIT_TIMEOUT);
 				Result<String> result = new Result<String>(ICode.Code.UNIT_NOT_EXIST);

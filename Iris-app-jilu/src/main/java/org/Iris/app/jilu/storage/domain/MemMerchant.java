@@ -11,7 +11,6 @@ public class MemMerchant implements RedisHashBean, Unit {
 	private int statusMod;
 	private String name;
 	private String address;
-	private String avatar;
 	private String QRCode;
 	private int lastLoginTime;
 	private int lastPurchaseTime;
@@ -27,10 +26,9 @@ public class MemMerchant implements RedisHashBean, Unit {
 		this.merchantId = merchantId;
 	}
 	
-	public MemMerchant(String name, String address, String avatar) {
+	public MemMerchant(String name, String address) {
 		this.name = name;
 		this.address = address;
-		this.avatar = avatar;
 	}
 
 	public long getMerchantId() {
@@ -63,14 +61,6 @@ public class MemMerchant implements RedisHashBean, Unit {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
 	}
 
 	public String getQRCode() {

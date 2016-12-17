@@ -14,7 +14,7 @@ public class AppConfig extends Config {
 	private static String aliyunOssBucket;						// 阿里云 oss 对应的 bucket name
 	private static String aliyunStsRoleArn;						// 阿里云 sts 的 roleArn
 	private static String aliyunOssEndpoint;					// 阿里云 oss 的endpoint
-	private static String aliyunOssUserFolderPrefix;			// 阿里云 oss 用户文件夹前缀
+	private static String aliyunOssFolderPrefix;				// 阿里云 oss 文件夹前缀
 	
 	public static int getCaptchaDigit() {
 		return captchaDigit;
@@ -72,11 +72,11 @@ public class AppConfig extends Config {
 		AppConfig.aliyunOssEndpoint = aliyunOssEndpoint;
 	}
 	
-	public static void setAliyunOssUserFolderPrefix(String aliyunOssUserFolderPrefix) {
-		AppConfig.aliyunOssUserFolderPrefix = aliyunOssUserFolderPrefix;
+	public static void setAliyunOssFolderPrefix(String aliyunOssFolderPrefix) {
+		AppConfig.aliyunOssFolderPrefix = aliyunOssFolderPrefix;
 	}
 	
-	public static String getAliyunOssUserFolderPrefix() {
-		return aliyunOssUserFolderPrefix;
+	public static String getAliyunOssFolderPrefix() {
+		return aliyunOssFolderPrefix;
 	}
 }

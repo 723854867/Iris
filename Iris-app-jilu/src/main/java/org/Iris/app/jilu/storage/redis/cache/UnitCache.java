@@ -7,8 +7,10 @@ import org.Iris.app.jilu.common.bean.model.AccountModel;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemAccount;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.util.lang.DateUtils;
@@ -21,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Ahab
  */
 @Service
-public class MerchantCache extends RedisCache {
+public class UnitCache extends RedisCache {
 	
 	@Resource
 	private AliyunService aliyunService;
@@ -29,6 +31,8 @@ public class MerchantCache extends RedisCache {
 	private MemAccountMapper memAccountMapper;
 	@Resource
 	private MemMerchantMapper memMerchantMapper;
+	@Resource
+	private MemCustomerMapper memCustomerMapper;
 	
 	/**
 	 * 新建商户时需要插入商户数据，商户账号数据，并且在阿里云新建 oss 存储文件夹，之后该用户
@@ -107,9 +111,19 @@ public class MerchantCache extends RedisCache {
 	 * @return
 	 */
 	public Merchant getMerchantByToken(String token) {
-		String val = redisOperate.get(RedisKeyGenerator.getTokenUidKey(token));
+		String val = redisOperate.get(RedisKeyGenerator.getMerchantTokenKey(token));
 		if (null == val)
 			return null;
 		return getMerchantByMerchantId(Long.valueOf(val));
+	}
+	
+	/**
+	 * 插入客户
+	 * 
+	 * @param customer
+	 */
+	public void insertCustomer(MemCustomer customer) {
+		memCustomerMapper.insert(customer);
+		flushHashBean(customer);
 	}
 }

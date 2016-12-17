@@ -21,14 +21,13 @@ public class CREATE extends CommonAction {
 	@Override
 	protected String execute0(IrisSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);
-		String avatar = session.getKVParam(JiLuParams.AVATAR);
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		String token = session.getKVParam(JiLuParams.TOKEN);
 		
-		AccountModel am = luaOperate.hdelAndGet(RedisKeyGenerator.getTokenAccountKey(token), new AccountModel());
+		AccountModel am = luaOperate.hdelAndGet(RedisKeyGenerator.getRegisterTokenDataKey(token), new AccountModel());
 		if (null == am)
 			throw IllegalConstException.errorException(JiLuParams.TOKEN);
-		Merchant merchant = merchantCache.insertMerchant(BeanCreator.newMemMerchant(name, avatar, address), am);
+		Merchant merchant = unitCache.insertMerchant(BeanCreator.newMemMerchant(name, address), am);
 		if (!merchant.login(am.getAccount(), true))
 			return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
 		return Result.jsonSuccess(new MerchantForm(merchant));

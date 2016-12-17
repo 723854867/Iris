@@ -11,7 +11,7 @@ public class LOGOUT extends UnitAction<MerchantSession> {
 
 	@Override
 	protected String execute0(MerchantSession session) {
-		redisOperate.del(RedisKeyGenerator.getTokenUidKey(session.getUnit().getUnit().getToken()));
+		redisOperate.del(RedisKeyGenerator.getMerchantTokenKey(session.getUnit().getUnit().getToken()));
 		return Result.jsonSuccess();
 	}
 }

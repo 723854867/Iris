@@ -15,4 +15,9 @@ public abstract class UnitAction<SESSION extends UnitSession<?>> implements IAct
 	}
 	
 	protected abstract String execute0(SESSION session);
+	
+	@Override
+	public String name() {
+		return this.getClass().getSimpleName();
+	}
 }

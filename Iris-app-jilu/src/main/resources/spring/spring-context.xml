@@ -15,7 +15,7 @@
 		<property name="aliyunOssBucket" value="${aliyun.oss.bucket}" />
 		<property name="aliyunStsRoleArn" value="${aliyun.sts.role.arn}" />
 		<property name="aliyunOssEndpoint" value="${aliyun.oss.endpoint}" />
-		<property name="aliyunOssUserFolderPrefix" value="${aliyun.oss.user.folder.prefix}" />
+		<property name="aliyunOssFolderPrefix" value="${aliyun.oss.folder.prefix}" />
 	</bean>
         
 	<bean id="lang" class="org.Iris.app.jilu.service.JiLuLang">

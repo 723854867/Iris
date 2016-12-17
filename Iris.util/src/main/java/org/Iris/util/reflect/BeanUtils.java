@@ -93,7 +93,8 @@ public class BeanUtils {
 					}
 				}
 			}
-			temp.put(field, converter.convert(entry.getValue()));
+			if (null != converter)
+				temp.put(field, converter.convert(entry.getValue()));
 		}
 		
 		return temp;

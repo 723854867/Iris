@@ -16,15 +16,13 @@ public class MERCHANT_EDIT extends UnitAction<MerchantSession> {
 	@Override
 	protected String execute0(MerchantSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);
-		String avatar = session.getKVParam(JiLuParams.AVATAR);
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		
 		MemMerchant memMerchant = session.getUnit().getUnit();
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
-		memMerchant.setAvatar(avatar);
 		memMerchant.setUpdated(DateUtils.currentTime());
-		merchantCache.updateMerchant(memMerchant);
+		unitCache.updateMerchant(memMerchant);
 		return Result.jsonSuccess();
 	}
 }
