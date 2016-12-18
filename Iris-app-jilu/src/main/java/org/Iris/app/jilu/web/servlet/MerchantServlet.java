@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.action.UnitAction;
 import org.Iris.app.jilu.service.action.merchant.parallel.ALIYUN_ASSUME_ROLE;
+import org.Iris.app.jilu.service.action.merchant.parallel.CUSTOMER_ADD;
 import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
-import org.Iris.app.jilu.service.action.merchant.serial.CUSTOMER_ADD;
 import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
 import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_EDIT;
 import org.Iris.app.jilu.service.action.merchant.serial.ORDER_ADD;
@@ -53,8 +53,8 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		_addSerialAction(ORDER_ADD.INSTANCE);
 		_addSerialAction(ORDER_EDIT.INSTANCE);
 		_addSerialAction(ORDER_LOCK.INSTANCE);
-		_addSerialAction(CUSTOMER_ADD.INSTANCE);
-
+		
+		_addParallelAction(CUSTOMER_ADD.INSTANCE);
 		_addParallelAction(MERCHANT_QUERY.INSTANCE);
 		_addParallelAction(ALIYUN_ASSUME_ROLE.INSTANCE);
 	}

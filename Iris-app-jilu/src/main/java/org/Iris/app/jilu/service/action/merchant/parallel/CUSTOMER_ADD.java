@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.service.action.merchant.serial;
+package org.Iris.app.jilu.service.action.merchant.parallel;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.service.action.UnitAction;
