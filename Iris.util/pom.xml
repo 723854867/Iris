@@ -64,5 +64,11 @@
 			<artifactId>mail</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

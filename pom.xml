@@ -26,6 +26,7 @@
 		<logback.version>1.1.7</logback.version>
 		<zkclient.version>0.10</zkclient.version>
 		<jetlang.version>0.2.17</jetlang.version>
+		<pinyin4j.version>2.5.1</pinyin4j.version>
 		<HikariCP.version>2.5.1</HikariCP.version>
 		<activemq.version>5.14.1</activemq.version>
 		<spring.version>4.3.4.RELEASE</spring.version>
@@ -42,7 +43,7 @@
 		<jcl-over-slf4j.version>1.7.21</jcl-over-slf4j.version>
 		<httpclient.async.version>4.1.2</httpclient.async.version>
 		<mysql-connector-java.version>6.0.5</mysql-connector-java.version>
-		
+
 		<assembly.version>2.6</assembly.version>
 		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
 
@@ -334,6 +335,12 @@
 						<artifactId>jdom</artifactId>
 					</exclusion>
 				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>com.belerweb</groupId>
+				<artifactId>pinyin4j</artifactId>
+				<version>${pinyin4j.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
