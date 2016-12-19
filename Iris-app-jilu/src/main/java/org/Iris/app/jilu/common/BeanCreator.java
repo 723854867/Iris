@@ -4,6 +4,7 @@ import org.Iris.app.jilu.common.bean.model.AccountModel;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
 
 /**
@@ -42,6 +43,7 @@ public class BeanCreator {
 		memCustomer.setAddress(address);
 		memCustomer.setMemo(memo);
 		memCustomer.setIDNumber(IDNumber);
+		memCustomer.setNamePrefixLetter(CnToSpell.getFirstChar(name));
 		int time = DateUtils.currentTime();
 		memCustomer.setCreated(time);
 		memCustomer.setUpdated(time);

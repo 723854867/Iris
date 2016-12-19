@@ -15,6 +15,7 @@ public class MemCustomerSQLBuilder {
 				VALUES("mobile", 			"#{mobile}");
 				VALUES("memo", 				"#{memo}");
 				VALUES("ID_Number", 		"#{IDNumber}");
+				VALUES("name_prefix_letter","#{namePrefixLetter}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
 			}

@@ -12,6 +12,9 @@ public class MemCustomer implements RedisHashBean {
 	private String address;
 	private String memo;
 	private String IDNumber;
+	private String namePrefixLetter;
+	private int lastPurchaseTime;
+	private int purchaseSum;
 	private int created;
 	private int updated;
 	private int deleted;
@@ -70,6 +73,30 @@ public class MemCustomer implements RedisHashBean {
 
 	public void setIDNumber(String iDNumber) {
 		IDNumber = iDNumber;
+	}
+	
+	public String getNamePrefixLetter() {
+		return namePrefixLetter;
+	}
+
+	public void setNamePrefixLetter(String namePrefixLetter) {
+		this.namePrefixLetter = namePrefixLetter;
+	}
+
+	public int getLastPurchaseTime() {
+		return lastPurchaseTime;
+	}
+
+	public void setLastPurchaseTime(int lastPurchaseTime) {
+		this.lastPurchaseTime = lastPurchaseTime;
+	}
+
+	public int getPurchaseSum() {
+		return purchaseSum;
+	}
+
+	public void setPurchaseSum(int purchaseSum) {
+		this.purchaseSum = purchaseSum;
 	}
 
 	public int getCreated() {
