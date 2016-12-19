@@ -21,4 +21,14 @@ public class MemCustomerSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String getMerchantCustomers() {
+		return new SQL() {
+			{
+				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");
+				FROM(Table.MEM_CUSTOMER.mark());
+				WHERE("merchant_id=#{merchantId}");
+			}
+		}.toString();
+	}
 }

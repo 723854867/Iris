@@ -19,7 +19,10 @@ public class RedisKeyGenerator {
 	private static final String MEM_ACCOUNT_DATA					= "hash:db:mem:{0}:account";	
 	private static final String MEM_CUSTOMER_DATA					= "hash:db:mem:{0}:customer";
 	
-	private static final String CUSTOMER_PURCHASE_FREQUENCY			= "zset:merchant:{0}:customer:purchase:frequency";	// 商户所属客户购买频率排序
+	private static final String CUSTOMER_LIST_PURCHASE_FREQUENCY	= "zset:merchant:{0}:customer:purchase:frequency";			// 商户所属客户列表 - 购买频率排序
+	private static final String CUSTOMER_LIST_PURCHASE_SUM			= "zset:merchant:{0}:customer:purchase:sum";				// 商户所属客户列表 - 购物总金额排序
+	private static final String CUSTOMER_LIST_PURCHASE_RECENT		= "zset:merchant:{0}:customer:list:purchase:recent";		// 商户所属客户列表 - 最近购物时间排序
+	private static final String CUSTOMER_LIST_NAME					= "zset:merchant:{0}:customer:list:name";					// 商户所属客户列表 - 名字排序列表
 	
 	private static final String ORDER_DATA							= "hash:db:order:{0}";
 	private static final String ORDER_GOODS							= "hash:db:order:goods:{0}:{1}";			//0代表 orderId 1 代表goodsId
@@ -61,8 +64,20 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(MEM_CUSTOMER_DATA, String.valueOf(customerId));
 	}
 	
-	public static String getCustomerPurchaseFrequencyKey(long merchantId) { 
-		return MessageFormat.format(CUSTOMER_PURCHASE_FREQUENCY, String.valueOf(merchantId));
+	public static String getCustomerListPurchaseFrequencyKey(long merchantId) { 
+		return MessageFormat.format(CUSTOMER_LIST_PURCHASE_FREQUENCY, String.valueOf(merchantId));
+	}
+	
+	public static String getCustomerListPurchaseSumKey(long merchantId) { 
+		return MessageFormat.format(CUSTOMER_LIST_PURCHASE_SUM, String.valueOf(merchantId));
+	}
+	
+	public static String getCustomerListPurchaseRecentKey(long merchantId) { 
+		return MessageFormat.format(CUSTOMER_LIST_PURCHASE_RECENT, String.valueOf(merchantId));
+	}
+	
+	public static String getCustomerListNameKey(long merchantId) { 
+		return MessageFormat.format(CUSTOMER_LIST_NAME, String.valueOf(merchantId));
 	}
 	
 	public static String getOrderDataKey(String orderId){

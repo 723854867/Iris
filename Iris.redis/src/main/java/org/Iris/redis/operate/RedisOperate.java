@@ -126,6 +126,39 @@ public class RedisOperate {
 			}
 		});
 	}
+	
+	/**
+	 * 获取整个有序集元素数量
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public long zcount(String key) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zcount(key, "-inf", "+inf");
+			}
+		});
+	}
+	
+	public long zcount(String key, double min, double max) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zcount(key, min, max);
+			}
+		});
+	}
+	
+	public long zadd(String key, Map<String, Double> scoreMembers) {  
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zadd(key, scoreMembers);
+			}
+		});
+	}
 
 	public <T> T invoke(RedisInvocation<T> invoke) {
 		Jedis jedis = null;

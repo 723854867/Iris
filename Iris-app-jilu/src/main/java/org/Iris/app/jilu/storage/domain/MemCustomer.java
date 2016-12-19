@@ -14,7 +14,7 @@ public class MemCustomer implements RedisHashBean {
 	private String IDNumber;
 	private String namePrefixLetter;
 	private int lastPurchaseTime;
-	private int purchaseSum;
+	private String purchaseSum;
 	private int created;
 	private int updated;
 	private int deleted;
@@ -91,11 +91,11 @@ public class MemCustomer implements RedisHashBean {
 		this.lastPurchaseTime = lastPurchaseTime;
 	}
 
-	public int getPurchaseSum() {
+	public String getPurchaseSum() {
 		return purchaseSum;
 	}
 
-	public void setPurchaseSum(int purchaseSum) {
+	public void setPurchaseSum(String purchaseSum) {
 		this.purchaseSum = purchaseSum;
 	}
 

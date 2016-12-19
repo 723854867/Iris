@@ -53,4 +53,7 @@ public interface JiLuParams {
 	final IrisStrConst ID_FRONTAGE							= new IrisStrConst("IDFrontage", 116);
 	final IrisStrConst ID_BEHIND							= new IrisStrConst("IDBehind", 117);
 	final IrisStrConst MEMO									= new IrisStrConst("memo", 118);
+	final IrisIntConst PAGE									= new IrisIntConst("page", 119);
+	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 120);
+	
 }
