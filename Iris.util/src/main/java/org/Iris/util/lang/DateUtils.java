@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class DateUtils {
+	
+	public static final int MONTH_SECONDS = 24 * 30 * 3600;
 
 	public static final String yyyyMMdd = "yyyyMMdd";
 	public static final String ISO8601_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";
@@ -16,6 +18,9 @@ public class DateUtils {
 	
 	public static int currentTime() {
 		return (int) (System.currentTimeMillis() / 1000);
+	}
+	
+	public static void main(String[] args) {
 	}
 	
 	public static long getTime(String date, String format, TimeZone zone) { 
