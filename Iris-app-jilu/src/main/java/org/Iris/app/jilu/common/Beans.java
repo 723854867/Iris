@@ -1,10 +1,9 @@
 package org.Iris.app.jilu.common;
 
-import org.Iris.app.jilu.service.realm.Tx;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.jms.JmsService;
-import org.Iris.app.jilu.storage.redis.cache.UnitCache;
 import org.Iris.app.jilu.storage.redis.cache.OrderCache;
+import org.Iris.app.jilu.storage.redis.cache.UnitCache;
 import org.Iris.core.util.SpringContextUtil;
 import org.Iris.redis.operate.RedisOperate;
 import org.Iris.redis.operate.lock.DistributeLock;
@@ -12,7 +11,6 @@ import org.Iris.redis.operate.lua.LuaOperate;
 
 public interface Beans {
 	
-	final Tx tx = SpringContextUtil.getBean("tx", Tx.class);
 	final UnitCache unitCache = SpringContextUtil.getBean("unitCache", UnitCache.class);
 	final OrderCache orderCache = SpringContextUtil.getBean("orderCache", OrderCache.class);
 	final JmsService jmsService = SpringContextUtil.getBean("jmsService", JmsService.class);

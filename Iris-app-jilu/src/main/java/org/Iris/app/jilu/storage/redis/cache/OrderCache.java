@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.redis.cache;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,92 +9,115 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.Iris.app.jilu.storage.domain.Order;
-import org.Iris.app.jilu.storage.domain.OrderGoods;
-import org.Iris.app.jilu.storage.mybatis.mapper.OrderGoodsMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.OrderMapper;
+import org.Iris.app.jilu.storage.domain.MemGoods;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.util.common.SerializeUtil;
+import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderCache extends RedisCache {
 
 	@Resource
-	private OrderMapper orderMapper;
+	private MemOrderMapper orderMapper;
 	@Resource
-	private OrderGoodsMapper orderGoodsMapper;
+	private MemOrderGoodsMapper orderGoodsMapper;
+	@Resource
+	private MemGoodsMapper memGoodsMapper;
 
 	/**
-	 * 创建订单时 缓存订单信息
+	 * 创建订单
 	 * @throws Exception 
 	 */
-	public void createOrder(Order order,OrderGoods[] orderGoods){
-		try {
-			flushHashBean(order);
-			for(OrderGoods ogs: orderGoods){
-				redisOperate.sadd(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()),String.valueOf(ogs.getGoodsId()));
-				ogs.setOrderId(order.getOrderId());
-				flushHashBean(ogs);
-			}
-		} catch (Exception e) {
-			//创建订单过程中如果出现异常回滚缓存
-			redisOperate.del(order.redisKey());
-			redisOperate.del(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()));
-			for(OrderGoods ogs: orderGoods){
-				redisOperate.del(ogs.redisKey());
-			}
-			throw e;
+	@Transactional
+	public void createOrder(MemOrder order,MemOrderGoods[] orderGoods){
+		orderMapper.insert(order);
+		List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(orderGoods));
+		batchInsertOrderGoodsByList(order.getOrderId(), list);
+		flushHashBean(order);
+	}
+
+	private void batchInsertOrderGoodsByList(String orderId, List<MemOrderGoods> list) {
+		for(MemOrderGoods ogs: list){
+			MemGoods goods = getGoodsById(ogs.getGoodsId());
+			ogs.setOrderId(orderId);
+			ogs.setGoodsName(goods.getZhName());
+			ogs.setStatus(0);
+			int time = DateUtils.currentTime();
+			ogs.setCreated(time);
+			ogs.setUpdated(time);
 		}
-		
+		Map<String, List<MemOrderGoods>> map = new HashMap<String, List<MemOrderGoods>>();
+		map.put("list", list);
+		orderGoodsMapper.batchInsert(map);
+		for(MemOrderGoods orderGoods :list){
+			redisOperate.sadd(RedisKeyGenerator.getMemOrderGoodsSetKey(orderId),String.valueOf(orderGoods.getGoodsId()));
+			flushHashBean(orderGoods);
+		}
 	}
 	
-	public Order updateOrder(Order order,OrderGoods[] orderGoods){
-		Order oldOrder = null;
-		List<OrderGoods> oldList = null;
-		try {
-			oldOrder = getHashBean(new Order(order.getOrderId()));
-			oldList = getOGListByOrderId(order.getOrderId());
-			//先清除原先缓存
-			redisOperate.del(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()));
-			for(OrderGoods ogs: oldList){
-				redisOperate.del(ogs.redisKey());
-			}
-			//更新
-			flushHashBean(order);
-			for(OrderGoods ogs: orderGoods){
-				redisOperate.sadd(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()),String.valueOf(ogs.getGoodsId()));
-				ogs.setOrderId(order.getOrderId());
-				flushHashBean(ogs);
-			}
-			
-		} catch (Exception e) {
-			//更新订单过程中如果出现异常回滚缓存
-			redisOperate.del(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()));
-			for(OrderGoods ogs: orderGoods){
-				redisOperate.del(ogs.redisKey());
-			}
-			
-			flushHashBean(oldOrder);
-			for(OrderGoods ogs: oldList){
-				redisOperate.sadd(RedisKeyGenerator.getOrderGoodsSetKey(order.getOrderId()),String.valueOf(ogs.getGoodsId()));
-				ogs.setOrderId(order.getOrderId());
-				flushHashBean(ogs);
-			}
-			throw e;
+	private void batchUpdateOrderGoodsByList(String orderId, List<MemOrderGoods> list) {
+		for(MemOrderGoods ogs: list){
+			MemOrderGoods mGoods = getHashBean(new MemOrderGoods(orderId, ogs.getGoodsId()));
+			mGoods.setCount(ogs.getCount());
+			mGoods.setUnitPrice(ogs.getUnitPrice());
 		}
-		
-		return order;
+		Map<String, List<MemOrderGoods>> map = new HashMap<String, List<MemOrderGoods>>();
+		map.put("list", list);
+		orderGoodsMapper.batchUpdate(map);
+		for(MemOrderGoods orderGoods :list){
+			flushHashBean(orderGoods);
+		}
+	}
+	/**
+	 * 更新订单
+	 * @param order
+	 * @param addGoodsList
+	 * @param updateGoodsList
+	 * @param deleteGoodsList
+	 */
+	@Transactional
+	public void updateOrder(MemOrder order,String addGoodsList,String updateGoodsList,String deleteGoodsList){
+		orderMapper.update(order);
+		if(addGoodsList!=null){
+			MemOrderGoods addOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(addGoodsList, MemOrderGoods[].class);
+			List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(addOrderGoods));
+			batchInsertOrderGoodsByList(order.getOrderId(), list);
+		}
+		if(updateGoodsList!=null){
+			MemOrderGoods updateOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, MemOrderGoods[].class);
+			List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(updateOrderGoods));
+			batchUpdateOrderGoodsByList(order.getOrderId(), list);
+		}
+		if(deleteGoodsList!=null){
+			Long goodsIds[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, Long[].class);
+			List<Long> list = new ArrayList<Long>(Arrays.asList(goodsIds));
+			Map<String, List<Long>> map = new HashMap<String, List<Long>>();
+			map.put("list", list);
+			orderGoodsMapper.batchDelete(map);
+			for(long goodsId :list){
+				redisOperate.del(RedisKeyGenerator.getMemOrderGoodsDataKey(order.getOrderId(), goodsId));
+				redisOperate.srem(RedisKeyGenerator.getMemOrderGoodsSetKey(order.getOrderId()),goodsId+"");
+			}
+		}
+		flushHashBean(order);
 	}
 	/**
 	 * 根据订单号获取订单基本信息
 	 * @param orderId
 	 * @return
 	 */
-	public Order getByOrderId(String orderId){
-		Order order = getHashBean(new Order(orderId));
+	public MemOrder getByOrderId(String orderId){
+		MemOrder order = getHashBean(new MemOrder(orderId));
 		if(null !=order)
 			return order;
-		order = orderMapper.getByOrderId(orderId);
+		order = orderMapper.getOrderById(orderId);
 		if (null == order)
 			return null;
 		flushHashBean(order);
@@ -104,14 +128,41 @@ public class OrderCache extends RedisCache {
 	 * @param orderId
 	 * @return
 	 */
-	public List<OrderGoods> getOGListByOrderId(String orderId){
-		Set<String> goodsIds = redisOperate.sdiff(RedisKeyGenerator.getOrderGoodsSetKey(orderId));
-		List<OrderGoods> oList = new ArrayList<>();
+	public List<MemOrderGoods> getOGListByOrderId(String orderId){
+		Set<String> goodsIds = redisOperate.sdiff(RedisKeyGenerator.getMemOrderGoodsSetKey(orderId));
+		List<MemOrderGoods> oList = new ArrayList<>();
 		for(String goodsId:goodsIds){
-			OrderGoods oGoods = getHashBean(new OrderGoods(orderId,Integer.valueOf(goodsId)));
+			MemOrderGoods oGoods = getHashBean(new MemOrderGoods(orderId,Integer.valueOf(goodsId)));
 			oList.add(oGoods);
 		}
 		return oList;
+	}
+	/**
+	 * 订单确认
+	 * @param orderId
+	 */
+	public void orderLock(MemOrder order){
+		orderMapper.update(order);
+		flushHashBean(order);
+	}
+	
+	/**
+	 * 插入商品
+	 * @param memGoods
+	 */
+	public void insertGoods(MemGoods memGoods){
+		memGoodsMapper.insert(memGoods);
+		flushHashBean(memGoods);
+	}
+	
+	public MemGoods getGoodsById(long goodsId){
+		MemGoods goods = getHashBean(new MemGoods(goodsId));
+		if(goods!=null)
+			return goods;
+		goods = memGoodsMapper.getGoodsById(goodsId);
+		if(goods!=null)
+			return goods;
+		return null;
 	}
 	
 }

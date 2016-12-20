@@ -1,15 +1,16 @@
 package org.Iris.app.jilu.storage.domain;
 
+import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class Goods implements RedisHashBean {
+public class MemGoods implements RedisHashBean {
 
 	private long goodsId;
 	private String goodsCode;
 	private String zhName;
 	private String usName;
 	private String goodsFormat;
-	private String sort;
+	private String classification;
 	private String zhBrand;
 	private String usBrand;
 	private String unit;
@@ -20,7 +21,11 @@ public class Goods implements RedisHashBean {
 	private int created;
 	private int updated;
 
-	public Goods() {
+	public MemGoods() {
+	}
+	public MemGoods(long goodsId) {
+		super();
+		this.goodsId = goodsId;
 	}
 
 	public long getGoodsId() {
@@ -63,14 +68,12 @@ public class Goods implements RedisHashBean {
 		this.goodsFormat = goodsFormat;
 	}
 
-	public String getSort() {
-		return sort;
+	public String getClassification() {
+		return classification;
 	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
+	public void setClassification(String classification) {
+		this.classification = classification;
 	}
-
 	public String getZhBrand() {
 		return zhBrand;
 	}
@@ -145,8 +148,7 @@ public class Goods implements RedisHashBean {
 
 	@Override
 	public String redisKey() {
-		// TODO Auto-generated method stub
-		return null;
+		return RedisKeyGenerator.getMemGoodsKey(goodsId);
 	}
 
 }

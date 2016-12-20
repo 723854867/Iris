@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.service.action.UnitAction;
-import org.Iris.app.jilu.storage.domain.Order;
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -13,13 +13,13 @@ public class ORDER_LOCK extends UnitAction<MerchantSession>{
 	@Override
 	protected String execute0(MerchantSession session) {
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
-		Order order = orderCache.getByOrderId(orderId);
-		if(order.getStatus()!=1){
-			//订单已经确认不能修改
+		MemOrder order = orderCache.getByOrderId(orderId);
+		if(order.getStatus()!=0){
+			//订单已经完成
 			return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
 		}
-		order.setStatus(0);
-		tx.OrderLock(orderId);
+		order.setStatus(1);
+		orderCache.orderLock(order);
 		return Result.jsonSuccess();
 	}
 

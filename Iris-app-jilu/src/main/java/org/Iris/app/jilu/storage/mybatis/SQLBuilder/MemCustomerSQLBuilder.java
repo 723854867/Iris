@@ -24,6 +24,9 @@ public class MemCustomerSQLBuilder {
 		}.toString();
 	}
 	
+	public String getMemCustomerById(){
+		return "select * from "+Table.MEM_CUSTOMER.mark()+" where customer_id = #{customerId}";
+	}
 	public String getMerchantCustomers() {
 		return new SQL() {
 			{

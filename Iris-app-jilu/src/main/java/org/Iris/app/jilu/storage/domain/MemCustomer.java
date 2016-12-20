@@ -21,6 +21,13 @@ public class MemCustomer implements RedisHashBean, CustomerListModel {
 	private int updated;
 	private int deleted;
 
+	public MemCustomer() {
+	}
+
+	public MemCustomer(long customerId) {
+		this.customerId = customerId;
+	}
+
 	@Override
 	public long getCustomerId() {
 		return customerId;
@@ -29,11 +36,11 @@ public class MemCustomer implements RedisHashBean, CustomerListModel {
 	public void setCustomerId(long customerId) {
 		this.customerId = customerId;
 	}
-	
+
 	public long getMerchantId() {
 		return merchantId;
 	}
-	
+
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
 	}

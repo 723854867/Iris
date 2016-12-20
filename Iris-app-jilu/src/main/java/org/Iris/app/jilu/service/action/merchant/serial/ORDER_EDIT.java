@@ -1,13 +1,15 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.service.action.UnitAction;
-import org.Iris.app.jilu.storage.domain.Order;
-import org.Iris.app.jilu.storage.domain.OrderGoods;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
+import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
-import org.Iris.util.common.SerializeUtil;
+
+
 
 public class ORDER_EDIT extends UnitAction<MerchantSession>{
 	
@@ -15,17 +17,25 @@ public class ORDER_EDIT extends UnitAction<MerchantSession>{
 
 	@Override
 	protected String execute0(MerchantSession session) {
-		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
-		String receiveId = session.getKVParam(JiLuParams.RECEIVEId);
+		String addGoodsList = session.getKVParamOptional(JiLuParams.ADDGOODSLIST);
+		String updateGoodsList = session.getKVParamOptional(JiLuParams.UPDATEGOODSLIST);
+		String deleteGoodsList = session.getKVParamOptional(JiLuParams.DELETEGOODSLIST);
+		long customerId = session.getKVParam(JiLuParams.CUSTOMERID);
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
-		Order order = orderCache.getByOrderId(orderId);
+		MemOrder order = orderCache.getByOrderId(orderId);
 		int status  = order.getStatus();
-		if(status!=1){
+		if(status!=0){
 			//订单已经确认不能修改
 			return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
 		}
-		OrderGoods orderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(goodsList, OrderGoods[].class);
-		order = orderCache.updateOrder(new Order(orderId, receiveId, "test"), orderGoods);
-		return Result.jsonSuccess(order);
+		MemCustomer customer = unitCache.getMemCustomerById(customerId);
+		if(customer == null)
+			throw IllegalConstException.errorException(JiLuParams.CUSTOMERID);
+		order.setCustomerAddress(customer.getAddress());
+		order.setCustomerId(customerId);
+		order.setCustomerName(customer.getName());
+		order.setCustomerMobile(customer.getMobile());
+		orderCache.updateOrder(order, addGoodsList, updateGoodsList, deleteGoodsList);
+		return Result.jsonSuccess();
 	}
 }

@@ -19,14 +19,15 @@ public class RedisKeyGenerator {
 	private static final String MEM_ACCOUNT_DATA					= "hash:db:mem:{0}:account";	
 	private static final String MEM_CUSTOMER_DATA					= "hash:db:mem:{0}:customer";
 	
+	private static final String MEM_ORDER_DATA						= "hash:db:mem:{0}:order";
+	private static final String MEM_ORDER_GOODS						= "hash:db:mem:{0}:{1}:order:goods";			//0代表 orderId 1 代表goodsId
+	private static final String MEM_ORDER_GOODS_SET					= "list:db:mem:{0}:order:goods";				//订单 id与商品id对应关系 一对多
+	private static final String MEM_GOODS							= "hash:db:mem:{0}:goods";					
 	private static final String CUSTOMER_LIST_PURCHASE_FREQUENCY	= "zset:merchant:{0}:customer:purchase:frequency";			// 商户所属客户列表 - 购买频率排序
 	private static final String CUSTOMER_LIST_PURCHASE_SUM			= "zset:merchant:{0}:customer:purchase:sum";				// 商户所属客户列表 - 购物总金额排序
 	private static final String CUSTOMER_LIST_PURCHASE_RECENT		= "zset:merchant:{0}:customer:list:purchase:recent";		// 商户所属客户列表 - 最近购物时间排序
 	private static final String CUSTOMER_LIST_NAME					= "zset:merchant:{0}:customer:list:name";					// 商户所属客户列表 - 名字排序列表
-	
-	private static final String ORDER_DATA							= "hash:db:order:{0}";
-	private static final String ORDER_GOODS							= "hash:db:order:goods:{0}:{1}";			//0代表 orderId 1 代表goodsId
-	private static final String ORDER_GOODS_SET						= "list:db:order:goods:{0}";				//订单 id与商品id对应关系 一对多
+
 	
 	public static String getUnitLockKey(UnitType type, long uid) { 
 		return MessageFormat.format(LOCK_UNIT, type.name(), String.valueOf(uid));
@@ -64,6 +65,9 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(MEM_CUSTOMER_DATA, String.valueOf(customerId));
 	}
 	
+	public static String getMemOrderDataKey(String orderId){
+		return MessageFormat.format(MEM_ORDER_DATA, orderId);
+	}
 	public static String getCustomerListPurchaseFrequencyKey(long merchantId) { 
 		return MessageFormat.format(CUSTOMER_LIST_PURCHASE_FREQUENCY, String.valueOf(merchantId));
 	}
@@ -80,15 +84,15 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(CUSTOMER_LIST_NAME, String.valueOf(merchantId));
 	}
 	
-	public static String getOrderDataKey(String orderId){
-		return MessageFormat.format(ORDER_DATA, orderId);
+	public static String getMemOrderGoodsDataKey(String orderId,long goodsId){
+		return MessageFormat.format(MEM_ORDER_GOODS, orderId, String.valueOf(goodsId));
 	}
 	
-	public static String getOrderGoodsDataKey(String orderId,long goodsId){
-		return MessageFormat.format(ORDER_GOODS, orderId, String.valueOf(goodsId));
+	public static String getMemOrderGoodsSetKey(String orderId){
+		return MessageFormat.format(MEM_ORDER_GOODS_SET, orderId);
 	}
 	
-	public static String getOrderGoodsSetKey(String orderId){
-		return MessageFormat.format(ORDER_GOODS_SET, orderId);
+	public static String getMemGoodsKey(long goodsId){
+		return MessageFormat.format(MEM_GOODS, goodsId);
 	}
 }

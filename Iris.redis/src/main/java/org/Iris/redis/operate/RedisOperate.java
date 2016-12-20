@@ -137,6 +137,15 @@ public class RedisOperate {
 		});
 	}
 	
+	public Long srem(String key,String member){
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				// TODO Auto-generated method stub
+				return jedis.srem(key, member);
+			}
+		});
+	}
 	/**
 	 * 获取整个有序集元素数量
 	 * 

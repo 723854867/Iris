@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.Iris.app.jilu.service.action.UnitAction;
 import org.Iris.app.jilu.service.action.merchant.parallel.ALIYUN_ASSUME_ROLE;
 import org.Iris.app.jilu.service.action.merchant.parallel.CUSTOMER_ADD;
+import org.Iris.app.jilu.service.action.merchant.parallel.GOODS_ADD;
 import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
+import org.Iris.app.jilu.service.action.merchant.parallel.ORDER_ADD;
 import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
 import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_EDIT;
-import org.Iris.app.jilu.service.action.merchant.serial.ORDER_ADD;
 import org.Iris.app.jilu.service.action.merchant.serial.ORDER_EDIT;
 import org.Iris.app.jilu.service.action.merchant.serial.ORDER_LOCK;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
@@ -50,13 +51,14 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		
 		_addSerialAction(LOGOUT.INSTANCE);
 		_addSerialAction(MERCHANT_EDIT.INSTANCE);
-		_addSerialAction(ORDER_ADD.INSTANCE);
 		_addSerialAction(ORDER_EDIT.INSTANCE);
 		_addSerialAction(ORDER_LOCK.INSTANCE);
 		
 		_addParallelAction(CUSTOMER_ADD.INSTANCE);
 		_addParallelAction(MERCHANT_QUERY.INSTANCE);
 		_addParallelAction(ALIYUN_ASSUME_ROLE.INSTANCE);
+		_addParallelAction(ORDER_ADD.INSTANCE);
+		_addParallelAction(GOODS_ADD.INSTANCE);
 	}
 	
 	@Override

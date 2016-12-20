@@ -14,6 +14,8 @@ public interface MemCustomerMapper {
 	@Options(useGeneratedKeys = true, keyColumn = "customer_id", keyProperty = "customerId")
 	void insert(MemCustomer memCustomer);
 	
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMemCustomerById")
+	MemCustomer getMemCustomerById(long customerById);
 	/**
 	 * 获取商户的客户列表 
 	 * 
