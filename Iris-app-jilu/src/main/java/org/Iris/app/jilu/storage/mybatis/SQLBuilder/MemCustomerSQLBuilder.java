@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
 import org.Iris.app.jilu.storage.mybatis.Table;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.jdbc.SQL;
 
 public class MemCustomerSQLBuilder {
@@ -19,5 +20,9 @@ public class MemCustomerSQLBuilder {
 				VALUES("updated", 			"#{updated}");
 			}
 		}.toString();
+	}
+	
+	public String getMemCustomerById(){
+		return "select * from "+Table.MEM_CUSTOMER.mark()+" where customer_id = #{customerId}";
 	}
 }

@@ -3,7 +3,9 @@ package org.Iris.app.jilu.common;
 import org.Iris.app.jilu.common.bean.model.AccountModel;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemGoods;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.util.lang.DateUtils;
 
 /**
@@ -46,5 +48,43 @@ public class BeanCreator {
 		memCustomer.setCreated(time);
 		memCustomer.setUpdated(time);
 		return memCustomer;
+	}
+	
+	public static MemGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
+			String usBrand, String unit, float weight, String alias, String barcode, String sku){
+		MemGoods memGoods = new MemGoods();
+		memGoods.setGoodsCode(goodsCode);
+		memGoods.setZhName(zhName);
+		memGoods.setUsName(usName);
+		memGoods.setGoodsFormat(goodsFormat);
+		memGoods.setClassification(classification);
+		memGoods.setZhBrand(zhBrand);
+		memGoods.setUsBrand(usBrand);
+		memGoods.setUnit(unit);
+		memGoods.setWeight(weight);
+		memGoods.setAlias(alias);
+		memGoods.setBarcode(barcode);
+		memGoods.setSku(sku);
+		int time = DateUtils.currentTime();
+		memGoods.setCreated(time);
+		memGoods.setUpdated(time);
+		return memGoods;
+	}
+	
+	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName, long customerId, String customerName,
+			String customerMobile, String customerAddress, int status){
+		MemOrder memOrder = new MemOrder();
+		memOrder.setOrderId(orderId);
+		memOrder.setMerchantId(merchantId);
+		memOrder.setMerchantName(merchantName);
+		memOrder.setCustomerId(customerId);
+		memOrder.setCustomerName(customerName);
+		memOrder.setCustomerMobile(customerMobile);
+		memOrder.setCustomerAddress(customerAddress);
+		memOrder.setStatus(status);
+		int time = DateUtils.currentTime();
+		memOrder.setCreated(time);
+		memOrder.setUpdated(time);
+		return memOrder;
 	}
 }

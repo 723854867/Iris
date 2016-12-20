@@ -8,9 +8,11 @@ import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemGoods;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.util.lang.DateUtils;
@@ -33,6 +35,8 @@ public class UnitCache extends RedisCache {
 	private MemMerchantMapper memMerchantMapper;
 	@Resource
 	private MemCustomerMapper memCustomerMapper;
+	@Resource
+	private MemGoodsMapper memGoodsMapper;
 	
 	/**
 	 * 新建商户时需要插入商户数据，商户账号数据，并且在阿里云新建 oss 存储文件夹，之后该用户
@@ -125,5 +129,15 @@ public class UnitCache extends RedisCache {
 	public void insertCustomer(MemCustomer customer) {
 		memCustomerMapper.insert(customer);
 		flushHashBean(customer);
+	}
+	
+	public MemCustomer getMemCustomerById(long customerId){
+		MemCustomer customer = getHashBean(new MemCustomer(customerId));
+		if(customer!=null)
+			return customer;
+		customer = memCustomerMapper.getMemCustomerById(customerId);
+		if(customer!=null)
+			return customer;
+		return null;
 	}
 }

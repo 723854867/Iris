@@ -126,6 +126,16 @@ public class RedisOperate {
 			}
 		});
 	}
+	
+	public Long srem(String key,String member){
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				// TODO Auto-generated method stub
+				return jedis.srem(key, member);
+			}
+		});
+	}
 
 	public <T> T invoke(RedisInvocation<T> invoke) {
 		Jedis jedis = null;

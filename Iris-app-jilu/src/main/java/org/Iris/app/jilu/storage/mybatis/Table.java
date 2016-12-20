@@ -5,10 +5,10 @@ public enum Table {
 	MEM_MERCHANT("mem_merchant"),
 	MEM_ACCOUNT("mem_account"),
 	MEM_CUSTOMER("mem_customer"),
-	ORDER_BASEINFO("order_baseinfo"),
-	GOODS("goods"),
-	ORDER_GOODS("order_goods"),
-	ORDER_EMAIL("order_email");
+	MEM_ORDER("mem_order"),
+	MEM_GOODS("mem_order"),
+	MEM_ORDER_GOODS("mem_order_goods"),
+	MEM_PACKET("mem_packet");
 	
 	private String mark;
 	
