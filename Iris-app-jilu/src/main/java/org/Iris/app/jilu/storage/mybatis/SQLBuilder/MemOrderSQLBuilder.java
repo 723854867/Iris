@@ -50,4 +50,14 @@ public class MemOrderSQLBuilder {
 			}
 		}.toString();
 	}
+	public String getMerchantOrderCountGroupByCustomerBetweenTime() {
+		return new SQL() {
+			{
+				SELECT("customer_id, COUNT(*) count");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("merchant_id=#{merchantId}");
+				GROUP_BY("customer_id");
+			}
+		}.toString();
+	}
 }

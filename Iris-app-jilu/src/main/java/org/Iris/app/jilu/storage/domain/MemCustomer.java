@@ -1,9 +1,11 @@
 package org.Iris.app.jilu.storage.domain;
 
+import org.Iris.app.jilu.common.bean.enums.CustomerListType;
+import org.Iris.app.jilu.common.bean.model.CustomerListModel;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MemCustomer implements RedisHashBean {
+public class MemCustomer implements RedisHashBean, CustomerListModel {
 
 	private long customerId;
 	private long merchantId;
@@ -12,6 +14,9 @@ public class MemCustomer implements RedisHashBean {
 	private String address;
 	private String memo;
 	private String IDNumber;
+	private String namePrefixLetter;
+	private int lastPurchaseTime;
+	private String purchaseSum;
 	private int created;
 	private int updated;
 	private int deleted;
@@ -23,6 +28,7 @@ public class MemCustomer implements RedisHashBean {
 		this.customerId = customerId;
 	}
 
+	@Override
 	public long getCustomerId() {
 		return customerId;
 	}
@@ -78,6 +84,30 @@ public class MemCustomer implements RedisHashBean {
 	public void setIDNumber(String iDNumber) {
 		IDNumber = iDNumber;
 	}
+	
+	public String getNamePrefixLetter() {
+		return namePrefixLetter;
+	}
+
+	public void setNamePrefixLetter(String namePrefixLetter) {
+		this.namePrefixLetter = namePrefixLetter;
+	}
+
+	public int getLastPurchaseTime() {
+		return lastPurchaseTime;
+	}
+
+	public void setLastPurchaseTime(int lastPurchaseTime) {
+		this.lastPurchaseTime = lastPurchaseTime;
+	}
+
+	public String getPurchaseSum() {
+		return purchaseSum;
+	}
+
+	public void setPurchaseSum(String purchaseSum) {
+		this.purchaseSum = purchaseSum;
+	}
 
 	public int getCreated() {
 		return created;
@@ -106,5 +136,19 @@ public class MemCustomer implements RedisHashBean {
 	@Override
 	public String redisKey() {
 		return RedisKeyGenerator.getMemCustomerDataKey(this.customerId);
+	}
+	
+	@Override
+	public double getScore(CustomerListType type) {
+		switch (type) {
+		case PURCHASE_RECENT:
+			return Double.valueOf(lastPurchaseTime);
+		case PURCHASE_SUM:
+			return Double.valueOf(purchaseSum);
+		case NAME:
+			return Double.valueOf((int) namePrefixLetter.charAt(0));
+		default:
+			return 0;
+		}
 	}
 }

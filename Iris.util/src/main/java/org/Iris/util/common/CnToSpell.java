@@ -1,5 +1,7 @@
 package org.Iris.util.common;
 
+import org.Iris.util.lang.StringUtil;
+
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -28,11 +30,26 @@ public class CnToSpell {
 					else
 						pinyin += PinyinHelper.toHanyuPinyinStringArray(nameChars[i], format)[0];
 				} catch (BadHanyuPinyinOutputFormatCombination e) {
+					throw new RuntimeException("Chinese to spell convertion failure!", e);
 				}
 			} else
 				pinyin += s;
 		}
 		
 		return pinyin.toLowerCase();
+	}
+	
+	public static String getFirstChar(String chinese) {
+		chinese = StringUtil.trimWhitespace(chinese);
+		if (!StringUtil.hasText(chinese))
+			return null;
+		HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+		format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+		format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+		try {
+			return String.valueOf(PinyinHelper.toHanyuPinyinStringArray(chinese.toCharArray()[0], format)[0].charAt(0));
+		} catch (BadHanyuPinyinOutputFormatCombination e) {
+			throw new RuntimeException("Chinese to spell convertion failure!", e);
+		}
 	}
 }

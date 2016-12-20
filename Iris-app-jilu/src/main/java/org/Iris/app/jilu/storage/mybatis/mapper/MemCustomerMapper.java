@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
+import java.util.List;
+
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemCustomerSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -14,4 +16,11 @@ public interface MemCustomerMapper {
 	
 	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMemCustomerById")
 	MemCustomer getMemCustomerById(long customerById);
+	/**
+	 * 获取商户的客户列表 
+	 * 
+	 * @param merchantId
+	 * @return
+	 */
+	List<MemCustomer> getMerchantCustomers(long merchantId); 
 }
