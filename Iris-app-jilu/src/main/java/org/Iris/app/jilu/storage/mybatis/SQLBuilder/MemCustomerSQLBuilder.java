@@ -1,9 +1,12 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
-import java.util.List;
+import java.util.Set;
 
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
+
+import redis.clients.jedis.Tuple;
 
 public class MemCustomerSQLBuilder {
 
@@ -37,10 +40,11 @@ public class MemCustomerSQLBuilder {
 		}.toString();
 	}
 	
-	public String getCustomersByIds(List<Long> list) {
+	public String getCustomersByIds(StrictMap<Set<Tuple>> map) {
+		Set<Tuple> set = map.get("collection");
 		StringBuilder builder = new StringBuilder("SELECT * FROM mem_customer WHERE customer_id IN(");
-		for (Long id : list)
-			builder.append(id).append(",");
+		for (Tuple tuple : set)
+			builder.append(tuple.getElement()).append(",");
 		builder.deleteCharAt(builder.length() - 1);
 		builder.append(")");
 		return builder.toString();

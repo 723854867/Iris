@@ -11,9 +11,11 @@ public class RedisKeyGenerator {
 	private static final String ACCOUNT_CAPTCHA						= "string:account:{0}:{1}:captcha";			// 账号 - 验证码 对应关系；0-表示账号类型，1-表示账号值
 	private static final String ACCOUNT_CAPTCHA_COUNT				= "string:account:{0}:{1}:captcha:count";	// 账号 - 验证码获取次数 对应关系；0-表示账号类型，1-表示账号值
 	private static final String TOKEN_MERCHANT_ID					= "string:merchant:{0}:token";				// token merchantId 对应关系
+	private static final String CUSTOMER_LIST_LOAD_TIME				= "string:merchant:{0}:customer:list:load:time";			// 商户客户列表(名字、金额、最近购物时间排序)刷新时间
+	private static final String CUSTOMER_LIST_FREQUENCY_LOAD_TIME	= "string:merchant:{0}:customer:list:frequency:load:time";	// 商户客户列表(购物频率排序)刷新时间
 	
-	private static final String REGISTER_TOKEN_DATA					= "hash:account:{0}:create:token";			// 登录失败之后产生一个临时token，有效期三分钟，token保存该登录的账号信息,在创建商户时使用		
-	private static final String ALIYUN_STS_DATA						= "hash:merchant:{0}:aliyun:sts:info";		// 阿里云 sts 缓存的临时 token 信息
+	private static final String REGISTER_TOKEN_DATA					= "hash:account:create:token:{0}";			// 登录失败之后产生一个临时token，有效期三分钟，token保存该登录的账号信息,在创建商户时使用		
+	private static final String ALIYUN_STS_DATA						= "hash:merchant:aliyun:sts:info:{0}";		// 阿里云 sts 缓存的临时 token 信息
 	
 	private static final String MEM_MERCHANT_DATA					= "hash:db:mem:{0}:merchant";
 	private static final String MEM_ACCOUNT_DATA					= "hash:db:mem:{0}:account";	
@@ -23,10 +25,11 @@ public class RedisKeyGenerator {
 	private static final String MEM_ORDER_GOODS						= "hash:db:mem:{0}:{1}:order:goods";			//0代表 orderId 1 代表goodsId
 	private static final String MEM_ORDER_GOODS_SET					= "list:db:mem:{0}:order:goods";				//订单 id与商品id对应关系 一对多
 	private static final String MEM_GOODS							= "hash:db:mem:{0}:goods";					
-	private static final String CUSTOMER_LIST_PURCHASE_FREQUENCY	= "zset:merchant:{0}:customer:purchase:frequency";			// 商户所属客户列表 - 购买频率排序
-	private static final String CUSTOMER_LIST_PURCHASE_SUM			= "zset:merchant:{0}:customer:purchase:sum";				// 商户所属客户列表 - 购物总金额排序
-	private static final String CUSTOMER_LIST_PURCHASE_RECENT		= "zset:merchant:{0}:customer:list:purchase:recent";		// 商户所属客户列表 - 最近购物时间排序
-	private static final String CUSTOMER_LIST_NAME					= "zset:merchant:{0}:customer:list:name";					// 商户所属客户列表 - 名字排序列表
+	
+	private static final String CUSTOMER_LIST_PURCHASE_FREQUENCY	= "zset:merchant:customer:list:purchase:frequency:{0}";		// 商户所属客户列表 - 购买频率排序
+	private static final String CUSTOMER_LIST_PURCHASE_SUM			= "zset:merchant:customer:list:purchase:sum:{0}";			// 商户所属客户列表 - 购物总金额排序
+	private static final String CUSTOMER_LIST_PURCHASE_RECENT		= "zset:merchant:customer:list:purchase:recent:{0}";		// 商户所属客户列表 - 最近购物时间排序
+	private static final String CUSTOMER_LIST_NAME					= "zset:merchant:customer:list:name:{0}";					// 商户所属客户列表 - 名字排序列表
 
 	
 	public static String getUnitLockKey(UnitType type, long uid) { 
@@ -43,6 +46,14 @@ public class RedisKeyGenerator {
 	
 	public static String getMerchantTokenKey(String token) { 
 		return MessageFormat.format(TOKEN_MERCHANT_ID, token);
+	}
+	
+	public static String getCustomerListLoadTimeKey(long merchantId) {
+		return MessageFormat.format(CUSTOMER_LIST_LOAD_TIME, String.valueOf(merchantId));
+	}
+	
+	public static String getCustomerListFrequencyLoadTimeKey(long merchantId) { 
+		return MessageFormat.format(CUSTOMER_LIST_FREQUENCY_LOAD_TIME, String.valueOf(merchantId));
 	}
 	
 	public static String getRegisterTokenDataKey(String token) { 

@@ -13,6 +13,7 @@ import org.Iris.app.jilu.service.action.merchant.parallel.CUSTOMER_ADD;
 import org.Iris.app.jilu.service.action.merchant.parallel.GOODS_ADD;
 import org.Iris.app.jilu.service.action.merchant.parallel.MERCHANT_QUERY;
 import org.Iris.app.jilu.service.action.merchant.parallel.ORDER_ADD;
+import org.Iris.app.jilu.service.action.merchant.serial.CUSTOMER_LIST;
 import org.Iris.app.jilu.service.action.merchant.serial.LOGOUT;
 import org.Iris.app.jilu.service.action.merchant.serial.MERCHANT_EDIT;
 import org.Iris.app.jilu.service.action.merchant.serial.ORDER_EDIT;
@@ -53,6 +54,7 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		_addSerialAction(MERCHANT_EDIT.INSTANCE);
 		_addSerialAction(ORDER_EDIT.INSTANCE);
 		_addSerialAction(ORDER_LOCK.INSTANCE);
+		_addSerialAction(CUSTOMER_LIST.INSTANCE);
 		
 		_addParallelAction(CUSTOMER_ADD.INSTANCE);
 		_addParallelAction(MERCHANT_QUERY.INSTANCE);

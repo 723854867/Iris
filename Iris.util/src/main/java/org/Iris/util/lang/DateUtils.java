@@ -56,15 +56,8 @@ public class DateUtils {
 		return (int) (calendar.getTimeInMillis() / 1000);
 	}
 	
-	public static void main(String[] args) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR, 23);
-		calendar.set(Calendar.MINUTE, 59);
-		calendar.set(Calendar.SECOND, 59);
-		calendar.set(Calendar.MILLISECOND, 0);
-		long time = calendar.getTimeInMillis();
-		System.out.println(time);
-		System.out.println(getDate(yyyyMMddHHmmss, time, TimeZone.getDefault()));
+	public static boolean isToday(long time) {
+		return zeroTime() == zeroTime(time);
 	}
 	
 	public static long getTime(String date, String format, TimeZone zone) { 

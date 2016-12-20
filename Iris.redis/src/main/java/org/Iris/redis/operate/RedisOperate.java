@@ -10,6 +10,7 @@ import org.Iris.util.reflect.BeanUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Tuple;
+import redis.clients.jedis.ZParams;
 
 public class RedisOperate {
 
@@ -33,6 +34,15 @@ public class RedisOperate {
 		});
 	}
 	
+	public long exist(String... keys) { 
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.exists(keys);
+			}
+		});
+	}
+	
 	public long expireAt(String key, long timestamp) {
 		return invoke(new RedisInvocation<Long>() {
 			@Override
@@ -47,6 +57,15 @@ public class RedisOperate {
 			@Override
 			public String invok(Jedis jedis) {
 				return jedis.get(key);
+			}
+		});
+	}
+	
+	public String getSet(String key, String value) {
+		return invoke(new RedisInvocation<String>() {
+			@Override
+			public String invok(Jedis jedis) {
+				return jedis.getSet(key, value);
 			}
 		});
 	}
@@ -179,11 +198,29 @@ public class RedisOperate {
 		});
 	}
 	
+	public long zadd(String key, double score, String member) {  
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zadd(key, score, member);
+			}
+		});
+	}
+	
 	public Set<Tuple> zrangeWithScores(String key, long start, long end) {
 		return invoke(new RedisInvocation<Set<Tuple>>() {
 			@Override
 			public Set<Tuple> invok(Jedis jedis) {
 				return jedis.zrangeWithScores(key, start, end);
+			}
+		});
+	}
+	
+	public long zunionstore(String destination, ZParams params, String... keys) { 
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zunionstore(destination, params, keys);
 			}
 		});
 	}

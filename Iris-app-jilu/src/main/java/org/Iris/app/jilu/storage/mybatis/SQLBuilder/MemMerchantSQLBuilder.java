@@ -33,7 +33,6 @@ public class MemMerchantSQLBuilder {
 			{
 				UPDATE(Table.MEM_MERCHANT.mark());
 				SET("name=#{name}");
-				SET("avatar=#{avatar}");
 				SET("QR_code=#{QRCode}");
 				SET("updated=#{updated}");
 				SET("address=#{address}");

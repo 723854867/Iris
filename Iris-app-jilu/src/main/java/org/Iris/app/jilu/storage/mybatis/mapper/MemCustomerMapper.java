@@ -1,12 +1,15 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
+import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemCustomerSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
+
+import redis.clients.jedis.Tuple;
 
 public interface MemCustomerMapper {
 
@@ -32,5 +35,5 @@ public interface MemCustomerMapper {
 	 * @return
 	 */
 	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getCustomersByIds")
-	List<MemCustomer> getCustomersByIds(List<Long> list);
+	List<MemCustomer> getCustomersByIds(Set<Tuple> set);
 }

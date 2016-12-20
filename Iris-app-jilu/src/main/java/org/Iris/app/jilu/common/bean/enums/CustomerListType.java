@@ -35,6 +35,10 @@ public enum CustomerListType {
 		public String redisCustomerListKey(long merchantId) {
 			return RedisKeyGenerator.getCustomerListPurchaseFrequencyKey(merchantId);
 		}
+		@Override
+		public String customerListLoadTimeKey(long merchantId) {
+			return RedisKeyGenerator.getCustomerListFrequencyLoadTimeKey(merchantId);
+		}
 	};
 	
 	private int mark;
@@ -48,6 +52,10 @@ public enum CustomerListType {
 	}
 	
 	public abstract String redisCustomerListKey(long merchantId);
+	
+	public String customerListLoadTimeKey(long merchantId) {
+		return RedisKeyGenerator.getCustomerListLoadTimeKey(merchantId);
+	}
 	
 	public static final CustomerListType match(int type) {
 		for (CustomerListType listType : CustomerListType.values()) {

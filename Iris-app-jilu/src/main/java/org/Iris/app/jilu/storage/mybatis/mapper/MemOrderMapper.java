@@ -1,21 +1,24 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
+import java.util.List;
+
+import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import java.util.List;
-import org.Iris.app.jilu.common.bean.model.CustomerListModel;
-import org.apache.ibatis.annotations.Param;
 
 public interface MemOrderMapper {
 
-	@SelectProvider(type = MemOrderSQLBuilder.class,method="getOrderById")
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderById")
 	MemOrder getOrderById(String orderId);
-	@InsertProvider(type = MemOrderSQLBuilder.class,method="insert")
+	
+	@InsertProvider(type = MemOrderSQLBuilder.class, method="insert")
 	void insert(MemOrder order);
-	@UpdateProvider(type = MemOrderSQLBuilder.class,method="update")
+	
+	@UpdateProvider(type = MemOrderSQLBuilder.class, method="update")
 	void update(MemOrder order);
 	
 	/**
@@ -26,5 +29,6 @@ public interface MemOrderMapper {
 	 * @param end
 	 * @return
 	 */
-	List<CustomerListModel.CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
+	List<CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
 }
