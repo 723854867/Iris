@@ -14,6 +14,7 @@
 				<property name="username" value="${hikaricp.username}" />
 				<property name="password" value="${hikaricp.password}" />
 				<property name="maximumPoolSize" value="${hikaricp.max.pool.size}" />
+				<property name="minimumIdle" value="${hikaricp.min.idle}"/>
 				<property name="maxLifetime" value="${hikaricp.max.life.time}" />
 				<property name="idleTimeout" value="${hikaricp.idle.timeout}" />
 				<property name="connectionTimeout" value="${hikaricp.connection.timeout}" />

@@ -15,5 +15,5 @@ public interface MemOrderMapper {
 	 * @param end
 	 * @return
 	 */
-	List<CustomerListModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
+	List<CustomerListModel.CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
 }

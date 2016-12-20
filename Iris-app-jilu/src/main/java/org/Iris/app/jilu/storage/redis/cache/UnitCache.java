@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.storage.redis.cache;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +24,10 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.util.lang.DateUtils;
-import org.apache.ibatis.annotations.Case;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import redis.clients.jedis.Tuple;
 
 /**
  * 负责所有商户户相关的数据存取：比如 mem_merchant 等
@@ -145,60 +148,45 @@ public class UnitCache extends RedisCache {
 	public List<MemCustomer> getCustomerList(CustomerListType type, long merchantId, int page, int pageSize) { 
 		String key = type.redisCustomerListKey(merchantId);
 		long count = redisOperate.zcount(key);
+		if (0 == count)
+			count = _loadCustomerList(merchantId, type);
+		if (0 == count)
+			return Collections.emptyList();
+		
+		long total = count % pageSize == 0 ? count / pageSize : count / pageSize + 1;
+		if (total < page || page < 1)
+			return Collections.emptyList();
+		int start = (page - 1) * pageSize;
+		int end = start + pageSize - 1;
+		Set<Tuple> set = redisOperate.zrangeWithScores(key, start, end);
+		List<Long> list = new ArrayList<Long>();
+		for (Tuple tuple : set)
+			list.add(Long.valueOf(tuple.getElement()));
+		List<MemCustomer> customers = memCustomerMapper.getCustomersByIds(list);
+		return null;
+	}
+	
+	/**
+	 * 加载客户列表
+	 */
+	private int _loadCustomerList(long merchantId, CustomerListType type) {
+		List<? extends CustomerListModel> list;
 		switch (type) {
-		case PURCHASE_SUM:
-		case PURCHASE_FREQUENCY:
-		case NAME:
-			
+		case PURCHASE_FREQUENCY:													// 最近三十天的购物频率排序
+			int end = DateUtils.currentTime();
+			int start = end - DateUtils.MONTH_SECONDS;
+			list = memOrderMapper.getMerchantOrderCountGroupByCustomerBetweenTime(merchantId, start, end);
 			break;
-		default:					// 最近三十天的购物频率排序
-			if (0 == count) 		// 则需要重新加在
-				count = _loadCustomerListOrderByPurchaseFrequency(merchantId);
+		default:																					
+			list = memCustomerMapper.getMerchantCustomers(merchantId);
 			break;
 		}
-		return null;
-	}
-	
-	private List<MemCustomer> getFixedCustomerList(CustomerListType type, int page, int pageSize) {
-		return null;
-	}
-	
-	/**
-	 * 用户登录时清理缓存
-	 * 
-	 * @param merchantId
-	 */
-	public void clearCache(long merchantId) { 
-		redisOperate.del(
-				RedisKeyGenerator.getCustomerListNameKey(merchantId),
-				RedisKeyGenerator.getCustomerListPurchaseSumKey(merchantId),
-				RedisKeyGenerator.getCustomerListPurchaseRecentKey(merchantId),
-				RedisKeyGenerator.getCustomerListPurchaseFrequencyKey(merchantId));
-	}
-	
-	/**
-	 * 加载客户列表：注意这里不会加载 PURCHASE_FREQUENCY 因为该排序需要每天更新
-	 * 
-	 */
-	public void loadCustomerList(long merchantId) {
-		List<MemCustomer> list = memCustomerMapper.getMerchantCustomers(merchantId);
 		if (list.isEmpty())
-			return;
-		Map<String, Double> map = new HashMap<String, Double>(list.size());
-		_loadCustomerList(merchantId, list, map, CustomerListType.NAME);
-		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_SUM);
-		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_RECENT);
-	}
-	
-	private int _loadCustomerListOrderByPurchaseFrequency(long merchantId) { 
-		int end = DateUtils.currentTime();
-		int start = end - DateUtils.MONTH_SECONDS;
-		List<CustomerListModel> list = memOrderMapper.getMerchantOrderCountGroupByCustomerBetweenTime(merchantId, start, end);
-		if (list.isEmpty()) 
 			return 0;
 		Map<String, Double> map = new HashMap<String, Double>(list.size());
-		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_FREQUENCY);
-//		redisOperate.expire(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), seconds);
+		_loadCustomerList(merchantId, list, map, type);
+		if (type == CustomerListType.PURCHASE_FREQUENCY) 							// 需要当天晚上 23:59:59 秒将该 key 失效
+			redisOperate.expireAt(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), DateUtils.nextZeroTime() - 1);
 		return list.size();
 	}
 	

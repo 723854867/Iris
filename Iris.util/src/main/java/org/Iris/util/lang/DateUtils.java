@@ -3,12 +3,14 @@ package org.Iris.util.lang;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 public class DateUtils {
 	
 	public static final int MONTH_SECONDS = 24 * 30 * 3600;
+	public static final int DAY_SECONDS = 24 * 3600;
 
 	public static final String yyyyMMdd = "yyyyMMdd";
 	public static final String ISO8601_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";
@@ -19,8 +21,50 @@ public class DateUtils {
 	public static int currentTime() {
 		return (int) (System.currentTimeMillis() / 1000);
 	}
+
+	/**
+	 * 获取下一个零点 unix 时间戳
+	 * 
+	 * @return
+	 */
+	public static int nextZeroTime() {
+		return zeroTime() + DAY_SECONDS;
+	}
+	
+	/**
+	 * 获取当天零点 unix 时间戳
+	 * 
+	 * @return
+	 */
+	public static int zeroTime() { 
+		return zeroTime(System.currentTimeMillis());
+	}
+	
+	/**
+	 * 获取指定 unix 时间戳的零点的 10 位 unix 时间戳
+	 * 
+	 * @param millis
+	 * @return
+	 */
+	public static int zeroTime(long millis) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(millis);
+		calendar.set(Calendar.HOUR, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return (int) (calendar.getTimeInMillis() / 1000);
+	}
 	
 	public static void main(String[] args) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 0);
+		long time = calendar.getTimeInMillis();
+		System.out.println(time);
+		System.out.println(getDate(yyyyMMddHHmmss, time, TimeZone.getDefault()));
 	}
 	
 	public static long getTime(String date, String format, TimeZone zone) { 

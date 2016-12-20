@@ -9,6 +9,7 @@ import org.Iris.util.reflect.BeanUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Tuple;
 
 public class RedisOperate {
 
@@ -28,6 +29,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.expire(key, seconds);
+			}
+		});
+	}
+	
+	public long expireAt(String key, long timestamp) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.expireAt(key, timestamp);
 			}
 		});
 	}
@@ -156,6 +166,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.zadd(key, scoreMembers);
+			}
+		});
+	}
+	
+	public Set<Tuple> zrangeWithScores(String key, long start, long end) {
+		return invoke(new RedisInvocation<Set<Tuple>>() {
+			@Override
+			public Set<Tuple> invok(Jedis jedis) {
+				return jedis.zrangeWithScores(key, start, end);
 			}
 		});
 	}

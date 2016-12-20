@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.List;
+
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -30,5 +32,14 @@ public class MemCustomerSQLBuilder {
 				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
+	}
+	
+	public String getCustomersByIds(List<Long> list) {
+		StringBuilder builder = new StringBuilder("SELECT * FROM mem_customer WHERE customer_id IN(");
+		for (Long id : list)
+			builder.append(id).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
 	}
 }
