@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
-import org.Iris.app.jilu.service.action.UnitAction;
+import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -9,9 +9,7 @@ import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 
-
-
-public class ORDER_EDIT extends UnitAction<MerchantSession>{
+public class ORDER_EDIT extends SerialMerchantAction {
 	
 	public static final ORDER_EDIT INSTANCE						 = new ORDER_EDIT();
 

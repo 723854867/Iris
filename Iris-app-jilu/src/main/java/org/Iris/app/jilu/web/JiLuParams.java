@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.web;
 
-import org.Iris.core.consts.IrisBoolConst;
 import org.Iris.core.consts.IrisIntConst;
 import org.Iris.core.consts.IrisLongConst;
 import org.Iris.core.consts.IrisStrConst;
@@ -14,12 +13,11 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 public interface JiLuParams {
 
 	final IrisStrConst ACTION								= new IrisStrConst("action", 101);
-	final IrisBoolConst SERIAL								= new IrisBoolConst("serial", false, 102);
-	final IrisIntConst TYPE									= new IrisIntConst("type", 0, 103);
-	final IrisStrConst ACCOUNT								= new IrisStrConst("account", 104);
+	final IrisIntConst TYPE									= new IrisIntConst("type", 0, 102);
+	final IrisStrConst ACCOUNT								= new IrisStrConst("account", 103);
 	
 	// 手机号码需要验证
-	final IrisStrConst MOBILE								= new IrisStrConst("mobile", 105) {
+	final IrisStrConst MOBILE								= new IrisStrConst("mobile", 104) {
 		protected String parseValue(String value) {
 			PhoneNumberUtil util = PhoneNumberUtil.getInstance();
 			try {
@@ -34,7 +32,7 @@ public interface JiLuParams {
 	};
 	
 	// 邮箱号码需要验证
-	final IrisStrConst EMAIL								= new IrisStrConst("email", 106) {
+	final IrisStrConst EMAIL								= new IrisStrConst("email", 105) {
 		protected String parseValue(String value) {
 			if (!Patterns.isEmail(value))
 				throw IllegalConstException.errorException(this);
@@ -42,34 +40,34 @@ public interface JiLuParams {
 		};
 	};
 	
-	final IrisStrConst CAPTCHA								= new IrisStrConst("captcha", 107);
-	final IrisStrConst AVATAR								= new IrisStrConst("avatar", 108);
-	final IrisStrConst ADDRESS								= new IrisStrConst("address", 109);
-	final IrisStrConst TOKEN								= new IrisStrConst("token", 110);
-	final IrisStrConst NAME									= new IrisStrConst("name", 111);
-	final IrisLongConst CUSTOMERID							= new IrisLongConst("customerId",0, 112);
-	final IrisStrConst GOODSLIST							= new IrisStrConst("goodsList", 113);
-	final IrisStrConst ORDERID								= new IrisStrConst("orderId", 114);
-	final IrisStrConst ID_NUMBER							= new IrisStrConst("IDNumber", 115);
-	final IrisStrConst ID_FRONTAGE							= new IrisStrConst("IDFrontage", 116);
-	final IrisStrConst ID_BEHIND							= new IrisStrConst("IDBehind", 117);
-	final IrisStrConst MEMO									= new IrisStrConst("memo", 118);
-	final IrisStrConst GOODS_CODE							= new IrisStrConst("goodsCode", 119);
-	final IrisStrConst ZH_NAME							    = new IrisStrConst("zhName", 120);
-	final IrisStrConst US_NAME							    = new IrisStrConst("usName", 121);
-	final IrisStrConst GOODS_FORMAT							= new IrisStrConst("goodsFormat", 122);
-	final IrisStrConst CLASSIFICATION						= new IrisStrConst("classification", 123);
-	final IrisStrConst ZH_BRAND								= new IrisStrConst("zhBrand", 124);
-	final IrisStrConst US_BRAND								= new IrisStrConst("usBrand", 125);
-	final IrisStrConst UNIT								    = new IrisStrConst("unit", 126);
-	final IrisStrConst WEIGHT							    = new IrisStrConst("weight","0",127);
-	final IrisStrConst ALIAS							    = new IrisStrConst("alias", 128);
-	final IrisStrConst BARCODE							    = new IrisStrConst("barcode", 129);
-	final IrisStrConst SKU							        = new IrisStrConst("sku", 130);
-	final IrisStrConst ADDGOODSLIST							= new IrisStrConst("addGoodsList",null, 131);
-	final IrisStrConst UPDATEGOODSLIST					    = new IrisStrConst("updateGoodsList",null, 132);
-	final IrisStrConst DELETEGOODSLIST						= new IrisStrConst("deleteGoodsList",null,133);
-	final IrisIntConst PAGE									= new IrisIntConst("page", 134);
-	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 135);
+	final IrisStrConst CAPTCHA								= new IrisStrConst("captcha", 106);
+	final IrisStrConst AVATAR								= new IrisStrConst("avatar", 107);
+	final IrisStrConst ADDRESS								= new IrisStrConst("address", 108);
+	final IrisStrConst TOKEN								= new IrisStrConst("token", 109);
+	final IrisStrConst NAME									= new IrisStrConst("name", 110);
+	final IrisLongConst CUSTOMERID							= new IrisLongConst("customerId",0, 111);
+	final IrisStrConst GOODSLIST							= new IrisStrConst("goodsList", 112);
+	final IrisStrConst ORDERID								= new IrisStrConst("orderId", 113);
+	final IrisStrConst ID_NUMBER							= new IrisStrConst("IDNumber", 114);
+	final IrisStrConst ID_FRONTAGE							= new IrisStrConst("IDFrontage", 115);
+	final IrisStrConst ID_BEHIND							= new IrisStrConst("IDBehind", 116);
+	final IrisStrConst MEMO									= new IrisStrConst("memo", 117);
+	final IrisStrConst GOODS_CODE							= new IrisStrConst("goodsCode", 118);
+	final IrisStrConst ZH_NAME							    = new IrisStrConst("zhName", 119);
+	final IrisStrConst US_NAME							    = new IrisStrConst("usName", 120);
+	final IrisStrConst GOODS_FORMAT							= new IrisStrConst("goodsFormat", 121);
+	final IrisStrConst CLASSIFICATION						= new IrisStrConst("classification", 122);
+	final IrisStrConst ZH_BRAND								= new IrisStrConst("zhBrand", 123);
+	final IrisStrConst US_BRAND								= new IrisStrConst("usBrand", 124);
+	final IrisStrConst UNIT								    = new IrisStrConst("unit", 125);
+	final IrisStrConst WEIGHT							    = new IrisStrConst("weight","0", 126);
+	final IrisStrConst ALIAS							    = new IrisStrConst("alias", 127);
+	final IrisStrConst BARCODE							    = new IrisStrConst("barcode", 128);
+	final IrisStrConst SKU							        = new IrisStrConst("sku", 129);
+	final IrisStrConst ADDGOODSLIST							= new IrisStrConst("addGoodsList", null, 130);
+	final IrisStrConst UPDATEGOODSLIST					    = new IrisStrConst("updateGoodsList", null, 131);
+	final IrisStrConst DELETEGOODSLIST						= new IrisStrConst("deleteGoodsList", null, 132);
+	final IrisIntConst PAGE									= new IrisIntConst("page", 133);
+	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 134);
 	
 }

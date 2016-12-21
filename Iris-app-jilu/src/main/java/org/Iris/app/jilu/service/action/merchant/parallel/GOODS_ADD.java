@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.parallel;
 
 import org.Iris.app.jilu.common.BeanCreator;
-import org.Iris.app.jilu.service.action.UnitAction;
+import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
@@ -11,7 +11,7 @@ import org.Iris.core.service.bean.Result;
  * 
  * @author fansd
  */
-public class GOODS_ADD extends UnitAction<MerchantSession> {
+public class GOODS_ADD extends ParallelMerchantAction {
 	
 	public static final GOODS_ADD INSTANCE				= new GOODS_ADD();
 	

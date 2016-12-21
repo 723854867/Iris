@@ -37,8 +37,7 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 	
 	private static final long serialVersionUID = -3144141122029756489L;
 	
-	protected Map<String, UnitAction<?>> serialActions = new HashMap<String, UnitAction<?>>();
-	protected Map<String, UnitAction<?>> parallelActions = new HashMap<String, UnitAction<?>>();
+	protected Map<String, UnitAction<?>> actions = new HashMap<String, UnitAction<?>>();
 	
 	@Override
 	protected MerchantSession buildSession(HttpServletRequest request, HttpServletResponse response) {
@@ -50,28 +49,25 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 		super.init();
 		this.authenticator = SpringContextUtil.getBean("merchantAuthenticator", MerchantAuthenticator.class);
 		
-		_addSerialAction(LOGOUT.INSTANCE);
-		_addSerialAction(MERCHANT_EDIT.INSTANCE);
-		_addSerialAction(ORDER_EDIT.INSTANCE);
-		_addSerialAction(ORDER_LOCK.INSTANCE);
-		_addSerialAction(CUSTOMER_LIST.INSTANCE);
-		
-		_addParallelAction(CUSTOMER_ADD.INSTANCE);
-		_addParallelAction(MERCHANT_QUERY.INSTANCE);
-		_addParallelAction(ALIYUN_ASSUME_ROLE.INSTANCE);
-		_addParallelAction(ORDER_ADD.INSTANCE);
-		_addParallelAction(GOODS_ADD.INSTANCE);
+		_addAction(LOGOUT.INSTANCE);
+		_addAction(MERCHANT_EDIT.INSTANCE);
+		_addAction(ORDER_EDIT.INSTANCE);
+		_addAction(ORDER_LOCK.INSTANCE);
+		_addAction(CUSTOMER_LIST.INSTANCE);
+		_addAction(CUSTOMER_ADD.INSTANCE);
+		_addAction(MERCHANT_QUERY.INSTANCE);
+		_addAction(ALIYUN_ASSUME_ROLE.INSTANCE);
+		_addAction(ORDER_ADD.INSTANCE);
+		_addAction(GOODS_ADD.INSTANCE);
 	}
 	
 	@Override
 	protected void receive(MerchantSession session) {
-		boolean serial = session.getKVParamOptional(JiLuParams.SERIAL);
-		String action = session.getKVParam(JiLuParams.ACTION);
-		UnitAction<?> unitAction = serial ? serialActions.get(action) : parallelActions.get(action);
-		if (null == unitAction) 
+		UnitAction<?> action = actions.get(session.getKVParam(JiLuParams.ACTION));
+		if (null == action) 
 			throw IllegalConstException.errorException(JiLuParams.ACTION);
 		
-		if (serial) {
+		if (action.serial()) {
 			Merchant merchant = session.getUnit();
 			String lockId = merchant.tryLock();
 			if (null == lockId) {
@@ -80,19 +76,15 @@ public class MerchantServlet extends IrisServlet<MerchantSession> {
 			}
 			
 			try {
-				unitAction.execute(session);
+				action.execute(session);
 			} finally {
 				merchant.unLock(lockId);
 			}
 		} else 
-			unitAction.execute(session);
+			action.execute(session);
 	}
 	
-	private void _addSerialAction(UnitAction<?> action) { 
-		this.serialActions.put(action.name().toLowerCase(), action);
-	}
-	
-	private void _addParallelAction(UnitAction<?> action) { 
-		this.parallelActions.put(action.name().toLowerCase(), action);
+	private void _addAction(UnitAction<?> action) { 
+		this.actions.put(action.name(), action);
 	}
 }

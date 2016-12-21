@@ -20,4 +20,6 @@ public abstract class UnitAction<SESSION extends UnitSession<?>> implements IAct
 	public String name() {
 		return this.getClass().getSimpleName();
 	}
+	
+	public abstract boolean serial();
 }
