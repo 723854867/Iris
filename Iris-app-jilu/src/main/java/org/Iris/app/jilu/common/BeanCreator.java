@@ -46,6 +46,8 @@ public class BeanCreator {
 		memCustomer.setMemo(memo);
 		memCustomer.setIDNumber(IDNumber);
 		memCustomer.setNamePrefixLetter(CnToSpell.getFirstChar(name));
+		memCustomer.setPurchaseSum("0");//设置初始值
+		memCustomer.setLastPurchaseTime(0);//设置初始值
 		int time = DateUtils.currentTime();
 		memCustomer.setCreated(time);
 		memCustomer.setUpdated(time);
@@ -73,12 +75,13 @@ public class BeanCreator {
 		return memGoods;
 	}
 	
-	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName, long customerId, String customerName,
+	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName,String memchantAddress, long customerId, String customerName,
 			String customerMobile, String customerAddress, int status){
 		MemOrder memOrder = new MemOrder();
 		memOrder.setOrderId(orderId);
 		memOrder.setMerchantId(merchantId);
 		memOrder.setMerchantName(merchantName);
+		memOrder.setMerchantAddress(memchantAddress);
 		memOrder.setCustomerId(customerId);
 		memOrder.setCustomerName(customerName);
 		memOrder.setCustomerMobile(customerMobile);

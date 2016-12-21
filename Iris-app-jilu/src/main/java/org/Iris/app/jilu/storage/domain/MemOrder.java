@@ -10,6 +10,7 @@ public class MemOrder implements RedisHashBean{
 	private String superOrderId;
 	private long merchantId;
 	private String merchantName;
+	private String merchantAddress;
 	private long customerId;
 	private String customerName;
 	private String customerMobile;
@@ -65,6 +66,14 @@ public class MemOrder implements RedisHashBean{
 
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+	
+	public String getMerchantAddress() {
+		return merchantAddress;
+	}
+
+	public void setMerchantAddress(String merchantAddress) {
+		this.merchantAddress = merchantAddress;
 	}
 
 	public long getCustomerId() {
