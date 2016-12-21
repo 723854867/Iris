@@ -11,6 +11,7 @@ public interface MemGoodsMapper {
 	@InsertProvider(type = MemGoodsSQLBuilder.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "goods_id", keyProperty = "goodsId")
 	void insert(MemGoods memGoods);
+
 	@SelectProvider(type = MemGoodsSQLBuilder.class, method = "getGoodsById")
 	MemGoods getGoodsById(long goodsId);
 }

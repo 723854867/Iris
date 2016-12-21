@@ -25,7 +25,7 @@ public class ORDER_ADD extends ParallelMerchantAction {
 	protected String execute0(MerchantSession session) {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
 		long customerId = session.getKVParam(JiLuParams.CUSTOMERID);
-		String orderId = System.currentTimeMillis()+new Random().nextInt(10)+"";
+		String orderId = System.currentTimeMillis()+""+new Random().nextInt(10);
 		MemOrderGoods orderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class);
 		if(orderGoods==null || orderGoods.length==0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
@@ -33,7 +33,7 @@ public class ORDER_ADD extends ParallelMerchantAction {
 		MemCustomer customer = unitCache.getMemCustomerById(customerId);
 		if(customer == null)
 			throw IllegalConstException.errorException(JiLuParams.CUSTOMERID);
-		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), 
+		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
 				customerId, customer.getName(), customer.getMobile(), customer.getAddress(),0);
 		orderCache.createOrder(order, orderGoods);
 		return Result.jsonSuccess(order);

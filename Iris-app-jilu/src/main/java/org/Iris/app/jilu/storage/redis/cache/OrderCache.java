@@ -64,9 +64,10 @@ public class OrderCache extends RedisCache {
 	
 	private void batchUpdateOrderGoodsByList(String orderId, List<MemOrderGoods> list) {
 		for(MemOrderGoods ogs: list){
-			MemOrderGoods mGoods = getHashBean(new MemOrderGoods(orderId, ogs.getGoodsId()));
-			mGoods.setCount(ogs.getCount());
-			mGoods.setUnitPrice(ogs.getUnitPrice());
+			ogs = getHashBean(new MemOrderGoods(orderId, ogs.getGoodsId()));
+			ogs.setCount(ogs.getCount());
+			ogs.setUnitPrice(ogs.getUnitPrice());
+			
 		}
 		Map<String, List<MemOrderGoods>> map = new HashMap<String, List<MemOrderGoods>>();
 		map.put("list", list);

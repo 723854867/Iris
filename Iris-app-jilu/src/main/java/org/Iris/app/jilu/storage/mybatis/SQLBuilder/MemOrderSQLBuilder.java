@@ -24,6 +24,7 @@ public class MemOrderSQLBuilder {
 				VALUES("super_order_id", 	    "#{superOrderId}");
 				VALUES("merchant_id", 			"#{merchantId}");
 				VALUES("merchant_name", 		"#{merchantName}");
+				VALUES("merchant_address", 		"#{merchantAddress}");
 				VALUES("customer_id", 			"#{customerId}");
 				VALUES("customer_name", 		"#{customerName}");
 				VALUES("customer_mobile", 		"#{customerMobile}");
