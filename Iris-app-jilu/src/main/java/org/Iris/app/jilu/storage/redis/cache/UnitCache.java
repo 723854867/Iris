@@ -15,7 +15,6 @@ import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.AccountModel;
-import org.Iris.app.jilu.common.bean.model.CustomerListModel;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
@@ -218,8 +217,8 @@ public class UnitCache extends RedisCache {
 		return list.size();
 	}
 	
-	private <T extends CustomerListModel> void _loadCustomerList(long merchantId, List<T> list, Map<String, Double> map, CustomerListType type) { 
-		for (T model : list)
+	private void _loadCustomerList(long merchantId, List<MemCustomer> list, Map<String, Double> map, CustomerListType type) { 
+		for (MemCustomer model : list)
 			map.put(String.valueOf(model.getCustomerId()), model.getScore(type));
 		redisOperate.zadd(type.redisCustomerListKey(merchantId), map);
 	}

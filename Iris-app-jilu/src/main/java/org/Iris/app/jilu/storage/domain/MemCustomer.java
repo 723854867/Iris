@@ -1,11 +1,10 @@
 package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
-import org.Iris.app.jilu.common.bean.model.CustomerListModel;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MemCustomer implements RedisHashBean, CustomerListModel {
+public class MemCustomer implements RedisHashBean {
 
 	private long customerId;
 	private long merchantId;
@@ -28,7 +27,6 @@ public class MemCustomer implements RedisHashBean, CustomerListModel {
 		this.customerId = customerId;
 	}
 
-	@Override
 	public long getCustomerId() {
 		return customerId;
 	}
@@ -138,7 +136,6 @@ public class MemCustomer implements RedisHashBean, CustomerListModel {
 		return RedisKeyGenerator.getMemCustomerDataKey(this.customerId);
 	}
 	
-	@Override
 	public double getScore(CustomerListType type) {
 		switch (type) {
 		case PURCHASE_RECENT:
