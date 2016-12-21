@@ -14,8 +14,8 @@ public interface MerchantMapper {
 	
 	@InsertProvider(type = MerchantSQLBuilder.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "merchant_id", keyProperty = "merchantId")
-	void insert(Merchant memMerchant);
+	void insert(Merchant merchant);
 	
 	@UpdateProvider(type = MerchantSQLBuilder.class, method = "update")
-	void update(Merchant memMerchant);
+	void update(Merchant merchant);
 }

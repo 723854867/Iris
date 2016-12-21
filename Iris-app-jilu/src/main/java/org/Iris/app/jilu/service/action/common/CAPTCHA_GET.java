@@ -24,7 +24,7 @@ public class CAPTCHA_GET extends CommonAction {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
 		String account = type == AccountType.MOBILE ? session.getKVParam(JiLuParams.MOBILE) : session.getKVParam(JiLuParams.EMAIL);
 		String captchaKey = CommonKeyGenerator.accountCaptchaKey(type, account);
-		String captchaCountKey = CommonKeyGenerator.getAccountCaptchaCountKey(type, account);
+		String captchaCountKey = CommonKeyGenerator.accountCaptchaCountKey(type, account);
 		
 		// 生成验证码并且缓存验证码
 		String captcha = KeyUtil.randomCaptcha(AppConfig.getCaptchaDigit());

@@ -2,7 +2,7 @@ package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.service.realm.unit.Unit;
 import org.Iris.app.jilu.service.realm.unit.UnitType;
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
 public class Merchant implements RedisHashBean, Unit {
@@ -115,7 +115,7 @@ public class Merchant implements RedisHashBean, Unit {
 
 	@Override
 	public String redisKey() {
-		return CommonKeyGenerator.getMemMerchantDataKey(merchantId);
+		return MerchantKeyGenerator.merchantDataKey(merchantId);
 	}
 	
 	@Override

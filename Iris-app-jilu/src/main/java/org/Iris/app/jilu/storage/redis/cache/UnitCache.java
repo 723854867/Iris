@@ -75,7 +75,7 @@ public class UnitCache extends RedisCache {
 
 		// 更新缓存
 		flushHashBean(merchant);
-		flushHashBean(account);
+		redisOperate.hset(CommonKeyGenerator.accountMerchantIdMapKey(AccountType.match(am.getType())), am.getAccount(), String.valueOf(merchant.getMerchantId()));
 		
 		// 创建用户 oss 资源文件夹
 		aliyunService.createMerchantFolder(merchant);
@@ -136,7 +136,7 @@ public class UnitCache extends RedisCache {
 	 * @return
 	 */
 	public MerchantOperator getMerchantByToken(String token) {
-		String val = redisOperate.get(CommonKeyGenerator.getMerchantTokenKey(token));
+		String val = redisOperate.get(CommonKeyGenerator.tokenMerchantIdKey(token));
 		if (null == val)
 			return null;
 		return getMerchantByMerchantId(Long.valueOf(val));
@@ -151,7 +151,7 @@ public class UnitCache extends RedisCache {
 		merchantCustomerMapper.insert(customer);
 		flushHashBean(customer);
 		String member = String.valueOf(customer.getCustomerId());
-		if (0 == redisOperate.exist(CommonKeyGenerator.getCustomerListLoadTimeKey(customer.getMerchantId())))
+		if (0 == redisOperate.exist(CommonKeyGenerator.customerListLoadTimeKey(customer.getMerchantId())))
 			return;
 		
 		// 客户列表已经加载到内存中需要同步, 初始购物金额，购物频率和最近购物时间都是 0，只有名字有 score
@@ -161,11 +161,18 @@ public class UnitCache extends RedisCache {
 		redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), member);
 	}
 	
-	public MerchantCustomer getMemCustomerById(long customerId){
-		MerchantCustomer customer = getHashBean(new MerchantCustomer(customerId));
+	/**
+	 * 获取指定商户的指定客户
+	 * 
+	 * @param merchantId
+	 * @param customerId
+	 * @return
+	 */
+	public MerchantCustomer getMerchantCustomerById(long merchantId, long customerId){
+		MerchantCustomer customer = getHashBean(new MerchantCustomer(merchantId, customerId));
 		if(customer != null)
 			return customer;
-		return merchantCustomerMapper.getMemCustomerById(customerId);
+		return merchantCustomerMapper.getMerchantCustomerById(merchantId, customerId);
 	}
 	/**
 	 * 加载商户客户列表，返回的是排序的 set
@@ -195,7 +202,7 @@ public class UnitCache extends RedisCache {
 	 * 会导致加载客户列表
 	 */
 	private long _customerCount(long merchantId, CustomerListType type) {
-		String key = CommonKeyGenerator.getCustomerListLoadTimeKey(merchantId);
+		String key = CommonKeyGenerator.customerListLoadTimeKey(merchantId);
 		String zeroTime = String.valueOf(DateUtils.zeroTime());
 		String time = luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_REFRESH.name(), 1, key, String.valueOf(type.mark()), zeroTime);
 		if (null == time) 

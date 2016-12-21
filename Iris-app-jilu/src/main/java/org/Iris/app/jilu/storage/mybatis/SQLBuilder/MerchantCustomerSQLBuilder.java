@@ -36,7 +36,7 @@ public class MerchantCustomerSQLBuilder {
 			}
 		}.toString();
 	}
-	public String getMerchantCustomers() {
+	public String getMerchantCustomerById() {
 		return new SQL() {
 			{
 				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");

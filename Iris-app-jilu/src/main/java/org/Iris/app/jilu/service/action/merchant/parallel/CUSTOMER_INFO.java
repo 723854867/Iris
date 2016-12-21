@@ -17,7 +17,7 @@ public class CUSTOMER_INFO extends ParallelMerchantAction {
 
 	@Override
 	protected String execute0(MerchantSession session) {
-		MerchantCustomer customer = unitCache.getMemCustomerById(session.getKVParam(JiLuParams.CUSTOMER_ID));
+		MerchantCustomer customer = unitCache.getMerchantCustomerById(session.getUnit().uid(), session.getKVParam(JiLuParams.CUSTOMER_ID));
 		if (null == customer)
 			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
 		return Result.jsonSuccess(new CustomerForm(customer));

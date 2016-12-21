@@ -11,7 +11,6 @@ import org.Iris.aliyun.service.StsService;
 import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
 import org.Iris.app.jilu.storage.domain.Merchant;
-import org.Iris.util.common.SerializeUtil;
 import org.springframework.stereotype.Service;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
@@ -45,7 +44,6 @@ public class AliyunService {
 		Policy policy = new Policy();
 		policy.addStatement(ossFullAccess);
 		policy.addStatement(AliyunUtils.getMerchantStatement(merchant));
-		System.out.println(SerializeUtil.JsonUtil.GSON.toJson(policy));
 		return stsService.assumeRole(AppConfig.getAliyunStsRoleArn(), "Merchant-" + merchant.uid(), policy);
 	}
 	

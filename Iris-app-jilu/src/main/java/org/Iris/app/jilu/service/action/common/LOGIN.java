@@ -31,7 +31,7 @@ public class LOGIN extends CommonAction {
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
-			if (!luaOperate.delIfEquals(CommonKeyGenerator.getAccountCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA)))
+			if (!luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), session.getKVParam(JiLuParams.CAPTCHA)))
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
 			
 			MerchantOperator operator = unitCache.getMerchantByAccount(type, account);

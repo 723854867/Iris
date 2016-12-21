@@ -1,9 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
-import org.Iris.redis.RedisHashBean;
-
-public class MerchantAccount implements RedisHashBean {
+public class MerchantAccount {
 
 	private String account;
 	private int type;
@@ -55,10 +52,5 @@ public class MerchantAccount implements RedisHashBean {
 
 	public void setUpdated(int updated) {
 		this.updated = updated;
-	}
-
-	@Override
-	public String redisKey() {
-		return CommonKeyGenerator.getMemAccountDataKey(account);
 	}
 }
