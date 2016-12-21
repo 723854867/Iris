@@ -30,9 +30,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public abstract class IrisServlet<SESSION extends IrisSession, ACTION extends IAction<SESSION>> extends HttpServlet {
+public abstract class IrisDispatcher<SESSION extends IrisSession, ACTION extends IAction<SESSION>> extends HttpServlet {
 	
-	private static final Logger logger = LoggerFactory.getLogger(IrisServlet.class);
+	private static final Logger logger = LoggerFactory.getLogger(IrisDispatcher.class);
 
 	private static final long serialVersionUID = -7815032356377001691L;
 	
@@ -49,17 +49,16 @@ public abstract class IrisServlet<SESSION extends IrisSession, ACTION extends IA
 	@Autowired
 	private ErrorHandler errorHandler;
 	
-	protected Authenticator<SESSION> authenticator;
 	protected String actionPackage;
-	
+	protected Authenticator<SESSION> authenticator;
 	protected Map<String, ACTION> actions = new HashMap<String, ACTION>();
 	
-	protected IrisServlet(String actionPackage) {
+	protected IrisDispatcher(String actionPackage) {
 		this.actionPackage = actionPackage;
 	}
 	
 	@Override
-	@SuppressWarnings({ "resource", "unchecked" })
+	@SuppressWarnings({ "resource"})
 	public void init() throws ServletException {
 		super.init();
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -74,7 +73,11 @@ public abstract class IrisServlet<SESSION extends IrisSession, ACTION extends IA
 
 		AutowireCapableBeanFactory factory = context.getAutowireCapableBeanFactory();
 		factory.autowireBean(this);
-		
+		_initActions();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void _initActions()  {
 		List<Class<?>> classes = ClassUtil.scanPackage(actionPackage, false);
 		for (Class<?> clazz : classes) {
 			int modifiers = clazz.getModifiers();

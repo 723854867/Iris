@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.action.MerchantAction;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
-import org.Iris.app.jilu.web.IrisServlet;
+import org.Iris.app.jilu.web.IrisDispatcher;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.auth.MerchantAuthenticator;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -20,7 +20,7 @@ import org.Iris.core.util.SpringContextUtil;
  * 
  * @author Ahab
  */
-public class MerchantServlet extends IrisServlet<MerchantSession, MerchantAction> {
+public class MerchantServlet extends IrisDispatcher<MerchantSession, MerchantAction> {
 	
 	private static final long serialVersionUID = -3144141122029756489L;
 	

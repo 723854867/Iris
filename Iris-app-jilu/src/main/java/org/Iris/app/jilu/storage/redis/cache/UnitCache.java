@@ -192,7 +192,7 @@ public class UnitCache extends RedisCache {
 	 * 会导致加载客户列表
 	 */
 	private long _customerCount(long merchantId, CustomerListType type) {
-		String key = type.customerListLoadTimeKey(merchantId);
+		String key = RedisKeyGenerator.getCustomerListLoadTimeKey(merchantId);
 		String zeroTime = String.valueOf(DateUtils.zeroTime());
 		String time = luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_REFRESH.name(), 1, key, String.valueOf(type.mark()), zeroTime);
 		if (null == time) 

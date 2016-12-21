@@ -4,12 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.action.CommonAction;
-import org.Iris.app.jilu.web.IrisServlet;
+import org.Iris.app.jilu.web.IrisDispatcher;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
 
-public class CommonServlet extends IrisServlet<IrisSession, CommonAction> {
+public class CommonServlet extends IrisDispatcher<IrisSession, CommonAction> {
 
 	private static final long serialVersionUID = -419034761363132842L;
 	
