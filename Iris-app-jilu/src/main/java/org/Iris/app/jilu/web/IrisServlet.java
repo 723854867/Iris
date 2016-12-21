@@ -81,7 +81,7 @@ public abstract class IrisServlet<SESSION extends IrisSession, ACTION extends IA
 			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
 				continue;
 			try {
-				actions.put(clazz.getSimpleName(), (ACTION) clazz.newInstance());
+				actions.put(clazz.getSimpleName().toLowerCase(), (ACTION) clazz.newInstance());
 			} catch (Exception e) {
 				logger.error("Action load failure, system will closed!", e);
 				System.exit(1);
