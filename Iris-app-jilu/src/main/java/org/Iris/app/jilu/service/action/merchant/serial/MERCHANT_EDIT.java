@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
-import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.Merchant;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
@@ -14,7 +14,7 @@ public class MERCHANT_EDIT extends SerialMerchantAction {
 		String name = session.getKVParam(JiLuParams.NAME);
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		
-		MemMerchant memMerchant = session.getUnit().getUnit();
+		Merchant memMerchant = session.getUnit().getUnit();
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
 		memMerchant.setUpdated(DateUtils.currentTime());

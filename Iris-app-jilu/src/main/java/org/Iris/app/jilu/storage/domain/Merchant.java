@@ -2,10 +2,10 @@ package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.service.realm.unit.Unit;
 import org.Iris.app.jilu.service.realm.unit.UnitType;
-import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MemMerchant implements RedisHashBean, Unit {
+public class Merchant implements RedisHashBean, Unit {
 
 	private long merchantId;
 	private int statusMod;
@@ -20,13 +20,13 @@ public class MemMerchant implements RedisHashBean, Unit {
 	// 只存在 redis 的字段
 	private String token;
 	
-	public MemMerchant() {}
+	public Merchant() {}
 	
-	public MemMerchant(long merchantId) {
+	public Merchant(long merchantId) {
 		this.merchantId = merchantId;
 	}
 	
-	public MemMerchant(String name, String address) {
+	public Merchant(String name, String address) {
 		this.name = name;
 		this.address = address;
 	}
@@ -115,7 +115,7 @@ public class MemMerchant implements RedisHashBean, Unit {
 
 	@Override
 	public String redisKey() {
-		return RedisKeyGenerator.getMemMerchantDataKey(merchantId);
+		return CommonKeyGenerator.getMemMerchantDataKey(merchantId);
 	}
 	
 	@Override

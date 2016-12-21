@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.common.bean.form;
 
-import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MerchantCustomer;
 
 public class CustomerPagerForm {
 
@@ -10,7 +10,7 @@ public class CustomerPagerForm {
 	private String purchaseSum;
 	private int lastPurchaseTime;
 	
-	public CustomerPagerForm(MemCustomer customer) {
+	public CustomerPagerForm(MerchantCustomer customer) {
 		this.customerId = customer.getCustomerId();
 		this.name = customer.getName();
 		this.mobile = customer.getMobile();

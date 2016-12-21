@@ -8,12 +8,12 @@ import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 import redis.clients.jedis.Tuple;
 
-public class MemCustomerSQLBuilder {
+public class MerchantCustomerSQLBuilder {
 
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MEM_CUSTOMER.mark());
+				INSERT_INTO(Table.MERCHANT_CUSTOMER.mark());
 				VALUES("merchant_id", 		"#{merchantId}");
 				VALUES("name", 				"#{name}");
 				VALUES("address", 			"#{address}");
@@ -27,15 +27,21 @@ public class MemCustomerSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMemCustomerById(){
-		return "select * from "+Table.MEM_CUSTOMER.mark()+" where customer_id = #{customerId}";
+	public String getMemCustomerById() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MERCHANT_CUSTOMER.mark());
+				WHERE("customer_id = #{customerId}");
+			}
+		}.toString();
 	}
 	public String getMerchantCustomers() {
 		return new SQL() {
 			{
 				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");
-				FROM(Table.MEM_CUSTOMER.mark());
-				WHERE("merchant_id=#{merchantId}");
+				FROM(Table.MERCHANT_CUSTOMER.mark());
+				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}

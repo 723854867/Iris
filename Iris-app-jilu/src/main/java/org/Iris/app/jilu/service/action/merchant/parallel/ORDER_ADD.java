@@ -4,10 +4,10 @@ import java.util.Random;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
-import org.Iris.app.jilu.storage.domain.MemCustomer;
-import org.Iris.app.jilu.storage.domain.MemMerchant;
-import org.Iris.app.jilu.storage.domain.MemOrder;
-import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.domain.MerchantCustomer;
+import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MerchantOrder;
+import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
@@ -24,16 +24,16 @@ public class ORDER_ADD extends ParallelMerchantAction {
 	@Override
 	protected String execute0(MerchantSession session) {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
-		long customerId = session.getKVParam(JiLuParams.CUSTOMERID);
+		long customerId = session.getKVParam(JiLuParams.CUSTOMER_ID);
 		String orderId = System.currentTimeMillis()+""+new Random().nextInt(10);
-		MemOrderGoods orderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class);
+		MerchantOrderGoods orderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MerchantOrderGoods[].class);
 		if(orderGoods==null || orderGoods.length==0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		MemMerchant memMerchant = session.getUnit().getUnit();
-		MemCustomer customer = unitCache.getMemCustomerById(customerId);
+		Merchant memMerchant = session.getUnit().getUnit();
+		MerchantCustomer customer = unitCache.getMemCustomerById(customerId);
 		if(customer == null)
-			throw IllegalConstException.errorException(JiLuParams.CUSTOMERID);
-		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
+			throw IllegalConstException.errorException(JiLuParams.CUSTOMER_ID);
+		MerchantOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
 				customerId, customer.getName(), customer.getMobile(), customer.getAddress(),0);
 		orderCache.createOrder(order, orderGoods);
 		return Result.jsonSuccess(order);

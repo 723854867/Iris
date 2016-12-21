@@ -1,9 +1,9 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MemAccount implements RedisHashBean {
+public class MerchantAccount implements RedisHashBean {
 
 	private String account;
 	private int type;
@@ -11,9 +11,9 @@ public class MemAccount implements RedisHashBean {
 	private long created;
 	private int updated;
 	
-	public MemAccount() {}
+	public MerchantAccount() {}
 	
-	public MemAccount(String account) {
+	public MerchantAccount(String account) {
 		this.account = account;
 	}
 
@@ -59,6 +59,6 @@ public class MemAccount implements RedisHashBean {
 
 	@Override
 	public String redisKey() {
-		return RedisKeyGenerator.getMemAccountDataKey(account);
+		return CommonKeyGenerator.getMemAccountDataKey(account);
 	}
 }

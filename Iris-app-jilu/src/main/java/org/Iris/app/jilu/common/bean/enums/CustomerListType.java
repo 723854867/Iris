@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.common.bean.enums;
 
-import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 
 /**
  * 客户列表类型
@@ -12,28 +12,28 @@ public enum CustomerListType {
 	NAME(0) {
 		@Override
 		public String redisCustomerListKey(long merchantId) {
-			return RedisKeyGenerator.getCustomerListNameKey(merchantId);
+			return CommonKeyGenerator.getCustomerListNameKey(merchantId);
 		}
 	},
 	
 	PURCHASE_SUM(1) {
 		@Override
 		public String redisCustomerListKey(long merchantId) {
-			return RedisKeyGenerator.getCustomerListPurchaseSumKey(merchantId);
+			return CommonKeyGenerator.getCustomerListPurchaseSumKey(merchantId);
 		}
 	},
 	
 	PURCHASE_RECENT(2) {
 		@Override
 		public String redisCustomerListKey(long merchantId) {
-			return RedisKeyGenerator.getCustomerListPurchaseRecentKey(merchantId);
+			return CommonKeyGenerator.getCustomerListPurchaseRecentKey(merchantId);
 		}
 	},
 	
 	PURCHASE_FREQUENCY(3) {
 		@Override
 		public String redisCustomerListKey(long merchantId) {
-			return RedisKeyGenerator.getCustomerListPurchaseFrequencyKey(merchantId);
+			return CommonKeyGenerator.getCustomerListPurchaseFrequencyKey(merchantId);
 		}
 	};
 	

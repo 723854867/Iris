@@ -5,15 +5,30 @@ import java.text.MessageFormat;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.unit.UnitType;
 
-public class RedisKeyGenerator {
+public final class CommonKeyGenerator {
+	
+	private static final String ACCOUNT_MERCHANT_ID_MAP				= "hash:cache:account:{0}:merchant_id";		// account - merchant 映射
+	private static final String CREATE_MARK_DATA					= "hash:tmp:create:{0}:mark";				// 登录失败之后产生一个临时token，有效期三分钟，token保存该登录的账号信息,在创建商户时使用		
+
+	private static final String TOKEN_MERCHANT_ID					= "string:cache:token:{0}:merchant_id";		// token - merchantId 对应关系
+	
+	public static final String accountMerchantIdMapKey(AccountType type) { 
+		return MessageFormat.format(ACCOUNT_MERCHANT_ID_MAP, type.name().toLowerCase());
+	}
+	
+	public static String createMarkDataKey(String token) { 
+		return MessageFormat.format(CREATE_MARK_DATA, token);
+	}
+	
+	public static String tokenMerchantIdKey(String token) {
+		return MessageFormat.format(TOKEN_MERCHANT_ID, token);
+	}
 
 	private static final String LOCK_UNIT							= "string:unit:{0}:{1}:lock";				// 用户分布式锁；0-表示用户类型，1-表示用户Id
 	private static final String ACCOUNT_CAPTCHA						= "string:account:{0}:{1}:captcha";			// 账号 - 验证码 对应关系；0-表示账号类型，1-表示账号值
 	private static final String ACCOUNT_CAPTCHA_COUNT				= "string:account:{0}:{1}:captcha:count";	// 账号 - 验证码获取次数 对应关系；0-表示账号类型，1-表示账号值
-	private static final String TOKEN_MERCHANT_ID					= "string:merchant:{0}:token";				// token merchantId 对应关系
 	private static final String CUSTOMER_LIST_LOAD_TIME				= "string:merchant:{0}:customer:list:load:time";	// 商户客户列表刷新时间
 	
-	private static final String REGISTER_TOKEN_DATA					= "hash:account:create:token:{0}";			// 登录失败之后产生一个临时token，有效期三分钟，token保存该登录的账号信息,在创建商户时使用		
 	private static final String ALIYUN_STS_DATA						= "hash:merchant:aliyun:sts:info:{0}";		// 阿里云 sts 缓存的临时 token 信息
 	
 	private static final String MEM_MERCHANT_DATA					= "hash:db:mem:{0}:merchant";
@@ -43,16 +58,8 @@ public class RedisKeyGenerator {
 		return MessageFormat.format(ACCOUNT_CAPTCHA_COUNT, type.name().toLowerCase(), account);
 	}
 	
-	public static String getMerchantTokenKey(String token) { 
-		return MessageFormat.format(TOKEN_MERCHANT_ID, token);
-	}
-	
 	public static String getCustomerListLoadTimeKey(long merchantId) {
 		return MessageFormat.format(CUSTOMER_LIST_LOAD_TIME, String.valueOf(merchantId));
-	}
-	
-	public static String getRegisterTokenDataKey(String token) { 
-		return MessageFormat.format(REGISTER_TOKEN_DATA, token);
 	}
 	
 	public static String getAliyunStsDataKey(long uid) { 

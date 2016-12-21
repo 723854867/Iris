@@ -1,0 +1,7 @@
+redis 的 key 的命名格式为
+
+keyType:storeType:.....
+
+keyType 表示 key 的数据类型，有：string、list、set、zset、hash 五种
+storeType 表示数据存储类型，有：db、cache、tmp 三种。分别表示：数据库数据模型，永久缓存，带时效缓存
+后面的命名要能够见文知意

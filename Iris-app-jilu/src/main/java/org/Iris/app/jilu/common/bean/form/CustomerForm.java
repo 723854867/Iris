@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
 import org.Iris.app.jilu.common.JiLuResourceUtil;
-import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MerchantCustomer;
 
 public class CustomerForm {
 
@@ -15,7 +15,7 @@ public class CustomerForm {
 	private String purchaseSum;
 	private int lastPurchaseTime;
 	
-	public CustomerForm(MemCustomer customer) {
+	public CustomerForm(MerchantCustomer customer) {
 		this.customerId = customer.getCustomerId();
 		this.name = customer.getName();
 		this.mobile = customer.getMobile();

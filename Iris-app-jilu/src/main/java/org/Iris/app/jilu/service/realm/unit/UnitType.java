@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.service.realm.unit;
 
-import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 
 /**
  * 单位类型
@@ -30,6 +30,6 @@ public enum UnitType {
 	}
 	
 	public String getUnitLock(long uid) { 
-		return RedisKeyGenerator.getUnitLockKey(this, uid);
+		return CommonKeyGenerator.getUnitLockKey(this, uid);
 	}
 }

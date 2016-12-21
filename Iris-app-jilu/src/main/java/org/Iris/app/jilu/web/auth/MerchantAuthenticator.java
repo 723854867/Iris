@@ -2,7 +2,7 @@ package org.Iris.app.jilu.web.auth;
 
 import javax.annotation.Resource;
 
-import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
+import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
 import org.Iris.app.jilu.storage.redis.cache.UnitCache;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -19,7 +19,7 @@ public class MerchantAuthenticator implements Authenticator<MerchantSession> {
 	@Override
 	public boolean auth(MerchantSession session) {
 		String token = session.getHeader(JiLuParams.TOKEN);
-		Merchant merchant = unitCache.getMerchantByToken(token);
+		MerchantOperator merchant = unitCache.getMerchantByToken(token);
 		if (null == merchant) {
 			session.write(Result.jsonError(ICode.Code.TOKEN_INVALID));
 			return false;

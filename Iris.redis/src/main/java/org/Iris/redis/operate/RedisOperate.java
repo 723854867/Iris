@@ -97,6 +97,15 @@ public class RedisOperate {
 			}
 		});
 	}
+	
+	public String hget(String key, String field) {
+		return invoke(new RedisInvocation<String>() {
+			@Override
+			public String invok(Jedis jedis) {
+				return jedis.hget(key, field);
+			}
+		});
+	}
 
 	public Map<String, String> hgetAll(String key) {
 		return invoke(new RedisInvocation<Map<String, String>>() {
@@ -117,6 +126,15 @@ public class RedisOperate {
 		if (map.isEmpty())
 			return null;
 		return BeanUtils.mapToBean(map, bean);
+	}
+	
+	public long hset(String key, String field, String value) {
+		return invoke(new RedisInvocation<Long>(){
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.hset(key, field, value);
+			}
+		});
 	}
 
 	public String hmset(String key, Map<String, String> map) {

@@ -3,13 +3,13 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class MemOrderSQLBuilder {
+public class MerchantOrderSQLBuilder {
 
 	public String getOrderById(){
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MEM_ORDER.mark());
+				FROM(Table.MERCHANT_ORDER.mark());
 				WHERE("order_id=#{orderId}");
 			}
 		}.toString();
@@ -18,7 +18,7 @@ public class MemOrderSQLBuilder {
 	public String insert(){
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MEM_ORDER.mark());
+				INSERT_INTO(Table.MERCHANT_ORDER.mark());
 				VALUES("order_id", 				"#{orderId}");
 				VALUES("root_order_id", 		"#{rootOrderId}");
 				VALUES("super_order_id", 	    "#{superOrderId}");
@@ -40,7 +40,7 @@ public class MemOrderSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MEM_ORDER.mark());
+				UPDATE(Table.MERCHANT_ORDER.mark());
 				SET("customer_id=#{customerId}");
 				SET("customer_name=#{customerName}");
 				SET("customer_mobile=#{customerMobile}");
@@ -55,7 +55,7 @@ public class MemOrderSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("customer_id, COUNT(*) count");
-				FROM(Table.MEM_ORDER.mark());
+				FROM(Table.MERCHANT_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 				GROUP_BY("customer_id");
 			}
