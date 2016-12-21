@@ -3,7 +3,7 @@ package org.Iris.app.jilu.service.action.merchant.parallel;
 import java.util.Random;
 
 import org.Iris.app.jilu.common.BeanCreator;
-import org.Iris.app.jilu.service.action.UnitAction;
+import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -13,17 +13,14 @@ import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.SerializeUtil;
-import org.Iris.util.common.uuid.JdkIdGenerator;
 
 /**
  * 创建订单
  * @author 樊水东
  * 2016年12月14日
  */
-public class ORDER_ADD extends UnitAction<MerchantSession>{
+public class ORDER_ADD extends ParallelMerchantAction {
 	
-	public static final ORDER_ADD INSTANCE						 = new ORDER_ADD();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);

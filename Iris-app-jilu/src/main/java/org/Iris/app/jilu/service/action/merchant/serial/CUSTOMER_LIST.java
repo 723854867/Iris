@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
-import org.Iris.app.jilu.service.action.UnitAction;
+import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
@@ -11,10 +11,8 @@ import org.Iris.core.service.bean.Result;
  * 
  * @author Ahab
  */
-public class CUSTOMER_LIST extends UnitAction<MerchantSession> {
+public class CUSTOMER_LIST extends SerialMerchantAction {
 	
-	public static final CUSTOMER_LIST INSTANCE						= new CUSTOMER_LIST();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		CustomerListType type = CustomerListType.match(session.getKVParamOptional(JiLuParams.TYPE)); 

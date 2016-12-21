@@ -10,11 +10,12 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
+import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.AccountModel;
-import org.Iris.app.jilu.common.bean.model.CustomerListModel;
+import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.unit.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemAccount;
@@ -26,12 +27,12 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.redis.operate.lua.LuaOperate;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import redis.clients.jedis.Tuple;
-import redis.clients.jedis.ZParams;
 
 /**
  * 负责所有商户户相关的数据存取：比如 mem_merchant 等
@@ -42,7 +43,11 @@ import redis.clients.jedis.ZParams;
 public class UnitCache extends RedisCache {
 	
 	@Resource
+	private LuaOperate luaOperate;
+	@Resource
 	private AliyunService aliyunService;
+	@Resource
+	private MemGoodsMapper memGoodsMapper;
 	@Resource
 	private MemOrderMapper memOrderMapper;
 	@Resource
@@ -51,8 +56,7 @@ public class UnitCache extends RedisCache {
 	private MemMerchantMapper memMerchantMapper;
 	@Resource
 	private MemCustomerMapper memCustomerMapper;
-	@Resource
-	private MemGoodsMapper memGoodsMapper;
+
 	
 	/**
 	 * 新建商户时需要插入商户数据，商户账号数据，并且在阿里云新建 oss 存储文件夹，之后该用户
@@ -185,66 +189,49 @@ public class UnitCache extends RedisCache {
 	}
 	
 	/**
-	 * 加载客户列表
+	 * 会导致加载客户列表
 	 */
 	private long _customerCount(long merchantId, CustomerListType type) {
 		String key = type.customerListLoadTimeKey(merchantId);
-		String today = String.valueOf(DateUtils.zeroTime());
-		String time = redisOperate.getSet(key, today);
-		List<? extends CustomerListModel> list = null;								// 先获取该商户的所有客户
-		switch (type) {
-		case PURCHASE_FREQUENCY:													// 最近三十天的购物频率排序
-			long count = 0;
-			if (null == time || !time.equals(today)) {								// 该缓存需要每天重新计算刷新，因此如果刷新时间不是当天或者不存在则要重新计算
-				// 重新计算时先看是否已经缓存了其他排序列表，如果已经刷新了其他排序列表则直接用其他排序列表的id，只不过 score 全部变成了0
-				if (1 == redisOperate.exist(CustomerListType.NAME.redisCustomerListKey(merchantId))) {
-					ZParams params = new ZParams();
-					params.weightsByDouble(0);
-					count = redisOperate.zunionstore(type.redisCustomerListKey(merchantId), params, CustomerListType.NAME.redisCustomerListKey(merchantId));
-				// 如果其他列表还没刷新，则从数据库读取数据刷新
-				} else {
-					list = memCustomerMapper.getMerchantCustomers(merchantId);
-					if (list.isEmpty())
-						return 0;
-					Map<String, Double> map = new HashMap<String, Double>(list.size());
-					_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_FREQUENCY);
-					count = list.size();
-				}
-				
-				// 同步 score
-				int end = DateUtils.currentTime();
-				int start = end - DateUtils.MONTH_SECONDS;
-				list = memOrderMapper.getMerchantOrderCountGroupByCustomerBetweenTime(merchantId, start, end);
-				if (list.isEmpty()) 
-					return count;
-				redisOperate.expireAt(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), DateUtils.nextZeroTime() - 1);
-			}
-			
-			
-			int end = DateUtils.currentTime();
-			int start = end - DateUtils.MONTH_SECONDS;
-			list = memOrderMapper.getMerchantOrderCountGroupByCustomerBetweenTime(merchantId, start, end);
-			redisOperate.expireAt(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), DateUtils.nextZeroTime() - 1);
-			return list.size();
-		default:	
-			if (null != time)				// 已经更新过排序列表了，直接返回总的客户数
-				return redisOperate.zcount(type.redisCustomerListKey(merchantId));
-			
-			// 没有更新过，则需要从数据库中更新
-			list = memCustomerMapper.getMerchantCustomers(merchantId);
-			if (list.isEmpty())
-				return 0;
-			Map<String, Double> map = new HashMap<String, Double>(list.size());
-			_loadCustomerList(merchantId, list, map, CustomerListType.NAME);
-			_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_SUM);
-			_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_RECENT);
-			return list.size();
-		}
+		String zeroTime = String.valueOf(DateUtils.zeroTime());
+		String time = luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_REFRESH.name(), 1, key, String.valueOf(type.mark()), zeroTime);
+		if (null == time) 
+			return _loadCustomerList(merchantId);
+		if (null != time && type == CustomerListType.PURCHASE_FREQUENCY && !zeroTime.equals(time))
+			_refreshCustomerListFrequency(merchantId);
+		return redisOperate.zcount(type.redisCustomerListKey(merchantId));
 	}
 	
-	private <T extends CustomerListModel> void _loadCustomerList(long merchantId, List<T> list, Map<String, Double> map, CustomerListType type) { 
-		for (T model : list)
+	private int _loadCustomerList(long merchantId) {
+		List<MemCustomer> list = memCustomerMapper.getMerchantCustomers(merchantId);
+		if (list.isEmpty())
+			return 0;
+		Map<String, Double> map = new HashMap<String, Double>(list.size());
+		_loadCustomerList(merchantId, list, map, CustomerListType.NAME);
+		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_SUM);
+		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_RECENT);
+		
+		// 购物频率还要去订单表实时获取(每天只会获取一次)
+		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_FREQUENCY);
+		_refreshCustomerListFrequency(merchantId);
+		return list.size();
+	}
+	
+	private void _loadCustomerList(long merchantId, List<MemCustomer> list, Map<String, Double> map, CustomerListType type) { 
+		for (MemCustomer model : list)
 			map.put(String.valueOf(model.getCustomerId()), model.getScore(type));
 		redisOperate.zadd(type.redisCustomerListKey(merchantId), map);
+	}
+	
+	private void _refreshCustomerListFrequency(long merchantId) { 
+		int end = DateUtils.currentTime();
+		int start = end - DateUtils.MONTH_SECONDS;
+		List<CustomerListPurchaseFrequencyModel> list = memOrderMapper.getMerchantOrderCountGroupByCustomerBetweenTime(merchantId, start, end);
+		if (list.isEmpty())
+			return;
+		Map<String, Double> map = new HashMap<String, Double>();
+		for (CustomerListPurchaseFrequencyModel model : list)
+			map.put(String.valueOf(model.getCustomerId()), Double.valueOf(model.getCount()));
+		redisOperate.zadd(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), map);
 	}
 }

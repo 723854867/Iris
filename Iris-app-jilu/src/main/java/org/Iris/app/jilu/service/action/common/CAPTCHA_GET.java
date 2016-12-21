@@ -19,10 +19,6 @@ import org.Iris.util.common.KeyUtil;
  */
 public class CAPTCHA_GET extends CommonAction {
 	
-	public static final CAPTCHA_GET INSTANCE				= new CAPTCHA_GET();
-	
-	private CAPTCHA_GET() {}
-
 	@Override
 	protected String execute0(IrisSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));

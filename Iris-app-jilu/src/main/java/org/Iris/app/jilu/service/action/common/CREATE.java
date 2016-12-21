@@ -14,10 +14,6 @@ import org.Iris.core.service.locale.ICode;
 
 public class CREATE extends CommonAction {
 	
-	public static final CREATE INSTANCE						 = new CREATE();
-	
-	private CREATE() {}
-
 	@Override
 	protected String execute0(IrisSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);
