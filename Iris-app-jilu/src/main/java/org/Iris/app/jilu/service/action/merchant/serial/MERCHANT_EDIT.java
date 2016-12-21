@@ -14,11 +14,11 @@ public class MERCHANT_EDIT extends SerialMerchantAction {
 		String name = session.getKVParam(JiLuParams.NAME);
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		
-		Merchant memMerchant = session.getUnit().getUnit();
-		memMerchant.setAddress(address);
-		memMerchant.setName(name);
-		memMerchant.setUpdated(DateUtils.currentTime());
-		unitCache.updateMerchant(memMerchant);
+		Merchant merchant = session.getUnit().getUnit();
+		merchant.setAddress(address);
+		merchant.setName(name);
+		merchant.setUpdated(DateUtils.currentTime());
+		unitCache.updateMerchant(merchant);
 		return Result.jsonSuccess();
 	}
 }

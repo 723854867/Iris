@@ -27,6 +27,21 @@ public class MerchantCustomerSQLBuilder {
 		}.toString();
 	}
 	
+	public String update() {
+		return new SQL() {
+			{
+				UPDATE(Table.MERCHANT_CUSTOMER.mark());
+				SET("name=#{name}");
+				SET("name_prefix_letter=#{namePrefixLetter}");
+				SET("mobile=#{mobile}");
+				SET("address=#{address}");
+				SET("memo=#{memo}");
+				SET("updated=#{updated}");
+				WHERE("customer_id=#{customerId}");
+			}
+		}.toString();
+	}
+	
 	public String getMemCustomerById() {
 		return new SQL() {
 			{

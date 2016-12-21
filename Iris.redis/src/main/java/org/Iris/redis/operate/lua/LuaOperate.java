@@ -76,8 +76,8 @@ public class LuaOperate {
 	 * @param bean
 	 * @return
 	 */
-	public <T> T hdelAndGet(String key, T bean) { 
-		List<String> list = evalLua(LuaCommand.HDEL_AND_GET, 1, key);
+	public <T> T delAndGetHash(String key, T bean) { 
+		List<String> list = evalLua(LuaCommand.DEL_AND_GET_HASH, 1, key);
 		if (list.isEmpty())
 			return null;
 	    Map<String, String> hash = new HashMap<String, String>(list.size()/2, 1);

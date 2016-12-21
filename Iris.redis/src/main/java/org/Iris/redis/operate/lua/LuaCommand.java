@@ -7,5 +7,5 @@ public enum LuaCommand {
 	HMSET_IF_EXIST,
 	HSET_IF_EXIST,
 	RECORD_CAPTCHA,
-	HDEL_AND_GET;
+	DEL_AND_GET_HASH;
 }

@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.UpdateProvider;
 
 import redis.clients.jedis.Tuple;
 
@@ -17,6 +18,9 @@ public interface MerchantCustomerMapper {
 	@InsertProvider(type = MerchantCustomerSQLBuilder.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "customer_id", keyProperty = "customerId")
 	void insert(MerchantCustomer customer);
+	
+	@UpdateProvider(type = MerchantCustomerSQLBuilder.class, method = "update")
+	void update(MerchantCustomer customer);
 	
 	/**
 	 * 获取指定商户的指定客户

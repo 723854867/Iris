@@ -25,7 +25,7 @@ public class CREATE extends CommonAction {
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		String token = session.getKVParam(JiLuParams.TOKEN);
 		
-		AccountModel am = luaOperate.hdelAndGet(CommonKeyGenerator.createMarkDataKey(token), new AccountModel());
+		AccountModel am = luaOperate.delAndGetHash(CommonKeyGenerator.createMarkDataKey(token), new AccountModel());
 		if (null == am)
 			throw IllegalConstException.errorException(JiLuParams.TOKEN);
 		MerchantOperator operator = unitCache.insertMerchant(BeanCreator.newMemMerchant(name, address), am);

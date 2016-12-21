@@ -151,14 +151,15 @@ public class UnitCache extends RedisCache {
 		merchantCustomerMapper.insert(customer);
 		flushHashBean(customer);
 		String member = String.valueOf(customer.getCustomerId());
-		if (0 == redisOperate.exist(CommonKeyGenerator.customerListLoadTimeKey(customer.getMerchantId())))
-			return;
-		
-		// 客户列表已经加载到内存中需要同步, 初始购物金额，购物频率和最近购物时间都是 0，只有名字有 score
-		redisOperate.zadd(CustomerListType.PURCHASE_SUM.redisCustomerListKey(customer.getMerchantId()), 0, member);
-		redisOperate.zadd(CustomerListType.PURCHASE_RECENT.redisCustomerListKey(customer.getMerchantId()), 0, member);
-		redisOperate.zadd(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(customer.getMerchantId()), 0, member);			
-		redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), member);
+		// 尝试将客户添加到商户排序列表中(如果商户排序列表还没有加载，咋不会添加)
+		long merchantId = customer.getMerchantId();
+		luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_ADD.name(), 5, 
+				CommonKeyGenerator.customerListLoadTimeKey(merchantId),
+				CustomerListType.PURCHASE_SUM.redisCustomerListKey(merchantId),
+				CustomerListType.PURCHASE_RECENT.redisCustomerListKey(merchantId),
+				CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId),
+				CustomerListType.NAME.redisCustomerListKey(merchantId),
+				member, String.valueOf((int) customer.getNamePrefixLetter().charAt(0)));
 	}
 	
 	/**
@@ -243,5 +244,28 @@ public class UnitCache extends RedisCache {
 		for (CustomerListPurchaseFrequencyModel model : list)
 			map.put(String.valueOf(model.getCustomerId()), Double.valueOf(model.getCount()));
 		redisOperate.zadd(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), map);
+	}
+	
+	/**
+	 * 更新客户，如果客户
+	 * 
+	 * @param customer
+	 * @param nameSort
+	 */
+	public void updateCustomer(MerchantCustomer customer, boolean nameSort) { 
+		merchantCustomerMapper.update(customer);
+		flushHashBean(customer);
+		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))
+			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), String.valueOf(customer.getCustomerId()));
+	}
+	
+	/**
+	 * 判断商户的客户排序列表是否已经加载
+	 * 
+	 * @param merchantId
+	 * @return
+	 */
+	private boolean _isCustomerListLoaded(long merchantId) {
+		return 1 == redisOperate.exist(CommonKeyGenerator.customerListLoadTimeKey(merchantId));
 	}
 }

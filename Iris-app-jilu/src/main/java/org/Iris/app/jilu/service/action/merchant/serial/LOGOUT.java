@@ -9,7 +9,7 @@ public class LOGOUT extends SerialMerchantAction {
 	
 	@Override
 	protected String execute0(MerchantSession session) {
-		redisOperate.del(CommonKeyGenerator.getMerchantTokenKey(session.getUnit().getUnit().getToken()));
+		redisOperate.del(CommonKeyGenerator.tokenMerchantIdKey(session.getUnit().getUnit().getToken()));
 		return Result.jsonSuccess();
 	}
 }
