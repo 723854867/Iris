@@ -23,7 +23,7 @@ public class CAPTCHA_GET extends CommonAction {
 	protected String execute0(IrisSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
 		String account = type == AccountType.MOBILE ? session.getKVParam(JiLuParams.MOBILE) : session.getKVParam(JiLuParams.EMAIL);
-		String captchaKey = CommonKeyGenerator.getAccountCaptchaKey(type, account);
+		String captchaKey = CommonKeyGenerator.accountCaptchaKey(type, account);
 		String captchaCountKey = CommonKeyGenerator.getAccountCaptchaCountKey(type, account);
 		
 		// 生成验证码并且缓存验证码
