@@ -1,6 +1,10 @@
 package org.Iris.app.jilu.web;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,11 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.JiLu;
+import org.Iris.app.jilu.service.action.IAction;
 import org.Iris.app.jilu.web.auth.Authenticator;
 import org.Iris.app.jilu.web.handler.ErrorHandler;
 import org.Iris.app.jilu.web.handler.ErrorHandler.DefaultErrorHandler;
 import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
+import org.Iris.util.reflect.ClassUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -22,7 +30,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServlet {
+public abstract class IrisServlet<SESSION extends IrisSession, ACTION extends IAction<SESSION>> extends HttpServlet {
+	
+	private static final Logger logger = LoggerFactory.getLogger(IrisServlet.class);
 
 	private static final long serialVersionUID = -7815032356377001691L;
 	
@@ -40,9 +50,16 @@ public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServl
 	private ErrorHandler errorHandler;
 	
 	protected Authenticator<SESSION> authenticator;
+	protected String actionPackage;
+	
+	protected Map<String, ACTION> actions = new HashMap<String, ACTION>();
+	
+	protected IrisServlet(String actionPackage) {
+		this.actionPackage = actionPackage;
+	}
 	
 	@Override
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "unchecked" })
 	public void init() throws ServletException {
 		super.init();
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
@@ -57,6 +74,19 @@ public abstract class IrisServlet<SESSION extends IrisSession> extends HttpServl
 
 		AutowireCapableBeanFactory factory = context.getAutowireCapableBeanFactory();
 		factory.autowireBean(this);
+		
+		List<Class<?>> classes = ClassUtil.scanPackage(actionPackage, false);
+		for (Class<?> clazz : classes) {
+			int modifiers = clazz.getModifiers();
+			if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers) || !Modifier.isPublic(modifiers))
+				continue;
+			try {
+				actions.put(clazz.getSimpleName(), (ACTION) clazz.newInstance());
+			} catch (Exception e) {
+				logger.error("Action load failure, system will closed!", e);
+				System.exit(1);
+			} 
+		}
 	}
 	
 	@Override

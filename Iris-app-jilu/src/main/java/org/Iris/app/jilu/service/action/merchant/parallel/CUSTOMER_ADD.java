@@ -13,8 +13,6 @@ import org.Iris.core.service.bean.Result;
  */
 public class CUSTOMER_ADD extends ParallelMerchantAction {
 	
-	public static final CUSTOMER_ADD INSTANCE				= new CUSTOMER_ADD();
-	
 	@Override
 	protected String execute0(MerchantSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);

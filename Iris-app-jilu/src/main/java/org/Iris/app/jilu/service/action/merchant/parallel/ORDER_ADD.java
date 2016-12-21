@@ -21,8 +21,6 @@ import org.Iris.util.common.SerializeUtil;
  */
 public class ORDER_ADD extends ParallelMerchantAction {
 	
-	public static final ORDER_ADD INSTANCE						 = new ORDER_ADD();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);

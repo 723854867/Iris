@@ -7,8 +7,6 @@ import org.Iris.core.service.bean.Result;
 
 public class LOGOUT extends SerialMerchantAction {
 	
-	public static final LOGOUT INSTANCE = new LOGOUT();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		redisOperate.del(RedisKeyGenerator.getMerchantTokenKey(session.getUnit().getUnit().getToken()));

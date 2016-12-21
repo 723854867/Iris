@@ -11,7 +11,6 @@ import org.Iris.core.service.bean.Result;
  */
 public class MERCHANT_QUERY extends ParallelMerchantAction {
 
-	public static final MERCHANT_QUERY INSTANCE = new MERCHANT_QUERY();
 	@Override
 	protected String execute0(MerchantSession session) {
 		return Result.jsonSuccess(session.getUnit());

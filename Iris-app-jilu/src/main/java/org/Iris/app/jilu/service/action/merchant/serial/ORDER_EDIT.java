@@ -11,8 +11,6 @@ import org.Iris.core.service.bean.Result;
 
 public class ORDER_EDIT extends SerialMerchantAction {
 	
-	public static final ORDER_EDIT INSTANCE						 = new ORDER_EDIT();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		String addGoodsList = session.getKVParamOptional(JiLuParams.ADDGOODSLIST);

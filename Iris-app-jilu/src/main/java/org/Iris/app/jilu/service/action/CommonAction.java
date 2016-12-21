@@ -9,9 +9,4 @@ public abstract class CommonAction implements IAction<IrisSession> {
 	}
 	
 	protected abstract String execute0(IrisSession session); 
-	
-	@Override
-	public String name() {
-		return this.getClass().getSimpleName().toLowerCase();
-	}
 }

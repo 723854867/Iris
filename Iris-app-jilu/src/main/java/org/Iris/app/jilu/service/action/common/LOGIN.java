@@ -23,10 +23,6 @@ import org.Iris.util.common.SerializeUtil;
  */
 public class LOGIN extends CommonAction {
 	
-	public static final LOGIN INSTANCE						= new LOGIN();
-	
-	private LOGIN() {}
-
 	@Override
 	protected String execute0(IrisSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));

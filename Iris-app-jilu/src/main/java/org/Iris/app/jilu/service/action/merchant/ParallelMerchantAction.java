@@ -1,9 +1,8 @@
 package org.Iris.app.jilu.service.action.merchant;
 
-import org.Iris.app.jilu.service.action.UnitAction;
-import org.Iris.app.jilu.web.session.MerchantSession;
+import org.Iris.app.jilu.service.action.MerchantAction;
 
-public abstract class ParallelMerchantAction extends UnitAction<MerchantSession> {
+public abstract class ParallelMerchantAction extends MerchantAction {
 
 	@Override
 	public boolean serial() {

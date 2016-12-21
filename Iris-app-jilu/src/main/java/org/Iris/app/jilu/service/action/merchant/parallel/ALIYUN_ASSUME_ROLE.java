@@ -12,8 +12,6 @@ import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 
 public class ALIYUN_ASSUME_ROLE extends ParallelMerchantAction {
 	
-	public static final ALIYUN_ASSUME_ROLE INSTANCE					= new ALIYUN_ASSUME_ROLE();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		Merchant merchant = session.getUnit();

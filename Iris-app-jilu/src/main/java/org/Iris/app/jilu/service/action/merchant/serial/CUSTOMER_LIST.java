@@ -13,8 +13,6 @@ import org.Iris.core.service.bean.Result;
  */
 public class CUSTOMER_LIST extends SerialMerchantAction {
 	
-	public static final CUSTOMER_LIST INSTANCE						= new CUSTOMER_LIST();
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		CustomerListType type = CustomerListType.match(session.getKVParamOptional(JiLuParams.TYPE)); 

@@ -9,10 +9,6 @@ import org.Iris.util.lang.DateUtils;
 
 public class MERCHANT_EDIT extends SerialMerchantAction {
 	
-	public static final MERCHANT_EDIT INSTANCE						 = new MERCHANT_EDIT();
-	
-	private MERCHANT_EDIT() {}
-
 	@Override
 	protected String execute0(MerchantSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);
