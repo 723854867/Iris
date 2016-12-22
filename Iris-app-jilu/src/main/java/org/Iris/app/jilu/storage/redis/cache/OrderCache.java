@@ -96,7 +96,7 @@ public class OrderCache extends RedisCache {
 			List<MerchantOrderGoods> list = new ArrayList<MerchantOrderGoods>(Arrays.asList(updateOrderGoods));
 			batchUpdateOrderGoodsByList(order.getOrderId(), list);
 		}
-		if(deleteGoodsList!=null){
+		if(deleteGoodsList!=null && !"".equals(deleteGoodsList)){
 			Long goodsIds[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, Long[].class);
 			List<Long> list = new ArrayList<Long>(Arrays.asList(goodsIds));
 			Map<String, List<Long>> map = new HashMap<String, List<Long>>();

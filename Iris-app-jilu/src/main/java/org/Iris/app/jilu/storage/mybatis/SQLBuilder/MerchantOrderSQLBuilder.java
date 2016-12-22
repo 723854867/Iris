@@ -41,10 +41,6 @@ public class MerchantOrderSQLBuilder {
 		return new SQL(){
 			{
 				UPDATE(Table.MERCHANT_ORDER.mark());
-				SET("customer_id=#{customerId}");
-				SET("customer_name=#{customerName}");
-				SET("customer_mobile=#{customerMobile}");
-				SET("customer_address=#{customerAddress}");
 				SET("status=#{status}");
 				SET("updated=#{updated}");
 				WHERE("order_id=#{orderId}");
