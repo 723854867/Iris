@@ -53,7 +53,7 @@ public class AliyunService {
 	 * @param merchant
 	 */
 	public void createMerchantFolder(Merchant merchant) {
-		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/user/" + merchant.uid() + "/");
+		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/merchant/" + merchant.uid() + "/");
 	}
 	
 	public void dispose() {

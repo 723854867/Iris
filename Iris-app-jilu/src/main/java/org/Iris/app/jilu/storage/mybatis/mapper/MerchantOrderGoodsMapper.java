@@ -7,6 +7,7 @@ import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderGoodsSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 public interface MerchantOrderGoodsMapper {
@@ -28,4 +29,7 @@ public interface MerchantOrderGoodsMapper {
 
 	@DeleteProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "batchDelete")
 	void batchDelete(Map<String, List<Long>> map);
+	
+	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsById")
+	MerchantOrderGoods getMerchantOrderGoodsById(long id);
 }

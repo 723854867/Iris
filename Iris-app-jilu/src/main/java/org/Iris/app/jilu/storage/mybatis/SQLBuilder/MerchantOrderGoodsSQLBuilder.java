@@ -124,11 +124,11 @@ public class MerchantOrderGoodsSQLBuilder {
 		return stringBuilder.toString();
 	}
 	
-	public String getMemOrderGoodsById(){
+	public String getMerchantOrderGoodsById(){
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MEM_ORDER_GOODS.mark());
+				FROM(Table.MERCHANT_ORDER_GOODS.mark());
 				WHERE("id=#{id}");
 			}
 		}.toString();
