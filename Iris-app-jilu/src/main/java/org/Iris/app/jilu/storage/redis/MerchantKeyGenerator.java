@@ -61,8 +61,8 @@ public final class MerchantKeyGenerator {
 		return MessageFormat.format(MERCHANT_ORDER_GOODS_DATA, orderId, String.valueOf(goodsId));
 	}
 	
-	public static final String merchantOrderPacketDataKey(long merchantId, long packetId) { 
-		return MessageFormat.format(MERCHANT_ORDER_PACKET_DATA, String.valueOf(merchantId), String.valueOf(packetId));
+	public static final String merchantOrderPacketDataKey(long merchantId, String packetId) { 
+		return MessageFormat.format(MERCHANT_ORDER_PACKET_DATA, String.valueOf(merchantId), packetId);
 	}
 	
 	public static String aliyunStsTokenDataKey(long merchantId) { 

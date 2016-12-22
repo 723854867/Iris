@@ -48,12 +48,12 @@ public class AliyunService {
 	}
 	
 	/**
-	 * 为新用户创建阿里云文件夹
+	 * 创建商户阿里云文件夹
 	 * 
 	 * @param merchant
 	 */
 	public void createMerchantFolder(Merchant merchant) {
-		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/user/" + merchant.uid() + "/");
+		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/merchant/" + merchant.uid() + "/");
 	}
 	
 	public void dispose() {

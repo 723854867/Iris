@@ -47,14 +47,17 @@ public class MerchantCustomerSQLBuilder {
 			{
 				SELECT("*");
 				FROM(Table.MERCHANT_CUSTOMER.mark());
-				WHERE("customer_id = #{customerId} and merchant_id = #{merchantId}");
+				WHERE("merchant_id = #{merchantId}");
+				AND();
+				WHERE("customer_id = #{customerId}");
 			}
 		}.toString();
 	}
+	
 	public String getMerchantCustomers() {
 		return new SQL() {
 			{
-				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");
+				SELECT("*");
 				FROM(Table.MERCHANT_CUSTOMER.mark());
 				WHERE("merchant_id = #{merchantId}");
 			}
@@ -63,7 +66,7 @@ public class MerchantCustomerSQLBuilder {
 	
 	public String getCustomersByIds(StrictMap<Set<Tuple>> map) {
 		Set<Tuple> set = map.get("collection");
-		StringBuilder builder = new StringBuilder("SELECT * FROM mem_customer WHERE customer_id IN(");
+		StringBuilder builder = new StringBuilder("SELECT * FROM merchant_customer WHERE customer_id IN(");
 		for (Tuple tuple : set)
 			builder.append(tuple.getElement()).append(",");
 		builder.deleteCharAt(builder.length() - 1);
