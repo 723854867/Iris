@@ -64,7 +64,7 @@ public class OrderCache extends RedisCache {
 	
 	private void batchUpdateOrderGoodsByList(String orderId, List<MemOrderGoods> list) {
 		for(MemOrderGoods ogs: list){
-			ogs = orderGoodsMapper.
+			//ogs = orderGoodsMapper.
 			ogs.setCount(ogs.getCount());
 			ogs.setUnitPrice(ogs.getUnitPrice());
 			
