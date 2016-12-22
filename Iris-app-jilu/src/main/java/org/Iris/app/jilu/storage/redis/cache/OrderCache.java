@@ -2,20 +2,18 @@ package org.Iris.app.jilu.storage.redis.cache;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.Merchant;
 import org.Iris.app.jilu.storage.domain.MerchantOrder;
 import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderMapper;
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
@@ -61,15 +59,15 @@ public class OrderCache extends RedisCache {
 	}
 	
 	private void batchUpdateOrderGoodsByList(String orderId, List<MerchantOrderGoods> list) {
+		List<MerchantOrderGoods> updateList = new ArrayList<MerchantOrderGoods>();
 		for(MerchantOrderGoods ogs: list){
-			int count = ogs.getCount();
-			String unitPrice = ogs.getUnitPrice();
-			ogs = getMerchantOrderGoodsById(orderId, ogs.getId());
-			ogs.setCount(count);
-			ogs.setUnitPrice(unitPrice);
+			MerchantOrderGoods mGood = getMerchantOrderGoodsById(orderId, ogs.getId());
+			mGood.setCount(ogs.getCount());
+			mGood.setUnitPrice(ogs.getUnitPrice());
+			updateList.add(mGood);
 		}
-		merchantOrderGoodsMapper.batchUpdate(list);
-		for(MerchantOrderGoods orderGoods :list){
+		merchantOrderGoodsMapper.batchUpdate(updateList);
+		for(MerchantOrderGoods orderGoods :updateList){
 			flushHashBean(orderGoods);
 		}
 	}
@@ -93,39 +91,38 @@ public class OrderCache extends RedisCache {
 			batchUpdateOrderGoodsByList(order.getOrderId(), list);
 		}
 		if(deleteGoodsList!=null && !"".equals(deleteGoodsList)){
-			Long goodsIds[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, Long[].class);
-			List<Long> list = new ArrayList<Long>(Arrays.asList(goodsIds));
-			Map<String, List<Long>> map = new HashMap<String, List<Long>>();
-			map.put("list", list);
-			merchantOrderGoodsMapper.batchDelete(map);
-			for(long goodsId :list){
-				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getOrderId(), goodsId));
+			Long ids[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, Long[].class);
+			List<Long> list = new ArrayList<Long>(Arrays.asList(ids));
+			merchantOrderGoodsMapper.batchDelete(list);
+			for(long id :list){
+				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getOrderId(), id));
 			}
 		}
 		flushHashBean(order);
 	}
 	/**
-	 * 根据订单号获取订单基本信息
+	 * 根据商户号和订单号获取订单基本信息
 	 * @param orderId
 	 * @return
 	 */
-	public MerchantOrder getByOrderId(String orderId){
-		MerchantOrder order = getHashBean(new MerchantOrder(orderId));
+	public MerchantOrder getMerchantOrderById(long merchatId,String orderId){
+		MerchantOrder order = getHashBean(new MerchantOrder(merchatId,orderId));
 		if(null !=order)
 			return order;
-		order = merchantOrderMapper.getOrderById(orderId);
+		order = merchantOrderMapper.getOrderById(merchatId,orderId);
 		if (null == order)
 			return null;
 		flushHashBean(order);
 		return order;
 	}
+	
 	/**
-	 * 通过订单号获取该订单下的产品列表
-	 * @param orderId
+	 * 
+	 * @param ids
 	 * @return
 	 */
-	public List<MerchantOrderGoods> getOGListByOrderId(String orderId){
-		return null;
+	public List<MerchantOrderGoods> getOGListByOrderId(List<Long> ids){
+		return merchantOrderGoodsMapper.getMerchantOrderGoodsByIdList(ids);
 	}
 	/**
 	 * 订单确认
@@ -134,6 +131,37 @@ public class OrderCache extends RedisCache {
 	public void orderLock(MerchantOrder order){
 		merchantOrderMapper.update(order);
 		flushHashBean(order);
+	}
+	
+	/**
+	 * 转单
+	 * @param superOrder 父订单
+	 * @param merchant 转单商户对象
+	 * @param ogs 转单产品列表
+	 */
+	@Transactional
+	public MerchantOrder orderChange(MerchantOrder superOrder,Merchant merchant,List<MerchantOrderGoods> ogs){
+		MerchantOrder order = superOrder;
+		order.setOrderId(System.currentTimeMillis()+""+new Random().nextInt(10));
+		int time = DateUtils.currentTime();
+		order.setCreated(time);
+		order.setUpdated(time);
+		order.setMerchantId(merchant.getMerchantId());
+		order.setMerchantName(merchant.getName());
+		order.setMerchantAddress(merchant.getAddress());
+		order.setSuperOrderId(superOrder.getOrderId());
+		order.setRootOrderId(superOrder.getRootOrderId());
+		order.setStatus(2);
+		merchantOrderMapper.insert(order);
+		//处理产品列表
+		for(MerchantOrderGoods goods : ogs){
+			goods.setStatus(2);
+			goods.setUpdated(DateUtils.currentTime());
+		}
+		merchantOrderGoodsMapper.batchUpdate(ogs);
+		flushHashBean(order);
+		batchFlushHashBean(ogs);
+		return order;
 	}
 	
 	/**
@@ -150,6 +178,9 @@ public class OrderCache extends RedisCache {
 		if(merchantOrderGoods != null)
 			return merchantOrderGoods;
 		merchantOrderGoods = merchantOrderGoodsMapper.getMerchantOrderGoodsById(id);
+		if(null == merchantOrderGoods)
+			return null;
+		flushHashBean(merchantOrderGoods);
 		return merchantOrderGoods;
 	}
 	
@@ -158,7 +189,22 @@ public class OrderCache extends RedisCache {
 		if(goods!=null)
 			return goods;
 		goods = cfgGoodsMapper.getGoodsById(goodsId);
+		if(null == goods)
+			return null;
+		flushHashBean(goods);
 		return goods;
+	}
+	/**
+	 * 判断订单列表是否可以进行转单
+	 * @param list
+	 * @return
+	 */
+	public boolean isChangedMerchantOrderGoods(List<MerchantOrderGoods> list){
+		for(MerchantOrderGoods orderGoods : list){
+			if(orderGoods.getStatus() != 0)
+				return false;
+		}
+		return true;
 	}
 	
 }

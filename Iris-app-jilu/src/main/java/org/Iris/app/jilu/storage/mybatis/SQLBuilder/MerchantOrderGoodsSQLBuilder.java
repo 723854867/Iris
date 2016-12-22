@@ -66,23 +66,7 @@ public class MerchantOrderGoodsSQLBuilder {
 		List<MerchantOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
-		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set packet_id = case id ");
-		for(MerchantOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getPacketId());
-		}
-		stringBuilder.append(" end, goods_id = case id");
-		for(MerchantOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsId());
-		}
-		stringBuilder.append(" end, goods_name = case id");
-		for(MerchantOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsName());
-		}
-		stringBuilder.append(" end, goods_image = case id");
-		for(MerchantOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsImage());
-		}
-		stringBuilder.append(" end, count = case id");
+		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set count = case id ");
 		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getCount());
 		}
@@ -115,8 +99,8 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchDelete(Map<String, List<Long>> map){
-		List<Long> list = map.get("list");
+	public String batchDelete(StrictMap<List<Long>> map){
+		List<Long> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		stringBuilder.append("delete from "+Table.MERCHANT_ORDER_GOODS.mark()+" where id in(");
 		for(Long id : list){
@@ -138,5 +122,14 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
+	public String getMerchantOrderGoodsByIdList(StrictMap<List<Long>> map){
+		List<Long> ids = map.get("collection");
+		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MERCHANT_ORDER_GOODS.mark()+" WHERE id IN(");
+		for (long id : ids)
+			builder.append(id).append(",");
+		builder.deleteCharAt(builder.length() - 1);
+		builder.append(")");
+		return builder.toString();
+	}
 
 }

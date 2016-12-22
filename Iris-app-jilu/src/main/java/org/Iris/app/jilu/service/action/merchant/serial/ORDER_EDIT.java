@@ -16,7 +16,7 @@ public class ORDER_EDIT extends SerialMerchantAction {
 		String deleteGoodsList = session.getKVParamOptional(JiLuParams.DELETEGOODSLIST);
 //		long customerId = session.getKVParam(JiLuParams.CUSTOMER_ID);
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
-		MerchantOrder order = orderCache.getByOrderId(orderId);
+		MerchantOrder order = orderCache.getMerchantOrderById(session.getUnit().getUnit().getMerchantId(),orderId);
 		int status  = order.getStatus();
 		if(status!=0){
 			//订单已经确认不能修改

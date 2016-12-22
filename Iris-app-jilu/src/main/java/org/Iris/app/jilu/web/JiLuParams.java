@@ -69,5 +69,6 @@ public interface JiLuParams {
 	final IrisStrConst DELETEGOODSLIST						= new IrisStrConst("deleteGoodsList", null, 132);
 	final IrisIntConst PAGE									= new IrisIntConst("page", 133);
 	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 134);
+	final IrisLongConst MERCHANTID							= new IrisLongConst("merchantId",0, 111);
 	
 }

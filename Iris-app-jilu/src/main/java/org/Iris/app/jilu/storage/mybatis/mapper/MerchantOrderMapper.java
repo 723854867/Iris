@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.UpdateProvider;
 public interface MerchantOrderMapper {
 
 	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getOrderById")
-	MerchantOrder getOrderById(String orderId);
+	MerchantOrder getOrderById(@Param("merchantId") long merchantId, @Param("orderId") String orderId);
 	
 	@InsertProvider(type = MerchantOrderSQLBuilder.class, method="insert")
 	void insert(MerchantOrder order);

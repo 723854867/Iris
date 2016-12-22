@@ -14,7 +14,8 @@ public enum JiLuCode implements ICode {
 	CAPTCHA_COUNT_LIMIT(202, "captcha count limit"),
 	CAPTCHA_ERROR(203, "captcha error"),
 	ORDER_IS_LOCK(204, "order is lock"),
-	CUSTOMER_NOT_EXIST(205, "customer is not exist");
+	CUSTOMER_NOT_EXIST(205, "customer is not exist"),
+	GOODSLIST_CAN_NOT_CHANGE(206, "goodsList can not change");
 	
 	private int code;
 	private String defaultVaule;

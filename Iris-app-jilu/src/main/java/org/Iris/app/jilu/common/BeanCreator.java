@@ -87,6 +87,7 @@ public class BeanCreator {
 		memOrder.setCustomerMobile(customerMobile);
 		memOrder.setCustomerAddress(customerAddress);
 		memOrder.setStatus(status);
+		memOrder.setRootOrderId(orderId);
 		int time = DateUtils.currentTime();
 		memOrder.setCreated(time);
 		memOrder.setUpdated(time);

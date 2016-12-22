@@ -1,14 +1,17 @@
 package org.Iris.redis.operate;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.Iris.redis.RedisHashBean;
 import org.Iris.redis.model.EXPX;
 import org.Iris.redis.model.NXXX;
 import org.Iris.util.reflect.BeanUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.ZParams;
 
@@ -154,6 +157,19 @@ public class RedisOperate {
 			}
 		});
 	}
+	
+	public void hmset(List<? extends RedisHashBean> beans) {
+		 invoke(new RedisInvocation<Void>() {
+			@Override
+			public Void invok(Jedis jedis) {
+				Pipeline pipeline = jedis.pipelined();
+				for(RedisHashBean object : beans)
+					pipeline.hmset(object.redisKey(), BeanUtils.beanToMap(object));
+				 pipeline.sync();
+				 return null;
+			}
+		});
+	}
 
 	
 	public Long sadd(String key,String... members){
@@ -260,4 +276,5 @@ public class RedisOperate {
 	public interface RedisInvocation<T> {
 		T invok(Jedis jedis);
 	}
+	
 }

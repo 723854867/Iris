@@ -11,6 +11,8 @@ public class MerchantOrderSQLBuilder {
 				SELECT("*");
 				FROM(Table.MERCHANT_ORDER.mark());
 				WHERE("order_id=#{orderId}");
+				AND();
+				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
 	}

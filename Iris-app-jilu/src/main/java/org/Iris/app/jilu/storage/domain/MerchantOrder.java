@@ -23,8 +23,8 @@ public class MerchantOrder implements RedisHashBean{
 	public MerchantOrder() {
 	}
 
-	public MerchantOrder(String orderId) {
-		super();
+	public MerchantOrder(long merchantId,String orderId) {
+		this.merchantId = merchantId;
 		this.orderId = orderId;
 	}
 

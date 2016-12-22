@@ -1,7 +1,6 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderGoodsSQLBuilder;
@@ -31,8 +30,11 @@ public interface MerchantOrderGoodsMapper {
 	void delete(long id);
 
 	@DeleteProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "batchDelete")
-	void batchDelete(Map<String, List<Long>> map);
+	void batchDelete(List<Long> list);
 	
 	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsById")
 	MerchantOrderGoods getMerchantOrderGoodsById(long id);
+	
+	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsByIdList")
+	List<MerchantOrderGoods> getMerchantOrderGoodsByIdList(List<Long> list);
 }
