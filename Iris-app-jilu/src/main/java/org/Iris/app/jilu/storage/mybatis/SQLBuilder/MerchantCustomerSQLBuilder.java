@@ -42,19 +42,22 @@ public class MerchantCustomerSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMemCustomerById() {
+	public String getMerchantCustomerById() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(Table.MERCHANT_CUSTOMER.mark());
+				WHERE("merchant_id = #{merchantId}");
+				AND();
 				WHERE("customer_id = #{customerId}");
 			}
 		}.toString();
 	}
-	public String getMerchantCustomerById() {
+	
+	public String getMerchantCustomers() {
 		return new SQL() {
 			{
-				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");
+				SELECT("*");
 				FROM(Table.MERCHANT_CUSTOMER.mark());
 				WHERE("merchant_id = #{merchantId}");
 			}

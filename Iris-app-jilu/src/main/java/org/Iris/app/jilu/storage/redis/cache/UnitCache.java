@@ -120,7 +120,7 @@ public class UnitCache extends RedisCache {
 	public MerchantOperator getMerchantByAccount(AccountType type, String account) {
 		String key = CommonKeyGenerator.accountMerchantIdMapKey(type);
 		String value = redisOperate.hget(key, account);
-		if (null != value) {
+		if (null == value) {
 			MerchantAccount merchantAccount = merchantAccountMapper.getByAccount(account);
 			if (null == merchantAccount)
 				return null;
@@ -205,7 +205,7 @@ public class UnitCache extends RedisCache {
 	private long _customerCount(long merchantId, CustomerListType type) {
 		String key = CommonKeyGenerator.customerListLoadTimeKey(merchantId);
 		String zeroTime = String.valueOf(DateUtils.zeroTime());
-		String time = luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_REFRESH.name(), 1, key, String.valueOf(type.mark()), zeroTime);
+		String time = luaOperate.evalLua(JiLuLuaCommand.CUSTOMER_LIST_REFRESH_TIME.name(), 1, key, String.valueOf(type.mark()), zeroTime);
 		if (null == time) 
 			return _loadCustomerList(merchantId);
 		if (null != time && type == CustomerListType.PURCHASE_FREQUENCY && !zeroTime.equals(time))
@@ -218,6 +218,10 @@ public class UnitCache extends RedisCache {
 		if (list.isEmpty())
 			return 0;
 		Map<String, Double> map = new HashMap<String, Double>(list.size());
+		redisOperate.del(CustomerListType.NAME.redisCustomerListKey(merchantId),
+				CustomerListType.PURCHASE_SUM.redisCustomerListKey(merchantId),
+				CustomerListType.PURCHASE_RECENT.redisCustomerListKey(merchantId),
+				CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId));
 		_loadCustomerList(merchantId, list, map, CustomerListType.NAME);
 		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_SUM);
 		_loadCustomerList(merchantId, list, map, CustomerListType.PURCHASE_RECENT);

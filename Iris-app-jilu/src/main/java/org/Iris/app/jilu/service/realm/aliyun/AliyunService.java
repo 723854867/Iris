@@ -48,7 +48,7 @@ public class AliyunService {
 	}
 	
 	/**
-	 * 为新用户创建阿里云文件夹
+	 * 创建商户阿里云文件夹
 	 * 
 	 * @param merchant
 	 */
