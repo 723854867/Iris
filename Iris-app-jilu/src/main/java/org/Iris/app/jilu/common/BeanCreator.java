@@ -1,11 +1,11 @@
 package org.Iris.app.jilu.common;
 
 import org.Iris.app.jilu.common.bean.model.AccountModel;
-import org.Iris.app.jilu.storage.domain.MemAccount;
-import org.Iris.app.jilu.storage.domain.MemCustomer;
-import org.Iris.app.jilu.storage.domain.MemGoods;
-import org.Iris.app.jilu.storage.domain.MemMerchant;
-import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MerchantAccount;
+import org.Iris.app.jilu.storage.domain.MerchantCustomer;
+import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MerchantOrder;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
 
@@ -16,8 +16,8 @@ import org.Iris.util.lang.DateUtils;
  */
 public class BeanCreator {
 
-	public static MemMerchant newMemMerchant(String name, String address) { 
-		MemMerchant memMerchant = new MemMerchant();
+	public static Merchant newMemMerchant(String name, String address) { 
+		Merchant memMerchant = new Merchant();
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
 		int time = DateUtils.currentTime();
@@ -27,8 +27,8 @@ public class BeanCreator {
 		return memMerchant;
 	}
 	
-	public static MemAccount newMemAccount(AccountModel am, int time, long merchantId) {
-		MemAccount memAccount = new MemAccount();
+	public static MerchantAccount newMemAccount(AccountModel am, int time, long merchantId) {
+		MerchantAccount memAccount = new MerchantAccount();
 		memAccount.setMerchantId(merchantId);
 		memAccount.setAccount(am.getAccount());
 		memAccount.setType(am.getType());
@@ -37,8 +37,8 @@ public class BeanCreator {
 		return memAccount;
 	}
 	
-	public static MemCustomer newMemCustomer(long merchantId, String name, String mobile, String address, String memo, String IDNumber) { 
-		MemCustomer memCustomer = new MemCustomer();
+	public static MerchantCustomer newMemCustomer(long merchantId, String name, String mobile, String address, String memo, String IDNumber) { 
+		MerchantCustomer memCustomer = new MerchantCustomer();
 		memCustomer.setMerchantId(merchantId);
 		memCustomer.setName(name);
 		memCustomer.setMobile(mobile);
@@ -54,9 +54,9 @@ public class BeanCreator {
 		return memCustomer;
 	}
 	
-	public static MemGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
+	public static CfgGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
 			String usBrand, String unit, float weight, String alias, String barcode, String sku){
-		MemGoods memGoods = new MemGoods();
+		CfgGoods memGoods = new CfgGoods();
 		memGoods.setGoodsCode(goodsCode);
 		memGoods.setZhName(zhName);
 		memGoods.setUsName(usName);
@@ -75,9 +75,9 @@ public class BeanCreator {
 		return memGoods;
 	}
 	
-	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName,String memchantAddress, long customerId, String customerName,
+	public static MerchantOrder newMemOrder(String orderId, long merchantId, String merchantName,String memchantAddress, long customerId, String customerName,
 			String customerMobile, String customerAddress, int status){
-		MemOrder memOrder = new MemOrder();
+		MerchantOrder memOrder = new MerchantOrder();
 		memOrder.setOrderId(orderId);
 		memOrder.setMerchantId(merchantId);
 		memOrder.setMerchantName(merchantName);

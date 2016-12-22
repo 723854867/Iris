@@ -3,23 +3,23 @@ package org.Iris.app.jilu.storage.mybatis.mapper;
 import java.util.List;
 
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
-import org.Iris.app.jilu.storage.domain.MemOrder;
-import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderSQLBuilder;
+import org.Iris.app.jilu.storage.domain.MerchantOrder;
+import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-public interface MemOrderMapper {
+public interface MerchantOrderMapper {
 
-	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderById")
-	MemOrder getOrderById(String orderId);
+	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getOrderById")
+	MerchantOrder getOrderById(String orderId);
 	
-	@InsertProvider(type = MemOrderSQLBuilder.class, method="insert")
-	void insert(MemOrder order);
+	@InsertProvider(type = MerchantOrderSQLBuilder.class, method="insert")
+	void insert(MerchantOrder order);
 	
-	@UpdateProvider(type = MemOrderSQLBuilder.class, method="update")
-	void update(MemOrder order);
+	@UpdateProvider(type = MerchantOrderSQLBuilder.class, method="update")
+	void update(MerchantOrder order);
 	
 	/**
 	 * 获取在 [start, end] 之间的商户的客户订单统计数
@@ -29,6 +29,6 @@ public interface MemOrderMapper {
 	 * @param end
 	 * @return
 	 */
-	@SelectProvider(type = MemOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
+	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
 	List<CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
 }

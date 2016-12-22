@@ -3,13 +3,13 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class MemMerchantSQLBuilder {
+public class MerchantSQLBuilder {
 	
 	public String getByMerchantId() {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Table.MEM_MERCHANT.mark());
+				FROM(Table.MERCHANT.mark());
 				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
@@ -18,7 +18,7 @@ public class MemMerchantSQLBuilder {
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MEM_MERCHANT.mark());
+				INSERT_INTO(Table.MERCHANT.mark());
 				VALUES("name", 				"#{name}");
 				VALUES("address", 			"#{address}");
 				VALUES("last_login_time", 	"#{lastLoginTime}");
@@ -31,7 +31,7 @@ public class MemMerchantSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MEM_MERCHANT.mark());
+				UPDATE(Table.MERCHANT.mark());
 				SET("name=#{name}");
 				SET("QR_code=#{QRCode}");
 				SET("updated=#{updated}");

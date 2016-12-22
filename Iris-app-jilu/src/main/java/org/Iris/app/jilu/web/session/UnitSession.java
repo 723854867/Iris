@@ -3,10 +3,10 @@ package org.Iris.app.jilu.web.session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.Iris.app.jilu.service.realm.unit.UnitAdapter;
+import org.Iris.app.jilu.service.realm.unit.UnitOperator;
 import org.Iris.core.exception.IrisRuntimeException;
 
-public class UnitSession<T extends UnitAdapter<?>> extends IrisSession {
+public class UnitSession<T extends UnitOperator<?>> extends IrisSession {
 	
 	protected T unit;
 

@@ -1,8 +1,8 @@
 package org.Iris.app.jilu.service.realm.unit.merchant;
 
-import org.Iris.app.jilu.service.realm.unit.UnitAdapter;
-import org.Iris.app.jilu.storage.domain.MemMerchant;
-import org.Iris.app.jilu.storage.redis.RedisKeyGenerator;
+import org.Iris.app.jilu.service.realm.unit.UnitOperator;
+import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.util.common.IrisSecurity;
 import org.Iris.util.lang.DateUtils;
 
@@ -11,9 +11,9 @@ import org.Iris.util.lang.DateUtils;
  * 
  * @author Ahab
  */
-public class Merchant extends UnitAdapter<MemMerchant> {
+public class MerchantOperator extends UnitOperator<Merchant> {
 	
-	public Merchant(MemMerchant merchant) {
+	public MerchantOperator(Merchant merchant) {
 		super(merchant);
 	}
 	
@@ -29,7 +29,7 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 		try {
 			// 删除老的 token
 			if (null != unit.getToken()) 
-				redisOperate.del(RedisKeyGenerator.getMerchantTokenKey(unit.getToken()));
+				redisOperate.del(CommonKeyGenerator.tokenMerchantIdKey(unit.getToken()));
 			
 			// 生成新的 token 并且写入
 			String token = IrisSecurity.encodeToken(account);
@@ -40,7 +40,7 @@ public class Merchant extends UnitAdapter<MemMerchant> {
 				unitCache.updateMerchant(unit);
 			} else 
 				unitCache.flushHashBean(unit);
-			redisOperate.set(RedisKeyGenerator.getMerchantTokenKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
+			redisOperate.set(CommonKeyGenerator.tokenMerchantIdKey(unit.getToken()), String.valueOf(unit.getMerchantId()));
 			return true;
 		} finally {
 			unLock(lockId);

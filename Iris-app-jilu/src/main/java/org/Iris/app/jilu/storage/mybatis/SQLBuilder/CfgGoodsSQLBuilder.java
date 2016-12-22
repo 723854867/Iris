@@ -3,12 +3,12 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class MemGoodsSQLBuilder {
+public class CfgGoodsSQLBuilder {
 
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MEM_GOODS.mark());
+				INSERT_INTO(Table.CFG_GOODS.mark());
 				VALUES("goods_code", 		    "#{goodsCode}");
 				VALUES("zh_name", 				"#{zhName}");
 				VALUES("us_name", 			    "#{usName}");
@@ -31,7 +31,7 @@ public class MemGoodsSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MEM_GOODS.mark());
+				FROM(Table.CFG_GOODS.mark());
 				WHERE("goods_id=#{goods_id}");
 				
 			}

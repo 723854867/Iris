@@ -3,17 +3,17 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import java.util.List;
 import java.util.Map;
 
-import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class MemOrderGoodsSQLBuilder {
+public class MerchantOrderGoodsSQLBuilder {
 
 	
 	public String insert(){
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MEM_ORDER_GOODS.mark());
+				INSERT_INTO(Table.MERCHANT_ORDER_GOODS.mark());
 				VALUES("order_id", 		    "#{orderId}");
 				VALUES("packet_id", 		"#{packetId}");
 				VALUES("goods_id", 			"#{goodsId}");
@@ -28,11 +28,11 @@ public class MemOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchInsert(Map<String, List<MemOrderGoods>> map) {
-		List<MemOrderGoods> list = map.get("list");
+	public String batchInsert(Map<String, List<MerchantOrderGoods>> map) {
+		List<MerchantOrderGoods> list = map.get("list");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
-		for(MemOrderGoods orderGoods:list){
+		stringBuilder.append("insert into "+Table.MERCHANT_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getPacketId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
 								+ ",'"+orderGoods.getGoodsImage()+"','"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
 								+ ",'"+orderGoods.getStatus()+"','"+orderGoods.getCreated()+"','"+orderGoods.getUpdated()+"'),");
@@ -44,7 +44,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MEM_ORDER_GOODS.mark());
+				UPDATE(Table.MERCHANT_ORDER_GOODS.mark());
 				SET("packet_id=#{packetId}");
 				SET("goods_id=#{goods_id}");
 				SET("goods_name=#{goods_name}");
@@ -58,40 +58,40 @@ public class MemOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchUpdate(Map<String, List<MemOrderGoods>> map){
-		List<MemOrderGoods> list = map.get("list");
+	public String batchUpdate(Map<String, List<MerchantOrderGoods>> map){
+		List<MerchantOrderGoods> list = map.get("list");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
-		stringBuilder.append("update "+Table.MEM_ORDER_GOODS.mark()+" set packet_id = case id ");
-		for(MemOrderGoods orderGoods:list){
+		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set packet_id = case id ");
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getPacketId());
 		}
 		stringBuilder.append(" end, goods_id = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsId());
 		}
 		stringBuilder.append(" end, goods_name = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsName());
 		}
 		stringBuilder.append(" end, goods_image = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getGoodsImage());
 		}
 		stringBuilder.append(" end, count = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getCount());
 		}
 		stringBuilder.append(" end, unit_price = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUnitPrice());
 		}
 		stringBuilder.append(" end, status = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getStatus());
 		}
 		stringBuilder.append(" end, updated = case id");
-		for(MemOrderGoods orderGoods:list){
+		for(MerchantOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUpdated());
 			stringBuilder2.append(orderGoods.getId()+",");
 		}
@@ -105,7 +105,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String delete(){
 		return new SQL(){
 			{
-				DELETE_FROM(Table.MEM_ORDER_GOODS.mark());
+				DELETE_FROM(Table.MERCHANT_ORDER_GOODS.mark());
 				WHERE("id=#{id}");
 			}
 		}.toString();
@@ -114,7 +114,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String batchDelete(Map<String, List<Long>> map){
 		List<Long> list = map.get("list");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("delete from "+Table.MEM_ORDER_GOODS.mark()+" where id in(");
+		stringBuilder.append("delete from "+Table.MERCHANT_ORDER_GOODS.mark()+" where id in(");
 		for(Long id : list){
 			stringBuilder.append(id+",");
 		}
