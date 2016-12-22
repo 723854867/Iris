@@ -2,10 +2,14 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
+
+import redis.clients.jedis.Tuple;
 
 public class MerchantOrderGoodsSQLBuilder {
 
@@ -28,8 +32,8 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchInsert(Map<String, List<MerchantOrderGoods>> map) {
-		List<MerchantOrderGoods> list = map.get("list");
+	public String batchInsert(StrictMap<List<MerchantOrderGoods>> map) {
+		List<MerchantOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		stringBuilder.append("insert into "+Table.MERCHANT_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
 		for(MerchantOrderGoods orderGoods:list){
@@ -58,8 +62,8 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchUpdate(Map<String, List<MerchantOrderGoods>> map){
-		List<MerchantOrderGoods> list = map.get("list");
+	public String batchUpdate(StrictMap<List<MerchantOrderGoods>> map){
+		List<MerchantOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
 		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set packet_id = case id ");
@@ -124,11 +128,11 @@ public class MerchantOrderGoodsSQLBuilder {
 		return stringBuilder.toString();
 	}
 	
-	public String getMemOrderGoodsById(){
+	public String getMerchantOrderGoodsById(){
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MEM_ORDER_GOODS.mark());
+				FROM(Table.MERCHANT_ORDER_GOODS.mark());
 				WHERE("id=#{id}");
 			}
 		}.toString();

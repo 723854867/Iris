@@ -16,6 +16,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
@@ -53,25 +54,21 @@ public class OrderCache extends RedisCache {
 			ogs.setCreated(time);
 			ogs.setUpdated(time);
 		}
-		Map<String, List<MerchantOrderGoods>> map = new HashMap<String, List<MerchantOrderGoods>>();
-		map.put("list", list);
-		merchantOrderGoodsMapper.batchInsert(map);
+		merchantOrderGoodsMapper.batchInsert(list);
 		for(MerchantOrderGoods orderGoods :list){
-			redisOperate.sadd(CommonKeyGenerator.getMemOrderGoodsSetKey(orderId),String.valueOf(orderGoods.getGoodsId()));
 			flushHashBean(orderGoods);
 		}
 	}
 	
 	private void batchUpdateOrderGoodsByList(String orderId, List<MerchantOrderGoods> list) {
 		for(MerchantOrderGoods ogs: list){
-			ogs = getHashBean(new MerchantOrderGoods(orderId, ogs.getGoodsId()));
-			ogs.setCount(ogs.getCount());
-			ogs.setUnitPrice(ogs.getUnitPrice());
-			
+			int count = ogs.getCount();
+			String unitPrice = ogs.getUnitPrice();
+			ogs = getMerchantOrderGoodsById(orderId, ogs.getId());
+			ogs.setCount(count);
+			ogs.setUnitPrice(unitPrice);
 		}
-		Map<String, List<MerchantOrderGoods>> map = new HashMap<String, List<MerchantOrderGoods>>();
-		map.put("list", list);
-		merchantOrderGoodsMapper.batchUpdate(map);
+		merchantOrderGoodsMapper.batchUpdate(list);
 		for(MerchantOrderGoods orderGoods :list){
 			flushHashBean(orderGoods);
 		}
@@ -85,13 +82,12 @@ public class OrderCache extends RedisCache {
 	 */
 	@Transactional
 	public void updateOrder(MerchantOrder order,String addGoodsList,String updateGoodsList,String deleteGoodsList){
-		merchantOrderMapper.update(order);
-		if(addGoodsList!=null){
+		if(addGoodsList!=null && !"".equals(addGoodsList)){
 			MerchantOrderGoods addOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(addGoodsList, MerchantOrderGoods[].class);
 			List<MerchantOrderGoods> list = new ArrayList<MerchantOrderGoods>(Arrays.asList(addOrderGoods));
 			batchInsertOrderGoodsByList(order.getOrderId(), list);
 		}
-		if(updateGoodsList!=null){
+		if(updateGoodsList!=null && !"".equals(updateGoodsList)){
 			MerchantOrderGoods updateOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, MerchantOrderGoods[].class);
 			List<MerchantOrderGoods> list = new ArrayList<MerchantOrderGoods>(Arrays.asList(updateOrderGoods));
 			batchUpdateOrderGoodsByList(order.getOrderId(), list);
@@ -103,8 +99,7 @@ public class OrderCache extends RedisCache {
 			map.put("list", list);
 			merchantOrderGoodsMapper.batchDelete(map);
 			for(long goodsId :list){
-				redisOperate.del(CommonKeyGenerator.getMemOrderGoodsDataKey(order.getOrderId(), goodsId));
-				redisOperate.srem(CommonKeyGenerator.getMemOrderGoodsSetKey(order.getOrderId()),goodsId+"");
+				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getOrderId(), goodsId));
 			}
 		}
 		flushHashBean(order);
@@ -130,13 +125,7 @@ public class OrderCache extends RedisCache {
 	 * @return
 	 */
 	public List<MerchantOrderGoods> getOGListByOrderId(String orderId){
-		Set<String> goodsIds = redisOperate.sdiff(CommonKeyGenerator.getMemOrderGoodsSetKey(orderId));
-		List<MerchantOrderGoods> oList = new ArrayList<>();
-		for(String goodsId:goodsIds){
-			MerchantOrderGoods oGoods = getHashBean(new MerchantOrderGoods(orderId,Integer.valueOf(goodsId)));
-			oList.add(oGoods);
-		}
-		return oList;
+		return null;
 	}
 	/**
 	 * 订单确认
@@ -156,14 +145,20 @@ public class OrderCache extends RedisCache {
 		flushHashBean(memGoods);
 	}
 	
+	public MerchantOrderGoods getMerchantOrderGoodsById(String orderId,long id){
+		MerchantOrderGoods merchantOrderGoods = getHashBean(new MerchantOrderGoods(orderId, id));
+		if(merchantOrderGoods != null)
+			return merchantOrderGoods;
+		merchantOrderGoods = merchantOrderGoodsMapper.getMerchantOrderGoodsById(id);
+		return merchantOrderGoods;
+	}
+	
 	public CfgGoods getGoodsById(long goodsId){
 		CfgGoods goods = getHashBean(new CfgGoods(goodsId));
 		if(goods!=null)
 			return goods;
 		goods = cfgGoodsMapper.getGoodsById(goodsId);
-		if(goods!=null)
-			return goods;
-		return null;
+		return goods;
 	}
 	
 }

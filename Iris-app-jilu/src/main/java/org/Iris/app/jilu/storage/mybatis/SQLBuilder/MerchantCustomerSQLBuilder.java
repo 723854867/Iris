@@ -42,16 +42,16 @@ public class MerchantCustomerSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMemCustomerById() {
+	public String getMerchantCustomerById() {
 		return new SQL() {
 			{
 				SELECT("*");
 				FROM(Table.MERCHANT_CUSTOMER.mark());
-				WHERE("customer_id = #{customerId}");
+				WHERE("customer_id = #{customerId} and merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}
-	public String getMerchantCustomerById() {
+	public String getMerchantCustomers() {
 		return new SQL() {
 			{
 				SELECT("customer_id, name_prefix_letter, last_purchase_time, purchase_sum");

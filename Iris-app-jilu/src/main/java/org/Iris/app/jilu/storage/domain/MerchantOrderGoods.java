@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
 public class MerchantOrderGoods implements RedisHashBean{
@@ -19,9 +20,9 @@ public class MerchantOrderGoods implements RedisHashBean{
 
 	public MerchantOrderGoods() {
 	}
-	public MerchantOrderGoods(String orderId,long goodsId) {
+	public MerchantOrderGoods(String orderId,long id) {
 		this.orderId = orderId;
-		this.goodsId = goodsId;
+		this.id = id;
 	}
 
 	public long getId() {
@@ -114,7 +115,7 @@ public class MerchantOrderGoods implements RedisHashBean{
 
 	@Override
 	public String redisKey() {
-		return CommonKeyGenerator.getMemOrderGoodsDataKey(orderId, goodsId);
+		return MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, id);
 	}
 
 }

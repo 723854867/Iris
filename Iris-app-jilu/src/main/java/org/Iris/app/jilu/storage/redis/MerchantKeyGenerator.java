@@ -18,7 +18,7 @@ public final class MerchantKeyGenerator {
 	private static final String MERCHANT_ACCOUNT_DATA					= "hash:db:merchant:{0}:account:{1}";
 	private static final String MERCHANT_CUSTOMER_DATA					= "hash:db:merchant:{0}:customer:{1}";
 	private static final String MERCHANT_ORDER_DATA						= "hash:db:merchant:{0}:order:{1}";
-	private static final String MERCHANT_ORDER_GOODS_DATA				= "hash:db:merchant:{0}:order:goods:{1}";
+	private static final String MERCHANT_ORDER_GOODS_DATA				= "hash:db:merchant:order:{0}:goods:{1}";
 	private static final String MERCHANT_ORDER_PACKET_DATA				= "hash:db:merchant:{0}:order:packet:{1}";
 	
 	private static final String ALIYUN_STS_TOKEN_DATA					= "hash:tmp:merchant:{0}:aliyun:sts:info";				// 阿里云 sts 缓存的临时 token 信息
@@ -57,8 +57,8 @@ public final class MerchantKeyGenerator {
 		return MessageFormat.format(MERCHANT_ORDER_DATA, String.valueOf(merchantId), String.valueOf(orderId));
 	}
 	
-	public static final String merchantOrderGoodsDataKey(long merchantId, long goodsId) { 
-		return MessageFormat.format(MERCHANT_ORDER_GOODS_DATA, String.valueOf(merchantId), String.valueOf(goodsId));
+	public static final String merchantOrderGoodsDataKey(String orderId, long goodsId) { 
+		return MessageFormat.format(MERCHANT_ORDER_GOODS_DATA, orderId, String.valueOf(goodsId));
 	}
 	
 	public static final String merchantOrderPacketDataKey(long merchantId, long packetId) { 

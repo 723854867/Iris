@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
 public class MerchantOrder implements RedisHashBean{
@@ -142,6 +142,6 @@ public class MerchantOrder implements RedisHashBean{
 
 	@Override
 	public String redisKey() {
-		return CommonKeyGenerator.getMemOrderDataKey(orderId);
+		return MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId);
 	}
 }

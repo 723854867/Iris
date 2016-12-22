@@ -30,7 +30,7 @@ public class ORDER_ADD extends ParallelMerchantAction {
 		if(orderGoods==null || orderGoods.length==0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
 		Merchant memMerchant = session.getUnit().getUnit();
-		MerchantCustomer customer = unitCache.getMemCustomerById(customerId);
+		MerchantCustomer customer = unitCache.getMerchantCustomerById(memMerchant.getMerchantId(),customerId);
 		if(customer == null)
 			throw IllegalConstException.errorException(JiLuParams.CUSTOMER_ID);
 		MerchantOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),

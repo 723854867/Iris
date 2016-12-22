@@ -43,25 +43,10 @@ public final class CommonKeyGenerator {
 	
 	private static final String LOCK_UNIT							= "string:unit:{0}:{1}:lock";				// 用户分布式锁；0-表示用户类型，1-表示用户Id
 	
-	private static final String MEM_ORDER_DATA						= "hash:db:mem:{0}:order";
-	private static final String MEM_ORDER_GOODS						= "hash:db:mem:{0}:{1}:order:goods";			//0代表 orderId 1 代表goodsId
-	private static final String MEM_ORDER_GOODS_SET					= "list:db:mem:{0}:order:goods";				//订单 id与商品id对应关系 一对多
 	private static final String MEM_GOODS							= "hash:db:mem:{0}:goods";					
 	
 	public static String getUnitLockKey(UnitType type, long uid) { 
 		return MessageFormat.format(LOCK_UNIT, type.name(), String.valueOf(uid));
-	}
-	
-	public static String getMemOrderDataKey(String orderId){
-		return MessageFormat.format(MEM_ORDER_DATA, orderId);
-	}
-	
-	public static String getMemOrderGoodsDataKey(String orderId,long goodsId){
-		return MessageFormat.format(MEM_ORDER_GOODS, orderId, String.valueOf(goodsId));
-	}
-	
-	public static String getMemOrderGoodsSetKey(String orderId){
-		return MessageFormat.format(MEM_ORDER_GOODS_SET, orderId);
 	}
 	
 	public static String getMemGoodsKey(long goodsId){
