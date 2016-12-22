@@ -64,7 +64,7 @@ public class OrderCache extends RedisCache {
 	
 	private void batchUpdateOrderGoodsByList(String orderId, List<MemOrderGoods> list) {
 		for(MemOrderGoods ogs: list){
-			ogs = getHashBean(new MemOrderGoods(orderId, ogs.getGoodsId()));
+			ogs = orderGoodsMapper.
 			ogs.setCount(ogs.getCount());
 			ogs.setUnitPrice(ogs.getUnitPrice());
 			
@@ -86,17 +86,17 @@ public class OrderCache extends RedisCache {
 	@Transactional
 	public void updateOrder(MemOrder order,String addGoodsList,String updateGoodsList,String deleteGoodsList){
 		orderMapper.update(order);
-		if(addGoodsList!=null){
+		if(addGoodsList!=null && !"".equals(addGoodsList)){
 			MemOrderGoods addOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(addGoodsList, MemOrderGoods[].class);
 			List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(addOrderGoods));
 			batchInsertOrderGoodsByList(order.getOrderId(), list);
 		}
-		if(updateGoodsList!=null){
+		if(updateGoodsList!=null && !"".equals(updateGoodsList)){
 			MemOrderGoods updateOrderGoods[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, MemOrderGoods[].class);
 			List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(updateOrderGoods));
 			batchUpdateOrderGoodsByList(order.getOrderId(), list);
 		}
-		if(deleteGoodsList!=null){
+		if(deleteGoodsList!=null && !"".equals(deleteGoodsList)){
 			Long goodsIds[] = SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, Long[].class);
 			List<Long> list = new ArrayList<Long>(Arrays.asList(goodsIds));
 			Map<String, List<Long>> map = new HashMap<String, List<Long>>();
