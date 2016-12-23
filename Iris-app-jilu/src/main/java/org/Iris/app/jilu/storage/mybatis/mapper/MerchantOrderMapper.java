@@ -31,4 +31,12 @@ public interface MerchantOrderMapper {
 	 */
 	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
 	List<CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
+
+	/**
+	 * 通过被转单商户id获取转单申请列表
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getChangeMerchantOrderList")
+	List<MerchantOrder> getChangeMerchantOrderList(long merchantId);
 }

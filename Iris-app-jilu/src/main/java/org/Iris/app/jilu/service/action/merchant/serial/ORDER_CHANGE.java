@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +29,21 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 		Merchant merchant = unitCache.getMerchantByMerchantId(merchantId).getUnit();
 		if(null == merchant)
 			throw IllegalConstException.errorException(JiLuParams.MERCHANTID);
-		List<Long> ids = new ArrayList<Long>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, Long[].class)));
-		if(null == ids || ids.size() == 0)
+		List<MerchantOrderGoods> changeOrderGoods = new ArrayList<MerchantOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MerchantOrderGoods[].class)));
+		if(null == changeOrderGoods || changeOrderGoods.size() == 0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		List<MerchantOrderGoods> ogs = orderCache.getOGListByOrderId(ids);
-		if(null == ogs || ogs.size() == 0 || ogs.size() != ids.size())
-			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		if(!orderCache.isChangedMerchantOrderGoods(ogs))
-			return Result.jsonError(JiLuCode.GOODSLIST_CAN_NOT_CHANGE);
-		return Result.jsonSuccess(orderCache.orderChange(superOrder,merchant,ogs));
+		
+		List<MerchantOrderGoods> list = new ArrayList<MerchantOrderGoods>();
+		for (MerchantOrderGoods ogs : changeOrderGoods) {
+			MerchantOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+			if (mGood == null)
+				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
+			if (mGood.getStatus() != 0)
+				return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), ogs.getGoodsId()));
+			list.add(mGood);
+		}
+		
+		return Result.jsonSuccess(orderCache.orderChange(superOrder,merchant,session.getUnit().getUnit(),list));
 	}
 
 	

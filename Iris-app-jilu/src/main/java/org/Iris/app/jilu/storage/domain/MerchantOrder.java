@@ -8,6 +8,8 @@ public class MerchantOrder implements RedisHashBean{
 	private String orderId;
 	private String rootOrderId;
 	private String superOrderId;
+	private long superMerchantId;
+	private String superMerchantName;
 	private long merchantId;
 	private String merchantName;
 	private String merchantAddress;
@@ -50,6 +52,22 @@ public class MerchantOrder implements RedisHashBean{
 
 	public void setSuperOrderId(String superOrderId) {
 		this.superOrderId = superOrderId;
+	}
+
+	public long getSuperMerchantId() {
+		return superMerchantId;
+	}
+
+	public void setSuperMerchantId(long superMerchantId) {
+		this.superMerchantId = superMerchantId;
+	}
+
+	public String getSuperMerchantName() {
+		return superMerchantName;
+	}
+
+	public void setSuperMerchantName(String superMerchantName) {
+		this.superMerchantName = superMerchantName;
 	}
 
 	public long getMerchantId() {

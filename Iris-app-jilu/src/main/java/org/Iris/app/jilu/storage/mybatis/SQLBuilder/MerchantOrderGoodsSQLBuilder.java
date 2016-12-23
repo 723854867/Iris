@@ -99,12 +99,12 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchDelete(StrictMap<List<Long>> map){
-		List<Long> list = map.get("collection");
+	public String batchDelete(StrictMap<List<MerchantOrderGoods>> map){
+		List<MerchantOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		stringBuilder.append("delete from "+Table.MERCHANT_ORDER_GOODS.mark()+" where id in(");
-		for(Long id : list){
-			stringBuilder.append(id+",");
+		for(MerchantOrderGoods goods : list){
+			stringBuilder.append(goods.getId()+",");
 		}
 		
 		stringBuilder.setLength(stringBuilder.length() - 1);
@@ -122,14 +122,36 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMerchantOrderGoodsByIdList(StrictMap<List<Long>> map){
-		List<Long> ids = map.get("collection");
+	public String getMerchantOrderGoodsByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				WHERE("order_id=#{orderId}");
+				AND();
+				WHERE("goods_id=#{goodsId}");
+			}
+		}.toString();
+	}
+	
+	public String getMerchantOrderGoodsByList(StrictMap<List<MerchantOrderGoods>> map){
+		List<MerchantOrderGoods> ogs = map.get("collection");
 		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MERCHANT_ORDER_GOODS.mark()+" WHERE id IN(");
-		for (long id : ids)
-			builder.append(id).append(",");
+		for (MerchantOrderGoods goods : ogs)
+			builder.append(goods.getId()).append(",");
 		builder.deleteCharAt(builder.length() - 1);
 		builder.append(")");
 		return builder.toString();
+	}
+	
+	public String getChangeMerchantOrderGoodsByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				WHERE("order_id=#{orderId}");
+			}
+		}.toString();
 	}
 
 }

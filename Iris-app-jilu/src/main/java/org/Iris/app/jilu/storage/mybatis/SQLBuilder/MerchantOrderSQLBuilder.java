@@ -24,6 +24,8 @@ public class MerchantOrderSQLBuilder {
 				VALUES("order_id", 				"#{orderId}");
 				VALUES("root_order_id", 		"#{rootOrderId}");
 				VALUES("super_order_id", 	    "#{superOrderId}");
+				VALUES("super_merchant_id", 	"#{superMerchantId}");
+				VALUES("super_merchant_name", 	"#{superMerchantName}");
 				VALUES("merchant_id", 			"#{merchantId}");
 				VALUES("merchant_name", 		"#{merchantName}");
 				VALUES("merchant_address", 		"#{merchantAddress}");
@@ -56,6 +58,16 @@ public class MerchantOrderSQLBuilder {
 				FROM(Table.MERCHANT_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 				GROUP_BY("customer_id");
+			}
+		}.toString();
+	}
+	
+	public String getChangeMerchantOrderList(){
+		return new SQL() {
+			{
+				SELECT("order_id,super_merchant_id,super_merchant_name");
+				FROM(Table.MERCHANT_ORDER.mark());
+				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
 	}
