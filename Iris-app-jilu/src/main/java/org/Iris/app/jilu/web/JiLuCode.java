@@ -18,7 +18,10 @@ public enum JiLuCode implements ICode {
 	ORDER_GOODS_IS_LOCK(206, "order_goods {0} is lock"),
 	GOODS_NOT_EXIST(207, "goods {0} not exist"),
 	ORDER_GOODS_IS_EXIST(208, "order_goods {0} is exist"),
-	ORDER_GOODS_NOT_EXIST(209, "order_goods {0} not exist");
+	ORDER_GOODS_NOT_EXIST(209, "order_goods {0} not exist"),
+	GOODSLIST_CAN_NOT_CHANGE(210, "goodsList can not change"),
+	TARGET_MERCHANT_NOT_EXIST(211, "target merchant is not exist"),
+	SELF_LIMIT(212, "self limit");
 	
 	private int code;
 	private String defaultVaule;
