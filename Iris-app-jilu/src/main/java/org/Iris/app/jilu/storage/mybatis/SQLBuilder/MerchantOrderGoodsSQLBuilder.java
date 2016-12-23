@@ -1,15 +1,11 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
-
-import redis.clients.jedis.Tuple;
 
 public class MerchantOrderGoodsSQLBuilder {
 

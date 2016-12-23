@@ -9,7 +9,9 @@ public enum Table {
 	MERCHANT_CUSTOMER("merchant_customer"),
 	MERCHANT_ORDER("merchant_order"),
 	MERCHANT_ORDER_GOODS("merchant_order_goods"),
-	MERCHANT_PACKET("merchant_packet");
+	MERCHANT_PACKET("merchant_packet"),
+	
+	RELATION("relation");
 	
 	private String mark;
 	

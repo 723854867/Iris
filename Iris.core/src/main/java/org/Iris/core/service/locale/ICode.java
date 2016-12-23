@@ -21,6 +21,7 @@ public interface ICode extends IrisConst<String> {
 		AUTH_FAIL(4, "auth fail"),
 		REQUEST_FREQUENTLY(5, "request frequently"),
 		TOKEN_INVALID(6, "token invalid"),
+		DATA_CHANGED(7, "data changed"),
 		
 		UNIT_NOT_EXIST(50, "unit not exist");
 		
