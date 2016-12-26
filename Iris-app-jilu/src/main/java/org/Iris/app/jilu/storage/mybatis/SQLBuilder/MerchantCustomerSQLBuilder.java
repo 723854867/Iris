@@ -66,7 +66,7 @@ public class MerchantCustomerSQLBuilder {
 	
 	public String getCustomersByIds(StrictMap<Set<Tuple>> map) {
 		Set<Tuple> set = map.get("collection");
-		StringBuilder builder = new StringBuilder("SELECT * FROM merchant_customer WHERE customer_id IN(");
+		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MERCHANT_CUSTOMER.mark()+" WHERE customer_id IN(");
 		for (Tuple tuple : set)
 			builder.append(tuple.getElement()).append(",");
 		builder.deleteCharAt(builder.length() - 1);

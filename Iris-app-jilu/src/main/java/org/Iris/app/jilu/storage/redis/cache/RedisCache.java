@@ -13,7 +13,7 @@ public abstract class RedisCache {
 	@Resource
 	protected RedisOperate redisOperate;
 	
-	protected <T extends RedisHashBean> T getHashBean(T bean) {
+	public <T extends RedisHashBean> T getHashBean(T bean) {
 		return redisOperate.hgetAll(bean.redisKey(), bean);
 	}
 

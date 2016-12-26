@@ -5,6 +5,7 @@ import java.util.List;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderSQLBuilder;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -39,4 +40,7 @@ public interface MerchantOrderMapper {
 	 */
 	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getChangeMerchantOrderList")
 	List<MemOrder> getChangeMerchantOrderList(long merchantId);
+	
+	@DeleteProvider(type = MerchantOrderSQLBuilder.class, method="delete")
+	void delete(@Param("merchantId") long merchantId,@Param("orderId") String orderId);
 }

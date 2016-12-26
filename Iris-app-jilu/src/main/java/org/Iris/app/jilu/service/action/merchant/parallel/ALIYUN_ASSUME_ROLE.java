@@ -2,6 +2,7 @@ package org.Iris.app.jilu.service.action.merchant.parallel;
 
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -14,7 +15,7 @@ public class ALIYUN_ASSUME_ROLE extends ParallelMerchantAction {
 	
 	@Override
 	protected String execute0(MerchantSession session) {
-		MerchantOperator merchant = session.getUnit();
+		Merchant merchant = session.getMerchant();
 		String key = MerchantKeyGenerator.aliyunStsTokenDataKey(merchant.uid());
 		AssumeRoleForm form = redisOperate.hgetAll(key, new AssumeRoleForm());
 		if (null == form) {
