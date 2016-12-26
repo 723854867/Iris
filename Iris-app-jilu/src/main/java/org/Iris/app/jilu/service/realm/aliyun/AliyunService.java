@@ -9,8 +9,7 @@ import org.Iris.aliyun.policy.Statement;
 import org.Iris.aliyun.service.OssService;
 import org.Iris.aliyun.service.StsService;
 import org.Iris.app.jilu.common.AppConfig;
-import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.springframework.stereotype.Service;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
@@ -40,11 +39,11 @@ public class AliyunService {
 	 * @param merchant
 	 * @return
 	 */
-	public AssumeRoleResponse getStsToken(MerchantOperator merchant) {
+	public AssumeRoleResponse getStsToken(long merchantId) {
 		Policy policy = new Policy();
 		policy.addStatement(ossFullAccess);
-		policy.addStatement(AliyunUtils.getMerchantStatement(merchant));
-		return stsService.assumeRole(AppConfig.getAliyunStsRoleArn(), "Merchant-" + merchant.uid(), policy);
+		policy.addStatement(AliyunUtils.getMerchantStatement(merchantId));
+		return stsService.assumeRole(AppConfig.getAliyunStsRoleArn(), "Merchant-" + merchantId, policy);
 	}
 	
 	/**
@@ -52,8 +51,8 @@ public class AliyunService {
 	 * 
 	 * @param merchant
 	 */
-	public void createMerchantFolder(Merchant merchant) {
-		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/merchant/" + merchant.uid() + "/");
+	public void createMerchantFolder(MemMerchant merchant) {
+		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/merchant/" + merchant.getMerchantId() + "/");
 	}
 	
 	public void dispose() {

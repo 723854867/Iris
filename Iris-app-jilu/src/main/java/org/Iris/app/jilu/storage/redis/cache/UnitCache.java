@@ -19,13 +19,13 @@ import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
-import org.Iris.app.jilu.storage.domain.Merchant;
-import org.Iris.app.jilu.storage.domain.MerchantAccount;
-import org.Iris.app.jilu.storage.domain.MerchantCustomer;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemAccount;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MerchantAccountMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantCustomerMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MerchantMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.redis.operate.lua.LuaOperate;
@@ -48,46 +48,22 @@ public class UnitCache extends RedisCache {
 	@Resource
 	private AliyunService aliyunService;
 	@Resource
-	private MerchantMapper merchantMapper;
+	private MemMerchantMapper merchantMapper;
 	@Resource
 	private CfgGoodsMapper cfgGoodsMapper;
 	@Resource
 	private MerchantOrderMapper merchantOrderMapper;
 	@Resource
-	private MerchantAccountMapper merchantAccountMapper;
+	private MemAccountMapper merchantAccountMapper;
 	@Resource
 	private MerchantCustomerMapper merchantCustomerMapper;
 
-	
-	/**
-	 * 新建商户时需要插入商户数据，商户账号数据，并且在阿里云新建 oss 存储文件夹，之后该用户
-	 * 拥有该 app 的资源文件夹的所有读权限，但是只能对自己所在文件夹进行写操作。
-	 * 
-	 * @param merchant
-	 * @param am
-	 * @return
-	 */
-	@Transactional
-	public MerchantOperator insertMerchant(Merchant merchant, AccountModel am) {
-		merchantMapper.insert(merchant);
-		MerchantAccount account = BeanCreator.newMemAccount(am, merchant.getCreated(), merchant.getMerchantId());
-		merchantAccountMapper.insert(account);
-
-		// 更新缓存
-		flushHashBean(merchant);
-		redisOperate.hset(CommonKeyGenerator.accountMerchantIdMapKey(AccountType.match(am.getType())), am.getAccount(), String.valueOf(merchant.getMerchantId()));
-		
-		// 创建用户 oss 资源文件夹
-		aliyunService.createMerchantFolder(merchant);
-		return new MerchantOperator(merchant);
-	}
-	
 	/**
 	 * 更新商户信息
 	 * 
 	 * @param merchant
 	 */
-	public void updateMerchant(Merchant merchant) {
+	public void updateMerchant(MemMerchant merchant) {
 		merchant.setUpdated(DateUtils.currentTime());
 		merchantMapper.update(merchant);
 		flushHashBean(merchant);
@@ -100,7 +76,7 @@ public class UnitCache extends RedisCache {
 	 * @return
 	 */
 	public MerchantOperator getMerchantByMerchantId(long merchantId) {
-		Merchant merchant = getHashBean(new Merchant(merchantId));
+		MemMerchant merchant = getHashBean(new MemMerchant(merchantId));
 		if (null != merchant)
 			return new MerchantOperator(merchant);
 		merchant = merchantMapper.getByMerchantId(merchantId);
@@ -121,7 +97,7 @@ public class UnitCache extends RedisCache {
 		String key = CommonKeyGenerator.accountMerchantIdMapKey(type);
 		String value = redisOperate.hget(key, account);
 		if (null == value) {
-			MerchantAccount merchantAccount = merchantAccountMapper.getByAccount(account);
+			MemAccount merchantAccount = merchantAccountMapper.getByAccount(account);
 			if (null == merchantAccount)
 				return null;
 			redisOperate.hset(key, account, String.valueOf(merchantAccount.getMerchantId()));
@@ -147,7 +123,7 @@ public class UnitCache extends RedisCache {
 	 * 
 	 * @param customer
 	 */
-	public void insertCustomer(MerchantCustomer customer) {
+	public void insertCustomer(MemCustomer customer) {
 		merchantCustomerMapper.insert(customer);
 		flushHashBean(customer);
 		String member = String.valueOf(customer.getCustomerId());
@@ -169,8 +145,8 @@ public class UnitCache extends RedisCache {
 	 * @param customerId
 	 * @return
 	 */
-	public MerchantCustomer getMerchantCustomerById(long merchantId, long customerId){
-		MerchantCustomer customer = getHashBean(new MerchantCustomer(merchantId, customerId));
+	public MemCustomer getMerchantCustomerById(long merchantId, long customerId){
+		MemCustomer customer = getHashBean(new MemCustomer(merchantId, customerId));
 		if(customer != null)
 			return customer;
 		return merchantCustomerMapper.getMerchantCustomerById(merchantId, customerId);
@@ -192,9 +168,9 @@ public class UnitCache extends RedisCache {
 		int start = (page - 1) * pageSize;
 		int end = start + pageSize - 1;
 		Set<Tuple> set = redisOperate.zrangeWithScores(key, start, end);
-		List<MerchantCustomer> list = merchantCustomerMapper.getCustomersByIds(set);
+		List<MemCustomer> list = merchantCustomerMapper.getCustomersByIds(set);
 		List<CustomerPagerForm> form = new ArrayList<CustomerPagerForm>();
-		for (MerchantCustomer customer : list)
+		for (MemCustomer customer : list)
 			form.add(type == CustomerListType.PURCHASE_FREQUENCY ? new CustomerFrequencyPagerForm(customer) : new CustomerPagerForm(customer));
 		return new Pager<CustomerPagerForm>(total, form);
 	}
@@ -214,7 +190,7 @@ public class UnitCache extends RedisCache {
 	}
 	
 	private int _loadCustomerList(long merchantId) {
-		List<MerchantCustomer> list = merchantCustomerMapper.getMerchantCustomers(merchantId);
+		List<MemCustomer> list = merchantCustomerMapper.getMerchantCustomers(merchantId);
 		if (list.isEmpty())
 			return 0;
 		Map<String, Double> map = new HashMap<String, Double>(list.size());
@@ -232,8 +208,8 @@ public class UnitCache extends RedisCache {
 		return list.size();
 	}
 	
-	private void _loadCustomerList(long merchantId, List<MerchantCustomer> list, Map<String, Double> map, CustomerListType type) { 
-		for (MerchantCustomer model : list)
+	private void _loadCustomerList(long merchantId, List<MemCustomer> list, Map<String, Double> map, CustomerListType type) { 
+		for (MemCustomer model : list)
 			map.put(String.valueOf(model.getCustomerId()), model.getScore(type));
 		redisOperate.zadd(type.redisCustomerListKey(merchantId), map);
 	}
@@ -256,7 +232,7 @@ public class UnitCache extends RedisCache {
 	 * @param customer
 	 * @param nameSort
 	 */
-	public void updateCustomer(MerchantCustomer customer, boolean nameSort) { 
+	public void updateCustomer(MemCustomer customer, boolean nameSort) { 
 		merchantCustomerMapper.update(customer);
 		flushHashBean(customer);
 		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))

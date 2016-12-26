@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.realm.unit.merchant;
 
 import org.Iris.app.jilu.service.realm.unit.UnitOperator;
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.util.common.IrisSecurity;
 import org.Iris.util.lang.DateUtils;
@@ -11,9 +11,9 @@ import org.Iris.util.lang.DateUtils;
  * 
  * @author Ahab
  */
-public class MerchantOperator extends UnitOperator<Merchant> {
+public class MerchantOperator extends UnitOperator<MemMerchant> {
 	
-	public MerchantOperator(Merchant merchant) {
+	public MerchantOperator(MemMerchant merchant) {
 		super(merchant);
 	}
 	

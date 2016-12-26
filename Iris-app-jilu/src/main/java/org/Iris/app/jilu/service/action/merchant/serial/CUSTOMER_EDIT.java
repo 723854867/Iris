@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
-import org.Iris.app.jilu.storage.domain.MerchantCustomer;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -19,7 +19,7 @@ public class CUSTOMER_EDIT extends SerialMerchantAction {
 		String memo = session.getKVParam(JiLuParams.MEMO);
 		String namePrefixLetter = CnToSpell.getFirstChar(name);
 		
-		MerchantCustomer customer = unitCache.getMerchantCustomerById(session.getUnit().uid(), session.getKVParam(JiLuParams.CUSTOMER_ID));
+		MemCustomer customer = unitCache.getMerchantCustomerById(session.getUnit().uid(), session.getKVParam(JiLuParams.CUSTOMER_ID));
 		if (null == customer)
 			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
 		

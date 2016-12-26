@@ -1,8 +1,8 @@
 package org.Iris.app.jilu.common.bean.form;
 
 import org.Iris.app.jilu.common.JiLuResourceUtil;
-import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 
 public class MerchantForm {
 
@@ -10,8 +10,8 @@ public class MerchantForm {
 	private String token;
 	private String avatar;
 	
-	public MerchantForm(MerchantOperator merchant) {
-		Merchant memMerchant = merchant.getUnit();
+	public MerchantForm(Merchant merchant) {
+		MemMerchant memMerchant = merchant.getMemMerchant();
 		this.merchantId = memMerchant.getMerchantId();
 		this.token = memMerchant.getToken();
 		this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);

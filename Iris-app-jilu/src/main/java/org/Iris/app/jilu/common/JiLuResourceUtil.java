@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.common;
 
-import org.Iris.app.jilu.storage.domain.MerchantCustomer;
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 
 public class JiLuResourceUtil {
 
@@ -18,7 +18,7 @@ public class JiLuResourceUtil {
 	 * @param merchant
 	 * @return
 	 */
-	public static final String merchantAvatarUri(Merchant merchant) {
+	public static final String merchantAvatarUri(MemMerchant merchant) {
 		StringBuilder builder = new StringBuilder(AppConfig.getAliyunOssFolderPrefix());
 		return builder.append(MERCHANT_FOLDER).append(merchant.getMerchantId()).append(AVATAR).toString();
 	}
@@ -29,7 +29,7 @@ public class JiLuResourceUtil {
 	 * @param memCustomer
 	 * @return
 	 */
-	public static final String customerIDFrontageUri(MerchantCustomer memCustomer) {
+	public static final String customerIDFrontageUri(MemCustomer memCustomer) {
 		StringBuilder builder = new StringBuilder(AppConfig.getAliyunOssFolderPrefix());
 		return builder.append(MERCHANT_FOLDER).append(memCustomer.getMerchantId()).append(CUSTOMER_FOLDER)
 				.append(memCustomer.getCustomerId()).append(CUSTOMER_ID_FRONTAGE).toString();
@@ -41,7 +41,7 @@ public class JiLuResourceUtil {
 	 * @param memCustomer
 	 * @return
 	 */
-	public static final String customerIDBehindUri(MerchantCustomer memCustomer) {
+	public static final String customerIDBehindUri(MemCustomer memCustomer) {
 		StringBuilder builder = new StringBuilder(AppConfig.getAliyunOssFolderPrefix());
 		return builder.append(MERCHANT_FOLDER).append(memCustomer.getMerchantId()).append(CUSTOMER_FOLDER)
 				.append(memCustomer.getCustomerId()).append(CUSTOMER_ID_BEHIND).toString();

@@ -2,7 +2,7 @@ package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
 
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderGoodsSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -15,33 +15,33 @@ public interface MerchantOrderGoodsMapper {
 
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	@InsertProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "insert")
-	void insert(MerchantOrderGoods order);
+	void insert(MemOrderGoods order);
 
 	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	@InsertProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "batchInsert")
-	void batchInsert(List<MerchantOrderGoods> list);
+	void batchInsert(List<MemOrderGoods> list);
 
 	@UpdateProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "update")
-	void update(MerchantOrderGoods order);
+	void update(MemOrderGoods order);
 
 	@UpdateProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "batchUpdate")
-	void batchUpdate(List<MerchantOrderGoods> list);
+	void batchUpdate(List<MemOrderGoods> list);
 
 	@DeleteProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "delete")
 	void delete(long id);
 
 	@DeleteProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "batchDelete")
-	void batchDelete(List<MerchantOrderGoods> list);
+	void batchDelete(List<MemOrderGoods> list);
 	
 	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsById")
-	MerchantOrderGoods getMerchantOrderGoodsById(long id);
+	MemOrderGoods getMerchantOrderGoodsById(long id);
 	
 	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsByOrderId")
-	MerchantOrderGoods getMerchantOrderGoodsByOrderId(@Param("orderId") String orderId,@Param("goodsId") long goodsId);
+	MemOrderGoods getMerchantOrderGoodsByOrderId(@Param("orderId") String orderId,@Param("goodsId") long goodsId);
 	
 	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsByList")
-	List<MerchantOrderGoods> getMerchantOrderGoodsByList(List<MerchantOrderGoods> list);
+	List<MemOrderGoods> getMerchantOrderGoodsByList(List<MemOrderGoods> list);
 	
 	@SelectProvider(type = MerchantOrderGoodsSQLBuilder.class, method = "getChangeMerchantOrderGoodsByOrderId")
-	List<MerchantOrderGoods> getChangeMerchantOrderGoodsByOrderId(String orderId);
+	List<MemOrderGoods> getChangeMerchantOrderGoodsByOrderId(String orderId);
 }

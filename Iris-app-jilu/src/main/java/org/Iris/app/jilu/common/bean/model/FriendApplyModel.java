@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.common.bean.model;
 
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.util.lang.DateUtils;
 
 public class FriendApplyModel {
@@ -12,7 +12,7 @@ public class FriendApplyModel {
 	
 	public FriendApplyModel() {}
 	
-	public FriendApplyModel(Merchant applier, String memo) {
+	public FriendApplyModel(MemMerchant applier, String memo) {
 		this.memo = memo;
 		this.applierName = applier.getName();
 		this.applier = applier.getMerchantId();

@@ -2,7 +2,7 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
 import java.util.List;
 
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
@@ -28,11 +28,11 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchInsert(StrictMap<List<MerchantOrderGoods>> map) {
-		List<MerchantOrderGoods> list = map.get("collection");
+	public String batchInsert(StrictMap<List<MemOrderGoods>> map) {
+		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		stringBuilder.append("insert into "+Table.MERCHANT_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
-		for(MerchantOrderGoods orderGoods:list){
+		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getPacketId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
 								+ ",'"+orderGoods.getGoodsImage()+"','"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
 								+ ",'"+orderGoods.getStatus()+"','"+orderGoods.getCreated()+"','"+orderGoods.getUpdated()+"'),");
@@ -58,24 +58,24 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchUpdate(StrictMap<List<MerchantOrderGoods>> map){
-		List<MerchantOrderGoods> list = map.get("collection");
+	public String batchUpdate(StrictMap<List<MemOrderGoods>> map){
+		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
 		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set count = case id ");
-		for(MerchantOrderGoods orderGoods:list){
+		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getCount());
 		}
 		stringBuilder.append(" end, unit_price = case id");
-		for(MerchantOrderGoods orderGoods:list){
+		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUnitPrice());
 		}
 		stringBuilder.append(" end, status = case id");
-		for(MerchantOrderGoods orderGoods:list){
+		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getStatus());
 		}
 		stringBuilder.append(" end, updated = case id");
-		for(MerchantOrderGoods orderGoods:list){
+		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUpdated());
 			stringBuilder2.append(orderGoods.getId()+",");
 		}
@@ -95,11 +95,11 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String batchDelete(StrictMap<List<MerchantOrderGoods>> map){
-		List<MerchantOrderGoods> list = map.get("collection");
+	public String batchDelete(StrictMap<List<MemOrderGoods>> map){
+		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		stringBuilder.append("delete from "+Table.MERCHANT_ORDER_GOODS.mark()+" where id in(");
-		for(MerchantOrderGoods goods : list){
+		for(MemOrderGoods goods : list){
 			stringBuilder.append(goods.getId()+",");
 		}
 		
@@ -130,10 +130,10 @@ public class MerchantOrderGoodsSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMerchantOrderGoodsByList(StrictMap<List<MerchantOrderGoods>> map){
-		List<MerchantOrderGoods> ogs = map.get("collection");
+	public String getMerchantOrderGoodsByList(StrictMap<List<MemOrderGoods>> map){
+		List<MemOrderGoods> ogs = map.get("collection");
 		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MERCHANT_ORDER_GOODS.mark()+" WHERE id IN(");
-		for (MerchantOrderGoods goods : ogs)
+		for (MemOrderGoods goods : ogs)
 			builder.append(goods.getId()).append(",");
 		builder.deleteCharAt(builder.length() - 1);
 		builder.append(")");

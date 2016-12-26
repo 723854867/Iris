@@ -18,7 +18,7 @@ public class ALIYUN_ASSUME_ROLE extends ParallelMerchantAction {
 		String key = MerchantKeyGenerator.aliyunStsTokenDataKey(merchant.uid());
 		AssumeRoleForm form = redisOperate.hgetAll(key, new AssumeRoleForm());
 		if (null == form) {
-			AssumeRoleResponse response = aliyunService.getStsToken(session.getUnit());
+			AssumeRoleResponse response = aliyunService.getStsToken(merchant.getUnit().getMerchantId());
 			form = new AssumeRoleForm(response);
 			redisOperate.hmset(key, form);
 			long expire = DateUtils.getTimeGap(form.getExpiration(), DateUtils.getUTCDate(), DateUtils.ISO8601_UTC, DateUtils.TIMEZONE_UTC);

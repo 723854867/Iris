@@ -2,8 +2,8 @@ package org.Iris.redis.operate.lua;
 
 public enum LuaCommand {
 	
-	TEST_PARAM,
-
+	TEST,
+	
 	DEL_IF_EQUALS,
 	DEL_IF_EXIST,
 	HMSET_IF_EXIST,

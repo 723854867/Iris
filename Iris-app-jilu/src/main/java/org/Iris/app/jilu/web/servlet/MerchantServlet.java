@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.action.MerchantAction;
-import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.web.IrisDispatcher;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.auth.MerchantAuthenticator;
@@ -46,8 +46,8 @@ public class MerchantServlet extends IrisDispatcher<MerchantSession, MerchantAct
 			throw IllegalConstException.errorException(JiLuParams.ACTION);
 		
 		if (action.serial()) {
-			MerchantOperator operator = session.getUnit();
-			String lockId = operator.tryLock();
+			Merchant merchant = session.getMerchant();
+			String lockId = merchant.tryLock();
 			if (null == lockId) {
 				session.write(Result.jsonError(ICode.Code.REQUEST_FREQUENTLY));
 				return;
@@ -56,7 +56,7 @@ public class MerchantServlet extends IrisDispatcher<MerchantSession, MerchantAct
 			try {
 				action.execute(session);
 			} finally {
-				operator.unLock(lockId);
+				merchant.unLock(lockId);
 			}
 		} else 
 			action.execute(session);

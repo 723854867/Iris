@@ -8,11 +8,11 @@ import java.util.Random;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
-import org.Iris.app.jilu.storage.domain.MerchantCustomer;
+import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
-import org.Iris.app.jilu.storage.domain.Merchant;
-import org.Iris.app.jilu.storage.domain.MerchantOrder;
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -33,10 +33,10 @@ public class ORDER_ADD extends ParallelMerchantAction {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
 		long customerId = session.getKVParam(JiLuParams.CUSTOMER_ID);
 		String orderId = System.currentTimeMillis()+""+new Random().nextInt(10);
-		List<MerchantOrderGoods> list = new ArrayList<MerchantOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MerchantOrderGoods[].class)));
+		List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
 		if(list==null || list.size() == 0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		for(MerchantOrderGoods ogs: list){
+		for(MemOrderGoods ogs: list){
 			CfgGoods goods = orderCache.getGoodsById(ogs.getGoodsId());
 			if(goods == null)
 				return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
@@ -48,13 +48,13 @@ public class ORDER_ADD extends ParallelMerchantAction {
 			ogs.setUpdated(time);
 		}
 		
-		Merchant memMerchant = session.getUnit().getUnit();
-		MerchantCustomer customer = unitCache.getMerchantCustomerById(memMerchant.getMerchantId(),customerId);
+		MemMerchant memMerchant = session.getUnit().getUnit();
+		MemCustomer customer = unitCache.getMerchantCustomerById(memMerchant.getMerchantId(),customerId);
 		if(customer == null)
 			throw IllegalConstException.errorException(JiLuParams.CUSTOMER_ID);
 		
 		
-		MerchantOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
+		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
 				customerId, customer.getName(), customer.getMobile(), customer.getAddress(),0);
 		orderCache.createOrder(order, list);
 		return Result.jsonSuccess(order);

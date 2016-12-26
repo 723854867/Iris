@@ -3,7 +3,7 @@ package org.Iris.app.jilu.storage.domain;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MerchantOrderGoods implements RedisHashBean{
+public class MemOrderGoods implements RedisHashBean{
 
 	private long id;
 	private String orderId;
@@ -17,9 +17,9 @@ public class MerchantOrderGoods implements RedisHashBean{
 	private int created;
 	private int updated;
 
-	public MerchantOrderGoods() {
+	public MemOrderGoods() {
 	}
-	public MerchantOrderGoods(String orderId,long goodsId) {
+	public MemOrderGoods(String orderId,long goodsId) {
 		this.orderId = orderId;
 		this.goodsId = goodsId;
 	}

@@ -4,12 +4,12 @@ public enum Table {
 	
 	CFG_GOODS("cfg_goods"),
 
-	MERCHANT("merchant"),
-	MERCHANT_ACCOUNT("merchant_account"),
-	MERCHANT_CUSTOMER("merchant_customer"),
-	MERCHANT_ORDER("merchant_order"),
-	MERCHANT_ORDER_GOODS("merchant_order_goods"),
-	MERCHANT_PACKET("merchant_packet"),
+	MEM_MERCHANT("mem_merchant"),
+	MEM_ACCOUNT("mem__account"),
+	MEM_CUSTOMER("mem__customer"),
+	MEM_ORDER("mem_order"),
+	MEM_ORDER_GOODS("mem_order_goods"),
+	MEM_ORDER_PACKET("mem_order_packet"),
 	
 	RELATION("relation");
 	

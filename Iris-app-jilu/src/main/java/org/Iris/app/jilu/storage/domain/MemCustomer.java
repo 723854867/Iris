@@ -4,7 +4,7 @@ import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class MerchantCustomer implements RedisHashBean {
+public class MemCustomer implements RedisHashBean {
 
 	private long customerId;
 	private long merchantId;
@@ -20,9 +20,9 @@ public class MerchantCustomer implements RedisHashBean {
 	private int updated;
 	private int deleted;
 
-	public MerchantCustomer() {}
+	public MemCustomer() {}
 
-	public MerchantCustomer(long merchantId, long customerId) {
+	public MemCustomer(long merchantId, long customerId) {
 		this.customerId = customerId;
 	}
 

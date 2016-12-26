@@ -9,8 +9,8 @@ public class MerchantAccountSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT_ACCOUNT.mark());
-				WHERE("account=#{account}");
+				FROM(Table.MEM_ACCOUNT.mark());
+				WHERE("account = #{account}");
 			}
 		}.toString();
 	}
@@ -18,7 +18,7 @@ public class MerchantAccountSQLBuilder {
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MERCHANT_ACCOUNT.mark());
+				INSERT_INTO(Table.MEM_ACCOUNT.mark());
 				VALUES("account", 			"#{account}");
 				VALUES("type", 				"#{type}");
 				VALUES("merchant_id", 		"#{merchantId}");

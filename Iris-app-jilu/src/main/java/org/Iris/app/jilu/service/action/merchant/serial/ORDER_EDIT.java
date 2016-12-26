@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
-import org.Iris.app.jilu.storage.domain.MerchantOrder;
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -25,23 +25,23 @@ public class ORDER_EDIT extends SerialMerchantAction {
 		String updateGoodsList = session.getKVParamOptional(JiLuParams.UPDATEGOODSLIST);
 		String deleteGoodsList = session.getKVParamOptional(JiLuParams.DELETEGOODSLIST);
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
-		MerchantOrder order = orderCache.getMerchantOrderById(session.getUnit().getUnit().getMerchantId(), orderId);
+		MemOrder order = orderCache.getMerchantOrderById(session.getUnit().getUnit().getMerchantId(), orderId);
 		int status = order.getStatus();
 		if (status != 0) {
 			// 订单不能修改
 			return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
 		}
 		// 对传递的需要变更的产品列表进行验证
-		List<MerchantOrderGoods> addList = null;
-		List<MerchantOrderGoods> updateList = null;
-		List<MerchantOrderGoods> deleteList = null;
+		List<MemOrderGoods> addList = null;
+		List<MemOrderGoods> updateList = null;
+		List<MemOrderGoods> deleteList = null;
 		if (addGoodsList != null && !"".equals(addGoodsList)) {
-			addList = new ArrayList<MerchantOrderGoods>(
-					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(addGoodsList, MerchantOrderGoods[].class)));
+			addList = new ArrayList<MemOrderGoods>(
+					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(addGoodsList, MemOrderGoods[].class)));
 			if (null == addList || addList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.ADDGOODSLIST);
-			for (MerchantOrderGoods ogs : addList) {
-				MerchantOrderGoods mGoods = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+			for (MemOrderGoods ogs : addList) {
+				MemOrderGoods mGoods = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGoods != null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_EXIST.defaultValue(), ogs.getGoodsId()));
 				CfgGoods goods = orderCache.getGoodsById(ogs.getGoodsId());
@@ -55,14 +55,14 @@ public class ORDER_EDIT extends SerialMerchantAction {
 				ogs.setUpdated(time);
 			}
 		}
-		List<MerchantOrderGoods> tempUpdateList = new ArrayList<MerchantOrderGoods>();
+		List<MemOrderGoods> tempUpdateList = new ArrayList<MemOrderGoods>();
 		if (updateGoodsList != null && !"".equals(updateGoodsList)) {
-			updateList = new ArrayList<MerchantOrderGoods>(
-					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, MerchantOrderGoods[].class)));
+			updateList = new ArrayList<MemOrderGoods>(
+					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(updateGoodsList, MemOrderGoods[].class)));
 			if (null == updateList || updateList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.UPDATEGOODSLIST);
-			for (MerchantOrderGoods ogs : updateList) {
-				MerchantOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+			for (MemOrderGoods ogs : updateList) {
+				MemOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGood == null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 				if (mGood.getStatus() != 0)
@@ -76,12 +76,12 @@ public class ORDER_EDIT extends SerialMerchantAction {
 			tempUpdateList = null;
 		
 		if (deleteGoodsList != null && !"".equals(deleteGoodsList)) {
-			deleteList = new ArrayList<MerchantOrderGoods>(
-					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(deleteGoodsList, MerchantOrderGoods[].class)));
+			deleteList = new ArrayList<MemOrderGoods>(
+					Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(deleteGoodsList, MemOrderGoods[].class)));
 			if (null == deleteList || deleteList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.DELETEGOODSLIST);
-			for (MerchantOrderGoods ogs : deleteList) {
-				MerchantOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+			for (MemOrderGoods ogs : deleteList) {
+				MemOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGood == null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 				if (mGood.getStatus() != 0)

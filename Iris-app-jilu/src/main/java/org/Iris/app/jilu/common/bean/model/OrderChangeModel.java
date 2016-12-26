@@ -2,7 +2,7 @@ package org.Iris.app.jilu.common.bean.model;
 
 import java.util.List;
 
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 
 /**
  * 商户获取的转单申请列表模块
@@ -12,13 +12,13 @@ import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 public class OrderChangeModel {
 
 	private String changeMerchantName;
-	private List<MerchantOrderGoods> changeOrderGoodsLilst;
+	private List<MemOrderGoods> changeOrderGoodsLilst;
 
 	public OrderChangeModel() {
 		super();
 	}
 
-	public OrderChangeModel(String changeMerchantName, List<MerchantOrderGoods> changeOrderGoodsLilst) {
+	public OrderChangeModel(String changeMerchantName, List<MemOrderGoods> changeOrderGoodsLilst) {
 		super();
 		this.changeMerchantName = changeMerchantName;
 		this.changeOrderGoodsLilst = changeOrderGoodsLilst;
@@ -32,11 +32,11 @@ public class OrderChangeModel {
 		this.changeMerchantName = changeMerchantName;
 	}
 
-	public List<MerchantOrderGoods> getChangeOrderGoodsLilst() {
+	public List<MemOrderGoods> getChangeOrderGoodsLilst() {
 		return changeOrderGoodsLilst;
 	}
 
-	public void setChangeOrderGoodsLilst(List<MerchantOrderGoods> changeOrderGoodsLilst) {
+	public void setChangeOrderGoodsLilst(List<MemOrderGoods> changeOrderGoodsLilst) {
 		this.changeOrderGoodsLilst = changeOrderGoodsLilst;
 	}
 }

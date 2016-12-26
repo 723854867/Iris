@@ -3,7 +3,7 @@ package org.Iris.app.jilu.service.realm.relation;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.model.FriendApplyModel;
-import org.Iris.app.jilu.storage.domain.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.cache.RelationCache;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -27,7 +27,7 @@ public class RelationService {
 	@Resource
 	private DistributeLock distributeLock;
 	
-	public String apply(Merchant applier, Merchant target, String memo) { 
+	public String apply(MemMerchant applier, MemMerchant target, String memo) { 
 		String key = _getKey(applier.getMerchantId(), target.getMerchantId());
 		String lock = CommonKeyGenerator.relationLockKey(key);
 		String lockId = distributeLock.tryLock(lock);

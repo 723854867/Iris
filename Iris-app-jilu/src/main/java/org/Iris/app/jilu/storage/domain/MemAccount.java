@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
-public class MerchantAccount {
+public class MemAccount {
 
 	private String account;
 	private int type;
@@ -8,9 +8,9 @@ public class MerchantAccount {
 	private long created;
 	private int updated;
 	
-	public MerchantAccount() {}
+	public MemAccount() {}
 	
-	public MerchantAccount(String account) {
+	public MemAccount(String account) {
 		this.account = account;
 	}
 

@@ -9,8 +9,8 @@ public class MerchantSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT.mark());
-				WHERE("merchant_id=#{merchantId}");
+				FROM(Table.MEM_MERCHANT.mark());
+				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}
@@ -18,7 +18,7 @@ public class MerchantSQLBuilder {
 	public String insert() { 
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MERCHANT.mark());
+				INSERT_INTO(Table.MEM_MERCHANT.mark());
 				VALUES("name", 				"#{name}");
 				VALUES("address", 			"#{address}");
 				VALUES("last_login_time", 	"#{lastLoginTime}");
@@ -31,15 +31,15 @@ public class MerchantSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MERCHANT.mark());
-				SET("name=#{name}");
-				SET("QR_code=#{QRCode}");
-				SET("updated=#{updated}");
-				SET("address=#{address}");
-				SET("status_mod=#{statusMod}");
-				SET("last_login_time=#{lastLoginTime}");
-				SET("last_purchase_time=#{lastPurchaseTime}");
-				WHERE("merchant_id=#{merchantId}");
+				UPDATE(Table.MEM_MERCHANT.mark());
+				SET("name = #{name}");
+				SET("QR_code = #{QRCode}");
+				SET("updated = #{updated}");
+				SET("address = #{address}");
+				SET("status_mod = #{statusMod}");
+				SET("last_login_time = #{lastLoginTime}");
+				SET("last_purchase_time = #{lastPurchaseTime}");
+				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}

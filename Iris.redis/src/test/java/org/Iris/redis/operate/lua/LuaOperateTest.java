@@ -17,7 +17,9 @@ public class LuaOperateTest extends BaseTest {
 	}
 
 	public void testRecordMobileCode() {
-		long value = luaOperate.recordCaptcha("code", "codeCount", "1235", 20000, 3, 30000);
-		System.out.println(value);
+//		long value = luaOperate.recordCaptcha("code", "codeCount", "1235", 20000, 3, 30000);
+//		System.out.println(value);
+		String val = luaOperate.evalLua(LuaCommand.TEST, 0, "string:cache:merchant:{0}:lock");
+		System.out.println(val);
 	}
 }

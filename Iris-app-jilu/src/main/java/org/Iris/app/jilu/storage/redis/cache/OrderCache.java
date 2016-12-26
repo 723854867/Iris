@@ -8,9 +8,9 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
-import org.Iris.app.jilu.storage.domain.Merchant;
-import org.Iris.app.jilu.storage.domain.MerchantOrder;
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MerchantOrderMapper;
@@ -34,7 +34,7 @@ public class OrderCache extends RedisCache {
 	 * @throws Exception 
 	 */
 	@Transactional
-	public void createOrder(MerchantOrder order,List<MerchantOrderGoods> list){
+	public void createOrder(MemOrder order,List<MemOrderGoods> list){
 		merchantOrderMapper.insert(order);
 		merchantOrderGoodsMapper.batchInsert(list);
 		batchFlushHashBean(list);
@@ -49,7 +49,7 @@ public class OrderCache extends RedisCache {
 	 * @param deleteGoodsList
 	 */
 	@Transactional
-	public void updateOrder(MerchantOrder order,List<MerchantOrderGoods> addGoodsList,List<MerchantOrderGoods> updateGoodsList,List<MerchantOrderGoods> deleteGoodsList){
+	public void updateOrder(MemOrder order,List<MemOrderGoods> addGoodsList,List<MemOrderGoods> updateGoodsList,List<MemOrderGoods> deleteGoodsList){
 		if(addGoodsList!=null){
 			merchantOrderGoodsMapper.batchInsert(addGoodsList);
 			batchFlushHashBean(addGoodsList);
@@ -60,7 +60,7 @@ public class OrderCache extends RedisCache {
 		}
 		if(deleteGoodsList!=null){
 			merchantOrderGoodsMapper.batchDelete(deleteGoodsList);
-			for(MerchantOrderGoods goods :deleteGoodsList){
+			for(MemOrderGoods goods :deleteGoodsList){
 				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getOrderId(), goods.getGoodsId()));
 			}
 		}
@@ -71,8 +71,8 @@ public class OrderCache extends RedisCache {
 	 * @param orderId
 	 * @return
 	 */
-	public MerchantOrder getMerchantOrderById(long merchatId,String orderId){
-		MerchantOrder order = getHashBean(new MerchantOrder(merchatId,orderId));
+	public MemOrder getMerchantOrderById(long merchatId,String orderId){
+		MemOrder order = getHashBean(new MemOrder(merchatId,orderId));
 		if(null !=order)
 			return order;
 		order = merchantOrderMapper.getOrderById(merchatId,orderId);
@@ -87,14 +87,14 @@ public class OrderCache extends RedisCache {
 	 * @param ids
 	 * @return
 	 */
-	public List<MerchantOrderGoods> getOGListByMerchantOrderGoodsList(List<MerchantOrderGoods> list){
+	public List<MemOrderGoods> getOGListByMerchantOrderGoodsList(List<MemOrderGoods> list){
 		return merchantOrderGoodsMapper.getMerchantOrderGoodsByList(list);
 	}
 	/**
 	 * 订单确认
 	 * @param orderId
 	 */
-	public void orderLock(MerchantOrder order){
+	public void orderLock(MemOrder order){
 		merchantOrderMapper.update(order);
 		flushHashBean(order);
 	}
@@ -106,7 +106,7 @@ public class OrderCache extends RedisCache {
 	 * @param ogs 转单产品列表
 	 */
 	@Transactional
-	public MerchantOrder orderChange(MerchantOrder superOrder,Merchant merchant,Merchant superMerchant,List<MerchantOrderGoods> ogs){
+	public MemOrder orderChange(MemOrder superOrder,MemMerchant merchant,MemMerchant superMerchant,List<MemOrderGoods> ogs){
 		superOrder.setSuperOrderId(superOrder.getOrderId());
 		superOrder.setOrderId(System.currentTimeMillis()+""+new Random().nextInt(10));
 		int time = DateUtils.currentTime();
@@ -120,13 +120,13 @@ public class OrderCache extends RedisCache {
 		superOrder.setStatus(2);
 		merchantOrderMapper.insert(superOrder);
 		//处理产品列表
-		for(MerchantOrderGoods goods : ogs){
+		for(MemOrderGoods goods : ogs){
 			goods.setStatus(2);
 			goods.setUpdated(DateUtils.currentTime());
 		}
 		merchantOrderGoodsMapper.batchUpdate(ogs);
 		batchFlushHashBean(ogs);
-		for(MerchantOrderGoods goods : ogs){
+		for(MemOrderGoods goods : ogs){
 			goods.setOrderId(superOrder.getOrderId());
 			goods.setUpdated(DateUtils.currentTime());
 			goods.setCreated(DateUtils.currentTime());
@@ -146,8 +146,8 @@ public class OrderCache extends RedisCache {
 		flushHashBean(memGoods);
 	}
 	
-	public MerchantOrderGoods getMerchantOrderGoodsById(String orderId,long goodsId){
-		MerchantOrderGoods merchantOrderGoods = getHashBean(new MerchantOrderGoods(orderId, goodsId));
+	public MemOrderGoods getMerchantOrderGoodsById(String orderId,long goodsId){
+		MemOrderGoods merchantOrderGoods = getHashBean(new MemOrderGoods(orderId, goodsId));
 		if(merchantOrderGoods != null)
 			return merchantOrderGoods;
 		merchantOrderGoods = merchantOrderGoodsMapper.getMerchantOrderGoodsByOrderId(orderId, goodsId);
@@ -172,8 +172,8 @@ public class OrderCache extends RedisCache {
 	 * @param list
 	 * @return
 	 */
-	public boolean isChangedMerchantOrderGoods(List<MerchantOrderGoods> list){
-		for(MerchantOrderGoods orderGoods : list){
+	public boolean isChangedMerchantOrderGoods(List<MemOrderGoods> list){
+		for(MemOrderGoods orderGoods : list){
 			if(orderGoods.getStatus() != 0)
 				return false;
 		}
@@ -184,14 +184,14 @@ public class OrderCache extends RedisCache {
 	 * @param merchantId
 	 * @return
 	 */
-	public List<MerchantOrder> getChangeOrderListByMerchantId(long merchantId){
+	public List<MemOrder> getChangeOrderListByMerchantId(long merchantId){
 		return merchantOrderMapper.getChangeMerchantOrderList(merchantId);
 	}
 	
-	public List<OrderChangeModel> getOrderChangeListModelList(List<MerchantOrder> mList){
+	public List<OrderChangeModel> getOrderChangeListModelList(List<MemOrder> mList){
 		List<OrderChangeModel> orderChangeModels = new ArrayList<>();
-		for(MerchantOrder order : mList){
-			List<MerchantOrderGoods> list = merchantOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
+		for(MemOrder order : mList){
+			List<MemOrderGoods> list = merchantOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
 			orderChangeModels.add(new OrderChangeModel(order.getSuperMerchantName(), list));
 		}
 		return orderChangeModels;
