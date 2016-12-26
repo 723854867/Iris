@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.web.servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,12 +7,10 @@ import org.Iris.app.jilu.service.action.MerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.web.IrisDispatcher;
 import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.app.jilu.web.auth.MerchantAuthenticator;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
-import org.Iris.core.util.SpringContextUtil;
 
 /**
  * 和商户相关的 Servlet
@@ -31,12 +28,6 @@ public class MerchantServlet extends IrisDispatcher<MerchantSession, MerchantAct
 	@Override
 	protected MerchantSession buildSession(HttpServletRequest request, HttpServletResponse response) {
 		return new MerchantSession(request, response);
-	}
-	
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		this.authenticator = SpringContextUtil.getBean("merchantAuthenticator", MerchantAuthenticator.class);
 	}
 	
 	@Override

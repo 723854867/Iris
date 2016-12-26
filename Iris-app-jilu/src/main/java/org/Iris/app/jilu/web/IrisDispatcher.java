@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.Iris.app.jilu.service.JiLu;
 import org.Iris.app.jilu.service.action.IAction;
-import org.Iris.app.jilu.web.auth.Authenticator;
 import org.Iris.app.jilu.web.handler.ErrorHandler;
 import org.Iris.app.jilu.web.handler.ErrorHandler.DefaultErrorHandler;
 import org.Iris.app.jilu.web.session.IrisSession;
@@ -50,7 +49,6 @@ public abstract class IrisDispatcher<SESSION extends IrisSession, ACTION extends
 	private ErrorHandler errorHandler;
 	
 	protected String actionPackage;
-	protected Authenticator<SESSION> authenticator;
 	protected Map<String, ACTION> actions = new HashMap<String, ACTION>();
 	
 	protected IrisDispatcher(String actionPackage) {
@@ -105,9 +103,6 @@ public abstract class IrisDispatcher<SESSION extends IrisSession, ACTION extends
 	private void _receive(HttpServletRequest request, HttpServletResponse response) {
 		SESSION session = buildSession(request, response);
 		try {
-			if (null != authenticator && !authenticator.auth(session))
-				return;
-			
 			receive(session);
 		} catch (IllegalConstException e) {
 			if (e.isNil())

@@ -1,6 +1,12 @@
 package org.Iris.redis.operate.lua;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.Iris.redis.BaseTest;
+import org.Iris.redis.bean.User;
+import org.Iris.util.common.SerializeUtil;
+import org.Iris.util.reflect.BeanUtils;
 
 public class LuaOperateTest extends BaseTest {
 	
@@ -19,7 +25,7 @@ public class LuaOperateTest extends BaseTest {
 	public void testRecordMobileCode() {
 //		long value = luaOperate.recordCaptcha("code", "codeCount", "1235", 20000, 3, 30000);
 //		System.out.println(value);
-		String val = luaOperate.evalLua(LuaCommand.TEST, 0, "string:cache:merchant:{0}:lock");
-		System.out.println(val);
+		long list = luaOperate.evalLua(LuaCommand.TEST, 0);
+		System.out.println(list);
 	}
 }
