@@ -71,4 +71,15 @@ public class MerchantOrderSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String delete(){
+		return new SQL(){
+			{
+				DELETE_FROM(Table.MERCHANT_ORDER.mark());
+				WHERE("merchant_id=#{merchantId}");
+				AND();
+				WHERE("order_id=#{orderId}");
+			}
+		}.toString();
+	}
 }
