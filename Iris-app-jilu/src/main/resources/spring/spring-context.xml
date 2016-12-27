@@ -11,12 +11,15 @@
 		<property name="captchaLifeTime" value="${captcha.life.time}" />
 		<property name="captchaCountMaximum" value="${captcha.count.maximum}" />
 		<property name="captchaCountLifeTime" value="${captcha.count.lift.time}" />
+		<property name="redisLockTimeout" value="${redis.lock.timeout}" />
 		
 		<property name="aliyunOssBucket" value="${aliyun.oss.bucket}" />
 		<property name="aliyunStsRoleArn" value="${aliyun.sts.role.arn}" />
 		<property name="aliyunOssEndpoint" value="${aliyun.oss.endpoint}" />
 		<property name="aliyunOssFolderPrefix" value="${aliyun.oss.folder.prefix}" />
 	</bean>
+	
+	<context:component-scan base-package="org.Iris.app.jilu" />
         
 	<bean id="lang" class="org.Iris.app.jilu.service.JiLuLang">
 		<constructor-arg index="0" value="classpath:locale/locale_${locale}.properties" />
@@ -28,8 +31,6 @@
 		<property name="aliyunService" ref="aliyunService" />
 		<property name="locale" ref="lang" />
 	</bean>
-	
-	<context:component-scan base-package="org.Iris.app.jilu" /> 
 	
 	<bean class="org.Iris.core.util.SpringContextUtil" />
 	

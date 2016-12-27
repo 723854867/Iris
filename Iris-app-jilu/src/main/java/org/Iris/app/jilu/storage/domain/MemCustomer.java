@@ -1,10 +1,9 @@
 package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
-import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
-import org.Iris.redis.RedisHashBean;
+import org.Iris.util.common.SerializeUtil;
 
-public class MemCustomer implements RedisHashBean {
+public class MemCustomer {
 
 	private long customerId;
 	private long merchantId;
@@ -130,11 +129,6 @@ public class MemCustomer implements RedisHashBean {
 		this.deleted = deleted;
 	}
 
-	@Override
-	public String redisKey() {
-		return MerchantKeyGenerator.merchantCustomerDataKey(this.merchantId, this.customerId);
-	}
-	
 	public double getScore(CustomerListType type) {
 		switch (type) {
 		case PURCHASE_RECENT:
@@ -146,5 +140,10 @@ public class MemCustomer implements RedisHashBean {
 		default:
 			return 0;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return SerializeUtil.JsonUtil.GSON.toJson(this);
 	}
 }

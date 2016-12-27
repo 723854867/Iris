@@ -4,22 +4,22 @@ import java.util.List;
 
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.storage.domain.MemOrder;
-import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantOrderSQLBuilder;
+import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-public interface MerchantOrderMapper {
+public interface MemOrderMapper {
 
-	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getOrderById")
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderById")
 	MemOrder getOrderById(@Param("merchantId") long merchantId, @Param("orderId") String orderId);
 	
-	@InsertProvider(type = MerchantOrderSQLBuilder.class, method="insert")
+	@InsertProvider(type = MemOrderSQLBuilder.class, method="insert")
 	void insert(MemOrder order);
 	
-	@UpdateProvider(type = MerchantOrderSQLBuilder.class, method="update")
+	@UpdateProvider(type = MemOrderSQLBuilder.class, method="update")
 	void update(MemOrder order);
 	
 	/**
@@ -30,7 +30,7 @@ public interface MerchantOrderMapper {
 	 * @param end
 	 * @return
 	 */
-	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getMerchantOrderCountGroupByCustomerBetweenTime")
 	List<CustomerListPurchaseFrequencyModel> getMerchantOrderCountGroupByCustomerBetweenTime(@Param("merchantId") long merchantId, @Param("start") int start, @Param("end") int end);
 
 	/**
@@ -38,9 +38,9 @@ public interface MerchantOrderMapper {
 	 * @param merchantId
 	 * @return
 	 */
-	@SelectProvider(type = MerchantOrderSQLBuilder.class, method="getChangeMerchantOrderList")
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getChangeMerchantOrderList")
 	List<MemOrder> getChangeMerchantOrderList(long merchantId);
 	
-	@DeleteProvider(type = MerchantOrderSQLBuilder.class, method="delete")
+	@DeleteProvider(type = MemOrderSQLBuilder.class, method="delete")
 	void delete(@Param("merchantId") long merchantId,@Param("orderId") String orderId);
 }

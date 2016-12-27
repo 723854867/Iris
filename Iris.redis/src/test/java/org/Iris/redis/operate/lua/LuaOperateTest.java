@@ -1,12 +1,11 @@
 package org.Iris.redis.operate.lua;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.Iris.redis.BaseTest;
-import org.Iris.redis.bean.User;
+import org.Iris.redis.bean.TokenProcessModel;
+import org.Iris.util.common.IrisSecurity;
 import org.Iris.util.common.SerializeUtil;
-import org.Iris.util.reflect.BeanUtils;
+import org.Iris.util.common.uuid.AlternativeJdkIdGenerator;
+import org.Iris.util.lang.DateUtils;
 
 public class LuaOperateTest extends BaseTest {
 	
@@ -25,7 +24,8 @@ public class LuaOperateTest extends BaseTest {
 	public void testRecordMobileCode() {
 //		long value = luaOperate.recordCaptcha("code", "codeCount", "1235", 20000, 3, 30000);
 //		System.out.println(value);
-		long list = luaOperate.evalLua(LuaCommand.TEST, 0);
-		System.out.println(list);
+		long val = luaOperate.evalLua(LuaCommand.TEST, 3, "string:cache:merchant:2:lock", "hash:db:merchant:2", "hash:cache:token:merchant",
+				AlternativeJdkIdGenerator.INSTANCE.generateId().toString(), IrisSecurity.encodeToken("+8613105716369"), String.valueOf(DateUtils.currentTime()), "2", "300000");
+		System.out.println(val);
 	}
 }

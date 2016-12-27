@@ -10,6 +10,7 @@ public class AppConfig extends Config {
 	private static int captchaLifeTime;							// 验证码有效时间
 	private static int captchaCountMaximum;						// 验证码获取次数限制，一般和 codeCountLifeTime 一起限制验证码的获取频率
 	private static int captchaCountLifeTime;					// 验证码次数累加超时时间，超过该时间没有获取验证码则次数清零
+	private static int redisLockTimeout;						// redis 分布式锁的有效时间
 	
 	private static String aliyunOssBucket;						// 阿里云 oss 对应的 bucket name
 	private static String aliyunStsRoleArn;						// 阿里云 sts 的 roleArn
@@ -78,5 +79,13 @@ public class AppConfig extends Config {
 	
 	public static String getAliyunOssFolderPrefix() {
 		return aliyunOssFolderPrefix;
+	}
+	
+	public static int getRedisLockTimeout() {
+		return redisLockTimeout;
+	}
+	
+	public static void setRedisLockTimeout(int redisLockTimeout) {
+		AppConfig.redisLockTimeout = redisLockTimeout;
 	}
 }

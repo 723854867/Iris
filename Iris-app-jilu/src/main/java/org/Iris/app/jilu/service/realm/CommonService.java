@@ -8,6 +8,7 @@ import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
+import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.cache.CommonCache;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
@@ -15,12 +16,15 @@ import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.util.common.SerializeUtil;
+import org.springframework.stereotype.Service;
 
-@Resource
-public class Commonservice {
+@Service
+public class CommonService {
 	
 	@Resource
 	private CommonCache commonCache;
+	@Resource
+	private JiLuLuaOperate luaOperate;
 	@Resource
 	private CourierService courierService;
 	@Resource

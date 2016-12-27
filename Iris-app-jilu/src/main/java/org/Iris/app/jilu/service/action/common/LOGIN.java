@@ -16,6 +16,6 @@ public class LOGIN extends CommonAction {
 	protected String execute0(IrisSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
 		String account = type == AccountType.MOBILE ? session.getKVParam(JiLuParams.MOBILE) : session.getKVParam(JiLuParams.EMAIL);
-		return commonservice.login(type, account, session.getKVParam(JiLuParams.CAPTCHA));
+		return commonService.login(type, account, session.getKVParam(JiLuParams.CAPTCHA));
 	}
 }

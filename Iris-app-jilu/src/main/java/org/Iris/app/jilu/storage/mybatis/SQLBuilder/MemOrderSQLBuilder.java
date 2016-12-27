@@ -3,16 +3,16 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class MerchantOrderSQLBuilder {
+public class MemOrderSQLBuilder {
 
 	public String getOrderById(){
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT_ORDER.mark());
-				WHERE("order_id=#{orderId}");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("order_id = #{orderId}");
 				AND();
-				WHERE("merchant_id=#{merchantId}");
+				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}
@@ -20,7 +20,7 @@ public class MerchantOrderSQLBuilder {
 	public String insert(){
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MERCHANT_ORDER.mark());
+				INSERT_INTO(Table.MEM_ORDER.mark());
 				VALUES("order_id", 				"#{orderId}");
 				VALUES("root_order_id", 		"#{rootOrderId}");
 				VALUES("super_order_id", 	    "#{superOrderId}");
@@ -44,7 +44,7 @@ public class MerchantOrderSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MERCHANT_ORDER.mark());
+				UPDATE(Table.MEM_ORDER.mark());
 				SET("status=#{status}");
 				SET("updated=#{updated}");
 				WHERE("order_id=#{orderId}");
@@ -55,8 +55,8 @@ public class MerchantOrderSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("customer_id, COUNT(*) count");
-				FROM(Table.MERCHANT_ORDER.mark());
-				WHERE("merchant_id=#{merchantId}");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("merchant_id = #{merchantId}");
 				GROUP_BY("customer_id");
 			}
 		}.toString();
@@ -66,7 +66,7 @@ public class MerchantOrderSQLBuilder {
 		return new SQL() {
 			{
 				SELECT("order_id,super_merchant_id,super_merchant_name");
-				FROM(Table.MERCHANT_ORDER.mark());
+				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
@@ -75,7 +75,7 @@ public class MerchantOrderSQLBuilder {
 	public String delete(){
 		return new SQL(){
 			{
-				DELETE_FROM(Table.MERCHANT_ORDER.mark());
+				DELETE_FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 				AND();
 				WHERE("order_id=#{orderId}");

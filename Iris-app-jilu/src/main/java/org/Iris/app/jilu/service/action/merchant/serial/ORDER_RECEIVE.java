@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
-import org.Iris.app.jilu.storage.domain.MerchantOrder;
-import org.Iris.app.jilu.storage.domain.MerchantOrderGoods;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;

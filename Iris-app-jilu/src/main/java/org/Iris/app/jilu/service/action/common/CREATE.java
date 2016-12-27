@@ -22,6 +22,6 @@ public class CREATE extends CommonAction {
 		AccountModel am = luaOperate.delAndGetHash(CommonKeyGenerator.createMarkDataKey(token), new AccountModel());
 		if (null == am)
 			throw IllegalConstException.errorException(JiLuParams.TOKEN);
-		return commonservice.create(token, name, address);
+		return commonService.create(token, name, address);
 	}
 }

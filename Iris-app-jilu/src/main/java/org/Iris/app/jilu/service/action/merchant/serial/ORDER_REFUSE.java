@@ -1,7 +1,6 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
-import org.Iris.app.jilu.storage.domain.MerchantOrder;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;

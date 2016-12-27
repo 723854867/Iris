@@ -26,7 +26,6 @@ public final class CommonKeyGenerator {
 	}
 	
 	private static final String RELATION_LOCK_KEY					= "string:relation:{0}:lock";							// 用户关系锁，关系锁是双方共有
-	private static final String CUSTOMER_LIST_LOAD_TIME				= "string:cache:merchant:{0}:customer:list:load:time";	// 商户客户列表刷新时间
 	
 	private static final String RELATION_DATA						= "hash:cache:relation:{0}";							// 所有关系数据
 	
@@ -34,10 +33,6 @@ public final class CommonKeyGenerator {
 		return MessageFormat.format(RELATION_LOCK_KEY, id);
 	}
 		
-	public static final String customerListLoadTimeKey(long merchantId) {
-		return MessageFormat.format(CUSTOMER_LIST_LOAD_TIME, String.valueOf(merchantId));
-	}
-	
 	// *********************************************************************************************
 	
 	public static final String relationDataKey(String relationId) { 

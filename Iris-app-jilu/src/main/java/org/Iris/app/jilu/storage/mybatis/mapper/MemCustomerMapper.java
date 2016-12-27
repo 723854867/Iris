@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MemCustomer;
-import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MerchantCustomerSQLBuilder;
+import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemCustomerSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -13,13 +13,13 @@ import org.apache.ibatis.annotations.UpdateProvider;
 
 import redis.clients.jedis.Tuple;
 
-public interface MerchantCustomerMapper {
+public interface MemCustomerMapper {
 
-	@InsertProvider(type = MerchantCustomerSQLBuilder.class, method = "insert")
+	@InsertProvider(type = MemCustomerSQLBuilder.class, method = "insert")
 	@Options(useGeneratedKeys = true, keyColumn = "customer_id", keyProperty = "customerId")
 	void insert(MemCustomer customer);
 	
-	@UpdateProvider(type = MerchantCustomerSQLBuilder.class, method = "update")
+	@UpdateProvider(type = MemCustomerSQLBuilder.class, method = "update")
 	void update(MemCustomer customer);
 	
 	/**
@@ -29,8 +29,8 @@ public interface MerchantCustomerMapper {
 	 * @param customerById
 	 * @return
 	 */
-	@SelectProvider(type = MerchantCustomerSQLBuilder.class, method = "getMerchantCustomerById")
-	MemCustomer getMerchantCustomerById(@Param("merchantId") long merchantId, @Param("customerId") long customerById);
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMerchantCustomerById")
+	MemCustomer getMerchantCustomerById(@Param("merchantId") long merchantId, @Param("customerId") long customerId);
 	
 	/**
 	 * 获取商户的客户列表 
@@ -38,7 +38,7 @@ public interface MerchantCustomerMapper {
 	 * @param merchantId
 	 * @return
 	 */
-	@SelectProvider(type = MerchantCustomerSQLBuilder.class, method = "getMerchantCustomers")
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMerchantCustomers")
 	List<MemCustomer> getMerchantCustomers(long merchantId); 
 	
 	/**
@@ -47,6 +47,6 @@ public interface MerchantCustomerMapper {
 	 * @param ids
 	 * @return
 	 */
-	@SelectProvider(type = MerchantCustomerSQLBuilder.class, method = "getCustomersByIds")
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getCustomersByIds")
 	List<MemCustomer> getCustomersByIds(Set<Tuple> set);
 }

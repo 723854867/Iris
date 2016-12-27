@@ -18,6 +18,15 @@ import redis.clients.jedis.ZParams;
 public class RedisOperate {
 
 	protected JedisPool pool;
+	
+	public String select(int db) {
+		return invoke(new RedisInvocation<String>() {
+			@Override
+			public String invok(Jedis jedis) {
+				return jedis.select(db);
+			}
+		});
+	}
 
 	public long del(String... keys) {
 		return invoke(new RedisInvocation<Long>() {
@@ -106,6 +115,15 @@ public class RedisOperate {
 			@Override
 			public String invok(Jedis jedis) {
 				return jedis.hget(key, field);
+			}
+		});
+	}
+	
+	public long hdel(String key, String... fields) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.hdel(key, fields);
 			}
 		});
 	}

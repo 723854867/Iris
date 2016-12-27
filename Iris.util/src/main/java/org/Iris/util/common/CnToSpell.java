@@ -6,7 +6,6 @@ import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 /**
  * 中文转换成拼音
@@ -29,7 +28,7 @@ public class CnToSpell {
 						pinyin += PinyinHelper.toHanyuPinyinStringArray(nameChars[i], format)[0].charAt(0);
 					else
 						pinyin += PinyinHelper.toHanyuPinyinStringArray(nameChars[i], format)[0];
-				} catch (BadHanyuPinyinOutputFormatCombination e) {
+				} catch (Exception e) {
 					throw new RuntimeException("Chinese to spell convertion failure!", e);
 				}
 			} else
@@ -46,10 +45,15 @@ public class CnToSpell {
 		HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
 		format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
 		format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-		try {
-			return String.valueOf(PinyinHelper.toHanyuPinyinStringArray(chinese.toCharArray()[0], format)[0].charAt(0));
-		} catch (BadHanyuPinyinOutputFormatCombination e) {
-			throw new RuntimeException("Chinese to spell convertion failure!", e);
-		}
+		char[] arr = chinese.toCharArray();
+		String first = String.valueOf(arr[0]);
+		if (first.matches("[\\u4e00-\\u9fa5]")) {
+			try {
+				return String.valueOf(PinyinHelper.toHanyuPinyinStringArray(arr[0], format)[0].charAt(0));
+			} catch (Exception e) {
+				throw new RuntimeException("Chinese to spell convertion failure!", e);
+			}
+		} else
+			return first;
 	}
 }

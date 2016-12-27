@@ -7,7 +7,7 @@ import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
-public class MerchantOrderGoodsSQLBuilder {
+public class MemOrderGoodsSQLBuilder {
 
 	
 	public String insert(){
