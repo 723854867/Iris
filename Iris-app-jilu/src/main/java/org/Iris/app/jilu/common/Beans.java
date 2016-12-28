@@ -4,6 +4,7 @@ import org.Iris.app.jilu.service.realm.CommonService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.jms.JmsService;
+import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
@@ -26,6 +27,7 @@ public interface Beans {
 	final CommonService commonService = SpringContextUtil.getBean("commonService", CommonService.class);
 	final DistributeLock distributeLock = SpringContextUtil.getBean("distributeLock", DistributeLock.class);
 	final CourierService courierService = SpringContextUtil.getBean("courierService", CourierService.class);
+	final MerchantService merchantService = SpringContextUtil.getBean("merchantService", MerchantService.class);
 	
 	final MemOrderMapper memOrderMapper = SpringContextUtil.getBean("memOrderMapper", MemOrderMapper.class);
 	final MemMerchantMapper memMerchantMapper = SpringContextUtil.getBean("memMerchantMapper", MemMerchantMapper.class);

@@ -68,7 +68,7 @@ public class MerchantService extends RedisCache {
 	}
 	
 	/**
-	 * 通过创建
+	 * 创建商户
 	 * 
 	 * @param token
 	 * @return
