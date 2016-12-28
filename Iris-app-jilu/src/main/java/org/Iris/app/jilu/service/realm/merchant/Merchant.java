@@ -1,10 +1,12 @@
 package org.Iris.app.jilu.service.realm.merchant;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.Iris.app.jilu.common.AppConfig;
@@ -17,10 +19,17 @@ import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
+import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
+import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
+import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.common.IrisSecurity;
@@ -30,6 +39,7 @@ import org.Iris.util.lang.DateUtils;
 import org.Iris.util.reflect.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 
@@ -284,6 +294,308 @@ public class Merchant implements Beans {
 		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))
 			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), String.valueOf(customer.getCustomerId()));
 	}
+	
+	/**
+	 * 创建订单
+	 * 
+	 * @throws Exception
+	 */
+	@Transactional
+	public void createOrder(MemOrder order,List<MemOrderGoods> list) {
+		memOrderMapper.insert(order);
+		memOrderGoodsMapper.batchInsert(list);
+		redisOperate.hmset(order.redisKey(), order);
+		redisOperate.batchHmset(list);
+	}
+	
+	/**
+	 * 创建订单
+	 * 
+	 * @throws Exception
+	 */
+	@Transactional
+	public String createOrder(MemCustomer customer,List<MemOrderGoods> list) {
+		String orderId = System.currentTimeMillis()+""+new Random().nextInt(10);
+		for(MemOrderGoods ogs: list){
+			CfgGoods goods = getGoodsById(ogs.getGoodsId());
+			if(goods == null)
+				return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
+			ogs.setOrderId(orderId);
+			ogs.setGoodsName(goods.getZhName());
+			ogs.setStatus(0);
+			int time = DateUtils.currentTime();
+			ogs.setCreated(time);
+			ogs.setUpdated(time);
+		}
+		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
+				customer.getCustomerId(), customer.getName(), customer.getMobile(), customer.getAddress(),0);
+		memOrderMapper.insert(order);
+		memOrderGoodsMapper.batchInsert(list);
+		redisOperate.hmset(order.redisKey(), order);
+		redisOperate.batchHmset(list);
+		return Result.jsonSuccess(order);
+	}
+
+	/**
+	 * 更新订单
+	 * 
+	 * @param order
+	 * @param addGoodsList
+	 * @param updateGoodsList
+	 * @param deleteGoodsList
+	 */
+	@Transactional
+	public void updateOrder(MemOrder order,List<MemOrderGoods> addGoodsList,List<MemOrderGoods> updateGoodsList,List<MemOrderGoods> deleteGoodsList){
+		if(addGoodsList!=null){
+			memOrderGoodsMapper.batchInsert(addGoodsList);
+			redisOperate.batchHmset(addGoodsList);
+		}
+		if (updateGoodsList != null) {
+			memOrderGoodsMapper.batchUpdate(updateGoodsList);
+			redisOperate.batchHmset(updateGoodsList);
+		}
+		if (deleteGoodsList != null) {
+			memOrderGoodsMapper.batchDelete(deleteGoodsList);
+			redisOperate.batchDelete(deleteGoodsList);
+		}
+	}
+
+	/**
+	 * 根据商户号和订单号获取订单基本信息
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	public MemOrder getMerchantOrderById(long merchantId,String orderId){
+		String key = MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId);
+		MemOrder order = redisOperate.hgetAll(key, new MemOrder());
+		if(null !=order)
+			return order;
+		order = memOrderMapper.getOrderById(merchantId, orderId);
+		if (null != order)
+			redisOperate.hmset(key, order);
+		return order;
+	}
+
+	/**
+	 * 获取MerchantOrderGoods列表 通过List<MerchantOrderGoods>
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	public List<MemOrderGoods> getOGListByMerchantOrderGoodsList(List<MemOrderGoods> list){
+		return memOrderGoodsMapper.getMerchantOrderGoodsByList(list);
+	}
+
+	/**
+	 * 订单确认
+	 * 
+	 * @param orderId
+	 */
+	public void orderLock(MemOrder order){
+		memOrderMapper.update(order);
+		redisOperate.hmset(order.redisKey(),order);
+	}
+
+	/**
+	 * 转单
+	 * 
+	 * @param superOrder
+	 *            父订单
+	 * @param merchant
+	 *            转单商户对象
+	 * @param ogs
+	 *            转单产品列表
+	 */
+	@Transactional
+	public MemOrder orderChange(MemOrder superOrder,MemMerchant memMerchant,List<MemOrderGoods> ogs){
+		superOrder.setSuperOrderId(superOrder.getOrderId());
+		superOrder.setOrderId(System.currentTimeMillis() + "" + new Random().nextInt(10));
+		int time = DateUtils.currentTime();
+		superOrder.setCreated(time);
+		superOrder.setUpdated(time);
+		superOrder.setSuperMerchantId(getMemMerchant().getMerchantId());
+		superOrder.setSuperMerchantName(getMemMerchant().getName());
+		superOrder.setMerchantId(memMerchant.getMerchantId());
+		superOrder.setMerchantName(memMerchant.getName());
+		superOrder.setMerchantAddress(memMerchant.getAddress());
+		superOrder.setStatus(2);
+		memOrderMapper.insert(superOrder);
+		//处理产品列表
+		for(MemOrderGoods goods : ogs){
+			goods.setStatus(2);
+			goods.setUpdated(DateUtils.currentTime());
+		}
+		memOrderGoodsMapper.batchUpdate(ogs);
+		redisOperate.batchHmset(ogs);
+		for(MemOrderGoods goods : ogs){
+			goods.setOrderId(superOrder.getOrderId());
+			goods.setUpdated(DateUtils.currentTime());
+			goods.setCreated(DateUtils.currentTime());
+		}
+		memOrderGoodsMapper.batchInsert(ogs);
+		redisOperate.hmset(superOrder.redisKey(), superOrder);
+		redisOperate.batchHmset(ogs);
+		return superOrder;
+	}
+
+	/**
+	 * 插入商品
+	 * 
+	 * @param memGoods
+	 */
+	public void insertGoods(CfgGoods memGoods) {
+		cfgGoodsMapper.insert(memGoods);
+		redisOperate.hmset(memGoods.redisKey(), memGoods);
+	}
+	
+	public MemOrderGoods getMerchantOrderGoodsById(String orderId,long goodsId){
+		String key = MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goodsId);
+		MemOrderGoods merchantOrderGoods = redisOperate.hgetAll(key, new MemOrderGoods());
+		if(merchantOrderGoods != null)
+			return merchantOrderGoods;
+		merchantOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsByOrderId(orderId, goodsId);
+		if (null != merchantOrderGoods)
+			redisOperate.hmset(merchantOrderGoods.redisKey(), merchantOrderGoods);
+		return merchantOrderGoods;
+	}
+
+	public CfgGoods getGoodsById(long goodsId) {
+		String key = CommonKeyGenerator.getMemGoodsKey(goodsId);
+		CfgGoods goods = redisOperate.hgetAll(key, new CfgGoods(goodsId));
+		if (goods != null)
+			return goods;
+		goods = cfgGoodsMapper.getGoodsById(goodsId);
+		if (null != goods)
+			redisOperate.hmset(key, goods);
+		return goods;
+	}
+
+	/**
+	 * 判断订单列表是否可以进行转单或者修改
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public boolean isChangedMerchantOrderGoods(List<MemOrderGoods> list){
+		for(MemOrderGoods orderGoods : list){
+			if(orderGoods.getStatus() != 0)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 获取转单订单列表
+	 * 
+	 * @param merchantId
+	 * @return
+	 */
+	public List<MemOrder> getChangeOrderListByMerchantId(long merchantId){
+		return memOrderMapper.getChangeMerchantOrderList(merchantId);
+	}
+	
+	public List<OrderChangeModel> getOrderChangeListModelList(List<MemOrder> mList){
+		List<OrderChangeModel> orderChangeModels = new ArrayList<>();
+		for(MemOrder order : mList){
+			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
+			orderChangeModels.add(new OrderChangeModel(order.getSuperMerchantName(), list));
+		}
+		return orderChangeModels;
+	}
+
+	/**
+	 * 拒绝转单操作
+	 * 
+	 * @param orderId
+	 */
+	@Transactional
+	public void refuseOrder(String orderId, String superOrderId, long merchantId) {
+		// 删除转单订单即子订单
+		memOrderMapper.delete(merchantId, orderId);
+		// 删除转单产品列表
+		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
+		memOrderGoodsMapper.batchDelete(list);
+		// 更新父订单产品状态
+		List<MemOrderGoods> superGoodsList = new ArrayList<MemOrderGoods>();
+		for (MemOrderGoods merchantOrderGoods : list) {
+			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+			mOrderGoods.setStatus(0);
+			mOrderGoods.setUpdated(DateUtils.currentTime());
+			superGoodsList.add(mOrderGoods);
+		}
+		memOrderGoodsMapper.batchUpdate(superGoodsList);
+		// 更新缓存
+		redisOperate.del(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId));
+		for (MemOrderGoods goods : list) {
+			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goods.getGoodsId()));
+		}
+		redisOperate.batchHmset(superGoodsList);
+	}
+
+	/**
+	 * 接收转单
+	 * 
+	 * @param changeOrderList
+	 * @param orderId
+	 * @param superOrderId
+	 * @param merchantId
+	 */
+	@Transactional
+	public void receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
+			long merchantId) {
+		// 更新子订单状态
+		MemOrder order = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId), new MemOrder());
+		order.setStatus(0);
+		order.setUpdated(DateUtils.currentTime());
+		memOrderMapper.update(order);
+		// 查找本次转单申请的所有产品
+		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
+		List<Long> recevieGoodsIds = new ArrayList<Long>();
+		for (MemOrderGoods goods : receiveGoodsList)
+			recevieGoodsIds.add(goods.getGoodsId());
+
+		Iterator<MemOrderGoods> it = list.iterator();
+		while (it.hasNext()) {
+			MemOrderGoods goods = it.next();
+			if (recevieGoodsIds.contains(goods.getGoodsId()))
+				it.remove();
+		}
+		if (null != list && list.size() > 0)
+			memOrderGoodsMapper.batchDelete(list);
+		memOrderGoodsMapper.batchUpdate(receiveGoodsList);
+		// 更新父订单产品状态
+		List<MemOrderGoods> superRecevieGoodsList = new ArrayList<MemOrderGoods>();
+		for (MemOrderGoods merchantOrderGoods : receiveGoodsList) {
+			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+			mOrderGoods.setStatus(3);
+			mOrderGoods.setUpdated(DateUtils.currentTime());
+			superRecevieGoodsList.add(mOrderGoods);
+		}
+		List<MemOrderGoods> superRefuseGoodsList = new ArrayList<MemOrderGoods>();
+		if (null != list && list.size() > 0) {
+			for (MemOrderGoods merchantOrderGoods : list) {
+				MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+				mOrderGoods.setStatus(0);
+				mOrderGoods.setUpdated(DateUtils.currentTime());
+				superRefuseGoodsList.add(mOrderGoods);
+			}
+			memOrderGoodsMapper.batchUpdate(superRefuseGoodsList);
+		}
+		memOrderGoodsMapper.batchUpdate(superRecevieGoodsList);
+
+		// 更新缓存
+		redisOperate.hmset(order.redisKey(), order);
+		if (null != list && list.size() > 0) {
+			for (MemOrderGoods goods : list) {
+				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goods.getGoodsId()));
+			}
+			redisOperate.batchHmset(superRefuseGoodsList);
+		}
+		redisOperate.batchHmset(receiveGoodsList);
+		redisOperate.batchHmset(superRecevieGoodsList);
+	}
+	
 	
 	/**
 	 * 判断商户的客户排序列表是否已经加载

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
@@ -25,7 +26,8 @@ public class ORDER_EDIT extends SerialMerchantAction {
 		String updateGoodsList = session.getKVParamOptional(JiLuParams.UPDATEGOODSLIST);
 		String deleteGoodsList = session.getKVParamOptional(JiLuParams.DELETEGOODSLIST);
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
-		MemOrder order = orderCache.getMerchantOrderById(session.getUnit().getUnit().getMerchantId(), orderId);
+		Merchant merchant = session.getMerchant();
+		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
 		int status = order.getStatus();
 		if (status != 0) {
 			// 订单不能修改
@@ -41,10 +43,10 @@ public class ORDER_EDIT extends SerialMerchantAction {
 			if (null == addList || addList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.ADDGOODSLIST);
 			for (MemOrderGoods ogs : addList) {
-				MemOrderGoods mGoods = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGoods != null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_EXIST.defaultValue(), ogs.getGoodsId()));
-				CfgGoods goods = orderCache.getGoodsById(ogs.getGoodsId());
+				CfgGoods goods = merchant.getGoodsById(ogs.getGoodsId());
 				if (goods == null)
 					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 				ogs.setOrderId(orderId);
@@ -62,7 +64,7 @@ public class ORDER_EDIT extends SerialMerchantAction {
 			if (null == updateList || updateList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.UPDATEGOODSLIST);
 			for (MemOrderGoods ogs : updateList) {
-				MemOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+				MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGood == null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 				if (mGood.getStatus() != 0)
@@ -81,16 +83,17 @@ public class ORDER_EDIT extends SerialMerchantAction {
 			if (null == deleteList || deleteList.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.DELETEGOODSLIST);
 			for (MemOrderGoods ogs : deleteList) {
-				MemOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+				MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 				if (mGood == null)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 				if (mGood.getStatus() != 0)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), ogs.getGoodsId()));
 				ogs.setId(mGood.getId());
+				ogs.setOrderId(orderId);
 			}
 		}
 
-		orderCache.updateOrder(order, addList, tempUpdateList, deleteList);
+		merchant.updateOrder(order, addList, tempUpdateList, deleteList);
 		return Result.jsonSuccess();
 	}
 }

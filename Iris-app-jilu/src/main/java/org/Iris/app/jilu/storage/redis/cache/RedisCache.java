@@ -21,7 +21,4 @@ public abstract class RedisCache {
 		redisOperate.hmset(bean.redisKey(), BeanUtils.beanToMap(bean));
 	}
 	
-	public void batchFlushHashBean(List<? extends RedisHashBean> beans) {
-		redisOperate.hmset(beans);
-	}
 }

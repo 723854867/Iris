@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
@@ -25,20 +28,21 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 	protected String execute0(MerchantSession session) {
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
-		long merchantId = session.getUnit().getUnit().getMerchantId();
-		MerchantOrder order = orderCache.getHashBean(new MerchantOrder(merchantId, orderId));
+		Merchant merchant = session.getMerchant();
+		long merchantId = merchant.getMemMerchant().getMerchantId();
+		MemOrder order = merchant.getMerchantOrderById(merchantId, orderId);
 		if(null == order)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		String superOrderId = order.getSuperOrderId();
 		if(null == superOrderId)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		List<MerchantOrderGoods> receiveGoodsList = new ArrayList<MerchantOrderGoods>(
-				Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MerchantOrderGoods[].class)));
+		List<MemOrderGoods> receiveGoodsList = new ArrayList<MemOrderGoods>(
+				Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
 		if (null == receiveGoodsList || receiveGoodsList.size() == 0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		List<MerchantOrderGoods> receiveGoodsList_ = new ArrayList<MerchantOrderGoods>();
-		for (MerchantOrderGoods ogs : receiveGoodsList) {
-			MerchantOrderGoods mGood = orderCache.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+		List<MemOrderGoods> receiveGoodsList_ = new ArrayList<MemOrderGoods>();
+		for (MemOrderGoods ogs : receiveGoodsList) {
+			MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
 			if (mGood == null)
 				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 			if (mGood.getStatus() != 2)
@@ -47,7 +51,7 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 			mGood.setStatus(0);
 			receiveGoodsList_.add(mGood);
 		}
-		orderCache.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId);
+		merchant.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId);
 		return Result.jsonSuccess();
 	}
 

@@ -176,13 +176,26 @@ public class RedisOperate {
 		});
 	}
 	
-	public void hmset(List<? extends RedisHashBean> beans) {
+	public void batchHmset(List<? extends RedisHashBean> beans) {
 		 invoke(new RedisInvocation<Void>() {
 			@Override
 			public Void invok(Jedis jedis) {
 				Pipeline pipeline = jedis.pipelined();
 				for(RedisHashBean object : beans)
 					pipeline.hmset(object.redisKey(), BeanUtils.beanToMap(object));
+				 pipeline.sync();
+				 return null;
+			}
+		});
+	}
+	
+	public void batchDelete(List<? extends RedisHashBean> beans) {
+		 invoke(new RedisInvocation<Void>() {
+			@Override
+			public Void invok(Jedis jedis) {
+				Pipeline pipeline = jedis.pipelined();
+				for(RedisHashBean object : beans)
+					pipeline.del(object.redisKey());
 				 pipeline.sync();
 				 return null;
 			}

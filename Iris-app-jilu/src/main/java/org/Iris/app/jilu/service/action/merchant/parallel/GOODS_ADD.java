@@ -2,6 +2,7 @@ package org.Iris.app.jilu.service.action.merchant.parallel;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
@@ -27,8 +28,8 @@ public class GOODS_ADD extends ParallelMerchantAction {
 		String alias = session.getKVParamOptional(JiLuParams.ALIAS);
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
-		
-		orderCache.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku));
+		Merchant merchant = session.getMerchant();
+		merchant.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku));
 		return Result.jsonSuccess();
 	}
 }

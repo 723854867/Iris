@@ -70,6 +70,8 @@ public class MemOrderSQLBuilder {
 				SELECT("order_id,super_merchant_id,super_merchant_name");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
+				AND();
+				WHERE("status=2");
 			}
 		}.toString();
 	}

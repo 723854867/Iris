@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.merchant.parallel;
 
 import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
-import org.Iris.app.jilu.service.realm.unit.merchant.MerchantOperator;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
@@ -18,12 +18,13 @@ public class FRIEND_APPLY extends ParallelMerchantAction {
 	@Override
 	protected String execute0(MerchantSession session) {
 		long targetId = session.getKVParam(JiLuParams.TARGET_ID);
-		MemMerchant applier = session.getUnit().getUnit();
+		Merchant merchant = session.getMerchant();
+		MemMerchant applier = merchant.getMemMerchant();
 		if (applier.getMerchantId() == targetId)					// 不能给自己发申请
 			return Result.jsonError(JiLuCode.SELF_LIMIT);
-		MerchantOperator target = unitCache.getMerchantByMerchantId(targetId);
+		Merchant target = merchantService.getMerchantById(targetId);
 		if (null == target)
 			return Result.jsonError(JiLuCode.TARGET_MERCHANT_NOT_EXIST);
-		return relationService.apply(applier, target.getUnit(), session.getKVParam(JiLuParams.MEMO));
+		return relationService.apply(applier, target.getMemMerchant(), session.getKVParam(JiLuParams.MEMO));
 	}
 }

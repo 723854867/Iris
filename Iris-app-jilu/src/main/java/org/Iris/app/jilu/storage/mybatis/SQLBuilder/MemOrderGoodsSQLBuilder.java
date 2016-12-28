@@ -13,7 +13,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String insert(){
 		return new SQL() {
 			{
-				INSERT_INTO(Table.MERCHANT_ORDER_GOODS.mark());
+				INSERT_INTO(Table.MEM_ORDER_GOODS.mark());
 				VALUES("order_id", 		    "#{orderId}");
 				VALUES("packet_id", 		"#{packetId}");
 				VALUES("goods_id", 			"#{goodsId}");
@@ -31,7 +31,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String batchInsert(StrictMap<List<MemOrderGoods>> map) {
 		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MERCHANT_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getPacketId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
 								+ ",'"+orderGoods.getGoodsImage()+"','"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
@@ -44,7 +44,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.MERCHANT_ORDER_GOODS.mark());
+				UPDATE(Table.MEM_ORDER_GOODS.mark());
 				SET("packet_id=#{packetId}");
 				SET("goods_id=#{goods_id}");
 				SET("goods_name=#{goods_name}");
@@ -62,7 +62,7 @@ public class MemOrderGoodsSQLBuilder {
 		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
-		stringBuilder.append("update "+Table.MERCHANT_ORDER_GOODS.mark()+" set count = case id ");
+		stringBuilder.append("update "+Table.MEM_ORDER_GOODS.mark()+" set count = case id ");
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getCount());
 		}
@@ -89,7 +89,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String delete(){
 		return new SQL(){
 			{
-				DELETE_FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				DELETE_FROM(Table.MEM_ORDER_GOODS.mark());
 				WHERE("id=#{id}");
 			}
 		}.toString();
@@ -98,7 +98,7 @@ public class MemOrderGoodsSQLBuilder {
 	public String batchDelete(StrictMap<List<MemOrderGoods>> map){
 		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("delete from "+Table.MERCHANT_ORDER_GOODS.mark()+" where id in(");
+		stringBuilder.append("delete from "+Table.MEM_ORDER_GOODS.mark()+" where id in(");
 		for(MemOrderGoods goods : list){
 			stringBuilder.append(goods.getId()+",");
 		}
@@ -112,7 +112,7 @@ public class MemOrderGoodsSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				FROM(Table.MEM_ORDER_GOODS.mark());
 				WHERE("id=#{id}");
 			}
 		}.toString();
@@ -122,7 +122,7 @@ public class MemOrderGoodsSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				FROM(Table.MEM_ORDER_GOODS.mark());
 				WHERE("order_id=#{orderId}");
 				AND();
 				WHERE("goods_id=#{goodsId}");
@@ -132,7 +132,7 @@ public class MemOrderGoodsSQLBuilder {
 	
 	public String getMerchantOrderGoodsByList(StrictMap<List<MemOrderGoods>> map){
 		List<MemOrderGoods> ogs = map.get("collection");
-		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MERCHANT_ORDER_GOODS.mark()+" WHERE id IN(");
+		StringBuilder builder = new StringBuilder("SELECT * FROM "+Table.MEM_ORDER_GOODS.mark()+" WHERE id IN(");
 		for (MemOrderGoods goods : ogs)
 			builder.append(goods.getId()).append(",");
 		builder.deleteCharAt(builder.length() - 1);
@@ -144,8 +144,10 @@ public class MemOrderGoodsSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.MERCHANT_ORDER_GOODS.mark());
+				FROM(Table.MEM_ORDER_GOODS.mark());
 				WHERE("order_id=#{orderId}");
+				AND();
+				WHERE("status=2");
 			}
 		}.toString();
 	}
