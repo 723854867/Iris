@@ -258,6 +258,13 @@ public class Merchant implements Beans {
 		redisOperate.zadd(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), map);
 	}
 	
+	// ************************** 好友模块 **********************************
+	
+	public void friendApply(Merchant applier) { 
+		
+	}
+
+	
 	// ************************************************************
 	
 	/**

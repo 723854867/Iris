@@ -24,12 +24,12 @@ public interface Beans {
 	final RedisOperate redisOperate = SpringContextUtil.getBean("redisOperate", RedisOperate.class);
 	final AliyunService aliyunService = SpringContextUtil.getBean("aliyunService", AliyunService.class); 
 	final RelationService relationService = SpringContextUtil.getBean("relationService", RelationService.class);
-	final MerchantService merchantService = SpringContextUtil.getBean("merchantService", MerchantService.class);
 	
 	final JiLuLuaOperate luaOperate = SpringContextUtil.getBean("luaOperate", JiLuLuaOperate.class); 
 	final CommonService commonService = SpringContextUtil.getBean("commonService", CommonService.class);
 	final DistributeLock distributeLock = SpringContextUtil.getBean("distributeLock", DistributeLock.class);
 	final CourierService courierService = SpringContextUtil.getBean("courierService", CourierService.class);
+	final MerchantService merchantService = SpringContextUtil.getBean("merchantService", MerchantService.class);
 	
 	final MemOrderMapper memOrderMapper = SpringContextUtil.getBean("memOrderMapper", MemOrderMapper.class);
 	final MemMerchantMapper memMerchantMapper = SpringContextUtil.getBean("memMerchantMapper", MemMerchantMapper.class);

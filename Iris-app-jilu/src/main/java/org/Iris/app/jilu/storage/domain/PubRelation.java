@@ -3,7 +3,7 @@ package org.Iris.app.jilu.storage.domain;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
-public class Relation implements RedisHashBean {
+public class PubRelation implements RedisHashBean {
 
 	private String id;
 	private long applier;
@@ -14,9 +14,9 @@ public class Relation implements RedisHashBean {
 	private int created;
 	private int updated;
 	
-	public Relation() {}
+	public PubRelation() {}
 	
-	public Relation(String relationId) {
+	public PubRelation(String relationId) {
 		this.id = relationId;
 	}
 

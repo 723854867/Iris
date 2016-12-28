@@ -2,7 +2,7 @@ package org.Iris.app.jilu.storage.redis.cache;
 
 import javax.annotation.Resource;
 
-import org.Iris.app.jilu.storage.domain.Relation;
+import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.mybatis.mapper.RelationMapper;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +12,8 @@ public class RelationCache extends RedisCache {
 	@Resource
 	private RelationMapper relationMapper;
 	
-	public Relation getRelationById(String relationId) {
-		Relation relation = getHashBean(new Relation(relationId));
+	public PubRelation getRelationById(String relationId) {
+		PubRelation relation = getHashBean(new PubRelation(relationId));
 		return null;
 	}
 }
