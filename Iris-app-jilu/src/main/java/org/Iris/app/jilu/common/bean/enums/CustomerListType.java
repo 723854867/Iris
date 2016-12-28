@@ -55,6 +55,6 @@ public enum CustomerListType {
 				continue;
 			return listType;
 		}
-		return null;
+		return CustomerListType.NAME;
 	}
 }

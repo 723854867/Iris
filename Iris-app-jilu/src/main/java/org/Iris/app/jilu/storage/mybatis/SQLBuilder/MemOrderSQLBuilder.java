@@ -57,6 +57,8 @@ public class MemOrderSQLBuilder {
 				SELECT("customer_id, COUNT(*) count");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id = #{merchantId}");
+				AND();
+				WHERE("root_order_id = 0");
 				GROUP_BY("customer_id");
 			}
 		}.toString();

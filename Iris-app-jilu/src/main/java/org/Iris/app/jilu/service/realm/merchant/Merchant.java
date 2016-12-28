@@ -2,6 +2,7 @@ package org.Iris.app.jilu.service.realm.merchant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -147,7 +148,7 @@ public class Merchant implements Beans {
 	 * 
 	 */
 	public String editCustomer(long customerId, String name, String mobile, String address, String memo) { 
-		MemCustomer customer = _getCustomer(customerId);
+		MemCustomer customer = getCustomer(customerId);
 		if (null == customer)
 			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
 		
@@ -184,8 +185,18 @@ public class Merchant implements Beans {
 		Set<Tuple> set = redisOperate.zrangeWithScores(key, start, end);
 		List<MemCustomer> list = memCustomerMapper.getCustomersByIds(set);
 		List<CustomerPagerForm> form = new ArrayList<CustomerPagerForm>();
-		for (MemCustomer customer : list)
-			form.add(type == CustomerListType.PURCHASE_FREQUENCY ? new CustomerFrequencyPagerForm(customer) : new CustomerPagerForm(customer));
+		
+		for (Tuple tuple : set) {
+			Iterator<MemCustomer> iterator = list.iterator();
+			long customerId = Long.valueOf(tuple.getElement());
+			while (iterator.hasNext()) {
+				MemCustomer customer = iterator.next();
+				if (customer.getCustomerId() == customerId) {
+					iterator.remove();
+					form.add(type == CustomerListType.PURCHASE_FREQUENCY ? new CustomerFrequencyPagerForm(customer) : new CustomerPagerForm(customer));
+				}
+			}
+		}
 		return Result.jsonSuccess(new Pager<CustomerPagerForm>(total, form));
 	}
 	
@@ -255,7 +266,7 @@ public class Merchant implements Beans {
 		redisOperate.hset(key, String.valueOf(customer.getCustomerId()), customer.toString());
 	}
 	
-	private MemCustomer _getCustomer(long customerId) { 
+	public MemCustomer getCustomer(long customerId) { 
 		String key = MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId());
 		String val = redisOperate.hget(key, String.valueOf(customerId));
 		if (null != val) 
