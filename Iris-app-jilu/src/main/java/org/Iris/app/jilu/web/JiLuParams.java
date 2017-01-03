@@ -71,4 +71,12 @@ public interface JiLuParams {
 	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 134);
 	final IrisLongConst MERCHANTID							= new IrisLongConst("merchantId", 135);
 	final IrisLongConst TARGET_ID							= new IrisLongConst("targetId", 136);
+	final IrisStrConst PACKETGOODSLIST						= new IrisStrConst("packetGoodsList", 137);
+	final IrisStrConst PACKETID								= new IrisStrConst("packetId", 138);
+	final IrisStrConst POSTAGE								= new IrisStrConst("postage", 139);
+	final IrisStrConst EXPRESS								= new IrisStrConst("express", 140);
+	final IrisStrConst EXPRESSCODE							= new IrisStrConst("expressCode", 141);
+	final IrisStrConst LABEL								= new IrisStrConst("label", 141);
+	final IrisStrConst LATITUDE								= new IrisStrConst("latitude", 141);
+	final IrisStrConst LONGITUDE							= new IrisStrConst("longitude", 141);
 }

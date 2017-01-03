@@ -25,6 +25,7 @@ import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -300,19 +301,6 @@ public class Merchant implements Beans {
 		redisOperate.hset(MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId()), String.valueOf(customer.getCustomerId()), customer.toString());
 		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))
 			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), String.valueOf(customer.getCustomerId()));
-	}
-	
-	/**
-	 * 创建订单
-	 * 
-	 * @throws Exception
-	 */
-	@Transactional
-	public void createOrder(MemOrder order,List<MemOrderGoods> list) {
-		memOrderMapper.insert(order);
-		memOrderGoodsMapper.batchInsert(list);
-		redisOperate.hmset(order.redisKey(), order);
-		redisOperate.batchHmset(list);
 	}
 	
 	/**
@@ -602,7 +590,105 @@ public class Merchant implements Beans {
 		redisOperate.batchHmset(receiveGoodsList);
 		redisOperate.batchHmset(superRecevieGoodsList);
 	}
+	/**
+	 * 分包
+	 * @param orderId
+	 * @param goodsList 1:2;3:4
+	 * @return
+	 */
+	@Transactional
+	public String orderPacket(String orderId,String packetGoodsList){
+		String[] packetGoods = packetGoodsList.split(";");
+		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
+		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
+		for(String str : packetGoods){
+			String[] goods = str.split(":");
+			for(String goodsId : goods){
+				MemOrderGoods mGoods = getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
+				if (goods == null)
+					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
+				if(mGoods.getStatus()!=0)
+					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
+				String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
+				MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,getMemMerchant().getMerchantId());
+				packetList.add(packet);
+				mGoods.setStatus(4);
+				int time = DateUtils.currentTime();
+				mGoods.setUpdated(time);
+				mGoods.setPacketId(packetId);
+				orderGoodsList.add(mGoods);
+			}
+		}
+		memOrderPacketMapper.batchInsert(packetList);
+		memOrderGoodsMapper.batchUpdate(orderGoodsList);
+		redisOperate.batchHmset(packetList);
+		redisOperate.batchHmset(orderGoodsList);
+		return Result.jsonSuccess();
+	}
 	
+	/**
+	 * 添加邮费
+	 * @param packetId 邮单号
+	 * @param postage 邮费
+	 * @param express 快递公司
+	 * @param memo 备注
+	 */
+	public String addPostage(String packetId,String postage,String express,String memo){
+		MemOrderPacket packet = getMemOrderPacket(packetId);
+		if(packet == null)
+			return Result.jsonError(JiLuCode.PACKET_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.PACKET_NOT_EXIST.defaultValue(), packetId));
+		packet.setPostage(postage);
+		packet.setExpress(express);
+		packet.setMemo(memo);
+		packet.setUpdated(DateUtils.currentTime());
+		memOrderPacketMapper.update(packet);
+		redisOperate.hmset(packet.redisKey(), packet);
+		return Result.jsonSuccess(packet);
+	}
+	
+	/**
+	 * 添加快递单
+	 * @param packetId
+	 * @param expressCode 快递号
+	 * @return
+	 */
+	public String addExpress(String packetId,String expressCode){
+		MemOrderPacket packet = getMemOrderPacket(packetId);
+		if(packet == null)
+			return Result.jsonError(JiLuCode.PACKET_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.PACKET_NOT_EXIST.defaultValue(), packetId));
+		packet.setExpressCode(expressCode);
+		packet.setUpdated(DateUtils.currentTime());
+		memOrderPacketMapper.update(packet);
+		redisOperate.hmset(packet.redisKey(), packet);
+		return Result.jsonSuccess(packet);
+	}
+	/**
+	 * 添加邮包标签
+	 * @param packetId
+	 * @param label 标签 
+	 * @param latitude 纬度
+	 * @param longitude 经度
+	 * @return
+	 */
+	public String addPacketLabel(String packetId,String label,String latitude,String longitude){
+		MemOrderPacket packet = getMemOrderPacket(packetId);
+		if(packet == null)
+			return Result.jsonError(JiLuCode.PACKET_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.PACKET_NOT_EXIST.defaultValue(), packetId));
+		packet.setLabel(label);
+		packet.setLatitude(latitude);
+		packet.setLongitude(longitude);
+		packet.setUpdated(DateUtils.currentTime());
+		memOrderPacketMapper.update(packet);
+		redisOperate.hmset(packet.redisKey(), packet);
+		return Result.jsonSuccess(packet);
+	}
+	
+	public MemOrderPacket getMemOrderPacket(String packetId){
+		MemOrderPacket packet = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderPacketDataKey(getMemMerchant().getMerchantId(), packetId), new MemOrderPacket());
+		if(null == packet)
+			packet = memOrderPacketMapper.getMemOrderPacketById(packetId, getMemMerchant().getMerchantId());
+		return packet;
+	}
 	
 	/**
 	 * 判断商户的客户排序列表是否已经加载
