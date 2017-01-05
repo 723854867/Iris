@@ -25,11 +25,10 @@ import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
-import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.common.IrisSecurity;
@@ -258,13 +257,6 @@ public class Merchant implements Beans {
 		redisOperate.zadd(CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(merchantId), map);
 	}
 	
-	// ************************** 好友模块 **********************************
-	
-	public void friendApply(Merchant applier) { 
-		
-	}
-
-	
 	// ************************************************************
 	
 	/**
@@ -300,6 +292,17 @@ public class Merchant implements Beans {
 		redisOperate.hset(MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId()), String.valueOf(customer.getCustomerId()), customer.toString());
 		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))
 			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), String.valueOf(customer.getCustomerId()));
+	}
+	
+	/**
+	 * 好友列表
+	 * 
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	public Pager<PubRelation> friendList(int page, int pageSize) {
+		return null;
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
 
@@ -92,5 +93,17 @@ public class BeanCreator {
 		memOrder.setCreated(time);
 		memOrder.setUpdated(time);
 		return memOrder;
+	}
+	
+	public static final PubRelation newRelation(String id, long applier, long acceptor, int mod) {
+		PubRelation relation = new PubRelation();
+		relation.setId(id);
+		relation.setApplier(applier);
+		relation.setAcceptor(acceptor);
+		relation.setMod(mod);
+		int time = DateUtils.currentTime();
+		relation.setCreated(time);
+		relation.setUpdated(time);
+		return relation;
 	}
 }

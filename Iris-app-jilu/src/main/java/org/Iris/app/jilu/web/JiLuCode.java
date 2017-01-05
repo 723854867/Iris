@@ -22,7 +22,9 @@ public enum JiLuCode implements ICode {
 	GOODSLIST_CAN_NOT_CHANGE(210, "goodsList can not change"),
 	TARGET_MERCHANT_NOT_EXIST(211, "target merchant is not exist"),
 	SELF_LIMIT(212, "self limit"),
-	ORDER_GOODS_NOT_CHANGING(213, "order_goods {0} not changing");
+	ORDER_GOODS_NOT_CHANGING(213, "order_goods {0} not changing"),
+	RELATION_EXIST(214, "relation exist"),
+	FRIEND_APPLY_NOT_EXIST(25, "friend apply not exist");
 	
 	private int code;
 	private String defaultVaule;

@@ -12,6 +12,7 @@ import org.Iris.util.reflect.BeanUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.SortingParams;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.ZParams;
 
@@ -60,6 +61,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.expireAt(key, timestamp);
+			}
+		});
+	}
+	
+	public List<String> sort(String key, SortingParams sortingParams) {
+		return invoke(new RedisInvocation<List<String>>() {
+			@Override
+			public List<String> invok(Jedis jedis) {
+				return jedis.sort(key, sortingParams);
 			}
 		});
 	}
@@ -136,6 +146,16 @@ public class RedisOperate {
 			}
 		});
 	}
+	
+	
+	public List<String> hmget(String key, String... fields) {
+		return invoke(new RedisInvocation<List<String>>() {
+			@Override
+			public List<String> invok(Jedis jedis) {
+				return jedis.hmget(key, fields);
+			}
+		});
+	}
 
 	public <T> T hgetAll(String key, T bean) {
 		Map<String, String> map = invoke(new RedisInvocation<Map<String, String>>() {
@@ -154,6 +174,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.hset(key, field, value);
+			}
+		});
+	}
+	
+	public boolean hsetnx(String key, String field, String value) {
+		return 1 == invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.hsetnx(key, field, value);
 			}
 		});
 	}
@@ -268,6 +297,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.zadd(key, score, member);
+			}
+		});
+	}
+	
+	public long zrem(String key, String ...members) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.zrem(key, members);
 			}
 		});
 	}
