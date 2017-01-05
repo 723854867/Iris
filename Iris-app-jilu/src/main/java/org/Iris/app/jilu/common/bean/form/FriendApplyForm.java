@@ -1,21 +1,12 @@
-package org.Iris.app.jilu.common.bean.model;
+package org.Iris.app.jilu.common.bean.form;
 
-import org.Iris.app.jilu.service.realm.merchant.Merchant;
-
-public class FriendApplyModel {
-
+public class FriendApplyForm {
+	
 	private long applier;
 	private String applierName;
 	private String memo;
+	private String time;
 	
-	public FriendApplyModel() {}
-	
-	public FriendApplyModel(Merchant applier, String memo) {
-		this.memo = memo;
-		this.applierName = applier.getMemMerchant().getName();
-		this.applier = applier.getMemMerchant().getMerchantId();
-	}
-
 	public long getApplier() {
 		return applier;
 	}
@@ -38,5 +29,13 @@ public class FriendApplyModel {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 }

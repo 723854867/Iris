@@ -1,6 +1,4 @@
-package org.Iris.app.jilu.storage.redis.cache;
-
-import java.util.List;
+package org.Iris.app.jilu.storage.redis;
 
 import javax.annotation.Resource;
 
@@ -20,5 +18,4 @@ public abstract class RedisCache {
 	public void flushHashBean(RedisHashBean bean) { 
 		redisOperate.hmset(bean.redisKey(), BeanUtils.beanToMap(bean));
 	}
-	
 }

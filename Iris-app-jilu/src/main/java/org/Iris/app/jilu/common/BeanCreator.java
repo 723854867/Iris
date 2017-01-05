@@ -6,6 +6,7 @@ import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
@@ -96,7 +97,19 @@ public class BeanCreator {
 		return memOrder;
 	}
 	
-	public static MemOrderPacket newMemOrderPacket(String packetId,String orderId,long merchantId){
+	public static final PubRelation newRelation(String id, long applier, long acceptor, int mod) {
+		PubRelation relation = new PubRelation();
+		relation.setId(id);
+		relation.setApplier(applier);
+		relation.setAcceptor(acceptor);
+		relation.setMod(mod);
+		int time = DateUtils.currentTime();
+		relation.setCreated(time);
+		relation.setUpdated(time);
+		return relation;
+	}
+	
+	public static MemOrderPacket newMemOrderPacket(String packetId,String orderId,long merchantId) {
 		MemOrderPacket packet = new MemOrderPacket();
 		packet.setPacketId(packetId);;
 		packet.setOrderId(orderId);

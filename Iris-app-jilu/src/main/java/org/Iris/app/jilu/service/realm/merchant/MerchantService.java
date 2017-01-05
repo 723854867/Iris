@@ -11,7 +11,7 @@ import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
-import org.Iris.app.jilu.storage.redis.cache.RedisCache;
+import org.Iris.app.jilu.storage.redis.RedisCache;
 import org.Iris.redis.operate.lua.LuaOperate;
 import org.Iris.util.common.SerializeUtil;
 import org.springframework.stereotype.Service;

@@ -17,7 +17,8 @@ public final class MerchantKeyGenerator {
 	
 	private static final String ACCOUNT_MERCHANT_MAP					= "hash:cache:account:{0}:merchant";							// account - merchant 映射
 	private static final String TOKEN_MERCHANT_MAP						= "hash:cache:token:merchant";									// token - merchant 映射
-	private static final String ALIYUN_STS_TOKEN_DATA					= "hash:tmp:merchant:{0}:aliyun:sts:info";				// 阿里云 sts 缓存的临时 token 信息
+	private static final String ALIYUN_STS_TOKEN_DATA					= "hash:tmp:merchant:{0}:aliyun:sts:info";						// 阿里云 sts 缓存的临时 token 信息
+	private static final String FRIEND_APPLY_DATA						= "hash:cache:merchant:{0}:friend:apply:data";					//
 	
 	private static final String MERCHANT_DATA							= "hash:db:merchant:{0}";
 	private static final String MERCHANT_ACCOUNT_DATA					= "hash:db:merchant:{0}:account";
@@ -27,10 +28,14 @@ public final class MerchantKeyGenerator {
 	private static final String CUSTOMER_LIST_PURCHASE_SUM				= "zset:cache:merchant:{0}:customer:list:purchase:sum";			// 商户所属客户列表 - 购物总金额排序
 	private static final String CUSTOMER_LIST_PURCHASE_RECENT			= "zset:cache:merchant:{0}:customer:list:purchase:recent";		// 商户所属客户列表 - 最近购物时间排序
 	private static final String CUSTOMER_LIST_NAME						= "zset:cache:merchant:{0}:customer:list:name";					// 商户所属客户列表 - 名字排序列表
-
+	private static final String FRIEND_APPLY_LIST						= "zset:cache:merchant:{0}:friend:apply:list";					// 
 
 	public static final String merchantLockKey(long merchantId) {
 		return MessageFormat.format(MERCHANT_LOCK, String.valueOf(merchantId));
+	}
+	
+	public static final String customerListLoadTimeKey(long merchantId) {
+		return MessageFormat.format(CUSTOMER_LIST_LOAD_TIME, String.valueOf(merchantId));
 	}
 	
 	// **********************************************************************************************
@@ -39,16 +44,16 @@ public final class MerchantKeyGenerator {
 		return MessageFormat.format(ACCOUNT_MERCHANT_MAP, type.name());
 	}
 	
-	public static final String customerListLoadTimeKey(long merchantId) {
-		return MessageFormat.format(CUSTOMER_LIST_LOAD_TIME, String.valueOf(merchantId));
-	}
-	
 	public static final String tokenMerchantMapKey() { 
 		return TOKEN_MERCHANT_MAP;
 	}
 
 	public static final String aliyunStsTokenDataKey(long merchantId) { 
 		return MessageFormat.format(ALIYUN_STS_TOKEN_DATA, String.valueOf(merchantId));
+	}
+	
+	public static final String friendApplyDataKey(long merchantId) {
+		return MessageFormat.format(FRIEND_APPLY_DATA, String.valueOf(merchantId));
 	}
 	
 	public static final String merchantDataKey(long merchantId) { 
@@ -79,6 +84,10 @@ public final class MerchantKeyGenerator {
 	
 	public static final String customerListNameKey(long merchantId) { 
 		return MessageFormat.format(CUSTOMER_LIST_NAME, String.valueOf(merchantId));
+	}
+	
+	public static final String friendApplyListKey(long merchantId) { 
+		return MessageFormat.format(FRIEND_APPLY_LIST, String.valueOf(merchantId));
 	}
 	
 	private static final String MERCHANT_ORDER_DATA						= "hash:db:merchant:{0}:order:{1}";

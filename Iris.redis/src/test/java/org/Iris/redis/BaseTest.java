@@ -13,8 +13,15 @@ public class BaseTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		JedisPool pool = new JedisPool(new JedisPoolConfig(), "121.42.155.96", 6379, 3000, null, 0);
+		JedisPool pool = new JedisPool(new JedisPoolConfig(), "121.42.155.96", 6379, 3000, null, 8);
 		redisOperate = new RedisOperate();
 		redisOperate.setPool(pool);
+	}
+	
+	public void testZadd() { 
+		long flag = redisOperate.zadd("1", 1, "1");
+		System.out.println(flag);
+		flag = redisOperate.zadd("1", 2, "1");
+		System.out.println(flag);
 	}
 }

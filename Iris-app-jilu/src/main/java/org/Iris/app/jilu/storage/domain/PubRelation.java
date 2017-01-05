@@ -1,9 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
-import org.Iris.redis.RedisHashBean;
-
-public class PubRelation implements RedisHashBean {
+public class PubRelation {
 
 	private String id;
 	private long applier;
@@ -82,10 +79,5 @@ public class PubRelation implements RedisHashBean {
 
 	public void setUpdated(int updated) {
 		this.updated = updated;
-	}
-	
-	@Override
-	public String redisKey() {
-		return CommonKeyGenerator.relationDataKey(this.id);
 	}
 }

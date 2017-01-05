@@ -3,7 +3,6 @@ package org.Iris.app.jilu.common;
 import org.Iris.app.jilu.service.realm.CommonService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
-import org.Iris.app.jilu.service.realm.jms.JmsService;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
@@ -14,15 +13,12 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
-import org.Iris.app.jilu.storage.redis.cache.OrderCache;
 import org.Iris.core.util.SpringContextUtil;
 import org.Iris.redis.operate.RedisOperate;
 import org.Iris.redis.operate.lock.DistributeLock;
 
 public interface Beans {
 	
-	final OrderCache orderCache = SpringContextUtil.getBean("orderCache", OrderCache.class);
-	final JmsService jmsService = SpringContextUtil.getBean("jmsService", JmsService.class);
 	final RedisOperate redisOperate = SpringContextUtil.getBean("redisOperate", RedisOperate.class);
 	final AliyunService aliyunService = SpringContextUtil.getBean("aliyunService", AliyunService.class); 
 	final RelationService relationService = SpringContextUtil.getBean("relationService", RelationService.class);
