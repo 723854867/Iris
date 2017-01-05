@@ -76,7 +76,9 @@ public interface JiLuParams {
 	final IrisStrConst POSTAGE								= new IrisStrConst("postage", 139);
 	final IrisStrConst EXPRESS								= new IrisStrConst("express", 140);
 	final IrisStrConst EXPRESSCODE							= new IrisStrConst("expressCode", 141);
-	final IrisStrConst LABEL								= new IrisStrConst("label", 141);
-	final IrisStrConst LATITUDE								= new IrisStrConst("latitude", 141);
-	final IrisStrConst LONGITUDE							= new IrisStrConst("longitude", 141);
+	final IrisStrConst LABEL								= new IrisStrConst("label", 142);
+	final IrisStrConst LATITUDE								= new IrisStrConst("latitude", 143);
+	final IrisStrConst LONGITUDE							= new IrisStrConst("longitude", 144);
+	final IrisStrConst UNITPRICE							= new IrisStrConst("unitPrice", 145);
+	final IrisStrConst QUERYID								= new IrisStrConst("queryId", 146);
 }

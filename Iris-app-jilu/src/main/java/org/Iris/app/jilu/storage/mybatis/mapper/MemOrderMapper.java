@@ -16,6 +16,26 @@ public interface MemOrderMapper {
 	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderById")
 	MemOrder getOrderById(@Param("merchantId") long merchantId, @Param("orderId") String orderId);
 	
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderByOrderId")
+	MemOrder getOrderByOrderId(@Param("orderId") String orderId);
+	
+	/**
+	 * 根据订单号获取所有关联的订单
+	 * @param orderId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getAllOrderByRootOrderId")
+	List<MemOrder> getAllOrderByRootOrderId(@Param("orderId") String orderId);
+	
+	/**
+	 * 根据订单号获取所有子订单
+	 * @param orderId
+	 * @param created
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getChildOrderByOrderId")
+	List<MemOrder> getChildOrderByOrderId(@Param("orderId") String orderId);
+	
 	@InsertProvider(type = MemOrderSQLBuilder.class, method="insert")
 	void insert(MemOrder order);
 	
@@ -40,6 +60,14 @@ public interface MemOrderMapper {
 	 */
 	@SelectProvider(type = MemOrderSQLBuilder.class, method="getChangeMerchantOrderList")
 	List<MemOrder> getChangeMerchantOrderList(long merchantId);
+	
+	/**
+	 * 通过商户id获取正在转单中的订单列表
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getTransferMerchantOrderList")
+	List<MemOrder> getTransferMerchantOrderList(long merchantId);
 	
 	@DeleteProvider(type = MemOrderSQLBuilder.class, method="delete")
 	void delete(@Param("merchantId") long merchantId,@Param("orderId") String orderId);

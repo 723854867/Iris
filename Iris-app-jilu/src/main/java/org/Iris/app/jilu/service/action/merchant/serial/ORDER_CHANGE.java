@@ -26,6 +26,8 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
 		long merchantId = session.getKVParam(JiLuParams.MERCHANTID);
 		Merchant merchant = session.getMerchant();
+		if(merchantId == merchant.getMemMerchant().getMerchantId())
+			return Result.jsonError(JiLuCode.SELF_LIMIT);//不能转单给自己
 		MemOrder superOrder = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
 		if(null == superOrder)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);

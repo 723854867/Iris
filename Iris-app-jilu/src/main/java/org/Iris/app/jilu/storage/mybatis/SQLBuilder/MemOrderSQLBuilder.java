@@ -17,6 +17,38 @@ public class MemOrderSQLBuilder {
 		}.toString();
 	}
 	
+	public String getOrderByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("order_id = #{orderId}");
+			}
+		}.toString();
+	}
+	
+	public String getAllOrderByRootOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("root_order_id = #{orderId}");
+				ORDER_BY("created");
+			}
+		}.toString();
+	}
+	
+	public String getChildOrderByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("super_order_id = #{orderId}");
+				ORDER_BY("created");
+			}
+		}.toString();
+	}
+	
 	public String insert(){
 		return new SQL() {
 			{
@@ -70,6 +102,18 @@ public class MemOrderSQLBuilder {
 				SELECT("order_id,super_merchant_id,super_merchant_name");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
+				AND();
+				WHERE("status=2");
+			}
+		}.toString();
+	}
+	
+	public String getTransferMerchantOrderList(){
+		return new SQL() {
+			{
+				SELECT("order_id,super_merchant_id,super_merchant_name");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("super_merchant_id=#{superMerchantId}");
 				AND();
 				WHERE("status=2");
 			}

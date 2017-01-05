@@ -18,6 +18,7 @@ public class CfgGoods implements RedisHashBean {
 	private String alias;
 	private String barcode;
 	private String sku;
+	private String unitPrice;
 	private int created;
 	private int updated;
 
@@ -130,6 +131,12 @@ public class CfgGoods implements RedisHashBean {
 		this.sku = sku;
 	}
 
+	public String getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(String unitPrice) {
+		this.unitPrice = unitPrice;
+	}
 	public int getCreated() {
 		return created;
 	}

@@ -9,16 +9,16 @@ import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.service.bean.Result;
 
 /**
- * 转单申请列表，指商户查看正在转给他的订单列表
+ * 待转单列表，指商户查看自己正在转出中的订单
  * @author 樊水东
  * 2016年12月23日
  */
-public class ORDER_CHANGE_LIST extends ParallelMerchantAction{
+public class TRANSFER_ORDER_LIST extends ParallelMerchantAction{
 
 	@Override
 	protected String execute0(MerchantSession session) {
 		Merchant merchant = session.getMerchant();
-		List<MemOrder> mList = merchant.getChangeOrderListByMerchantId(merchant.getMemMerchant().getMerchantId());
+		List<MemOrder> mList = merchant.getTransferOrderListByMerchantId(merchant.getMemMerchant().getMerchantId());
 		if(mList == null || mList.size() == 0)
 			return Result.jsonSuccess();
 		return Result.jsonSuccess(merchant.getOrderChangeListModelList(mList));

@@ -22,4 +22,10 @@ public interface MemOrderPacketMapper {
 	
 	@SelectProvider(type = MemOrderPacketSQLBuilder.class, method = "getMemOrderPacketById")
 	MemOrderPacket getMemOrderPacketById(@Param("packetId") String packetId,@Param("merchantId") long merchantId);
+	
+	@SelectProvider(type = MemOrderPacketSQLBuilder.class, method = "getMemOrderPacketByExpressCode")
+	MemOrderPacket getMemOrderPacketByExpressCode(@Param("expressCode") String expressCode);
+	
+	@SelectProvider(type = MemOrderPacketSQLBuilder.class, method = "getMemOrderPacketByOrderId")
+	List<MemOrderPacket> getMemOrderPacketByOrderId(@Param("orderId") String orderId);
 }

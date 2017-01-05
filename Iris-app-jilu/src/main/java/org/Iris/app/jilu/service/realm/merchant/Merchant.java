@@ -17,11 +17,16 @@ import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
+import org.Iris.app.jilu.common.bean.form.OrderForm;
+import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
+import org.Iris.app.jilu.common.bean.form.OrderPacketForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
+import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
@@ -29,8 +34,6 @@ import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
-import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.common.IrisSecurity;
@@ -371,6 +374,42 @@ public class Merchant implements Beans {
 			redisOperate.hmset(key, order);
 		return order;
 	}
+	
+	/**
+	 * 查询订单号是否存在
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	public MemOrder getOrderByOrderId(String orderId){
+		MemOrder order = memOrderMapper.getOrderByOrderId(orderId);
+		return order;
+	}
+	
+	/**
+	 * 查询快递单号是否存在
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	public MemOrderPacket getMemOrderPacketByExpressCode(String expressCode){
+		MemOrderPacket packet = memOrderPacketMapper.getMemOrderPacketByExpressCode(expressCode);
+		return packet;
+	}
+	
+	/**
+	 * 通过根订单号查询所有关联的子订单和父订单信息
+	 * @param orderId
+	 * @return
+	 */
+	public String queryAllOrderByOrderId(String rootOrderId){
+		List<MemOrder> list = memOrderMapper.getAllOrderByRootOrderId(rootOrderId);
+		List<OrderForm> orderForms = new ArrayList<OrderForm>();
+		for(MemOrder order : list)
+			orderForms.add(new OrderForm(order));
+		return Result.jsonSuccess(orderForms);
+	}
+
 
 	/**
 	 * 获取MerchantOrderGoods列表 通过List<MerchantOrderGoods>
@@ -441,7 +480,11 @@ public class Merchant implements Beans {
 	 */
 	public void insertGoods(CfgGoods memGoods) {
 		cfgGoodsMapper.insert(memGoods);
+		//目前在商户添加商品之后自动生成一条该商户商品的产品库信息
+		MemGoodsStore store = new MemGoodsStore(getMemMerchant().getMerchantId(), memGoods.getGoodsId(), 100);
+		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
+		redisOperate.hmset(store.redisKey(), store);
 	}
 	
 	public MemOrderGoods getMerchantOrderGoodsById(String orderId,long goodsId){
@@ -481,7 +524,7 @@ public class Merchant implements Beans {
 	}
 
 	/**
-	 * 获取转单订单列表
+	 * 获取转单申请列表
 	 * 
 	 * @param merchantId
 	 * @return
@@ -490,17 +533,27 @@ public class Merchant implements Beans {
 		return memOrderMapper.getChangeMerchantOrderList(merchantId);
 	}
 	
+	/**
+	 * 获取待转订单列表
+	 * 
+	 * @param merchantId
+	 * @return
+	 */
+	public List<MemOrder> getTransferOrderListByMerchantId(long superMerchantId){
+		return memOrderMapper.getTransferMerchantOrderList(superMerchantId);
+	}
+	
 	public List<OrderChangeModel> getOrderChangeListModelList(List<MemOrder> mList){
 		List<OrderChangeModel> orderChangeModels = new ArrayList<>();
 		for(MemOrder order : mList){
 			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
-			orderChangeModels.add(new OrderChangeModel(order.getSuperMerchantName(), list));
+			orderChangeModels.add(new OrderChangeModel(order.getOrderId(),order.getSuperMerchantName(),order.getSuperMerchantId(), list));
 		}
 		return orderChangeModels;
 	}
 
 	/**
-	 * 拒绝转单操作
+	 * 拒绝转单操作/取消转单
 	 * 
 	 * @param orderId
 	 */
@@ -527,7 +580,7 @@ public class Merchant implements Beans {
 		}
 		redisOperate.batchHmset(superGoodsList);
 	}
-
+	
 	/**
 	 * 接收转单
 	 * 
@@ -605,7 +658,7 @@ public class Merchant implements Beans {
 			String[] goods = str.split(":");
 			for(String goodsId : goods){
 				MemOrderGoods mGoods = getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
-				if (goods == null)
+				if (mGoods == null)
 					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
 				if(mGoods.getStatus()!=0)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
@@ -688,6 +741,38 @@ public class Merchant implements Beans {
 		if(null == packet)
 			packet = memOrderPacketMapper.getMemOrderPacketById(packetId, getMemMerchant().getMerchantId());
 		return packet;
+	}
+	
+	/**
+	 * 根据订单号查询本订单详细信息 ，以及所有子订单基本信息
+	 * @param orderId
+	 * @return
+	 */
+	public String getOrderDetailedInfoByOrderId(String orderId){
+		//获取本订单基本信息
+		OrderForm orderInfo = new OrderForm(getOrderByOrderId(orderId));
+		//获取未完成产品
+		List<MemOrderGoods> notFinishOrderGoods = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByOrderId(orderId);
+		List<OrderGoodsForm> notFinishGoodsList = new ArrayList<OrderGoodsForm>();
+		for(MemOrderGoods memOrderGoods : notFinishOrderGoods)
+			notFinishGoodsList.add(new OrderGoodsForm(memOrderGoods));
+		//获取正在转单中的产品
+		List<MemOrderGoods> changeingOrderGoods = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
+		List<OrderGoodsForm> changeGoodsList = new ArrayList<OrderGoodsForm>();
+		for(MemOrderGoods memOrderGoods : changeingOrderGoods)
+			changeGoodsList.add(new OrderGoodsForm(memOrderGoods));
+		//获取已打包的信息
+		List<MemOrderPacket> packets = memOrderPacketMapper.getMemOrderPacketByOrderId(orderId);
+		List<OrderPacketForm> packetList = new ArrayList<OrderPacketForm>();
+		for(MemOrderPacket memOrderPacket : packets)
+			packetList.add(new OrderPacketForm(memOrderPacket));
+		//获取子订单信息
+		List<MemOrder> childOrders = memOrderMapper.getChildOrderByOrderId(orderId);
+		List<OrderForm> childOrderList = new ArrayList<OrderForm>();
+		for(MemOrder order : childOrders)
+			childOrderList.add(new OrderForm(order));
+		
+		return Result.jsonSuccess(new OrderDetailedModel(orderInfo, notFinishGoodsList, changeGoodsList, packetList, childOrderList));
 	}
 	
 	/**

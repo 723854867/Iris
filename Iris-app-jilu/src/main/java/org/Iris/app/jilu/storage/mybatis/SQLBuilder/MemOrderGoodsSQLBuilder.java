@@ -70,6 +70,10 @@ public class MemOrderGoodsSQLBuilder {
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUnitPrice());
 		}
+		stringBuilder.append(" end, packet_id = case id");
+		for(MemOrderGoods orderGoods:list){
+			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getPacketId());
+		}
 		stringBuilder.append(" end, status = case id");
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getStatus());
@@ -148,6 +152,18 @@ public class MemOrderGoodsSQLBuilder {
 				WHERE("order_id=#{orderId}");
 				AND();
 				WHERE("status=2");
+			}
+		}.toString();
+	}
+	
+	public String getNotFinishMerchantOrderGoodsByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER_GOODS.mark());
+				WHERE("order_id=#{orderId}");
+				AND();
+				WHERE("status=0");
 			}
 		}.toString();
 	}
