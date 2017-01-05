@@ -28,8 +28,9 @@ public class GOODS_ADD extends ParallelMerchantAction {
 		String alias = session.getKVParamOptional(JiLuParams.ALIAS);
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
+		String unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
 		Merchant merchant = session.getMerchant();
-		merchant.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku));
+		merchant.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku,unitPrice));
 		return Result.jsonSuccess();
 	}
 }

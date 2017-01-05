@@ -44,4 +44,7 @@ public interface MemOrderGoodsMapper {
 	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getChangeMerchantOrderGoodsByOrderId")
 	List<MemOrderGoods> getChangeMerchantOrderGoodsByOrderId(String orderId);
+	
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getNotFinishMerchantOrderGoodsByOrderId")
+	List<MemOrderGoods> getNotFinishMerchantOrderGoodsByOrderId(String orderId);
 }

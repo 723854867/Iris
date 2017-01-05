@@ -61,4 +61,25 @@ public class MemOrderPacketSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String getMemOrderPacketByExpressCode(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER_PACKET.mark());
+				WHERE("express_code=#{expressCode}");
+			}
+		}.toString();
+	}
+	
+	public String getMemOrderPacketByOrderId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER_PACKET.mark());
+				WHERE("order_id=#{orderId}");
+			}
+		}.toString();
+	}
+	
 }

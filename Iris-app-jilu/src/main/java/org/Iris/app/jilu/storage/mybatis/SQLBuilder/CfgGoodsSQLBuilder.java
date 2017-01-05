@@ -21,6 +21,7 @@ public class CfgGoodsSQLBuilder {
 				VALUES("alias", 				"#{alias}");
 				VALUES("barcode", 				"#{barcode}");
 				VALUES("sku", 					"#{sku}");
+				VALUES("unit_price", 			"#{unitPrice}");
 				VALUES("created", 				"#{created}");
 				VALUES("updated", 				"#{updated}");
 			}

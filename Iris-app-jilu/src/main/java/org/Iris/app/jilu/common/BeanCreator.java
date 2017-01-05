@@ -57,7 +57,7 @@ public class BeanCreator {
 	}
 	
 	public static CfgGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
-			String usBrand, String unit, float weight, String alias, String barcode, String sku){
+			String usBrand, String unit, float weight, String alias, String barcode, String sku,String unitPrice){
 		CfgGoods memGoods = new CfgGoods();
 		memGoods.setGoodsCode(goodsCode);
 		memGoods.setZhName(zhName);
@@ -74,6 +74,7 @@ public class BeanCreator {
 		int time = DateUtils.currentTime();
 		memGoods.setCreated(time);
 		memGoods.setUpdated(time);
+		memGoods.setUnitPrice(unitPrice);
 		return memGoods;
 	}
 	

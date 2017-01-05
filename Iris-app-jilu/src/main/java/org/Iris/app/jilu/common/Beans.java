@@ -7,6 +7,7 @@ import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
@@ -34,4 +35,5 @@ public interface Beans {
 	final MemOrderGoodsMapper memOrderGoodsMapper = SpringContextUtil.getBean("memOrderGoodsMapper", MemOrderGoodsMapper.class);
 	final MemOrderPacketMapper memOrderPacketMapper = SpringContextUtil.getBean("memOrderPacketMapper", MemOrderPacketMapper.class);
 	final CfgGoodsMapper cfgGoodsMapper = SpringContextUtil.getBean("cfgGoodsMapper", CfgGoodsMapper.class);
+	final MemGoodsStoreMapper memGoodsStoreMapper = SpringContextUtil.getBean("memGoodsStoreMapper", MemGoodsStoreMapper.class);
 }

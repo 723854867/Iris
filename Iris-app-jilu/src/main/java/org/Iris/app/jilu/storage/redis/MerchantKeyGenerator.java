@@ -93,6 +93,7 @@ public final class MerchantKeyGenerator {
 	private static final String MERCHANT_ORDER_DATA						= "hash:db:merchant:{0}:order:{1}";
 	private static final String MERCHANT_ORDER_GOODS_DATA				= "hash:db:merchant:order:{0}:goods:{1}";
 	private static final String MERCHANT_ORDER_PACKET_DATA				= "hash:db:merchant:{0}:order:packet:{1}";
+	private static final String MERCHANT_GOODS_STORE_DATA				= "hash:db:merchant:{0}:goods:store:{1}";
 	
 	
 	// **********************************************************************************************
@@ -107,5 +108,9 @@ public final class MerchantKeyGenerator {
 	
 	public static final String merchantOrderPacketDataKey(long merchantId, String packetId) { 
 		return MessageFormat.format(MERCHANT_ORDER_PACKET_DATA, String.valueOf(merchantId), packetId);
+	}
+	
+	public static final String merchantGoodsStoreDataKey(long merchantId, long goodsId) { 
+		return MessageFormat.format(MERCHANT_GOODS_STORE_DATA, merchantId, goodsId);
 	}
 }

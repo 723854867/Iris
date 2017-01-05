@@ -28,6 +28,8 @@ public class ORDER_EDIT extends SerialMerchantAction {
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
 		Merchant merchant = session.getMerchant();
 		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
+		if(order == null)
+			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		int status = order.getStatus();
 		if (status != 0) {
 			// 订单不能修改
