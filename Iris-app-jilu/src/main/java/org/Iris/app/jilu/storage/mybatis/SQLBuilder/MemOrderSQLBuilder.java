@@ -33,6 +33,8 @@ public class MemOrderSQLBuilder {
 				SELECT("*");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("root_order_id = #{orderId}");
+				AND();
+				WHERE("status!=2");
 				ORDER_BY("created");
 			}
 		}.toString();
@@ -44,6 +46,8 @@ public class MemOrderSQLBuilder {
 				SELECT("*");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("super_order_id = #{orderId}");
+				AND();
+				WHERE("status!=2");
 				ORDER_BY("created");
 			}
 		}.toString();
@@ -111,7 +115,7 @@ public class MemOrderSQLBuilder {
 	public String getTransferMerchantOrderList(){
 		return new SQL() {
 			{
-				SELECT("order_id,super_merchant_id,super_merchant_name");
+				SELECT("order_id,merchant_id,merchant_name");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("super_merchant_id=#{superMerchantId}");
 				AND();

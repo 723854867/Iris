@@ -32,10 +32,14 @@ public class OrderDetailedModel {
 			List<OrderGoodsForm> changeGoodsList, List<OrderPacketForm> packetList, List<OrderForm> childOrderList) {
 		super();
 		this.orderInfo = orderInfo;
-		this.notFinishGoodsList = notFinishGoodsList;
-		this.changeGoodsList = changeGoodsList;
-		this.packetList = packetList;
-		this.childOrderList = childOrderList;
+		if(notFinishGoodsList.size()>0)
+			this.notFinishGoodsList = notFinishGoodsList;
+		if(changeGoodsList.size()>0)
+			this.changeGoodsList = changeGoodsList;
+		if(packetList.size()>0)
+			this.packetList = packetList;
+		if(childOrderList.size()>0)
+			this.childOrderList = childOrderList;
 	}
 	public OrderForm getOrderInfo() {
 		return orderInfo;

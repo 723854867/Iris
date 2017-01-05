@@ -20,7 +20,7 @@ public class ORDER_PACKET extends SerialMerchantAction{
 		String packetGoodsList = session.getKVParam(JiLuParams.PACKETGOODSLIST);
 		String orderId = session.getKVParam(JiLuParams.ORDERID);
 		Merchant merchant = session.getMerchant();
-		return merchant.orderPacket(orderId, packetGoodsList);
+		return merchantService.orderPacket(orderId, packetGoodsList,merchant);
 	}
 	
 }
