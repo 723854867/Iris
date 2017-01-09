@@ -445,6 +445,5 @@
 		<module>Iris-app-jilu-consumer</module>
 		<module>Iris-app-jilu-common</module>
 		<module>Iris.aliyun</module>
-		<module>Iris.dubbo</module>
 	</modules>
 </project>
