@@ -67,8 +67,8 @@ public interface JiLuParams {
 	final IrisStrConst ADDGOODSLIST							= new IrisStrConst("addGoodsList", null, 130);
 	final IrisStrConst UPDATEGOODSLIST					    = new IrisStrConst("updateGoodsList", null, 131);
 	final IrisStrConst DELETEGOODSLIST						= new IrisStrConst("deleteGoodsList", null, 132);
-	final IrisIntConst PAGE									= new IrisIntConst("page", 133);
-	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 134);
+	final IrisIntConst PAGE									= new IrisIntConst("page", 1, 133);
+	final IrisIntConst PAGE_SIZE							= new IrisIntConst("pageSize", 10, 134);
 	final IrisLongConst MERCHANTID							= new IrisLongConst("merchantId", 135);
 	final IrisLongConst TARGET_ID							= new IrisLongConst("targetId", 136);
 	final IrisStrConst PACKETGOODSLIST						= new IrisStrConst("packetGoodsList", 137);
@@ -81,4 +81,5 @@ public interface JiLuParams {
 	final IrisStrConst LONGITUDE							= new IrisStrConst("longitude", 144);
 	final IrisStrConst UNITPRICE							= new IrisStrConst("unitPrice", 145);
 	final IrisStrConst QUERYID								= new IrisStrConst("queryId", 146);
+	final IrisIntConst MOD									= new IrisIntConst("mod", 0, 147);
 }

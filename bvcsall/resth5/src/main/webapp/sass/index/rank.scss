@@ -1,0 +1,328 @@
+@import '../base/_base';
+//@import '../base/_colorFont';
+@import '../base/_other';
+@import '../base/retina-sprites';
+@import '../Connect';
+
+@mixin fullWidth{
+	width:100%;
+}
+@mixin txtCenter{
+	text-align:center;
+}
+@mixin borderSmall($color){
+	border:solid 1px $color;
+}
+@mixin bgColor($color){
+	background:$color;
+}
+.main{
+	width:100%; 
+}
+.rankHead{
+  padding:10px;
+  @include bgColor(#fff);
+  @include txtCenter;
+  border-bottom: solid 1px #d9d9d9;
+  button{
+	display: inline-block;
+	margin:0 10px;
+	@include bgColor(#f2f2f2);
+	font-size: 14px;
+	color:#333;
+	border-radius: 5px;
+	// padding:8px 35px;
+	width:40%;
+	height:35px;
+  }
+  .on{
+	color: #ffffff;
+	@include bgColor(#91c41f);
+  }
+}
+video{position:relative;z-index:1;}
+
+
+.videoList1{
+	ul{
+		min-height: 400px;
+	}
+	ul li{ width:100%;
+		position:relative;
+		background:#fff;
+		margin:0 0 10px 0;
+		//min-height:185px;
+		dl{
+			overflow:hidden;
+			margin:0;
+			padding:10px;
+		  	.rankKey{
+			  display: inline-block;
+			  width:28px;
+			  height:40px;
+			  margin-right:8px;
+			  font-size: 14px;
+			  font-weight: bold;
+			  @include txtCenter;
+			  line-height: 40px;
+			  font-family: "Hiragino Sans GB", "Microsoft YaHei", tahoma, arial, simsun;
+			}
+			.rankKey1{
+			  display: inline-block;
+			  width:28px;
+			  margin-right:8px;
+			  @include use-sprite(top_one);
+			}
+			.rankKey2{
+			  display: inline-block;
+			  width:28px;
+			  margin-right:8px;
+			  @include use-sprite(top_two);
+			}
+			.rankKey3{
+			  display: inline-block;
+			  width:28px;
+			  margin-right:8px;
+			  @include use-sprite(top_three);
+			}
+			dt{
+				@include floatL;
+				position:relative;
+				img{
+					margin:3px 0 0 0;
+					height:30px;
+					width:30px;
+					border-radius:6px;
+				}
+				.userV1{
+//				  @include use-sprite(user_icon_blue);
+				  position: absolute;
+				  right:-5px;
+				  bottom:0;
+				}
+				.userV2{
+//				  @include use-sprite(user_icon_yellow);
+				  position: absolute;
+				  right:-5px;
+				  bottom:1px;
+				}
+				.userV3 {
+//				  @include use-sprite(user_icon_green);
+				  position: absolute;
+				  right: -5px;
+				  bottom: 0
+				}
+			}
+			dd:first-of-type{
+				@include floatL;
+				margin-left:10px;
+				line-height:16px;
+			  	width:45%;
+
+				p:first-of-type{
+					font-weight:bold;
+					font-size:14px;
+					color:$fontcolor-333;
+				  	@include overHidd;
+				}
+				p:nth-of-type(2){
+					font-size:12px;
+					color:$fontcolor-999;
+				  	@include overHidd;
+				}
+			}
+			dd:nth-of-type(2){
+				float:right;
+				padding-top:13px;
+			  	color:$fontcolor-999;
+			  	margin:0;
+				.playIcon{
+					@include use-sprite(play-24);
+					display:inline-block;
+				}
+				.playData{
+					font-size:14px;
+					color:#333;
+					padding-left:5px;
+					line-height:15px;
+				  	color:$fontcolor-999;
+				}
+			}
+		}
+		.playBox{
+			video{
+				@include fullWidth;
+				height:100%;
+				display:block;
+				vertical-align:bottom;
+				//min-height:200px;
+			}
+		}
+		.videoListTag{
+			font-size: 14px;
+			color:$fontcolor-333;
+			padding:0px 15px 0px 15px;
+			line-height: 30px;
+		}
+		.shareBox{
+			display:box;
+			display:-webkit-box;
+			display:-moz-box;
+			div{
+				padding:10px 0 0 0;
+				em{
+					display:inline-block;margin:auto;
+
+					position:relative;
+					top:3px;
+				}
+				span{
+					line-height:10px;
+					color:$fontcolor-999;
+					display:inline-block;
+					height:20px; width:40px;
+					position:relative;
+					top:-5px; text-align:left;
+				}
+			}
+			.zan{
+				text-align:center;
+				box-flex:1;
+				-webkit-box-flex:1;
+				em.off{
+				  @include use-sprite(love-48);
+				}
+				em.on{
+//				  @include use-sprite(love-red-48);
+				}
+			  }
+			.commit{
+				text-align:center;
+				box-flex:1;
+				-webkit-box-flex:1;
+				em{
+					@include use-sprite(Comment-48);
+				}
+			}
+			.Forward{
+				text-align:center;
+				box-flex:1;
+				-webkit-box-flex:1;
+				em{
+					@include use-sprite(Forward-48);
+				}
+			}
+		}
+	}
+
+  	.rankPopuItem{
+	  @include bgColor(#fff);
+	  margin:0;
+	  .listUserMsg{
+		padding:10px 0 0 10px;
+		.rankKey{
+		  display: inline-block;
+		  width:28px;
+		  height:40px;
+		  margin:10px 8px 0 0;
+		  font-size: 14px;
+		  font-weight: bold;
+		  @include txtCenter;
+		  line-height: 40px;
+		  font-family: "Hiragino Sans GB", "Microsoft YaHei", tahoma, arial, simsun;
+		}
+		.rankKey1{
+		  display: inline-block;
+		  width:28px;
+		  margin-right:8px;
+		  @include use-sprite(top_one);
+		}
+		.rankKey2{
+		  display: inline-block;
+		  width:28px;
+		  margin-right:8px;
+		  @include use-sprite(top_two);
+		}
+		.rankKey3{
+		  display: inline-block;
+		  width:28px;
+		  margin-right:8px;
+		  @include use-sprite(top_three);
+		}
+		dl{
+		  margin:0;
+		  overflow: hidden;
+		  padding:0 0 10px 0;
+		  border-bottom:solid 1px #ccc;
+		  dt{
+			@include floatL;
+			position:relative;
+			img{
+			  margin:3px 0 0 0;
+			  height:55px;
+			  width:50px;
+			  border-radius:0px;
+			}
+			.userV1{
+//			  @include use-sprite(user_icon_blue);
+			  position: absolute;
+			  right:-5px;
+			  bottom:0;
+			}
+			.userV2{
+//			  @include use-sprite(user_icon_yellow);
+			  position: absolute;
+			  right:-5px;
+			  bottom:1px;
+			}
+			.userV3 {
+//			  @include use-sprite(user_icon_green);
+			  position: absolute;
+			  right: -5px;
+			  bottom: 0
+			}
+		  }
+		  dd:first-of-type{
+			@include floatL;
+			margin-left:10px;
+			line-height:16px;
+			width:75%;
+			p{
+			  margin-bottom: 5px;
+			}
+			p:first-of-type{
+			  font-weight:100;
+			  font-size:14px;
+			  color:$fontcolor-333;
+			  @include overHidd;
+			}
+			p:nth-of-type(2){
+			  font-size:12px;
+			  color:$fontcolor-999;
+			}
+			p:nth-of-type(3){
+			  font-size:12px;
+			  color:$fontcolor-999;
+			}
+		  }
+		}
+	  }
+	}
+  	.rankloadMore{
+	  border-top: solid 1px #ccc;
+	  border-bottom:solid 1px #ccc;
+	  //padding:10px;
+	  @include txtCenter;
+	  @include bgColor(#fff);
+	  color: #b6b6b6;
+	  @include poRe;
+	  top:-12px;
+	}
+}
+
+
+
+
+
+
+

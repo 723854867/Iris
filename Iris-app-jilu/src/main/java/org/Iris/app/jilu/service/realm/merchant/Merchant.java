@@ -14,6 +14,7 @@ import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
+import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
@@ -134,6 +135,7 @@ public class Merchant implements Beans {
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
 		memMerchant.setUpdated(DateUtils.currentTime());
+		memMerchant.setStatusMod(MerchantStatusMod.QUALIFIED.mod());
 		_updateMerchant();
 	}
 	
@@ -161,7 +163,7 @@ public class Merchant implements Beans {
 	 * 修改客户
 	 * 
 	 */
-	public String editCustomer(long customerId, String name, String mobile, String address, String memo) { 
+	public String editCustomer(long customerId, String name, String mobile, String address, String memo, int mod) { 
 		MemCustomer customer = getCustomer(customerId);
 		if (null == customer)
 			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
@@ -173,6 +175,7 @@ public class Merchant implements Beans {
 		customer.setAddress(address);
 		customer.setMobile(mobile);
 		customer.setMemo(memo);
+		customer.setStatusMod(mod);
 		_updateCustomer(customer, nameSort);
 		return Result.jsonSuccess();
 	}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.ForwardDAO">
+
+	<sql id="forwardFiledSql">
+		select f.id,
+		f.create_at as createDate,
+		f.author_id as authorId,
+		f.creator_id as creatorId,
+		f.data_from as dataFrom,
+		f.video_id as VideoId,
+		f.evaluation as evaluation
+	</sql>
+
+	<select id="isForward" resultType="Integer">
+		select count(*) from forward where creator_id=#{uid} and video_id=#{videoId}
+	</select>
+	
+	<select id="hasForwarded" resultType="Integer">
+		select count(*) from forward f where creator_id=#{uid} and f.video_id in(select id from video v where v.id=f.video_id and (v.flow_stat='published' or v.flow_stat='check_ok'))
+	</select>
+	
+	<select id="getForwardVideoIds" resultType="java.util.List">
+		select video_id from forward where creator_id=#{uid}
+	</select>
+	
+	<select id="getForwardList" resultType="com.busap.vcs.data.entity.Forward">
+	 	<include refid="forwardFiledSql"/>
+		from forward f 
+		where f.creator_id=#{uid}
+	</select>
+	
+	<delete id="cancelForward">
+		delete
+		from forward 
+		where creator_id=#{uid} and video_id=#{videoId}
+	</delete>
+	
+	<select id="getForwardListByIds" resultType="com.busap.vcs.data.entity.Forward">
+	 	<include refid="forwardFiledSql"/>
+		from forward f 
+		where f.creator_id in
+		<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach>
+	</select>
+
+	<update id="deleteForward">
+		update forward f  set f.status=1 where f.id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<select id="findVideoForwardCount" resultType="integer">
+		select count(id) from forward where video_id=#{vid}
+	</select>
+
+</mapper>

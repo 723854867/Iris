@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.OrganizationDao">
+
+	<resultMap id="BaseResultMap" type="com.busap.vcs.data.entity.Organization" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="create_at" property="createDateStr" jdbcType="TIMESTAMP" />
+		<result column="creator_id" property="creatorId" jdbcType="BIGINT" />
+		<result column="data_from" property="dataFrom" jdbcType="VARCHAR" />
+		<result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP" />
+		<result column="anchor_count" property="anchorCount" jdbcType="INTEGER" />
+		<result column="leader" property="leader" jdbcType="VARCHAR" />
+		<result column="leader_phone" property="leaderPhone" jdbcType="VARCHAR" />
+		<result column="org_name" property="orgName" jdbcType="VARCHAR" />
+		<result column="org_type" property="orgType" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+		delete from organization
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insert" parameterType="com.busap.vcs.data.entity.Organization">
+		insert into organization (id, create_at, creator_id,
+		data_from, anchor_count,
+		leader, leader_phone, org_name, org_type
+		)
+		values (#{id,jdbcType=BIGINT}, #{createDateStr,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=BIGINT},
+		#{dataFrom,jdbcType=VARCHAR},  #{anchorCount,jdbcType=INTEGER},
+		#{leader,jdbcType=VARCHAR}, #{leaderPhone,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{orgType,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.Organization" >
+		update organization
+		<set>
+			<if test="id != null">
+				id = #{id,jdbcType=BIGINT},
+			</if>
+			<if test="creatorId != null">
+				creator_id = #{creatorId,jdbcType=INTEGER},
+			</if>
+			<if test="anchorCount != null">
+				anchor_count = #{anchorCount,jdbcType=INTEGER},
+			</if>
+			<if test="dataFrom != null">
+				data_from = #{dataFrom,jdbcType=VARCHAR},
+			</if>
+			modify_at = now(),
+			<if test="orgName != null">
+				org_name = #{orgName,jdbcType=VARCHAR},
+			</if>
+			<if test="orgType != null">
+				org_type = #{orgType,jdbcType=VARCHAR},
+			</if>
+			<if test="leader != null">
+				leader = #{leader,jdbcType=VARCHAR},
+			</if>
+			<if test="leaderPhone != null">
+				leader_phone = #{leaderPhone,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateAnchorCount" parameterType="com.busap.vcs.data.entity.Organization">
+		update organization set anchor_count =
+		(select count(*) from ruser where ruser.organization_id = #{id,jdbcType=BIGINT})
+		where organization.id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+		select id, create_at, creator_id, data_from, modify_at, anchor_count, leader, leader_phone,
+		org_name,org_type
+		from organization
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select id, create_at, creator_id, data_from, modify_at, anchor_count, leader, leader_phone,
+		org_name,org_type
+		from organization
+		<where>
+			<if test="type != null">
+				<choose>
+					<when test="type == 0">
+						id = #{useKey,jdbcType=BIGINT}
+					</when>
+					<when test="type == 1">
+						org_name = #{useKey,jdbcType=VARCHAR}
+					</when>
+				</choose>
+			</if>
+
+		</where>
+	</select>
+
+
+</mapper>

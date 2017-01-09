@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.busap.vcs.data.mapper.LiveSettingDAO">  
+    
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <select id="searchLiveSetting" resultType="com.busap.vcs.data.entity.LiveSetting">
+    	select DISTINCT ls.id as id,ls.name as name,ls.create_at as createDate,ls.majia_count as majiaCount,
+			ls.majia_count_begin as majiaCountBegin,ls.max_user_count as maxUserCount,ls.max_user_count_period as maxUserCountPeriod,
+			ls.user_count_period as userCountPeriod,ls.user_count_step as userCountStep,ls.user_count_stat as userCountStat,
+    		ls.majia_period as majiaPeriod,ls.max_majia_period as maxMajiaPeriod,ls.`status` as `status`,ls.type_id as typeId,
+    		(case when ls.type_id!=0 then act.`name` else '无' end) as typeName
+		from live_setting ls LEFT JOIN auto_chat_type act on ls.type_id=act.id
+		where 1=1
+		<if test="status != null">
+			<![CDATA[
+				and ls.status=#{status}
+			]]>
+		</if>
+		
+		order by ls.create_at desc
+    	<include refid="page"/>
+    </select>
+    
+    <select id="searchCount" resultType="Integer">
+    	select count(ls.id) from live_setting ls
+			where 1=1
+		<if test="status != null">
+			<![CDATA[
+				and ls.status=#{status}
+			]]>
+		</if>
+		
+    </select>
+    
+    <insert id="addUser" >
+    	insert into live_setting_users(setting_id,user_id) values(#{settingId},#{userId})
+    </insert>
+    
+    <delete id="removeUser" >
+    	delete from live_setting_users where setting_id=#{settingId} and user_id=#{userId}
+    </delete>
+    
+    <select id="searchSettingUser" resultType="map">
+    	select r.id as id,r.username as username,r.`name` as `name`,r.phone as phone 
+    	from ruser r 
+    	where r.id in(
+    		select user_id from live_setting_users where setting_id=#{settingId}
+    	)
+    	
+    	<include refid="page"/>
+    </select>
+    
+    <select id="searchSettingUserCount" resultType="integer">
+    	select count(user_id) from live_setting_users where setting_id=#{settingId}
+    </select>
+    
+</mapper>  

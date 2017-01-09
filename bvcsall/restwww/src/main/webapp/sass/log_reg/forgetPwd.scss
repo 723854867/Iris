@@ -1,0 +1,189 @@
+@import "../base/retina-sprites";
+@import "../base/colorFont";
+@import "../base/other";
+@import "../base/base";
+@import '../Connect';
+html,body{
+	height:100%;
+	width:100%;
+}
+body{
+	background-color:$background-color-body;
+	.main{
+		width: 100%;
+		height: 100%;
+		background-color: #ffffff;
+		float: left;
+	}
+
+}
+header{
+	padding:10px;
+	border:1px solid #d9d9d9;
+	background-color:$background-color-head;
+	position:relative;
+	span{
+		display:inline-block;
+		width:100%;
+		height:44px;
+		line-height:44px;
+	}
+}
+header span.indexRecommend{
+	font-size:18px;
+	color:#666666;
+	font-weight:700;
+	position:absolute;
+	top:10px;
+	left:0;
+	a{
+		margin-left:10px;
+	}
+}
+header span.forgetPwd{
+	font-size:18px;
+	font-weight:bold;
+	color:$fontcolor-333;
+	text-align:center;
+}
+.line{
+	width:100%;
+	height:1px;
+	background-color:$background-color-d9;
+}
+.regContent{
+	background-color: #ffffff;
+    margin-top: 40px;
+}
+.login_icon_id{
+	display:inline-block;
+	@include use-sprite(login_icon_id);
+	height:$lineHeight-24;
+	line-height:$lineHeight-24;
+	float:left;
+}
+.login_icon_code{
+	display:inline-block;
+	@include use-sprite(login_icon_code);
+	height:$lineHeight-24;
+	line-height:$lineHeight-24;
+	float:left;
+
+}
+.login_icon_nickname{
+	display:inline-block;
+	@include use-sprite(login_icon_nickname);
+	height:$lineHeight-24;
+	line-height:$lineHeight-24;
+	float:left;
+}
+.login_icon_password{
+	display:inline-block;
+	@include use-sprite(login_icon_password);
+	height:$lineHeight-24;
+	line-height:$lineHeight-24;
+}
+.regContent p{
+    width: 80%;
+    position:relative;
+    margin: 30px auto;
+	input{
+		line-height:38px;
+		height:38px;
+		border-radius:20px;
+		text-indent:5px;
+		width:100%;
+		font-size: 14px;
+		color: #666666;
+		appearance:none;
+		-moz-appearance:none;
+		-webkit-appearance:none;
+		padding:0;
+		border:1px solid #cccccc;
+		text-indent: 20px;
+	}
+	input.se{
+		border:1px solid #f8698f;
+	}
+}
+.regContent p input.codeInput{
+}
+.regContent p input.btnCode{
+	border:none;
+	color:#ffffff;
+	background-color:#7cdb85;
+	padding: 16px 6px;
+    border-radius: 16px;
+    font-size: 14px;
+    width: 30%;
+    height: 26px;
+    float: right;
+    text-align: center;
+    text-indent: 0;
+    line-height: 0;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+}
+.regContent p input.btnCode1{
+	border:none;
+	color:#ffffff;
+	background-color:#7cdb85;
+	padding: 16px 6px;
+    border-radius: 16px;
+    font-size: 14px;
+    width: 33%;
+    height: 26px;
+    float: right;
+    text-align: center;
+    text-indent: 0;
+    line-height: 0;
+    position: absolute;
+    top: 4px;
+    right: 2px;
+}
+.regContent p input.pwdSH{
+}
+.btnForget{
+}
+.btnForget input{
+	width:80%;
+	height:42px;
+	line-height:42px;
+	background-color:#f8698f;
+	border-radius:4px;
+	color:#ffffff;
+	font-size:$fontsize-large;
+	margin:0 auto;
+	display:block;
+	border-radius:20px;
+	margin-top:30px;
+
+}
+.btnForget input.disabled{
+	width:90%;
+	height:42px;
+	line-height:42px;
+	background-color:$link-tap;
+	border-radius:4px;
+	color:$link-tap;
+	font-size:$fontsize-large;
+	margin:0 auto;
+	display:block;
+	border-radius:20px;
+	margin-top:30px;
+}
+.pwdSHBtn{
+	@include use-sprite(pwd_hide);
+	display:inline-block;
+	position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.pwdSHBtn1{
+	@include use-sprite(pwd_show);
+	display:inline-block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

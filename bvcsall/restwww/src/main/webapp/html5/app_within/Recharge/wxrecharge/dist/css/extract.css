@@ -1,0 +1,609 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif; }
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none; }
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+h1, h2, h3, h4, h5, h6, p {
+  font-weight: normal;
+  margin: 0;
+  padding: 0; }
+
+img {
+  border: 0; }
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a {
+  color: blue;
+  text-decoration: none;
+  output: none;
+  color: #333; }
+
+input, button, textarea {
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; }
+
+.fr {
+  float: right; }
+
+.fl {
+  float: left; }
+
+body {
+  font-size: 12px;
+  color: #333;
+  background: #fff; }
+
+.main {
+  max-width: 600px;
+  min-width: 320px;
+  margin: auto; }
+
+.log-1 {
+  margin-top: 80px; }
+  .log-1 .login-item {
+    position: relative;
+    margin: 10px auto;
+    text-align: center;
+    border: solid 1px #ccc;
+    border-radius: 20px;
+    width: 260px;
+    padding: 10px 0; }
+    .log-1 .login-item .user-txt {
+      height: 20px;
+      width: 180px;
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 14px; }
+    .log-1 .login-item .phone-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 27px;
+      background: url(../../dist/img/phone.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-1 .login-item .pwd-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 25px;
+      background: url(../../dist/img/pwd.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-1 .login-item .pwd-block {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: inline-block;
+      width: 25px;
+      height: 18px;
+      background: url(../../dist/img/pwd_hide.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-1 .login-item .pwd-hide {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: inline-block;
+      width: 25px;
+      height: 18px;
+      background: url(../../dist/img/pwd_show.png) no-repeat;
+      background-size: 100% 100%; }
+  .log-1 .forget-pwd {
+    width: 240px;
+    text-align: right;
+    margin: 2px auto; }
+    .log-1 .forget-pwd a {
+      color: #999; }
+  .log-1 .login-sub .login-btn {
+    border-radius: 30px;
+    background: #f8698f;
+    padding: 10px 0;
+    width: 260px;
+    font-size: 16px;
+    color: #fff;
+    display: block;
+    margin: 30px auto;
+    text-align: center;
+    letter-spacing: 5px; }
+  .log-1 .login-sub .unbind_btn {
+    display: none;
+    border-radius: 15px;
+    background: #f8698f;
+    padding: 10px 0;
+    width: 260px;
+    font-size: 16px;
+    color: #fff;
+    margin: 30px auto;
+    text-align: center;
+    letter-spacing: 5px; }
+  .log-1 .login-tip {
+    text-align: center;
+    color: #999; }
+  .log-1 .txt_on {
+    border: solid 1px #f8698f; }
+    .log-1 .txt_on .phone-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 27px;
+      background: url(../../dist/img/phone_on.png) no-repeat;
+      background-size: 100% 100%; }
+  .log-1 .pwd_on {
+    border: solid 1px #f8698f; }
+    .log-1 .pwd_on .pwd-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 25px;
+      background: url(../../dist/img/pwd_on.png) no-repeat;
+      background-size: 100% 100%; }
+
+.log-2 {
+  margin-top: 80px; }
+  .log-2 .login-item {
+    position: relative;
+    margin: 18px auto 0  auto;
+    text-align: left;
+    border: solid 1px #ccc;
+    border-radius: 20px;
+    width: 260px;
+    padding: 10px 0; }
+    .log-2 .login-item .user-txt {
+      height: 20px;
+      width: 165px;
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 14px; }
+    .log-2 .login-item .phone-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 27px;
+      background: url(../../dist/img/phone.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-2 .login-item .pwd-icon {
+      position: absolute;
+      left: 20px;
+      top: 7px;
+      display: inline-block;
+      width: 15px;
+      height: 25px;
+      background: url(../../dist/img/pwd.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-2 .login-item .pwd-block {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: inline-block;
+      width: 25px;
+      height: 18px;
+      background: url(../../dist/img/pwd_show.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-2 .login-item .pwd-hide {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: inline-block;
+      width: 25px;
+      height: 18px;
+      background: url(../../dist/img/pwd_hide.png) no-repeat;
+      background-size: 100% 100%; }
+    .log-2 .login-item .ver-icon {
+      background: #7cdb85;
+      border-radius: 15px;
+      padding: 9px 8px;
+      font-style: normal;
+      color: #fff; }
+  .log-2 .forget-pwd {
+    width: 240px;
+    text-align: right;
+    margin: 14px auto 0 auto; }
+    .log-2 .forget-pwd a {
+      color: #999; }
+  .log-2 .login-sub .login-btn {
+    border-radius: 15px;
+    background: #f2f2f2;
+    padding: 10px 0;
+    width: 260px;
+    font-size: 16px;
+    color: #999;
+    display: block;
+    margin: 30px auto;
+    text-align: center;
+    letter-spacing: 5px; }
+
+.user-box {
+  margin: 0px 0 0 0;
+  padding: 10px 10px;
+  overflow: hidden;
+  background: #f1f1f1; }
+
+.user-msg {
+  float: left;
+  width: 75%; }
+  .user-msg .user-pho {
+    width: 40px;
+    float: left;
+    border-radius: 50%; }
+  .user-msg .user-name {
+    float: left;
+    line-height: 40px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #666; }
+
+.switch-user {
+  float: right;
+  display: block;
+  border: solid 1px #f8698f;
+  border-radius: 12px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  color: #f8698f; }
+
+.money-box {
+  width: 75%;
+  margin: 50px auto;
+  text-align: center;
+  color: #999; }
+  .money-box .money-num {
+    color: #999;
+    margin: 0 0 50px 0; }
+    .money-box .money-num em {
+      font-size: 30px;
+      color: #f8698f;
+      font-style: normal;
+      padding: 0 3px; }
+  .money-box .money-btn {
+    border: solid 1px #f8698f;
+    border-radius: 50px;
+    color: #f8698f;
+    font-size: 16px;
+    padding: 10px 0;
+    width: 230px;
+    display: block;
+    margin: 20px auto 0 auto; }
+  .money-box .rule {
+    margin: 10px 0 0 0; }
+
+.rule-info {
+  position: absolute;
+  left: 17%;
+  top: 40%;
+  display: none;
+  text-align: left;
+  background: #fff;
+  width: 66%;
+  border-radius: 15px;
+  padding: 30px 0 15px 0;
+  z-index: 31; }
+  .rule-info em {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 20px;
+    width: 20px;
+    background: url(../../dist/img/close.png) no-repeat;
+    background-size: 100% 100%; }
+  .rule-info p {
+    padding: 0 15px;
+    line-height: 22px; }
+
+.exchange_top {
+  margin: 0px 0 0 0;
+  padding: 15px 10px;
+  overflow: hidden;
+  background: #f1f1f1; }
+  .exchange_top .bean_box {
+    float: left; }
+  .exchange_top .record_btn {
+    float: right; }
+  .exchange_top .record_info {
+    font-size: 20px;
+    color: #666; }
+  .exchange_top .record_exchange {
+    font-size: 12px; }
+  .exchange_top .dou_num {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #999; }
+  .exchange_top .close_record {
+    height: 20px;
+    width: 20px;
+    background: url(../../dist/img/close.png) no-repeat;
+    background-size: 100% 100%;
+    float: right;
+    display: block; }
+
+.exchange_list {
+  overflow: hidden; }
+  .exchange_list ul > li {
+    position: relative;
+    width: 90%;
+    border: solid 1px #ddd;
+    padding: 12px 5px;
+    border-radius: 25px;
+    overflow: hidden;
+    margin: 10px auto 0 auto;
+    font-size: 14px;
+    color: #666; }
+    .exchange_list ul > li .gold_bi {
+      float: left;
+      padding-left: 45px; }
+      .exchange_list ul > li .gold_bi .gold_bi_icon {
+        position: absolute;
+        top: 8px;
+        left: 18px;
+        display: inline-block;
+        height: 25px;
+        width: 25px;
+        background: url(../../dist/img/gold.png) no-repeat;
+        background-size: 100% 100%; }
+    .exchange_list ul > li .gold_dou {
+      float: right;
+      padding-right: 45px; }
+      .exchange_list ul > li .gold_dou .gold_dou_icon {
+        position: absolute;
+        top: 6px;
+        right: 20px;
+        display: inline-block;
+        height: 27px;
+        width: 25px;
+        background: url(../../dist/img/bean.png) no-repeat;
+        background-size: 100% 100%; }
+  .exchange_list ul > li.on {
+    border: solid 1px #333; }
+  .exchange_list .exchange_btn {
+    width: 150px;
+    font-size: 14px;
+    border: solid 1px #f8698f;
+    color: #f8698f;
+    border-radius: 20px;
+    padding: 8px 0;
+    margin: 30px auto 0 auto;
+    text-align: center; }
+
+.record_list {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  height: 500px; }
+  .record_list .record_list_1 {
+    margin: 15px auto; }
+    .record_list .record_list_1 h2 {
+      text-align: center;
+      color: #ccc; }
+    .record_list .record_list_1 ul > li {
+      position: relative;
+      border-bottom: solid 1px #f1f1f1;
+      padding: 12px 10px;
+      overflow: hidden;
+      margin: 10px auto 0 auto;
+      font-size: 16px;
+      color: #666; }
+      .record_list .record_list_1 ul > li .gold_bi {
+        margin-left: 45px;
+        float: left; }
+        .record_list .record_list_1 ul > li .gold_bi .gold_bi_icon {
+          position: absolute;
+          top: 8px;
+          left: 18px;
+          display: inline-block;
+          height: 25px;
+          width: 25px;
+          background: url(../../dist/img/gold.png) no-repeat;
+          background-size: 100% 100%; }
+        .record_list .record_list_1 ul > li .gold_bi em {
+          font-size: 12px;
+          color: #ccc;
+          font-style: normal;
+          margin-left: 3px; }
+      .record_list .record_list_1 ul > li .gold_dou {
+        float: right;
+        color: #888;
+        font-size: 14px; }
+
+.exchange_list_wiht {
+  overflow: hidden; }
+  .exchange_list_wiht ul > li {
+    position: relative;
+    width: 90%;
+    border: solid 1px #ddd;
+    padding: 12px 5px;
+    border-radius: 25px;
+    overflow: hidden;
+    margin: 10px auto 0 auto;
+    font-size: 14px;
+    color: #666; }
+    .exchange_list_wiht ul > li .gold_bi {
+      float: left;
+      padding-left: 10px; }
+      .exchange_list_wiht ul > li .gold_bi .gold_bi_icon {
+        position: absolute;
+        top: 8px;
+        left: 18px;
+        display: inline-block;
+        height: 25px;
+        width: 25px;
+        background: url(../../dist/img/gold.png) no-repeat;
+        background-size: 100% 100%; }
+    .exchange_list_wiht ul > li .gold_dou {
+      float: right;
+      padding-right: 45px; }
+      .exchange_list_wiht ul > li .gold_dou .gold_dou_icon {
+        position: absolute;
+        top: 6px;
+        right: 20px;
+        display: inline-block;
+        height: 27px;
+        width: 25px;
+        background: url(../../dist/img/bean.png) no-repeat;
+        background-size: 100% 100%; }
+  .exchange_list_wiht ul > li.on {
+    border: solid 1px #f8698f; }
+  .exchange_list_wiht .exchange_btn {
+    width: 150px;
+    font-size: 14px;
+    border: solid 1px #f8698f;
+    color: #f8698f;
+    border-radius: 20px;
+    padding: 8px 0;
+    margin: 20px auto;
+    text-align: center; }
+.exchange_list_wiht .exchange_btn.on{
+  background: #ccc;
+  color:#999;
+  border:solid 1px #ccc;
+}
+.record_list_wiht {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  height: 500px; }
+  .record_list_wiht .record_list_1 {
+    margin: 15px auto; }
+    .record_list_wiht .record_list_1 h2 {
+      text-align: center;
+      color: #ccc; }
+    .record_list_wiht .record_list_1 ul > li {
+      position: relative;
+      border-bottom: solid 1px #f1f1f1;
+      padding: 12px 10px;
+      overflow: hidden;
+      margin: 10px auto 0 auto;
+      font-size: 16px;
+      color: #666; }
+      .record_list_wiht .record_list_1 ul > li .gold_bi {
+        float: left; }
+        .record_list_wiht .record_list_1 ul > li .gold_bi em {
+          font-size: 12px;
+          color: #ccc;
+          font-style: normal;
+          margin-left: 3px; }
+      .record_list_wiht .record_list_1 ul > li .gold_dou {
+        float: right;
+        color: #888;
+        font-size: 14px; }
+
+.buy-ok {
+  display: block;
+  position: absolute;
+  font-size: 14px;
+  line-height: 26px;
+  left: 14%;
+  top: 30%;
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  width: 66%;
+  padding: 15px;
+  z-index: 35;
+  display: none; }
+  .buy-ok .close-btn {
+    position: absolute;
+    right: 6%;
+    top: 8%;
+    background: url(../../dist/img/close.png) no-repeat;
+    background-size: 100% 100%;
+    width: 15px;
+    height: 15px;
+    display: block; }
+  .buy-ok .ok-pic {
+    width: 80px;
+    margin-top: 30px; }
+  .buy-ok h4 {
+    font-size: 18px;
+    text-align: center;
+    margin: 10px 15px;
+    color: #f8698f; }
+  .buy-ok .gold-num {
+    font-size: 16px; }
+  .buy-ok .ok-msg {
+    color: #999; }
+    .buy-ok .ok-msg .user-name2 {
+      margin-right: 3px; }
+  .buy-ok .gold-num {
+    color: #000; }
+
+.skyBox {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  display: none; }
+
+.load-box {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: none; }
+  .load-box .loading {
+    width: 50%;
+    height: 30%;
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    border-right: 20px;
+    background: rgba(0, 0, 0, 0.6); }
+    .load-box .loading img {
+      width: 60%;
+      position: absolute;
+      left: 20%;
+      top: 20%; }
+
+.tipsWarp {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 8px;
+  width: 40%;
+  font-size: 14px;
+  color: #fff;
+  position: absolute;
+  left: 30%;
+  top: 40%;
+  z-index: 30;
+  text-align: center; }

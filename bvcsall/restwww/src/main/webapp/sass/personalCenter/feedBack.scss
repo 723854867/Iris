@@ -1,0 +1,129 @@
+@import '../base/_base';
+@import '../base/_colorFont';
+@import '../base/_other';
+@import '../base/retina-sprites';
+@import '../Connect';
+
+
+// h2{
+// 	text-align:center;
+// 	height:45px;
+// 	line-height:45px;
+// 	background-color:#f7f7f7;
+// 	border-bottom:1px solid #b2b2b2;
+// 	color:#333333;
+// }
+header{
+	padding:10px;
+	border:1px solid #d9d9d9;
+	background-color:$background-color-head; 
+	position:relative;
+}
+header span{
+	display:inline-block;
+	width:100%;
+	height:44px;
+	line-height:44px;
+}
+header span.feedBackTitke{ 
+	font-size:16px; 
+	color:$gray-six;
+	font-weight:700;
+	position:absolute;
+	top:10px;
+	left:0;
+	a{
+		margin-left:10px;
+		@include use-sprite(back-arrow-left);
+		display: inline-block;
+		position:absolute;
+		top: 10px;
+		left: 0;
+	}
+}
+header span.feedBack{
+	font-size:18px;
+	font-weight:bold;
+	color:$fontcolor-333;
+	text-align:center;
+}
+textarea{
+	overflow:hidden;
+	width:92%;
+	resize:none;
+	margin-top:10px;
+	border-top:1px solid #d9d9d9;
+	border-bottom:1px solid #d9d9d9;
+	outline:none;
+	padding:4%;
+	color:#999999;
+	font-size:14px;
+	border-radius:0;
+}
+.main{
+	ul{
+		padding:0 0 0 10px;
+		margin-top: 10px;
+		border-top:1px solid #d9d9d9;
+		border-bottom:1px solid #d9d9d9;
+		background-color: #ffffff;
+		color:#333333;
+		li{
+			//height: 44px;
+			line-height: 44px;
+			border-bottom:1px solid #d9d9d9;
+			font-size: 16px;
+			text-indent: 5px;
+			position:relative;
+			span.nor{
+				@include use-sprite(edit_btn_nor);
+				display: inline-block;
+				position: absolute;
+				top: 11px;
+				right: 10px;
+			}
+			span.select{
+				@include use-sprite(edit_btn_select);
+				display: inline-block;
+				position: absolute;
+				top: 11px;
+				right: 10px;
+			}
+		}
+		li:last-child{
+			border-bottom:none;
+		}
+	}
+	#connectWay{
+		margin-top:10px;
+		background-color: #ffffff;
+		//height: 43px;
+		line-height: 43px;
+		border-top:1px solid #d9d9d9;
+		border-bottom:1px solid #d9d9d9;
+		input{
+			border:none;
+			margin-left: 4%;
+			color: #999999;
+			font-size: 14px;
+			width: 90%;
+			//height: 40px;
+		}
+	}
+	#subMit{
+		width: 94%;
+		margin: 50px auto 10px auto;
+		//height: 42px;
+		line-height: 42px;
+		color: #ffffff;
+		background-color:#91c41f;
+		border-radius:4px;
+		a{
+			width: 100%;
+			text-align: center;
+			color: #ffffff;
+			display: inline-block;
+			font-size: 16px;
+		}
+	}
+}

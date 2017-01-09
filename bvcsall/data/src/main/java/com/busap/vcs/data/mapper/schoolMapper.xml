@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.SchoolRegisterDAO">
+
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+
+  	 <select id="getInviteInfo1" resultType="java.util.Map"> 
+	   select c.area as area,count(*) as register_number,count(distinct(c.invite_code)) as code_number from (select b.area,a.invite_code,a.creator_id from school_register a,school_code b where a.invite_code=b.code) c group by c.area
+    </select>
+    
+  	 <select id="getInviteInfo2" resultType="java.util.Map"> 
+	   select invite_code,count(creator_id) as number from school_register where invite_code in (select code from school_code) group by invite_code
+    </select>
+</mapper>

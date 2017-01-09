@@ -1,0 +1,44 @@
+html,body{width: 100$;height: 100%;background:#000000;}
+	*{padding: 0;margin: 0;}
+	a{text-decoration:none;-webkit-tap-highlight-color: transparent;}
+	.ruleBlock{
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+	}
+	.ruleBlock .ac_entrance{
+		width:100%;
+		height: 100%;
+		display: block;
+	}
+	.ruleBlock .ac_entrance img{
+		width:100%;
+	}
+	.fix{
+		width:100%;
+		height:40px;
+		line-height:40px;
+		position: fixed;
+		bottom: 0;
+	}
+	.fix a{
+		width:50%;
+		display:block;
+		float:left;
+		text-align:center;
+		font-size:19px;
+		color:#ffffff;
+	}
+	.fix a.signUp{
+		background:#e54a5b;
+		width:60%;
+	}
+	.fix a.shareBtn{
+		background:rgba(255,255,255,0.3);
+		width:40%;
+	}
+	
+	
+	
+	
+	

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.busap.vcs.data.mapper.ShowDAO">  
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <sql id="showFieldSql"> 
+		select 
+		s.id,                                                          
+		s.create_at as createDate,                                                   
+		s.creator_id as creatorId,                                             
+		s.data_from as dataFrom,
+		s.modify_at as modifyDate,                                                 
+		s.description as description,                                                    
+		s.pic,
+		s.ref_video_id as refVideoId,
+		s.title,
+		s.video_id as videoId,
+		s.ref_user_id as refUserId                                       
+    </sql>
+    
+    <select id="getAllShow" resultType="com.busap.vcs.data.entity.ShowVideo">
+      <include refid="showFieldSql"/>
+      from show_video s where exists(select id from video v where v.id=s.video_id and v.flow_stat != 'delete')
+      	<if test="timestamp!=null">
+      		<![CDATA[and s.create_at<#{timestamp}]]>
+      	</if>
+      	order by s.create_at desc limit #{count} 
+    </select>
+    
+    <select id="getShowByVideoId" resultType="com.busap.vcs.data.entity.ShowVideo">
+      <include refid="showFieldSql"/>
+      from show_video s
+      where s.video_id=#{id}
+    </select>
+    
+    <!-- 服务器页面展示 -->
+    <select id="findAllShows" resultType="com.busap.vcs.data.vo.ShowVO">
+    	<![CDATA[
+	    	select sv.id as id,sv.create_at as createDate,sv.creator_id as creatorId,sv.description as description,sv.pic as pic,sv.ref_video_id as refVideoId,
+					sv.video_id as videoId,sv.title as title,sv.ref_user_id as refUserId,v.play_key as playKey
+			from show_video sv,video v 
+			where sv.video_id=v.id and v.flow_stat<>'delete'
+			order by sv.create_at DESC
+		]]>
+		<include refid="page"/>
+    </select>
+    
+    <select id="findAllShowsCount" resultType="integer">
+    	<![CDATA[
+		    select count(sv.id) from show_video sv,video v 
+			where sv.video_id=v.id and v.flow_stat<>'delete'
+		]]>
+    </select>
+    
+</mapper>  

@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
-import org.Iris.app.jilu.common.bean.model.AccountModel;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
@@ -74,11 +73,10 @@ public class MerchantService extends RedisCache {
 	 * @return
 	 */
 	@Transactional
-	public Merchant createMerchant(AccountModel am, String name, String address) {
-		AccountType type = AccountType.match(am.getType());
-		MemMerchant memMerchant = BeanCreator.newMemMerchant(name, address);
+	public Merchant createMerchant(String account, AccountType type) {
+		MemMerchant memMerchant = BeanCreator.newMemMerchant();
 		memMerchantMapper.insert(memMerchant);
-		MemAccount memAccount = BeanCreator.newMemAccount(type, am.getAccount(), memMerchant.getCreated(), memMerchant.getMerchantId());
+		MemAccount memAccount = BeanCreator.newMemAccount(type, account, memMerchant.getCreated(), memMerchant.getMerchantId());
 		memAccountMapper.insert(memAccount);
 
 		// 更新缓存

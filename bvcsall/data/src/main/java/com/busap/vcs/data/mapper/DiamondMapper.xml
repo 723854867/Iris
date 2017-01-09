@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busap.vcs.data.mapper.DiamondDao">
+    <resultMap id="BaseResultMap" type="com.busap.vcs.data.entity.Diamond">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_at" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="data_from" property="dataFrom" jdbcType="VARCHAR"/>
+        <result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="diamond_count" property="diamondCount" jdbcType="INTEGER"/>
+        <result column="diamond_icon_url" property="diamondIconUrl" jdbcType="VARCHAR"/>
+        <result column="give_count" property="giveCount" jdbcType="INTEGER"/>
+        <result column="is_give" property="isGive" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pay_method" property="payMethod" jdbcType="TINYINT"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="weight" property="weight" jdbcType="DOUBLE"/>
+    </resultMap>
+    <sql id="where_sql">
+        <where>
+            <if test="id !=null">
+                AND id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name !=null and name != ''">
+                AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="payMethod !=null">
+                AND pay_method = #{payMethod,jdbcType=TINYINT}
+            </if>
+            <if test="state !=null">
+                AND state = #{state,jdbcType=BIT}
+            </if>
+            <if test="isGive !=null">
+                AND is_give = #{isGive,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from diamond
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.busap.vcs.data.entity.Diamond" useGeneratedKeys="true" keyProperty="id">
+    insert into diamond (id, create_at, creator_id, 
+      data_from, diamond_count,
+      diamond_icon_url, give_count, is_give, 
+      name, pay_method, price, 
+      state, weight)
+    values (#{id,jdbcType=BIGINT}, #{createDateStr,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=BIGINT},
+      #{dataFrom,jdbcType=VARCHAR}, #{diamondCount,jdbcType=INTEGER},
+      #{diamondIconUrl,jdbcType=VARCHAR}, #{giveCount,jdbcType=INTEGER}, #{isGive,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{payMethod,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, 
+      #{state,jdbcType=BIT}, #{weight,jdbcType=DOUBLE})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.Diamond">
+        update diamond
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            modify_at = now(),
+            <if test="diamondIconUrl != null and diamondIconUrl != ''">
+                diamond_icon_url = #{diamondIconUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=INTEGER},
+            </if>
+            <if test="diamondCount != null">
+                diamond_count = #{diamondCount,jdbcType=DECIMAL},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=BIT},
+            </if>
+            <if test="weight != null">
+                weight = #{weight,jdbcType=DOUBLE},
+            </if>
+            <if test="isGive != null">
+                is_give = #{isGive,jdbcType=INTEGER},
+            </if>
+            <if test="giveCount != null">
+                give_count = #{giveCount,jdbcType=INTEGER},
+            </if>
+            <if test="payMethod != null">
+                pay_method = #{payMethod,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select id, create_at, creator_id, data_from, modify_at, diamond_count, diamond_icon_url, 
+    give_count, is_give, name, pay_method, price, state, weight
+    from diamond
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.busap.vcs.data.model.DiamondDisplay">
+        select id, create_at, creator_id, data_from, modify_at, diamond_count, diamond_icon_url,
+        give_count, is_give, name, pay_method, price, state, weight
+        from diamond
+        <include refid="where_sql"/>
+        <choose>
+            <when test="order != '' and order != null">ORDER BY #{sort} #{order}</when>
+            <otherwise>ORDER BY weight DESC</otherwise>
+        </choose>
+    </select>
+</mapper>

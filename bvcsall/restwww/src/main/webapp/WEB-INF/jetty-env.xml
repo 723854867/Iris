@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<!-- 开发调试时,配合使用maven-jetty插件使用 
+    org.eclipse.jetty.webapp.WebAppContext -> org.eclipse.jetty.webapp.WebAppContext
+	org.eclipse.jetty.plus.jndi.EnvEntry -> org.eclipse.jetty.plus.jndi.EnvEntry-->
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-url</Arg>
+        <Arg type="java.lang.String">jdbc:mysql://127.0.0.1:3306/vcs?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-user</Arg>
+        <Arg type="java.lang.String">root</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-password</Arg>
+        <Arg type="java.lang.String">root</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.media.upload.path</Arg>
+        <Arg type="java.lang.String">/FTP/{channelName}/upload</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.media.transcode.path</Arg>
+        <Arg type="java.lang.String">ftp://test:test@192.166.62.78/{channelName}/upload</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.ftp.source</Arg>
+        <Arg type="java.lang.String">ftp://transcodeuser:123456@192.166.62.69/{channelName}/upload</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.ftp.target</Arg>
+        <Arg type="java.lang.String">ftp://transcodeuser:123456@192.166.62.69/{channelName}/transcode</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>transcode.ftp.target2localpath</Arg>
+        <Arg type="java.lang.String">/FTP/{channelName}/transcode</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.cpm.ws.url</Arg>
+        <Arg type="java.lang.String">http://192.166.63.201/cpmserver/services/CPMServerExternalService</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.wowza.ws.url</Arg>
+        <Arg type="java.lang.String">http://192.166.62.49:8081/wowza4VCS</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+	 <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.program.format</Arg>
+        <Arg type="java.lang.String">mp4_1,mp4_2</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.http.requesturl</Arg>
+        <Arg type="java.lang.String">http://192.166.62.11:8020</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>channel.icon.ftp.url</Arg>
+        <Arg type="java.lang.String">ftp://test:test@192.166.62.78/upload/image/</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>channel.icon.path</Arg>
+        <Arg type="java.lang.String">/FTP/upload/image/</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+     <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.task.add.cron</Arg>
+        <Arg type="java.lang.String">0 0/2 * 1/1 * ?</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+     <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.task.send.cron</Arg>
+        <Arg type="java.lang.String">0 0/1 * 1/1 * ? </Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+        <Arg></Arg>
+        <Arg>vcs.transcode.task.query.cron</Arg>
+        <Arg type="java.lang.String">0 0/1 * 1/1 * ?</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+
+</Configure>

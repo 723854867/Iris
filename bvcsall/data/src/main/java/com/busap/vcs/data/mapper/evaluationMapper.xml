@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.busap.vcs.data.mapper.EvaluationDAO">  
+    
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <select id="searchEvaluation" resultType="com.busap.vcs.data.vo.EvaluationVO" parameterType="java.util.Map">
+    	select e.id as id,e.content as content,e.create_at as createDate,e.video_id as videoId,e.pid as pid,
+    		r.`name` as creatorName,v.`name` as videoName,r2.`name` as pName,e.creator_id as creatorId,
+		r.username,r.phone
+		from evaluation e LEFT JOIN ruser r2 on e.pid=r2.id,ruser r,video v
+		where e.video_id=v.id and e.creator_id=r.id
+		<if test="creatorId != null">
+			and e.creator_id=#{creatorId}
+		</if>
+		<if test="videoId != null">
+			and e.video_id=#{videoId}
+		</if>
+		<if test="startTime != null and startTime !=''">
+			<![CDATA[ AND DATE_FORMAT(e.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime != null and endTime !=''">
+			<![CDATA[ AND DATE_FORMAT(e.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<choose>
+			<when test="evaluationPersonType != null">
+				<if test="evaluationPersonType == 1">
+					<if test="evaluationPerson != null and evaluationPerson != ''">
+						AND e.creator_id = #{evaluationPerson}
+					</if>
+				</if>
+				<if test="evaluationPersonType == 2">
+					<if test="evaluationPerson != null and evaluationPerson != ''">
+						AND r.username LIKE CONCAT('%',#{evaluationPerson},'%')
+					</if>
+				</if>
+				<if test="evaluationPersonType == 3">
+					<if test="evaluationPerson != null and evaluationPerson != ''">
+						AND r.phone LIKE CONCAT('%',#{evaluationPerson},'%')
+					</if>
+				</if>
+				<if test="evaluationPersonType == 4">
+					<if test="evaluationPerson != null and evaluationPerson != ''">
+						AND r.name LIKE CONCAT('%',#{evaluationPerson},'%')
+					</if>
+				</if>
+			</when>
+		</choose>
+		order by e.create_at desc
+    	<include refid="page"/>
+    </select>
+    
+    <select id="searchEvaluationCount" resultType="Integer">
+    	select count(e.id)
+		from evaluation e LEFT JOIN ruser r2 on e.pid=r2.id,ruser r,video v
+		where e.video_id=v.id and e.creator_id=r.id
+		<if test="creatorId != null">
+			and e.creator_id=#{creatorId}
+		</if>
+		<if test="videoId != null">
+			and	e.video_id=#{videoId}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			<![CDATA[ AND DATE_FORMAT(e.create_at, '%Y-%m-%d') >= #{startTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			<![CDATA[ AND DATE_FORMAT(e.create_at, '%Y-%m-%d') <= #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<choose>
+			<when test="evaluationPersonType != null">
+				<if test="evaluationPersonType == 1">
+					AND e.creator_id = #{evaluationPerson}
+				</if>
+				<if test="evaluationPersonType == 2">
+					AND r.username LIKE CONCAT('%',#{evaluationPerson},'%')
+				</if>
+				<if test="evaluationPersonType == 3">
+					AND r.phone LIKE CONCAT('%',#{evaluationPerson},'%')
+				</if>
+				<if test="evaluationPersonType == 4">
+					AND r.name LIKE CONCAT('%',#{evaluationPerson},'%')
+				</if>
+			</when>
+		</choose>
+    </select>
+
+	<update id="deleteEvaluation">
+		update evaluation e  set e.status=1 where e.id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<sql id="where_sql">
+		<where>
+			<if test="videoId != null">
+				e.video_id = #{videoId}
+			</if>
+			<if test="creatorId != null">
+				e.creator_id = #{creatorId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="selectEvaluations" resultType="com.busap.vcs.data.model.EvaluationDisplay" parameterType="java.util.Map">
+		SELECT
+		e.content,
+		e.create_at AS createDate,
+		r.username,
+		r.name
+		FROM
+		evaluation e
+		LEFT JOIN
+		ruser r ON r.id = e.creator_id
+		<include refid="where_sql"/>
+		ORDER BY e.create_at DESC
+	</select>
+
+<!--	<select id="selectEvaluationCount" resultType="java.lang.Integer" parameterType="map">
+		SELECT
+		COUNT(1)
+		FROM
+		evaluation e
+		LEFT JOIN
+		ruser r ON r.id = r.creator_id
+		<include refid="where_sql"/>
+	</select>-->
+
+
+</mapper>  

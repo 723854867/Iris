@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task-3.2.xsd"
+       default-lazy-init="false" default-autowire="byName" default-init-method="init">
+     
+    <import resource="classpath*:applicationContext-data.xml" />
+    <!--  
+    <import resource="classpath*:applicationContext-kafka.xml" />
+    -->
+    <context:component-scan base-package="com.busap.vcs.service" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    
+    <bean id="zkClient" class="com.github.zkclient.ZkClient">
+	   <constructor-arg index="0" type="String" value="${zookeeper.server}"/>
+	   <constructor-arg index="1" type="int" value="86400000"/>
+	   <constructor-arg index="2" type="int" value="50000"/>
+	</bean>  
+	<bean id="sensitiveWordInit" class="com.busap.vcs.service.SensitiveWordInit" init-method="initKeyWord"/>
+	
+	<!-- jms in vm -->
+<!--     <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"> -->
+<!-- 		<property name="brokerURL" value="vm://localhost" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="jmsTopic" class="org.apache.activemq.command.ActiveMQTopic"> -->
+<!-- 		<constructor-arg index="0" value="rank-topic" /> -->
+<!-- 	</bean> -->
+<!--     Spring JMS Template -->
+<!--     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate" lazy-init ="true" > -->
+<!--           <property name="connectionFactory" ref="jmsConnectionFactory" ></property> -->
+<!--           <property name="defaultDestination" ref="jmsTopic"></property > -->
+<!--     </bean> -->
+<!--     Sender -->
+<!--     <bean id="jmsSender" class="com.busap.vcs.service.msg.JMessageProducer" lazy-init ="true" > -->
+<!--           <property name="jmsTemplate" ref="jmsTemplate"></property > -->
+<!--     </bean> -->
+<!--     Receiver -->
+<!--     <bean id="jmsReceiver" class="com.busap.vcs.service.msg.JMessageConsumer" > -->
+<!--     </bean> -->
+<!--         Message Listener -->
+<!--     <bean id="listenerContainer" class= "org.springframework.jms.listener.DefaultMessageListenerContainer" > -->
+<!--           <property name="connectionFactory" ref="jmsConnectionFactory" ></property> -->
+<!--           <property name="destination" ref="jmsTopic"></property > -->
+<!--           <property name="messageListener" ref="jmsReceiver"></property > -->
+<!--           <property name="autoStartup" value="true" /> -->
+<!--     </bean> -->
+
+    <bean class="com.busap.vcs.service.utils.PropertyConfigurerUtils">
+        <property name="locations">
+            <list>
+                <value>classpath:mail.properties</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

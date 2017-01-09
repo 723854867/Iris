@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.CombogridDao">
+
+	<select id="selectUserCombogridByType" resultType="com.busap.vcs.data.entity.Ruser" parameterType="java.util.Map">
+		SELECT
+		id,
+		name,
+		username,
+		phone,
+		pic,
+		is_anchor AS isAnchor
+		FROM
+		ruser
+		WHERE is_locked = 0
+		<if test="type != null">
+			<choose>
+				<when test="type == 1">
+					AND type = "majia"
+				</when>
+				<when test="type == 2">
+					AND allow_publish = 0
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="userKey != null and userKey != ''">
+				<if test="userKey == 1">
+					<if test="userKeyword != null and userKeyword != ''">
+						AND id = #{userKeyword}
+					</if>
+				</if>
+				<if test="userKey == 2">
+					<if test="userKeyword != null and userKeyword != ''">
+						AND username LIKE CONCAT('%',#{userKeyword},'%')
+					</if>
+				</if>
+				<if test="userKey == 3">
+					<if test="userKeyword != null and userKeyword != ''">
+						AND name LIKE CONCAT('%',#{userKeyword},'%')
+					</if>
+				</if>
+				<if test="userKey == 4">
+					<if test="userKeyword != null and userKeyword != ''">
+						AND phone LIKE CONCAT('%',#{userKeyword},'%')
+					</if>
+				</if>
+			</when>
+		</choose>
+	</select>
+
+</mapper>

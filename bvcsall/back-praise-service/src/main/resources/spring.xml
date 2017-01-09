@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:oxm="http://www.springframework.org/schema/oxm" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+	http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-init-method="init" default-destroy-method="destroy"
+	default-autowire="byName">
+
+	<!-- ******************** config ******************** -->
+	<bean id="configProperties"
+	class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:config.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    
+    
+    <util:properties id="kafkaConfig" location="classpath:consumer.properties"/>
+    
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- *********************  Universal part of all engineering  ****************** -->
+	<context:annotation-config />
+	
+	
+	
+	
+	
+	
+	<context:component-scan base-package="com.busap.vcs" />
+	
+	
+	 <bean id="dataSource1" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close" init-method="init" >
+        <property name="driverClassName" value="${db-0-driver}" />
+        <property name="url" value="${db-0-url}" />
+        <property name="username" value="${db-0-user}" />
+        <property name="password" value="${db-0-password}" />
+
+        <!--  -->
+        <property name="initialSize" value="${db-0-initialSize}" />
+        <property name="minIdle" value="${db-0-minIdle}" />
+        <property name="maxActive" value="${db-0-maxActive}" />
+
+
+        <!-- -->
+        <property name="maxWait" value="60000" />
+
+        <!-- -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+        <!--  -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+
+        <property name="validationQuery" value="SELECT 'x'" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="false" />
+
+        <!--  -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+
+        <!-- filters -->
+        <property name="filters" value="stat" />
+
+    </bean>
+	
+	 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" >
+	 	<property name="dataSource" ref="dataSource1"></property>
+	 </bean>
+	
+	
+	
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig" />
+        <constructor-arg index="1">
+            <list>
+                <ref bean="jedis.shardInfo" />
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="jedis.shardInfo" class="redis.clients.jedis.JedisShardInfo">
+        <constructor-arg index="0" value="${redis_ip}" />
+        <constructor-arg index="1" value="${redis_port}" type="int" />
+        <constructor-arg index="2" value="5000" type="int" />
+        <property name="password" value="${redis_password}"></property>
+    </bean>
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- <property name="maxActive" value="250" /> -->
+        <property name="maxIdle" value="200" />
+        <property name="maxWaitMillis" value="5000" />
+        <property name="testOnBorrow" value="true" />
+    </bean>
+    
+    
+    <bean id="maxHandleCount" class="java.lang.String">
+        <constructor-arg value="${max_handle_count}"/>
+    </bean>
+
+    <bean id="jobFactory" class="com.busap.vcs.job.MyJobFactory"></bean>
+
+    <!-- 自动关注job -->
+    <bean name="focusJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.busap.vcs.consumer.NewVipFocusTask" />
+	</bean>
+
+    <!-- 每分钟执行一次 -->
+	<bean id="VipFocusCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="focusJobDetail" />
+		<property name="cronExpression">
+			<value>0 */1 * * * ?</value>
+		</property>
+	</bean>
+
+    <!-- 自动评论job -->
+    <bean name="commentJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.busap.vcs.consumer.MajiaCommentTask" />
+    </bean>
+    <!-- 每17秒执行一次 -->
+    <bean id="AutoCommentCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="commentJobDetail" />
+        <property name="cronExpression">
+            <value>*/17 * * * * ?</value>
+        </property>
+    </bean>
+
+	<bean id="schedulerFactory" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="VipFocusCronTrigger" />
+                <ref local="AutoCommentCronTrigger" />
+			</list>
+		</property>
+        <property name="jobFactory" ref="jobFactory"></property>
+	</bean>
+
+
+	 <bean id="consumer" class="com.busap.vcs.consumer.Consumer" init-method="init" destroy-method="close"></bean>
+
+</beans>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.SubscribeDAO">
+	<insert id="insert">
+		insert into
+		subscribe(creator_id,activity_id,create_at,data_from)
+		values(#{uid},#{activityId},#{createAt},#{dataFrom})
+	</insert>
+	
+	<delete id="delete">
+		delete from subscribe where creator_id=#{uid}
+		and activity_id=#{activityId}
+	</delete>
+	
+	<select id="isSubscribed" resultType="Integer">
+		select count(*) from subscribe where creator_id=#{uid} and activity_id=#{activityId}
+	</select>
+
+	<select id="getMyActivityList" resultType="com.busap.vcs.data.entity.Activity">
+		select a.id as id,a.title as title,a.cover,a.create_at as createDate,a.creator_id as creatorId,a.modify_at as modifyDate,
+		a.description as description,a.order_num as order_num,a.group_type as groupType,
+		a.data_from as dataFrom,a.status as status,a.banner_pic as bannerPic,a.video_cover_pic as videoCoverPic,a.playkey as playkey
+		from activity a,subscribe b where a.id=b.activity_id and b.creator_id=#{uid}
+		order by a.create_at desc
+	</select>
+	
+	<sql id="videoPraiseSql">
+    	(SELECT count(p.id) from praise p where p.video_id=v.id and p.creator_id=#{uid})>0 as praise
+    </sql>
+    
+    <sql id="videoFavoriteSql">
+    	(SELECT count(f.id) from favorite f where f.video_id=v.id and f.creator_id=#{uid})>0 as favorite
+	</sql>
+	
+	 <sql id="isAttentionSql">
+    	(SELECT count(a.creator_id) from attention a where a.attention_id=v.creator_id and a.creator_id=#{uid})>0 as attentionAuthor
+	</sql>
+
+	<select id="getMyActivityVideoList" resultType="com.busap.vcs.data.entity.Video">
+		select 
+		v.id,                                                          
+		v.create_at as createDate,                                                   
+		v.creator_id as creatorId,                                             
+		v.description,                                                 
+		v.duration,                                                    
+		v.evaluation_count as evaluationCount,                                       
+		v.favorite_count as favoriteCount,                                       
+		v.flow_stat as flowStat,                                      
+		v.name,                                                       
+		v.play_count as playCount,                                        
+		v.play_key as playKey,                                            
+		v.praise_count as praiseCount,                                         
+		v.tag,                                                        
+		v.play_count_today as playCountToday,                                             
+		v.play_rate_today as  playRateToday,                                            
+		v.latitude,                                                    
+		v.longitude,                                                   
+		v.gd_latitude as gdLatitude,                                                  
+		v.gd_longitude as gdLongitude,                                                 
+		v.coordinate_addr as coordinateAddr,                                   
+		v.video_pic as videoPic,                                                    
+		v.publish_time as publishTime,                                                
+		v.is_logo as isLogo,                                                  
+		v.video_list_pic as videoListPic 
+		<if test="uid!=null and uid!=''"> 
+	    ,<include refid="videoPraiseSql"/>
+	    ,<include refid="videoFavoriteSql"/>
+	    ,<include refid="isAttentionSql"/>
+	    </if>
+		from video v
+		where (v.flow_stat='published' or (creator_id=#{uid} and (v.flow_stat='uncheck' or v.flow_stat='check_ok')) or  (v.flow_stat='check_ok' and creator_id != #{uid}))
+		and v.id in (select videoid from activity_video a,subscribe b where a.activityid=b.activity_id and b.creator_id=#{uid}) 
+		<if test="timestamp!=null">
+	    	 <![CDATA[and v.publish_time<#{timestamp}]]>
+	    </if>
+		order by v.publish_time desc limit #{count}
+		  
+	</select>
+</mapper>

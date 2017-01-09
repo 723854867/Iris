@@ -6,8 +6,8 @@ import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
-import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
+import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
 
@@ -18,10 +18,8 @@ import org.Iris.util.lang.DateUtils;
  */
 public class BeanCreator {
 
-	public static MemMerchant newMemMerchant(String name, String address) { 
+	public static MemMerchant newMemMerchant() { 
 		MemMerchant memMerchant = new MemMerchant();
-		memMerchant.setAddress(address);
-		memMerchant.setName(name);
 		int time = DateUtils.currentTime();
 		memMerchant.setCreated(time);
 		memMerchant.setUpdated(time);

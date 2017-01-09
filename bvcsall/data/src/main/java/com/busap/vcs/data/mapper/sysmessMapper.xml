@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.busap.vcs.data.mapper.SysmessDAO">  
+    
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <select id="searchSysmess" resultType="com.busap.vcs.data.vo.SysmessVO">
+    	select id,title,content,dest_user as destUser,
+    		(case when isplan='0' then '立即' else publish_time end) as publishTime,
+    			create_at as createDate,
+    				(case when stat='1' then '生效' else '未生效' end) as stat,
+				image_path as imagePath
+		from system_mess sm
+		where 1=1
+		<if test="startTime !=null and startTime != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime !=null and endTime != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="stat != null">
+			and sm.stat=#{stat}
+		</if>
+		<if test="title != null and title != ''">
+			and sm.title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="content != null and content != ''">
+			and sm.content like CONCAT('%',#{content},'%')
+		</if>
+		<if test="publishTimeStart !=null and publishTimeStart != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.publish_time, '%Y-%m-%d')  >= #{publishTimeStart,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="publishTimeEnd !=null and publishTimeEnd != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.publish_time, '%Y-%m-%d')  <= #{publishTimeEnd,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="destUser!= null">
+			<choose>
+				<when test="destUser == 0">
+					AND sm.dest_user = 'all'
+				</when>
+				<when test="destUser == 2">
+					AND sm.dest_user LIKE CONCAT('%/%')
+				</when>
+				<otherwise>
+					AND sm.dest_user != 'all' AND sm.dest_user NOT LIKE CONCAT('%/%')
+				</otherwise>
+			</choose>
+		</if>
+		order by sm.create_at desc
+    	<include refid="page"/>
+    </select>
+    
+    <select id="searchAvailableSysmessByUid" resultType="com.busap.vcs.data.vo.SysmessVO">
+    	select id,title,content,dest_user as destUser,target_url AS targetUrl,
+    		unix_timestamp(publish_time)*1000 as publishTime,
+    			create_at as createDate,
+    				stat as stat,operation,targetid,
+		        image_path as imagePath
+		from system_mess sm
+		where stat=1
+		<if test="uid != null">
+			<![CDATA[
+				and (sm.dest_user like CONCAT('%;',#{uid},';%') or sm.dest_user like CONCAT('%',#{uid},';') or sm.dest_user like CONCAT(#{uid},';%') or sm.dest_user=#{uid}  or sm.dest_user='all')
+			]]>
+		</if>
+		<if test="timestamp != null">
+			<![CDATA[
+				and sm.publish_time<#{timestamp}
+			]]>
+		</if>
+		
+		order by sm.publish_time desc limit #{count}
+				
+    </select>
+    
+    <select id="searchSysmessCount" resultType="Integer">
+    	select count(id) from system_mess sm
+    	where 1=1
+		<if test="startTime !=null and startTime != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="endTime !=null and endTime != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="stat != null">
+			and sm.stat=#{stat}
+		</if>
+		<if test="title != null and title != ''">
+			and sm.title=#{title}
+		</if>
+		<if test="content != null and content != ''">
+			and sm.content=#{content}
+		</if>
+		<if test="publishTimeStart !=null and publishTimeStart != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.publish_time, '%Y-%m-%d')  >= #{publishTimeStart,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="publishTimeEnd !=null and publishTimeEnd != ''">
+			<![CDATA[ AND DATE_FORMAT(sm.publish_time, '%Y-%m-%d')  <= #{publishTimeEnd,jdbcType=TIMESTAMP} ]]>
+		</if>
+		<if test="destUser!= null">
+			<choose>
+				<when test="destUser == 0">
+					AND sm.dest_user = 'all'
+				</when>
+				<when test="destUser == 2">
+					AND sm.dest_user LIKE CONCAT('%/%')
+				</when>
+				<otherwise>
+					AND sm.dest_user != 'all' AND sm.dest_user NOT LIKE CONCAT('%/%')
+				</otherwise>
+			</choose>
+		</if>
+    </select>
+    
+    <select id="searchPlan" resultType="com.busap.vcs.data.entity.SystemMess">
+    	select id,publish_time as publishTime from system_mess where isplan='1' and publish_time>NOW()
+    </select>
+    
+    <select id="findUserMessByUid"  resultType="com.busap.vcs.data.vo.MessVO">
+		select r.name,r.pic as avatar,r.vstat as vstat, mes.* from
+		(
+			select a.id as id,a.creator_id as oid,a.create_date as create_at,2 as type,
+			attention_id as uid,'' as videoPic, '' as videoId
+			from attention a where a.attention_id=#{uid} and a.status=0
+			
+			UNION
+			
+			select p.id as id,p.creator_id as oid ,p.create_at, 1 as type,
+			       v.creator_id as uid , v.video_pic as videoPic,v.id as videoId
+			from praise p,video v where p.video_id = v.id and v.creator_id=#{uid} and p.status=0
+			
+			UNION
+			
+			select e.id as id,e.creator_id as oid, e.create_at, 3 as type,
+			 v.creator_id as uid , v.video_pic as videoPic,v.id as videoId
+			from evaluation  e,video v where e.video_id = v.id and (v.creator_id=#{uid} or e.pid=#{uid}) and e.status=0
+
+			UNION
+
+			select f.id as id,f.creator_id as oid, f.create_at, 4 as type,
+				f.author_id as uid, f.video_pic as videoPic, f.video_id as videoId
+			from forward f  where  f.author_id=#{uid} and f.status=0
+		)mes, ruser r
+		
+		where mes.oid = r.id 
+		
+		ORDER BY mes.create_at desc
+		<include refid="page"/>
+	</select>
+	
+	
+	<select id="findUserPraiseMessByUid"  resultType="com.busap.vcs.data.vo.MessVO">
+		select r.name,r.pic as avatar,r.vstat as vstat, mes.* from
+		(
+			
+			select p.id as id,p.creator_id as oid ,p.create_at, 1 as type,
+			       v.creator_id as uid , v.video_pic as videoPic,v.id as videoId
+			from praise p,video v where v.creator_id=#{uid} and p.video_id = v.id and p.status=0
+			
+		)mes, ruser r
+		
+		where mes.oid = r.id 
+		
+		ORDER BY mes.create_at desc
+		<include refid="page"/>
+	</select>
+	
+	<select id="findUserEvaluationMessByUid"  resultType="com.busap.vcs.data.vo.MessVO">
+		select r.name,r.pic as avatar,r.vstat as vstat, mes.* from
+		(
+			select e.id as id,e.creator_id as oid, e.create_at, 3 as type,
+			 v.creator_id as uid , v.video_pic as videoPic,v.id as videoId
+			from evaluation  e,video v where e.video_id = v.id and (v.creator_id=#{uid} or e.pid=#{uid}) and e.status=0
+
+		)mes, ruser r
+		
+		where mes.oid = r.id 
+		
+		ORDER BY mes.create_at desc
+		<include refid="page"/>
+	</select>
+	
+	
+	<select id="findUserAttentionMessByUid"  resultType="com.busap.vcs.data.vo.MessVO">
+		select r.name,r.pic as avatar,r.vstat as vstat, a.id as id,a.creator_id as oid,a.create_date as create_at,2 as type,
+			attention_id as uid,'' as videoPic, '' as videoId
+			from attention a,ruser r where a.creator_id=r.id and  a.attention_id=#{uid} and a.status=0
+		
+		ORDER BY a.create_date desc
+		<include refid="page"/>
+	</select>
+	
+	
+	<select id="findUserForwardMessByUid"  resultType="com.busap.vcs.data.vo.MessVO">
+		select r.name,r.pic as avatar,r.vstat as vstat,f.id as id,f.creator_id as oid, f.create_at, 4 as type,
+				f.author_id as uid, f.video_pic as videoPic, f.video_id as videoId
+			from forward f,ruser r   where f.creator_id=r.id and  f.author_id=#{uid} and f.status=0
+		
+		ORDER BY  f.create_at desc
+		<include refid="page"/>
+	</select>
+</mapper>  

@@ -1,0 +1,336 @@
+@import '../base/_base';
+@import '../base/_colorFont';
+@import '../base/_other';
+@import '../base/retina-sprites';
+@import '../Connect';
+
+.funPerson{
+	dl{
+		overflow:hidden;
+		margin:0;
+		padding:10px;
+		dt{
+			position:relative;
+			@include floatL;
+			img{
+				margin:3px 0 0 0;
+				height:30px;
+				width:30px;
+				border-radius:6px;
+			}
+			img.addV{
+				width: 12px;
+				height: 12px;
+				border-radius:0;
+				position:absolute;
+				top: 20px;
+				left: 20px;
+			}
+			
+			}
+		dd:first-of-type{
+			@include floatL;
+			margin-left:10px;
+			line-height:20px;
+			p:first-of-type{
+				font-weight:bold;
+				font-size:13px;
+				color:$fontcolor-333;
+				width: 140px;
+				@include overHidd;
+			}
+			p:nth-of-type(2){
+				font-weight:bold;
+				font-size:12px;
+				color:$fontcolor-999;
+				width: 140px;
+				@include overHidd;
+			}
+		}
+		dd:nth-of-type(2){
+			float:right;	
+			padding-top:5px;
+			a{
+				// @include use-sprite(follow);
+				display:block;
+				em.attenBtn{
+					display:inline-block;
+					@include use-sprite(follow);
+					margin-top:5px;
+				}
+			  	em.attenBtnActive{
+				  display:inline-block;
+				  @include use-sprite(follow-already);
+				  margin-top:5px;
+
+				}
+			}
+		}
+	}
+}
+.playBox{
+	position:relative;
+	.blackBox{
+		position:absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color:#000000;
+		opacity: 0.6;
+	}
+	p{
+		position:absolute;
+		bottom: 10px;
+		left: 10px;
+		color: #ffffff;
+		font-size: 16px;
+	}
+	.operation{
+		width: 70px;
+		position:absolute;
+		bottom:10px;
+		right: 10px;
+		.praise{
+			text-align:center;
+			box-flex:1;
+			-webkit-box-flex:1;
+			width: 30px;
+			float: right;
+			span{
+				width: 40px;
+				height: 18px;
+				line-height: 18px;
+				display: inline-block;
+				color: #FFFFFF;
+				text-align:left;
+			}
+			.zan{
+				width: 30px;
+				height: 30px;
+				float: left;
+				@include use-sprite(border);
+				em.off{						
+					@include use-sprite(whiteLove); 
+					display: inline-block;
+					margin-top: 4px;
+				}
+				em.on{
+					@include use-sprite(love-red-48);
+					vertical-align: center;
+					display: inline-block;
+					margin-top: 4px;
+				}
+			}
+		}
+		.commit{
+			width: 30px;
+			height: 30px;
+			float: left;
+			margin-top: 18px;
+			@include use-sprite(border);
+			text-align:center;
+			box-flex:1;
+			-webkit-box-flex:1;
+			em{
+				display: inline-block;
+				@include use-sprite(whiteCommit);
+				margin-top: 4px;
+
+			}
+		}
+	}
+}
+.openApp{
+		width:100%;
+	  	overflow: hidden;
+	  	padding:0 0 3px 0;
+	  	background-color:#FFFFFF;
+	  	.open-app-btn{
+			  font-size:12px;
+			  background:#91c41f;
+			  @include txtCenter;
+			  padding:8px 10px;
+			  color:#f2f2f2;
+			  display:inline-block;
+			  margin:5px 10px;
+			  border-radius: 8px;
+			  float: left;
+			  margin-top: 10px;
+			}
+	  	span{
+		  float: left;
+		  width:50px;
+		  @include txtCenter;
+		}
+		.shareIcon{
+		  display:inline-block;
+		  position:relative;
+		  top:5px;
+		  margin:0px 0px 0 0;
+		  @include use-sprite(Forward);
+		}
+	}
+	.hotRecommend{
+		background-color:#FFFFFF;
+		margin-top: 5px;
+		float: left;
+		width: 100%;
+		h2{
+			color: #91c41f;
+			text-indent: 10px;
+			height: 34px;
+			line-height:34px;
+		}
+		.videoListBox{
+			float: left;
+			padding:2%;
+			width: 96%;
+			ul{
+				@include txtCenter;
+				font-size: 0px;
+				float: left;
+			    li{
+			    	position:relative;
+			    	width:33%;
+			    	display:inline-block;
+				    margin:1px 0 0 1px;
+				    overflow: hidden;
+					float: left;
+					a{
+						display: block;
+						.hotPic{
+						  max-height: 150px;
+						  width:100%;
+						}
+					}
+				  	
+				  	.userTit{
+					  color:#fff;
+					  width:90%;
+					  font-size:12px;
+					  margin:10px 10px 10px 5%;
+					  color:#999;
+					  float: left;
+					  .useradddV{
+						position: relative;
+						float:left;
+						img{
+						  width:23px;
+						  height: 23px;
+						  border-radius:5px;
+						}
+						.userV1{
+						  @include use-sprite(user_icon_blue);
+						  position: absolute;
+						  right:-5px;
+						  bottom:-5px;
+						}
+						.userV2{
+						  @include use-sprite(user_icon_yellow);
+						  position: absolute;
+						  right:-5px;
+						  bottom:-5px;
+						}
+						.userV3{
+						  @include use-sprite(user_icon_green);
+						  position: absolute;
+						  right:-5px;
+						  bottom:-5px;
+						}
+					  }
+					  .userName{
+						//width:75%;
+						font-size: 14px;
+						color:#999;
+						text-shadow: 1px 1px 1px 1px;
+						text-align: left;
+						@include poRe;
+						left:10px;
+						@include overHidd;
+					  }
+					}
+				    .videoList{
+				    	position:absolute;
+				    	bottom:50px;
+				    	color:#fff;
+				    	width:90%;
+				    	font-size:12px;
+				    	margin-left:5%;
+				    	span{
+				    		display:inline-block;
+				    	}
+				    	.playNum{
+				    		display: inline-block;
+				    		margin: 5px 2px 0 0;
+							position:relative;
+							top:2px;
+				    		@include use-sprite(play-white-24);
+				    	}
+				    }
+			    }
+			}
+		}
+	}
+.bgBox{
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	opacity:0.6;
+	background-color:#000000;
+	z-index:66;
+	display:none;
+	
+}
+.showBox{
+		width: 290px;
+		height: 240px;
+		border-radius:10px;
+		background-color:#FFFFFF;
+		position:absolute;
+		left: 50%; 
+		margin-left: -145px;
+		top: 100px;
+		z-index: 99999;
+		overflow: hidden;
+		display: none;
+		span{
+			position:absolute;
+			right: 10px;
+			top: 10px;
+			@include use-sprite(icon_error46);
+			display: block;
+		}
+		h2{
+			text-align: center;
+			color: #333333;
+			margin-top: 75px;
+			font-size: 24px;
+		}
+		.downloadwopaiApp{
+			position:absolute;
+			bottom:0;
+			left: 0;
+			width: 100%;
+			background-color:#91c41f;
+			height: 60px;
+			em{
+				@include use-sprite(download);
+				display: inline-block;
+				position:absolute;
+				left: 20px;
+				top: 18px;
+			}
+			p{
+				text-align:center;
+				height: 60px;
+				line-height: 60px;
+				color: #FFFFFF;
+				font-size: 16px;
+				width: 90%;
+				float: right;
+			}
+		}
+	}	

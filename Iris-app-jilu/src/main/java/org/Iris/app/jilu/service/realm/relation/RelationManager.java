@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.service.realm.relation;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.form.Pager;
@@ -21,10 +23,16 @@ public class RelationManager {
 		relationMapper.insert(relation);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Pager<PubRelation> friendList(long merchantId, int page, int pageSize) {
-		long total = relationMapper.count(merchantId);
-		if (0 == total)
+		long count = relationMapper.count(merchantId);
+		if (0 == count)
 			return null;
-		return null;
+		long total = count % pageSize == 0 ? count / pageSize : count / pageSize + 1;
+		if (total < page || page < 1)
+			return Pager.EMPTY;
+		long start = (page - 1) * pageSize;
+		List<PubRelation> list = relationMapper.getPager(merchantId, start, pageSize);
+		return new Pager<PubRelation>(total, list);
 	}
 }

@@ -1,0 +1,163 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.busap.vcs</groupId>
+		<artifactId>bvcsall</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>restwww</artifactId>
+	<packaging>war</packaging>
+	<name>bvcs-rest-www</name>
+	<description>busap video content system cellphone user interface </description>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+	 	<dependency>
+            <groupId>com.busap.vcs</groupId>
+            <artifactId>webconm</artifactId>
+        </dependency>
+	 
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.busap.vcs</groupId> -->
+<!-- 			<artifactId>data</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.busap.vcs</groupId> -->
+<!-- 			<artifactId>service</artifactId> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.busap.vcs</groupId> -->
+<!-- 			<artifactId>webconm</artifactId> -->
+<!-- 		</dependency> -->
+		
+		<!--  QQ sdk-->  
+		<dependency>
+		  <groupId>com.qq.connector</groupId>
+		  <artifactId>qq-sdk</artifactId>
+		  <version>0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- oauth2 -->
+		<dependency>
+			<groupId>org.apache.oltu.oauth2</groupId>
+			<artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.oltu.oauth2</groupId>
+			<artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
+		</dependency>
+		
+		<!-- shiro -->
+		 <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency> 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency> 
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-access</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+		</dependency>
+		
+		<!-- ************************ test ************************ -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- jetty 6 -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>6.1.26</version>
+				<configuration>
+					<webDefaultXml>src/main/webapp/WEB-INF/webdefault.xml</webDefaultXml>
+					<jettyEnvXml>src/main/webapp/WEB-INF/jetty6-jndi.xml</jettyEnvXml>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>8080</port>
+							<maxIdleTime>60000</maxIdleTime>
+						</connector>
+					</connectors>
+					<scanIntervalSeconds>0</scanIntervalSeconds>
+					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
+						<filename>target/request.yyyy_mm_dd.log</filename>
+						<retainDays>90</retainDays>
+						<append>true</append>
+						<extended>false</extended>
+						<logTimeZone>GMT</logTimeZone>
+					</requestLog>
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+</project>

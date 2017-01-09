@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busap.vcs.data.mapper.AppVerifyRecodeMapper" >
+  <resultMap id="BaseResultMap" type="com.busap.vcs.data.entity.AppVerifyRecode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="param" property="param" jdbcType="VARCHAR" />
+    <result column="client_ip" property="clientIp" jdbcType="VARCHAR" />
+    <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.busap.vcs.data.entity.AppVerifyRecodeWithBLOBs" extends="BaseResultMap" >
+    <result column="receipt" property="receipt" jdbcType="LONGVARCHAR" />
+    <result column="result" property="result" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, create_time, param, client_ip, transaction_no, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    receipt, result
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from app_verify_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from app_verify_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from app_verify_recode
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from app_verify_recode
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeExample" >
+    delete from app_verify_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeWithBLOBs" >
+    insert into app_verify_recode (id, user_id, create_time, 
+      param, client_ip, transaction_no, 
+      status, receipt, result
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{param,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, #{transactionNo,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{receipt,jdbcType=LONGVARCHAR}, #{result,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeWithBLOBs" >
+    insert into app_verify_recode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="param != null" >
+        param,
+      </if>
+      <if test="clientIp != null" >
+        client_ip,
+      </if>
+      <if test="transactionNo != null" >
+        transaction_no,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="receipt != null" >
+        receipt,
+      </if>
+      <if test="result != null" >
+        result,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="param != null" >
+        #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="clientIp != null" >
+        #{clientIp,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNo != null" >
+        #{transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="receipt != null" >
+        #{receipt,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="result != null" >
+        #{result,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeExample" resultType="java.lang.Integer" >
+    select count(*) from app_verify_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update app_verify_recode
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.param != null" >
+        param = #{record.param,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientIp != null" >
+        client_ip = #{record.clientIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transactionNo != null" >
+        transaction_no = #{record.transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receipt != null" >
+        receipt = #{record.receipt,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.result != null" >
+        result = #{record.result,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update app_verify_recode
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      param = #{record.param,jdbcType=VARCHAR},
+      client_ip = #{record.clientIp,jdbcType=VARCHAR},
+      transaction_no = #{record.transactionNo,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      receipt = #{record.receipt,jdbcType=LONGVARCHAR},
+      result = #{record.result,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update app_verify_recode
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      param = #{record.param,jdbcType=VARCHAR},
+      client_ip = #{record.clientIp,jdbcType=VARCHAR},
+      transaction_no = #{record.transactionNo,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeWithBLOBs" >
+    update app_verify_recode
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="param != null" >
+        param = #{param,jdbcType=VARCHAR},
+      </if>
+      <if test="clientIp != null" >
+        client_ip = #{clientIp,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNo != null" >
+        transaction_no = #{transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="receipt != null" >
+        receipt = #{receipt,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.busap.vcs.data.entity.AppVerifyRecodeWithBLOBs" >
+    update app_verify_recode
+    set user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      param = #{param,jdbcType=VARCHAR},
+      client_ip = #{clientIp,jdbcType=VARCHAR},
+      transaction_no = #{transactionNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      receipt = #{receipt,jdbcType=LONGVARCHAR},
+      result = #{result,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.AppVerifyRecode" >
+    update app_verify_recode
+    set user_id = #{userId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      param = #{param,jdbcType=VARCHAR},
+      client_ip = #{clientIp,jdbcType=VARCHAR},
+      transaction_no = #{transactionNo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

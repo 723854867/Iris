@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.SignDAO">
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <sql id="loadConfigUrlFiledSql">
+		select i.id,
+		i.create_at as createDate,
+		i.modify_at as modifyDate,
+		i.data_from as dataFrom,
+		i.creator_id as creatorId,
+		i.sign_num as signNum,
+		i.continue_sign as continueSign,
+		i.date_mark as dateMark,
+		i.type
+    </sql>
+    <sql id="where_sql">
+        <where>
+            <if test="startTime != null and startTime !=''">
+                <![CDATA[ AND DATE_FORMAT(i.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+            </if>
+            <if test="endTime != null and endTime !=''">
+                <![CDATA[ AND DATE_FORMAT(i.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+            </if>
+        </where>
+    </sql>
+    <select id="findUserAllSgin" resultType="com.busap.vcs.data.vo.SignVO">
+        <include refid="loadConfigUrlFiledSql"/>
+        from sign i where creator_id =#{uid} order by id desc
+        <include refid="page"/>
+    </select>
+
+    <select id="findSginToday" resultType="com.busap.vcs.data.vo.SignVO">
+        <include refid="loadConfigUrlFiledSql"/>
+        from sign i where order by id desc
+    </select>
+
+    <select id="findYesterdaySign" resultType="com.busap.vcs.data.vo.SignVO">
+        <include refid="loadConfigUrlFiledSql"/>
+        from sign i where creator_id =#{uid} and date_mark= date_format(date_sub(now(), interval 1 day),'%Y-%m-%d') and
+        type=1 order by id desc
+    </select>
+    <select id="findEveryDaySumSign" resultType="com.busap.vcs.data.vo.SignVO">
+        select count(*) as allNum,sum(sign_num) as allSignNum,date_mark as dateMark
+        from sign i
+        <include refid="where_sql"/>
+        group by date_mark
+        <choose>
+            <when test="startCount != null and endCount != null">
+                HAVING sum(i.sign_num) <![CDATA[ >= ]]> #{startCount,jdbcType=INTEGER}
+                AND sum(i.sign_num) <![CDATA[ <= ]]> #{endCount,jdbcType=INTEGER}
+            </when>
+            <otherwise>
+                <if test="startCount != null">
+                    HAVING sum(i.sign_num) <![CDATA[ >= ]]> #{startCount,jdbcType=INTEGER}
+                </if>
+                <if test="endCount != null">
+                    HAVING sum(i.sign_num) <![CDATA[ <= ]]> #{endCount,jdbcType=INTEGER}
+                </if>
+            </otherwise>
+        </choose>
+        order by id desc
+        <include refid="page"/>
+    </select>
+    <select id="findEveryDaySumSignCount" resultType="java.lang.Integer" parameterType="map">
+        select count(*) from
+        (
+        select date_mark
+        from sign i
+        <include refid="where_sql"/>
+        group by date_mark
+        <choose>
+            <when test="startCount != null and endCount != null">
+                HAVING sum(i.sign_num) <![CDATA[ >= ]]> #{startCount,jdbcType=INTEGER}
+                AND sum(i.sign_num) <![CDATA[ <= ]]> #{endCount,jdbcType=INTEGER}
+            </when>
+            <otherwise>
+                <if test="startCount != null">
+                    HAVING sum(i.sign_num) <![CDATA[ >= ]]> #{startCount,jdbcType=INTEGER}
+                </if>
+                <if test="endCount != null">
+                    HAVING sum(i.sign_num) <![CDATA[ <= ]]> #{endCount,jdbcType=INTEGER}
+                </if>
+            </otherwise>
+        </choose>
+        order by id desc
+        ) a
+    </select>
+
+    <select id="findTodaySign" resultType="com.busap.vcs.data.vo.SignVO">
+        <include refid="loadConfigUrlFiledSql"/>
+        from sign i where creator_id =#{uid} and date_mark= date_format(now(),'%Y-%m-%d') and type=1 order by id desc
+    </select>
+    <select id="findAllBeyondMaxUser" resultType="java.lang.Integer">
+	select count(*) from (select creator_id from sign i where (date_mark= date_format(now(),'%Y-%m-%d') or date_mark= date_format(date_sub(now(), interval 1 day),'%Y-%m-%d')) and type=1 and continue_sign &gt; 30 group by creator_id ) a;
+	</select>
+    <select id="findAllSignUser" resultType="java.lang.Integer">
+	select count(*) from (select creator_id from sign i where (date_mark= date_format(now(),'%Y-%m-%d') or date_mark= date_format(date_sub(now(), interval 1 day),'%Y-%m-%d')) and type=1 group by creator_id ) a;
+	</select>
+
+    <select id="findPraiseShareSign" resultType="com.busap.vcs.data.vo.SignVO">
+        <include refid="loadConfigUrlFiledSql"/>
+        from sign i where creator_id =#{uid} and video_id=#{videoId} and from_uid=#{fromUid} and type=2 order by id desc
+    </select>
+</mapper>

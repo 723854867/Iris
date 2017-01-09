@@ -1,0 +1,160 @@
+*{
+    margin:0; padding:0;
+    list-style: none;
+}
+body{
+    font-size: 12px;
+    background: #000;
+
+}
+.main{
+    max-width: 640px;
+    min-width: 320px;
+    margin:auto;
+    background: #000;
+}
+.top img{
+    width: 100%;
+    vertical-align:bottom;
+}
+.video-top{
+    position: relative;
+    margin:0px auto;
+    text-align: center;
+    min-height: 130px;
+    border-left: solid 3px #fec418;
+    border-right: solid 3px #fec418;
+}
+.video-top video{
+    position: absolute;
+    left:0;
+    top:0;
+}
+.video-top img{
+    width: 74%;
+    margin: auto;
+    position: absolute;
+    top:-40px;
+    left:13%;
+}
+.go-vote{
+    padding-top: 20px;
+    text-align: center;
+    border-left: solid 3px #fec418;
+    border-right: solid 3px #fec418;
+}
+.go-vote .vote{
+    width:70%;
+    margin:0 0 25px 0;
+}
+.teach_tit{
+    width:100%;
+}
+.wangfeng{
+    width:100%;
+}
+.content{
+    margin:-2px auto 0 auto;
+    border:solid 3px #fec418;
+    border-top: 0;
+    border-bottom: none;
+}
+.content ul{
+    text-align:center;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+.content ul li{
+    width:90%;
+    margin:20px auto 0px auto;
+    display: -moz-box;
+    display: -webkit-box;
+    display: box;
+    position: relative;
+}
+.content ul li .pic img{
+  width:100%;
+}
+.myVideo{
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height: 100%;
+    display: none;
+    background: #000;;
+}
+.foot{
+    border:solid 3px #fec418;
+    border-top: none;
+    padding-top:20px;
+}
+
+
+
+
+.foot p{
+    margin:0px auto 0 auto;
+    text-align: center;
+}
+.foot p img{
+    width:70%;
+}
+span[id^="cnzz"] {
+    display: none;
+}
+.share-tip{
+    position: fixed;
+    top:0; left:0;
+    display: none;
+    width:100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+}
+.share-tip img{
+    width: 100%;
+}
+
+.list_head{
+    margin:35px auto 20px auto;
+    text-align: center;
+}
+.list_head img{
+    width:38%;
+}
+
+.hostory{
+    width:40%;
+    padding-bottom: 30px;
+}
+.hostory img{
+    width:100%;
+}
+.hostory-box{
+    width:92%;
+    margin:auto;
+    text-align: center;
+}
+.hostory-box a{
+    margin:0 0 10px 0;
+}
+.hostory-box img{
+    height: 30px;
+    display: inline-block;
+    margin:0 12px;
+    padding-bottom: 15px;
+
+}
+.foot-btn{
+    background: url(img/foot_bg.png) no-repeat;
+    background-size: 100% 100%;
+    width:100%;
+    margin: 20px 0 0 0;
+    padding:20px 0;
+}
+.foot-btn p{
+    margin:20px auto 0 auto;
+}
+
+
+

@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.busap.vcs</groupId>
+    <artifactId>bvcsall</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>bvcs-all</name>
+    <description>busap video content system</description>
+    <url>http://www.busap.com</url>    
+
+    <modules>
+        <module>data</module>
+        <module>service</module>
+        <module>webconm</module>
+        <module>restadmin</module>
+        <module>restwww</module>
+        <module>resth5</module>
+        <module>hlsmedia</module>
+        <module>back-praise-service</module>
+        <module>back-service</module>
+        <module>push-service</module>
+        <module>ws-chat</module>
+		<module>chat-consumer</module>
+        <module>ws-server</module>
+		<module>restcheck</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.netty>4.0.36.Final</version.netty>
+		<version.spring>4.0.7.RELEASE</version.spring>
+		<version.spring.datajpa>1.7.0.RELEASE</version.spring.datajpa>
+		<version.spring.wsoxm>1.5.10</version.spring.wsoxm>
+		<version.slf4j>1.7.5</version.slf4j>
+		<version.jackson>2.3.3</version.jackson>
+		<version.shiro>1.2.2</version.shiro>
+		<version.httpcomponents>4.3</version.httpcomponents>
+	</properties>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- 管理内部依赖 -->
+			<dependency>
+				<groupId>com.busap.vcs</groupId>
+				<artifactId>data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.busap.vcs</groupId>
+				<artifactId>service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.busap.vcs</groupId>
+				<artifactId>webconm</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- *************************** j2ee 1.6 ************************** -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.annotation</groupId>
+				<artifactId>jsr250-api</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.annotation</groupId>
+				<artifactId>javax.annotation-api</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.transaction</groupId>
+				<artifactId>jta</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.activation</groupId>
+				<artifactId>activation</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+
+			<!-- ****************** apache ******************** -->
+
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-cli</groupId>
+				<artifactId>commons-cli</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-exec</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>2.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-collections4</artifactId>
+				<version>4.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>1.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.8.3</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.6</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>3.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>4.3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.3</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpmime</artifactId>
+				<version>4.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>3.6</version>
+			</dependency>
+
+			<!-- ************************ spring ************************ -->
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${version.spring}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-logging</artifactId>
+						<groupId>commons-logging</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-tx</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>${version.spring.datajpa}</version>
+			</dependency>
+
+			<!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-elasticsearch</artifactId> 
+				<version>${version.spring.elasticsearch}</version> </dependency> -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-oxm</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${version.spring}</version>
+			</dependency>
+			<!-- ********************** validator ********************** -->
+			<!-- JSR 394 support only by spring 4.x <dependency> <groupId>javax.validation</groupId> 
+				<artifactId>validation-api</artifactId> <version>1.1.0.Final</version> </dependency> 
+				<dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-validator</artifactId> 
+				<version>5.0.1.Final</version> <exclusions> <exclusion> <artifactId>slf4j-api</artifactId> 
+				<groupId>org.slf4j</groupId> </exclusion> </exclusions> </dependency> -->
+
+			<!-- JSR 303 support by spring 3.2.x -->
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.0.0.GA</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>4.3.1.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- ********************** jpa&querydsl ********************** -->
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-core</artifactId>
+				<version>3.4.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>3.4.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>3.4.1</version>
+			</dependency>
+
+			<!-- ********************** jpa&hibernate ********************** -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>3.6.10.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>commons-collections</artifactId>
+						<groupId>commons-collections</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-envers</artifactId>
+				<version>3.6.10.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>3.6.10.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>cglib</artifactId>
+						<groupId>cglib</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>javassist</artifactId>
+						<groupId>javassist</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-ehcache</artifactId>
+				<version>3.6.10.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>ehcache-core</artifactId>
+						<groupId>net.sf.ehcache</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-proxool</artifactId>
+				<version>3.6.10.Final</version>
+				<exclusions>
+					<exclusion>
+						<groupId>proxool</groupId>
+						<artifactId>proxool</artifactId>
+					</exclusion>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- replace by proxool <dependency> <groupId>org.hibernate</groupId> 
+				<artifactId>hibernate-c3p0</artifactId> <version>3.6.10.Final</version> <exclusions> 
+				<exclusion> <artifactId>slf4j-api</artifactId> <groupId>org.slf4j</groupId> 
+				</exclusion> <exclusion> <artifactId>c3p0</artifactId> <groupId>c3p0</groupId> 
+				</exclusion> </exclusions> </dependency> -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-search</artifactId>
+				<version>3.4.2.Final</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-api</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+					<exclusion>
+						<artifactId>solr-analysis-extras</artifactId>
+						<groupId>org.apache.solr</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>com.cloudhopper.proxool</groupId>
+				<artifactId>proxool</artifactId>
+				<version>0.9.1</version>
+				<exclusions>
+					<exclusion>
+						<groupId>avalon-framework</groupId>
+						<artifactId>avalon-framework-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>1.0.9</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.34</version>
+			</dependency>
+
+			<!-- ************************ security ************************ -->
+			<!-- jdk16和jdk15on的不同：http://bouncy-castle.1462172.n4.nabble.com/What-to-use-bc-jdk15on-or-bc-jdk16-td4655449.html -->
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+				<version>1.49</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk16</artifactId>
+				<version>1.46</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>${version.shiro}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>ehcache-core</artifactId>
+						<groupId>net.sf.ehcache</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-quartz</artifactId>
+				<version>${version.shiro}</version>
+				<!-- <exclusions> <exclusion> <artifactId>quartz</artifactId> <groupId>org.opensymphony.quartz</groupId> 
+					</exclusion> </exclusions> -->
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${version.shiro}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.theborakompanioni</groupId>
+				<artifactId>thymeleaf-extras-shiro</artifactId>
+				<version>1.0.2</version>
+			</dependency>
+
+			<!-- not recommended <dependency> <groupId>org.apache.shiro</groupId> 
+				<artifactId>shiro-all</artifactId> <version>1.2.2</version> <exclusions> 
+				<exclusion> <artifactId>guava</artifactId> <groupId>com.google.guava</groupId> 
+				</exclusion> <exclusion> <artifactId>guice-multibindings</artifactId> <groupId>com.google.inject.extensions</groupId> 
+				</exclusion> <exclusion> <artifactId>guice</artifactId> <groupId>com.google.inject</groupId> 
+				</exclusion> <exclusion> <artifactId>slf4j-api</artifactId> <groupId>org.slf4j</groupId> 
+				</exclusion> <exclusion> <artifactId>shiro-guice</artifactId> <groupId>org.apache.shiro</groupId> 
+				</exclusion> </exclusions> </dependency> -->
+
+			<!-- ************************ task ************************ -->
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>2.1.7</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>c3p0</artifactId>
+						<groupId>c3p0</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+
+			<!-- *************************** netty ************************** -->
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-all</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-socks</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-codec-http</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-handler</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-microbench</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.netty</groupId>
+				<artifactId>netty-transport-native-epoll</artifactId>
+				<version>${version.netty}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.javassist</groupId>
+				<artifactId>javassist</artifactId>
+				<version>3.18.1-GA</version>
+			</dependency>
+
+
+			<!-- ************************ logs ************************ -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>1.1.2</version>
+			</dependency>
+			<dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-access</artifactId>
+			    <version>1.1.2</version>
+			</dependency>
+			<dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-core</artifactId>
+			    <version>1.1.2</version>
+			</dependency>
+
+
+			<!-- *************************** etc ************************** -->
+
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.5.7</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-web</artifactId>
+				<version>2.0.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.googlecode.json-simple</groupId>
+				<artifactId>json-simple</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>1.1.40</version>
+			</dependency>
+
+			<!-- Jackson JSON -->
+			<dependency>
+				<groupId>com.fasterxml</groupId>
+				<artifactId>jackson-module-json-org</artifactId>
+				<version>0.9.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${version.jackson}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${version.jackson}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${version.jackson}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotations</artifactId>
+				<version>${version.jackson}</version>
+			</dependency>
+
+			<!-- xml -->
+
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xercesImpl</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>1.1.3</version>
+			</dependency>
+			<dependency>
+				<groupId>com.thoughtworks.xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.4.5</version>
+			</dependency>
+			<dependency>
+				<groupId>jaxen</groupId>
+				<artifactId>jaxen</artifactId>
+				<version>1.1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>jaxme</groupId>
+				<artifactId>jaxme-api</artifactId>
+				<version>0.3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.castor</groupId>
+				<artifactId>castor-xml</artifactId>
+				<version>1.3.3</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>16.0.1</version>
+			</dependency>
+
+
+			<!-- KryoEnvelopeDecoder -->
+			<dependency>
+				<groupId>com.esotericsoftware.kryo</groupId>
+				<artifactId>kryo</artifactId>
+				<version>2.22</version>
+			</dependency>
+
+			<!-- KryoEnvelopeDecoder -->
+
+			<dependency>
+				<groupId>com.google.protobuf</groupId>
+				<artifactId>protobuf-java</artifactId>
+				<version>2.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.protobuf-java-format</groupId>
+				<artifactId>protobuf-java-format</artifactId>
+				<version>1.2</version>
+			</dependency>
+
+			<!-- captcha -->
+			<dependency>
+				<groupId>com.octo.captcha</groupId>
+				<artifactId>jcaptcha-integration-roller</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.octo.captcha</groupId>
+				<artifactId>jcaptcha-extension-ehcache-store</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.octo.captcha</groupId>
+				<artifactId>jcaptcha-extension-buffered-engine</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.octo.captcha</groupId>
+				<artifactId>jcaptcha-integration-filter</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<!--  
+			<dependency>
+				<groupId>com.google.code.kaptcha</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code</groupId>
+				<artifactId>kaptcha</artifactId>
+				<version>2.3.2</version>
+			</dependency>
+			-->
+			<dependency>
+			  <groupId>com.google.code</groupId>
+			  <artifactId>kaptcha</artifactId>
+			  <version>2.3.2</version>
+			</dependency>
+
+			<!-- thymeleaf -->
+			<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf</artifactId>
+				<version>2.1.3.RELEASE</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf-spring4</artifactId>
+				<version>2.1.3.RELEASE</version>
+				<scope>compile</scope>
+			</dependency>
+
+
+			<!-- aspect -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>1.7.4</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>1.7.4</version>
+			</dependency>
+
+			<!-- oauth2 -->
+			<dependency>
+				<groupId>org.apache.oltu.oauth2</groupId>
+				<artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
+				<version>0.31</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.oltu.oauth2</groupId>
+				<artifactId>org.apache.oltu.oauth2.resourceserver</artifactId>
+				<version>0.31</version>
+			</dependency>
+
+
+			<!-- ************************ test ************************ -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.perf4j</groupId>
+				<artifactId>perf4j</artifactId>
+				<version>0.9.16</version>
+			</dependency>
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>2.2.2</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<build>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<encoding>UTF-8</encoding>
+						<maxmem>256M</maxmem>
+						<fork>false</fork>
+						<compilerArgument>-XDignore.symbol.file</compilerArgument>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.8</version>
+				</plugin>
+
+				<plugin>
+					<groupId>com.mysema.maven</groupId>
+					<artifactId>apt-maven-plugin</artifactId>
+					<version>1.1.3</version>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>process</goal>
+							</goals>
+							<configuration>
+								<!-- Specifies the directory in which the query types are generated -->
+								<outputDirectory>target/generated-sources</outputDirectory>
+								<!-- States that the APT code generator should look for JPA annotations -->
+								<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+<!--  
+	<repositories>
+		<repository>
+			<id>local-nexus</id>
+			<url>http://192.168.108.160:8081/nexus/content/groups/public/</url>
+		</repository>
+		
+		 
+		<repository>
+			<id>spring-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://repo.springsource.org/libs-release/</url>
+		</repository>
+		<repository>
+			<id>typesafe</id>
+			<name>Typesafe Repository</name>
+			<url>http://repo.typesafe.com/typesafe/releases/</url>
+		</repository>-->
+		 
+		
+		<!-- need goagent <repository> <id>google-maven-snapshot-repository</id> 
+			<name>Google Maven Snapshot Repository</name> <url>https://m2repos.googlecode.com/svn/nexus</url> 
+			<snapshots> <enabled>true</enabled> </snapshots> </repository> <repository> 
+			<id>jboss</id> <name>JBoss Repository</name> <url>https://repository.jboss.org/nexus/content/repositories/releases</url> 
+			</repository> -->
+			
+		 <!--  
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Maven MILESTONE Repository</name>
+			<url>http://repo.springsource.org/libs-milestone</url>
+		</repository>
+		<repository>
+			<id>EclipseLink Repo</id>
+			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
+		</repository>
+		<repository>
+			<id>sonatype-release</id>
+			<name>Sonatype OSS repository</name>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+		</repository>
+
+	</repositories>-->
+	<!-- 
+	<pluginRepositories>
+		<pluginRepository>
+			<id>artifacts</id>
+			<url>http://192.168.108.160:8081/nexus/content/groups/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>EclipseLink Repo Plugin</id>
+			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>maven</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</pluginRepository>
+	</pluginRepositories> -->
+
+</project>

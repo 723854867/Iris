@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.AttentionDAO">
+<sql id="page">limit #{pageStart},#{pageSize}</sql>
+	<insert id="insert">
+		insert into
+		attention(creator_id,attention_id,create_date,data_from)
+		values(#{creatorId},#{attentionId},#{createDate},#{dataFrom})
+	</insert>
+	
+	<insert id="insert2">
+		insert into
+		attention(creator_id,attention_id,create_date,data_from,majia_attention)
+		values(#{creatorId},#{attentionId},#{createDate},#{dataFrom},#{majiaAttention})
+	</insert>
+
+	<select id="selectAllAttention" resultType="com.busap.vcs.data.vo.AttentionVO">
+		select a.attention_id as attentionId,unix_timestamp(a.create_date)*1000 as
+		createDate,a.data_from as dataFrom,b.pic as pic,b.name as name,b.vstat as vstat,b.signature as signature,b.day_popularity as dayPopularity,
+		b.month_popularity as monthPopularity from
+		attention a left join ruser b on a.attention_id=b.id where
+		a.creator_id=#{creatorId} 
+		<if test="timestamp!=null">
+	    	 <![CDATA[and a.create_date<#{timestamp}]]>
+	    </if>
+		order by a.create_date desc limit #{count}
+	</select>
+	
+	<select id="selectAllAttentionNew" resultType="com.busap.vcs.data.vo.AttentionVO">
+		select a.id,a.attention_id as attentionId,unix_timestamp(a.create_date)*1000 as
+		createDate,a.data_from as dataFrom,b.pic as pic,b.name as name,b.vstat as vstat,b.signature as signature,b.day_popularity as dayPopularity,
+		b.month_popularity as monthPopularity from
+		attention a left join ruser b on a.attention_id=b.id where
+		a.creator_id=#{creatorId} 
+		<if test="lastId!=null">
+	    	 <![CDATA[and a.id<#{lastId}]]>
+	    </if>
+		order by a.id desc limit #{count}
+	</select>
+
+	<select id="selectAttentionByCreator" resultType="com.busap.vcs.data.vo.AttentionVO">
+		select a.attention_id as attentionId,unix_timestamp(a.create_date)*1000 as
+		createDate,a.data_from as dataFrom,b.pic as pic,b.name as name,b.vstat as vstat,b.signature as signature,
+		b.day_popularity as dayPopularity,b.month_popularity as monthPopularity from
+		attention a left join ruser b on a.attention_id=b.id where
+		a.creator_id=#{creatorId}
+		<if test="timestampStart!=null">
+			<![CDATA[and a.create_date>#{timestampStart}]]>
+		</if>
+		<if test="timestampEnd!=null">
+			<![CDATA[and and a.create_date<#{timestampEnd}]]>
+		</if>
+	</select>
+
+	<select id="selectAllFans" resultType="com.busap.vcs.data.vo.FansVO">
+		select 
+			c.creator_id as fansId,
+			c.create_date as createDate,
+			c.data_from as dataFrom,
+			c.pic as pic,
+			c.name as name,
+			c.vstat as vstat,
+			c.signature as signature,
+		   (select count(*) from attention where attention_id=c.creator_id and creator_id=#{attentionId}) as isAttention,
+		    c.dayPopularity as dayPopularity,
+			c.monthPopularity
+		from
+
+		(select a.creator_id,unix_timestamp(a.create_date)*1000 as create_date,a.data_from,b.pic,b.name,b.vstat as vstat,b.signature as signature,
+		b.day_popularity as dayPopularity,b.month_popularity as monthPopularity from
+		  attention a left join ruser b on a.creator_id=b.id where
+		  a.attention_id=#{attentionId} 
+		  <if test="timestamp!=null">
+	    	 <![CDATA[and a.create_date<#{timestamp}]]>
+	     </if>
+		  order by a.create_date desc limit #{count}) c
+		  
+	</select>
+	
+	<select id="selectAllAttentionId" parameterType="Long"
+		resultType="Long">
+		select a.attention_id from attention a where a.creator_id=#{creatorId}
+	</select>
+	
+	<select id="selectAllFansId" parameterType="Long"
+		resultType="Long">
+		select a.creator_id from attention a where a.attention_id=#{attentionId}
+	</select>
+	
+	<select id="selectAllFansIdWithoutMajia" parameterType="Long"
+		resultType="Long">
+		select a.creator_id from attention a where a.attention_id=#{attentionId} and a.majia_attention=0
+	</select>
+
+	<delete id="delete">
+		delete from attention where creator_id=#{creatorId}
+		and attention_id=#{attentionId}
+	</delete>
+	
+	<select id="isAttention" resultType="Integer">
+		select count(*) from attention where creator_id=#{uid} and attention_id=#{otherUid}
+	</select>
+	
+	<select id="selectOtherAttention" resultType="com.busap.vcs.data.vo.AttentionVO">
+		select 
+			c.attention_id as attentionId,
+			c.create_date as createDate,
+			c.data_from as dataFrom,
+			c.pic as pic,
+			c.name as name,
+			c.vstat as vstat,
+			c.signature as signature,
+		    IF ((select count(*) from attention where attention_id=c.attention_id and creator_id=#{uid})>0, 1+(select count(*) from attention where attention_id=#{uid} and creator_id=c.attention_id) ,0) as isAttention,
+		    c.dayPopularity as dayPopularity,
+			c.monthPopularity
+		from
+
+		(select a.attention_id,unix_timestamp(a.create_date)*1000 as create_date,a.data_from,b.pic,b.name,b.vstat as vstat,
+		b.signature as signature,b.day_popularity as dayPopularity,b.month_popularity as monthPopularity from
+		  attention a left join ruser b on a.attention_id=b.id where
+		  a.creator_id=#{otherUid} 
+		  <if test="timestamp!=null">
+	    	 <![CDATA[and a.create_date<#{timestamp}]]>
+	     </if>
+		  order by a.create_date desc limit #{count}) c
+		  
+	</select>
+
+	<select id="selectOtherFans" resultType="com.busap.vcs.data.vo.FansVO">
+		select 
+			c.creator_id as fansId,
+			c.create_date as createDate,
+			c.data_from as dataFrom,
+			c.pic as pic,
+			c.name as name,
+			c.vstat as vstat,
+			c.signature as signature,
+		   (select count(*) from attention where attention_id=c.creator_id and creator_id=#{uid}) as isAttention,
+		    c.dayPopularity as dayPopularity,
+			c.monthPopularity
+		from
+
+		(select a.creator_id,unix_timestamp(a.create_date)*1000 as create_date,a.data_from,b.pic,b.name,b.vstat as vstat,b.signature as signature,
+		b.day_popularity as dayPopularity,b.month_popularity as monthPopularity from
+		  attention a left join ruser b on a.creator_id=b.id where
+		  a.attention_id=#{otherUid}
+		   <if test="timestamp!=null">
+	    	 <![CDATA[and a.create_date<#{timestamp}]]>
+	     </if>
+	      order by a.create_date desc limit #{count}) c
+		  
+	</select>
+	
+	<select id="getFansCount" parameterType="Long"
+		resultType="Integer">
+		select count(*) from attention a where a.attention_id=#{uid}
+	</select>
+	
+	<select id="getAttentionCount" parameterType="Long"
+		resultType="Integer">
+		select count(*) from attention a where a.creator_id=#{uid}
+	</select>
+	
+	<select id="getAllRecords" resultType="com.busap.vcs.data.vo.AttentionRecordVO">
+    	select a.creator_id as creatorId,a.attention_id as attentionId from attention a
+    </select>
+
+	<update id="deleteAttention">
+		update attention a  set a.status=1 where a.id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+</mapper>

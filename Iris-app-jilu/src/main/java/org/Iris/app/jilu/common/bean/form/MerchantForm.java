@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
 import org.Iris.app.jilu.common.JiLuResourceUtil;
+import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 
@@ -14,7 +15,8 @@ public class MerchantForm {
 		MemMerchant memMerchant = merchant.getMemMerchant();
 		this.merchantId = memMerchant.getMerchantId();
 		this.token = memMerchant.getToken();
-		this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
+		if (MerchantStatusMod.isQualified(memMerchant))
+			this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
 	}
 	
 	public long getMerchantId() {

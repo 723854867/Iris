@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busap.vcs.data.mapper.SongDao">
+
+    <resultMap id="SingerTypeResultMap" type="com.busap.vcs.data.entity.SingerType">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_at" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="data_from" property="dataFrom" jdbcType="VARCHAR"/>
+        <result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertSingerType" parameterType="com.busap.vcs.data.entity.SingerType">
+        INSERT INTO singer_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+    <resultMap id="SingerResultMap" type="com.busap.vcs.data.entity.Singer">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_at" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="data_from" property="dataFrom" jdbcType="VARCHAR"/>
+        <result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="singer_type" property="singerType" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertSinger" parameterType="com.busap.vcs.data.entity.Singer" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO singer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="singerType != null">
+                singer_type,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="singerType != null">
+                #{singerType,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <resultMap id="AlbumResultMap" type="com.busap.vcs.data.entity.Album">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_at" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="data_from" property="dataFrom" jdbcType="VARCHAR"/>
+        <result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="album_cover" property="albumCover" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertAlbum" parameterType="com.busap.vcs.data.entity.Album">
+        INSERT INTO album
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="albumCover != null and albumCover != ''">
+                album_cover,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="albumCover != null and albumCover != ''">
+                #{albumCover,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+    <resultMap id="SongResultMap" type="com.busap.vcs.data.entity.Song">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_at" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="data_from" property="dataFrom" jdbcType="VARCHAR"/>
+        <result column="modify_at" property="modifyDate" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="package_url" property="packageUrl" jdbcType="VARCHAR"/>
+        <result column="package_size" property="packageSize" jdbcType="BIGINT"/>
+        <result column="album_id" property="albumId" jdbcType="BIGINT"/>
+        <result column="singer_id" property="singerId" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="download_count" property="downloadCount" jdbcType="BIGINT"/>
+        <result column="language" property="language" jdbcType="INTEGER"/>
+        <result column="is_HD" property="isHD" jdbcType="INTEGER"/>
+    </resultMap>
+    <insert id="insertSong" parameterType="com.busap.vcs.data.entity.Song" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO song
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="packageUrl != null and packageUrl != ''">
+                package_url,
+            </if>
+            <if test="packageSize != null">
+                package_size,
+            </if>
+            <if test="albumId != null">
+                album_id,
+            </if>
+            <if test="singerId != null">
+                singer_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="downloadCount != null">
+                download_count,
+            </if>
+            <if test="language != null">
+                language,
+            </if>
+            <if test="isHD != null">
+                is_HD,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null and name != ''">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="packageUrl != null and packageUrl != ''">
+                #{packageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="packageSize != null">
+                #{packageSize,jdbcType=BIGINT},
+            </if>
+            <if test="albumId != null">
+                #{albumId,jdbcType=BIGINT},
+            </if>
+            <if test="singerId != null">
+                #{singerId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="downloadCount != null">
+                #{downloadCount,jdbcType=BIGINT},
+            </if>
+            <if test="language != null">
+                #{language,jdbcType=INTEGER},
+            </if>
+            <if test="isHD != null">
+                #{isHD,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <select id="selectSongList" resultType="com.busap.vcs.data.vo.SongVo" parameterType="map">
+        SELECT
+        s.id,
+        s.name,
+        s.singer_id AS singerId,
+        a.name AS albumName,
+        GROUP_CONCAT(se.name) AS singerName,
+        st.name AS singerTypeName,
+        a.album_cover AS albumCover,
+        s.package_url AS packageUrl,
+        s.package_size AS packageSize,
+        s.type,
+        s.download_count AS downloadCount
+        FROM `song_singer` ss
+        LEFT JOIN song s ON s.id = ss.song_id
+        LEFT JOIN singer se ON se.id = ss.singer_id
+        LEFT JOIN singer_type st ON st.id = se.singer_type
+        LEFT JOIN album a ON a.id = s.album_id
+        <where>
+             s.state = 1
+             <if test="keyword != null and keyword != ''">
+                AND (s.name LIKE CONCAT('%',#{keyword,jdbcType=VARCHAR},'%') OR se.name LIKE CONCAT('%',#{keyword,jdbcType=VARCHAR},'%'))
+             </if>
+        </where>
+        GROUP BY ss.song_id
+        ORDER BY s.download_count DESC
+      <include refid="page"/>
+    </select>
+
+    <select id="selectSingerGroupByIds" resultType="java.lang.String" parameterType="java.lang.String">
+        select GROUP_CONCAT(name) AS singerName from singer where FIND_IN_SET(id,#{singerIds,jdbcType=VARCHAR})
+    </select>
+
+    <sql id="song_where_sql">
+        <where>
+            <if test="id != null">
+                AND t.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != ''">
+                AND t.name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="singerType != null">
+                AND t.singerType = #{singerType,jdbcType=INTEGER}
+            </if>
+            <if test="singerName != null and singerName != ''">
+                AND t.singerName LIKE CONCAT('%',#{singerName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="albumId != null">
+                AND t.albumId = #{albumId,jdbcType=BIGINT}
+            </if>
+            <if test="type != null">
+                AND t.type = #{type,jdbcType=INTEGER}
+            </if>
+            <if test="state != null">
+                AND t.state = #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    
+    <select id="selectSongAll" resultType="com.busap.vcs.data.model.SongDisplay" parameterType="map">
+        SELECT t.* FROM
+        (
+        SELECT
+        s.id,
+        s.name,
+        s.singer_id AS singerId,
+        a.name AS albumName,
+        GROUP_CONCAT(se.name) AS singerName,
+        st.name AS singerTypeName,
+        a.album_cover AS albumCover,
+        s.package_url AS packageUrl,
+        s.package_size AS packageSize,
+        s.type,
+        s.download_count AS downloadCount,
+        s.album_id AS albumId
+        FROM `song_singer` ss
+        LEFT JOIN song s ON s.id = ss.song_id
+        LEFT JOIN singer se ON se.id = ss.singer_id
+        LEFT JOIN singer_type st ON st.id = se.singer_type
+        LEFT JOIN album a ON a.id = s.album_id
+        GROUP BY ss.song_id
+        ) t
+        <include refid="song_where_sql"/>
+        ORDER BY t.downloadCount DESC
+    </select>
+
+    <sql id="singer_type_where_sql">
+        <where>
+            <if test="id != null">
+                AND id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="state != null">
+                AND state = #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectSingerTypeAll" resultType="com.busap.vcs.data.entity.SingerType" parameterType="map">
+        SELECT
+        id,
+        name,
+        state
+        FROM
+        singer_type
+        <include refid="singer_type_where_sql"/>
+    </select>
+
+    <sql id="singer_where_sql">
+        <where>
+            <if test="id != null">
+                AND s.id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != ''">
+                AND s.name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="state != null">
+                AND s.state = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="singerType != null">
+                AND s.singer_type = #{singerType,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    <select id="selectSingerAll" resultType="com.busap.vcs.data.model.SingerDisplay" parameterType="map">
+        SELECT
+        s.id,
+        s.name,
+        st.name AS singerTypeName,
+        s.singer_type AS singerType,
+        s.state
+        FROM
+        singer s LEFT JOIN singer_type st ON st.id = s.singer_type
+        <include refid="singer_where_sql"/>
+    </select>
+
+    <select id="selectSongAllForImport" resultType="com.busap.vcs.data.model.SongDisplay" parameterType="map">
+        SELECT
+        s.id,
+        s.name,
+        se.name AS singerName,
+        st.name AS singerTypeName,
+        a.name AS albumName,
+        a.album_cover AS albumCover,
+        s.package_url AS packageUrl,
+        s.package_size AS packageSize,
+        s.type,
+        s.state,
+        s.download_count AS downloadCount,
+        s.singer_id AS singerId
+        FROM
+        song s
+        LEFT JOIN singer se ON se.id = s.singer_id
+        LEFT JOIN singer_type st ON st.id = se.singer_type
+        LEFT JOIN album a ON a.id = s.album_id
+        WHERE s.id > 20020
+        ORDER BY s.download_count DESC
+    </select>
+
+    <sql id="album_where_sql">
+        <where>
+            <if test="id != null">
+                AND id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="state != null">
+                AND state = #{state,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    <select id="selectAlbumAll" resultType="com.busap.vcs.data.entity.Album" parameterType="map">
+        SELECT
+        id,
+        name,
+        state,
+        album_cover AS albumCover
+        FROM
+        album
+        <include refid="album_where_sql"/>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="SongResultMap" parameterType="java.lang.Long">
+      SELECT
+      id,
+      create_at,
+      creator_id,
+      data_from,
+      modify_at,
+      album_id,
+      name,
+      singer_id,
+      state,
+      package_size,
+      package_url,
+      download_count,
+      type
+      FROM
+      song
+      WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectSingerByPrimaryKey" resultMap="SingerResultMap" parameterType="java.lang.Long">
+        SELECT
+        id,
+        create_at,
+        creator_id,
+        data_from,
+        modify_at,
+        name,
+        state,
+        singer_type
+        FROM
+        singer
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectSingerByName" resultMap="SingerResultMap" parameterType="java.lang.String">
+        SELECT
+        id
+        FROM
+        singer
+        WHERE name = #{name,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+    <select id="selectSingerTypeByPrimaryKey" resultMap="SingerTypeResultMap" parameterType="java.lang.Long">
+        SELECT
+        id,
+        create_at,
+        creator_id,
+        data_from,
+        modify_at,
+        name,
+        state
+        FROM
+        singer_type
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAlbumByPrimaryKey" resultMap="AlbumResultMap" parameterType="java.lang.Long">
+        SELECT
+        id,
+        create_at,
+        creator_id,
+        data_from,
+        modify_at,
+        name,
+        state,
+        album_cover
+        FROM
+        album
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.Song">
+        update song
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createDateStr != null">
+                create_at = #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="packageUrl != null and packageUrl != ''">
+                package_url = #{packageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="packageSize != null">
+                package_size = #{packageSize,jdbcType=BIGINT},
+            </if>
+            <if test="albumId != null">
+                album_id = #{albumId,jdbcType=BIGINT},
+            </if>
+            <if test="singerId != null">
+                singer_id = #{singerId,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="downloadCount != null">
+                download_count = #{downloadCount,jdbcType=BIGINT},
+            </if>
+            modify_at = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSingerTypeByPrimaryKey" parameterType="com.busap.vcs.data.entity.SingerType">
+        update singer_type
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createDateStr != null">
+                create_at = #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            modify_at = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateSingerByPrimaryKey" parameterType="com.busap.vcs.data.entity.Singer">
+        update singer
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createDateStr != null">
+                create_at = #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="singerType != null">
+                singer_type = #{singerType,jdbcType=INTEGER},
+            </if>
+            modify_at = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateAlbumByPrimaryKey" parameterType="com.busap.vcs.data.entity.Album">
+        update album
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="createDateStr != null">
+                create_at = #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="albumCover != null and albumCover != ''">
+                album_cover = #{albumCover,jdbcType=VARCHAR},
+            </if>
+            modify_at = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertSongSinger" parameterType="com.busap.vcs.data.entity.SongSinger" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO song_singer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+            <if test="singerId != null">
+                singer_id,
+            </if>
+            <if test="songId != null">
+                song_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="singerId != null">
+                #{singerId,jdbcType=BIGINT},
+            </if>
+            <if test="songId != null">
+                #{songId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectSongSinger" parameterType="map" resultType="com.busap.vcs.data.entity.SongSinger">
+      SELECT id,singer_id AS singerId,song_id AS songId FROM song_singer
+      WHERE singer_id = #{singerId,jdbcType=BIGINT}
+      AND song_id = #{songId,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateSongSinger" parameterType="com.busap.vcs.data.entity.SongSinger">
+        update song_singer
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="createDateStr != null">
+                create_at = #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="singerId != null">
+                singer_id = #{singerId,jdbcType=BIGINT},
+            </if>
+            <if test="songId != null">
+                song_id = #{songId,jdbcType=BIGINT},
+            </if>
+            modify_at = now()
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

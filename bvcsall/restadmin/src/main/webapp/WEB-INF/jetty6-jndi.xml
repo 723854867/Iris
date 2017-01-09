@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<!-- 开发调试时,配合使用maven-jetty插件使用 -->
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+    <New class="org.mortbay.jetty.plus.naming.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-url</Arg>
+        <Arg type="java.lang.String">jdbc:mysql://10.18.20.164:3306/bvcs?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.mortbay.jetty.plus.naming.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-user</Arg>
+        <Arg type="java.lang.String">mysqldba</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+    <New class="org.mortbay.jetty.plus.naming.EnvEntry">
+        <Arg></Arg>
+        <Arg>db-0-password</Arg>
+        <Arg type="java.lang.String">changeit</Arg>
+        <Arg type="boolean">true</Arg>
+    </New>
+
+
+</Configure>

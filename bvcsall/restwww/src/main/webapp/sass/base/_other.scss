@@ -1,0 +1,313 @@
+@import '../base/base';
+@import '../base/retina-sprites';
+
+//margin
+//--------------
+$mauto:auto;
+$m10:10px;
+$m20:20px;
+
+$mb16:16px;
+
+$mt20:20px;
+$mr20:20px;
+$mb20:20px;
+$ml20:20px;
+
+$numFull:100%;
+//padding 
+//---------------
+@mixin fullWidth{
+	width:100%;
+}
+
+//float
+//---------------
+@mixin floatL{
+	float:left; dispaly:inline-block;
+}
+@mixin floatR{
+	float:right; dispaly:inline-block;
+}
+.playBox{
+	video{ 
+		background-size: 100% 100%;
+		@include fullWidth;
+		height:100%;
+		display:block; 
+		vertical-align:bottom;
+		background-color:#000000;
+	//min-height:200px;
+	}
+  	img{
+	  min-height:200px;
+	}
+}
+//alerjs
+//--------------
+.promptBox{
+	background:rgba(0,0,0,0.6);
+	color:#fff;
+	border-radius:5px;
+	padding:10px 20px;
+	position: fixed;
+	top:45%;
+	font-size:1.4em;
+	line-height:24px;
+	max-width:90%;
+	top : 50%;
+	left : 50%;
+	-webkit-transform : translate(-50%,-50%);
+    -ms-transform : translate(-50%,-50%);
+    transform : translate(-50%,-50%);
+    z-index: 1000;
+}
+//downbar
+//-------------
+.downBar{
+	width:100%; 
+	background:#91c41f;
+	position:fixed; 
+	bottom:0;
+	color:#fff;
+	text-align:center;
+	padding:12px 0;
+	z-index:1000;
+  	display:none;
+  	.downClose{
+	  float: left;
+	  display: inline-block;
+	  @include poRe;
+	  left:15px;
+	  top:5px;
+	  font-size: $fontsize-large;
+	  @include use-sprite(down-close);
+	}
+	a{
+		font-size:14px;
+		color:#fff;
+	}
+}
+.downBar2{
+  color:#333;
+  @include bgColor(#fff);
+  @include fullWidth;
+  padding:10px 0;
+  @include txtCenter;
+  font-size:16px;
+  z-index:1000;
+  border-top:solid 1px #ccc;
+  a{
+	border:solid 1px #91c41f;
+	padding:5px 18px;
+	border-radius: 5px;
+  }
+}
+.openApp a{
+  font-size:14px;
+  color:#fff;
+}
+//skyBox
+//-------------
+.maskBox{
+	width:100%;
+	height: 100%;
+	background:#000;
+	opacity:0.6;
+	// background:rgba(0,0,0,0.5);
+	position:fixed;
+	top:0;
+	z-index:110;   
+	float:left;
+}
+//shareBox
+//------------
+.shareWarp{
+  position: relative;
+}
+.shareWxMask{
+  background: url(../../img/mask.png) no-repeat;
+  background-size:100% 100%;
+  width:100%;
+  min-height:150px;
+  position: fixed;
+  top:0;
+  z-index:120;
+}
+.shareBox1{
+	width:100%;
+	position:fixed; 
+	bottom:0;
+	background:#fff;
+	z-index:1000;
+	// display:none;
+	overflow:hidden;
+	transition:all 1s ease;
+	h4{
+		font-size:14px;
+		color:#999;
+		text-align: center;
+		margin:20px 10px 10px 10px;
+	}
+	.shareList{
+		width: 100%;
+		overflow-y:hidden;
+		overflow-x: auto;
+		ul{
+			// width:460px;
+			overflow-y: auto;
+			margin: 0 auto;
+			li{
+				float: left;
+				width:50px;
+				margin:10px 13px;
+				text-align: center;
+				width:65px;
+				a{display:inline-block; margin:auto; margin-bottom:8px;}
+				p{color:#333;}
+				.qq{
+					@include use-sprite(login_icon_qq);
+				  	display:block;
+				}
+				.QZone{
+					@include use-sprite(QZone);
+				  	display:block;
+				}
+				.wx{
+					@include use-sprite(login_icon_WeChat);
+				  	display:block;
+				}
+				.wxq{
+					@include use-sprite(moment);
+				  	display:block;
+				}
+				.sinawb{
+					@include use-sprite(login_icon_Sina);
+				  	display:block;
+				}
+			}
+		}
+	}
+	.sharewpBox{
+		width:100%;
+		background:#fff;
+		position:relative;
+		top:-8px;
+		.sharewp{
+			border-radius: 5px;
+			background:#91c41f;
+			width:95%;
+			padding:10px 0;
+			display:block;
+			margin:auto; 
+			text-align: center;
+			font-size:18px;
+			color:#fff;
+		}
+	}
+	
+	.cancel{
+		background-color: #f1f1f1;
+	    text-align: center;
+	    padding: 10px;
+		font-size:18px;
+	}
+}
+
+#videoTag{
+	display:none;
+	position:relative;
+	left:0; top:0;
+	width:100%;
+}
+.playBox{
+	position:relative;
+	.videoPic{
+		vertical-align:bottom;
+		width:100%;
+		min-height:320px;
+	}
+	.canPlay{
+		display: block;
+		position:absolute;
+		left:50%;
+		top:50%;
+		width: 50px;
+		height: 50px;
+		-webkit-transform : translate(-50%,-50%);
+		-ms-transform : translate(-50%,-50%);
+		transform: translate(-50%,-50%);
+		display: inline-block;
+		@include use-sprite(play-grey-120);
+		z-index: 100;
+	}
+	
+}
+
+
+.loadMore{
+  @include txtCenter;
+  border-top: solid 1px #d9d9d9;
+  border-bottom: solid 1px #d9d9d9;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  display: none;
+  color:#999999;
+}
+.scrollTop{
+	@include use-sprite(icon_to_top);
+	position:fixed;
+	bottom:70px;
+	right:10px;
+  	z-index: 110;
+}
+
+span[id^="cnzz"]{
+  display:none;
+}
+
+
+.main,.head,.personalCenter,.personalBg,.activeUseList,.recommendContent{
+  max-width: 640px;
+  min-width:318px;
+  margin:auto;
+} 
+.loadMore{
+	margin:0 auto;
+	margin-top:10px;
+}
+.rankloadMore{
+	width:100%;
+}
+.downBar{
+  max-width: 640px;
+  min-width:318px;
+  margin:auto;
+  // left: 50%;
+  // margin-left: -50%;
+}
+
+.sharePic{
+  @include poAb;
+  opacity:0;
+}
+
+.skyBox{
+  width:100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  position: fixed;
+  top:0;
+  z-index:99999;
+  display: none;
+}
+.skyBox-anz{
+  width:100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  position: fixed;
+  top:0;
+  z-index:999999;
+  display: none;
+}

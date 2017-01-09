@@ -1,0 +1,52 @@
+//
+// main
+// --------------------------------------------------
+@import "base/_colorFont";
+@import "base/_base";
+
+@import "base/_other";
+
+.head{padding:$m10 0; border-bottom:solid 1px #d9d9d9; overflow:hidden; background-color:#f7f7f7;
+	width:100%;
+	z-index:10; 
+} 
+.logo{background:url(../../img/icons-2x/logo.png) no-repeat; width:66px; height:30px;
+	background-size:100% 100%;
+	margin-top:2px;
+  	margin-left:10px; 
+	@include floatL;
+}
+.lagarNav{
+	font-size:0.7em;
+	li{
+		@include floatL;
+	}
+}
+.lagarNav{
+	@include floatR;
+	ul li{
+		text-align:center;
+		line-height:10px;
+		margin:0 5px;
+		width:35px;
+		color:#333;
+		img{ width:70%;height:22px;}
+	}
+}
+.bgBox2{
+	position: absolute;
+	top:0;
+	left:0;
+	background-color:#000000;
+	opacity:1;
+	width:100%;
+	height:100%;
+	display:none;
+	font-size:20px;
+	color:#FFFFFF;
+	text-align:center;
+	line-height:150px;
+	z-index:9999999;
+	overflow:hidden;
+}
+

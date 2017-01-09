@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jwplayer hls</title>
+    <meta charset="utf-8"/>
+    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jwplayer.js"></script>
+    <script type='text/javascript'>jwplayer.key = 'N8zhkmYvvRwOhz4aTGkySoEri4x+9pQwR7GHIQ=='; </script>
+    <script type="text/javascript">
+        var _player = null;
+        var _url = null;
+        $(document).ready(function () {
+            var player = $("<div/>");
+            $(player).attr("id", "player_id");
+            $("#div_container").append(player);
+            alert($("#div_container"));
+            alert(player);
+            var conf = {
+                file: "http://127.0.0.1:63880/hls/play/829b44f5/1d74/42b1/98dc/9cf26ca0f6cf.m3u8",
+                image: "http://127.0.0.1:63880/hls/play/829b44f5/1d74/42b1/98dc/9cf26ca0f6cf.jpg",
+                autostart: true,
+                analytics: { enabled: false}
+            };
+            _player = jwplayer('player_id').setup(conf);
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <div id="main_modal">
+        <div id="player">
+            <div id="div_container">
+                <div id="player_id">载入中</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+

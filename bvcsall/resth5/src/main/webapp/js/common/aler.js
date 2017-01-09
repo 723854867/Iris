@@ -1,0 +1,1 @@
+define(["../libs/jquery-2.1.4"],function(o){var e={alertMsg:function(o,e){var n=$('<div class="promptBox">'+o+"</div>");$("body").append(n),setTimeout(function(){n.remove()},1500),e&&e()},alertJamp:function(o,e,n){var i=$('<div class="promptBox">'+o+"</div>");$("body").append(i),setTimeout(function(){i.remove(),n&&n(),window.location.href=e},1500)}};return e});

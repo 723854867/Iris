@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.busap.vcs.data.mapper.ComplainDAO">  
+    
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+    <select id="searchComplain" resultType="com.busap.vcs.data.vo.ComplainVO">
+    	select c.id as id,c.content as content,c.title as title,c.create_at as createDate,c.creator_id as creatorId,
+				c.video_id as videoId,c.stat as stat,r.name as creatorName,v.name as videoName,
+					v.play_key as playKey,r2.name as videoCreator 
+    		from complain c left join ruser r ON c.creator_id = r.id 
+    				left join video v on c.video_id=v.id 
+    				left join ruser r2 on v.creator_id=r2.id 
+			where 1=1
+			<![CDATA[
+				and v.flow_stat<>'delete'
+			]]>
+		<if test="starttime != null">
+			<![CDATA[
+				and c.create_at>=#{starttime}
+			]]>
+		</if>
+		<if test="endtime != null">
+			<![CDATA[
+				and c.create_at<=#{endtime}
+			]]>
+		</if>
+		<if test="title != null">
+			and c.content=#{title}
+		</if>
+		<choose>
+			<when test="stat != null">
+				<if test="stat == 0">
+					AND c.stat IS NULL
+				</if>
+				<if test="stat == 1">
+					AND c.stat= 1
+				</if>
+			</when>
+		</choose>
+		order by c.create_at desc
+    	<include refid="page"/>
+    </select>
+    
+    <select id="searchComplainCount" resultType="Integer">
+    	select count(c.id) from complain c left join ruser r ON c.creator_id = r.id 
+    				left join video v on c.video_id=v.id 
+    				left join ruser r2 on v.creator_id=r2.id 
+			where 1=1
+		<![CDATA[
+				and v.flow_stat<>'delete'
+			]]>
+		<if test="starttime != null">
+			<![CDATA[
+				and c.create_at>=#{starttime}
+			]]>
+		</if>
+		<if test="endtime != null">
+			<![CDATA[
+				and c.create_at<=#{endtime}
+			]]>
+		</if>
+		<if test="title != null">
+			and c.content=#{title}
+		</if>
+		<choose>
+			<when test="stat != null">
+				<if test="stat == 0">
+					AND c.stat IS NULL
+				</if>
+				<if test="stat == 1">
+					AND c.stat = 1
+				</if>
+			</when>
+		</choose>
+    </select>
+    
+</mapper>  

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="format-detection" content="email=no" />
+	<title>${video.user.name}的【我拍】“${video.description}”</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<script src="../js/jquery-2.0.3.min.js"></script>
+	<script src="../js/jQuery.md5.js"></script>
+	<script type='text/javascript' src='../js/players/jwplayer.js'></script>
+	<script type='text/javascript'>jwplayer.key = 'N8zhkmYvvRwOhz4aTGkySoEri4x+9pQwR7GHIQ=='; </script>
+	<script type="text/javascript" src="../js/zepto.min.js"></script>
+	<script src="../js/api.js"></script>
+</head>
+<body>
+	<header class="header">
+			<img src="../img/down_logo.png" width="58" class="pr db header-logo" alt="我拍">
+		     <a href="http://www.wopaitv.com/oupeng/oupppp234/" id="downloadBtn" class="js-span-a btn-bg1 btn-download">
+            	<i class="icon-download"></i> 下载我拍
+            	</a>
+    </header>
+    <!--订阅-->
+    <div class="f-head">
+    
+            <div class="user">
+            <c:if test="${video.user.pic==null}">
+            <img src="<%=request.getContextPath()%>/img/avatar.png"
+                width="30" height="30" class="avatar">
+            </c:if>
+            <c:if test="${video.user.pic!=null}">
+            <img src="<%=request.getContextPath()%>/download${video.user.pic}"
+                width="30" height="30" class="avatar">
+            </c:if>
+            <div class="info">
+                <div class="name">${video.user.name}</div>
+                <div class="date">
+                    <fmt:formatDate value="${video.createDateStr}" pattern="MM-dd HH:mm"/>
+                </div>
+            </div>
+        </div>
+        <!--  
+			<span class="js-span-a" data-href="/user/1022971854">
+				<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+							</span>
+			<p class="f-name box ellipsis">FlareOne</p>
+			<p class="f-location box ellipsis">刚刚</p>
+			<p class="f-sub">已订阅</p>
+			-->
+	</div>
+	<div class="vodie_wrap">
+		<div class="vodie_child"><img src="../img/2.jpg"/></div>
+	</div>
+		
+	<p class="f-description break">呆萌小妹房顶犯二，要请她吃饭的快快点赞吧！</p>
+	<!--分享点赞-->
+	<!-- <div class="f-bottom">
+		<span class="f-info-item"><i class="icon-heart-empty"></i>分享</span>
+		<span  class="f-info-item box f-info-comment">
+				<i class="icon-comment-text"></i>107</span>
+		<span class="f-info-item2"><i class="icon-heart-vedio"></i>相关视频</span>
+		<span class="f-info-item3 f-info-left"><i class="icon-heart-share"></i>分享</span>
+	</div> -->
+	<!--分享点赞2-->
+	<div class="f-bottom2">
+		<div class="f-bottom pr" >
+			<span class="f-info-item2 pa_l"><i class="icon-heart-empty"></i>点赞</span>
+			<ul class="tab-hd3">
+	        	<li class="active tablist1 fl bl"><a href="javascript:void(0);"><i class="icon-comment-text"></i>375</a></li>
+	        	<li class="tablist2"><a href="javascript:void(0);"><i class="icon-heart-vedio"></i>相关视频</a></li>
+	        </ul>
+	        <span class="f-info-item3 pa_r"><i class="icon-heart-share"></i>分享</span>
+        </div>
+        <ul class="tab-bd3">
+        	<li>
+				<!--评论-->
+					<div class="d-conmment-wrap box" style="padding-left:8px;">
+						<a href="javascript:void(0);" class="smileface"></a>
+						<div class="d-conmment-input-wrap">
+							<input id="commentInput" type="text" class="d-conmment-input" placeholder="说点什么吧～">
+						</div><span id="commentSend" data-id="" class="d-comment-send">发送</span>
+					</div>
+					<!--评论list-->
+					<ul class="commentListWrap">
+						<li>
+						<div class="f-head">
+							<span class="js-span-a" data-href="/user/1022971854">
+								<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+											</span>
+							<p class="f-name2 box ellipsis">FlareOne</p>
+							<p class="f-location2 box ellipsis">猫咪成功抢镜</p>
+							<p class="f-sub">07-13 04:12</p>	
+						</div>
+						</li>
+						<li>
+						<div class="f-head">
+							<span class="js-span-a" data-href="/user/1022971854">
+								<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+											</span>
+							<p class="f-name2 box ellipsis">FlareOne</p>
+							<p class="f-location2 box ellipsis">猫咪成功抢镜</p>
+							<p class="f-sub">07-13 04:12</p>	
+						</div>
+						</li>
+					</ul>
+        	</li>
+        	<!--2con-->
+        	<li class="hide">
+				<ul class="piclist">
+				<li>
+					<div class="picimg fl">
+						<img src="img/piclist_1.png" class="picw100">
+						<div class="f-head2">
+								<span class="js-span-a" data-href="/user/1022971854">
+									<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+												</span>
+								<p class="f-name2 box ellipsis">FlareOne</p>
+								<p class="f-location box ellipsis">06-23 13:15</p>							
+						</div>
+					</div>
+					<div class="picimg fr">
+						<img src="../img/piclist_1.png" class="picw100">
+						<div class="f-head2">
+								<span class="js-span-a" data-href="/user/1022971854">
+									<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+												</span>
+								<p class="f-name2 box ellipsis">搞笑祖奶奶</p>
+								<p class="f-location box ellipsis">06-23 13:15</p>							
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="picimg fl">
+						<img src="../img/piclist_1.png" class="picw100">
+						<div class="f-head2">
+								<span class="js-span-a" data-href="/user/1022971854">
+									<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+												</span>
+								<p class="f-name2 box ellipsis">FlareOne</p>
+								<p class="f-location box ellipsis">06-23 13:15</p>							
+						</div>
+					</div>
+					<div class="picimg fr">
+						<img src="../img/piclist_1.png" class="picw100">
+						<div class="f-head2">
+								<span class="js-span-a" data-href="/user/1022971854">
+									<img class="f-avatar js-avatar" src="http://mvavatar2.meitudata.com/55291d9c2fe93431.jpg!thumb60" width="30" height="30" alt="">
+												</span>
+								<p class="f-name2 box ellipsis">搞笑祖奶奶</p>
+								<p class="f-location box ellipsis">06-23 13:15</p>		
+						</div>
+					</div>
+				</li>
+			</ul>
+        	</li>
+        </ul>
+	</div>
+	<script type="text/javascript">
+		tabs(".tab-hd3", "active", ".tab-bd3");
+	(function($){
+	$('.f-info-item2').on("tap",function(){
+		$('.f-info-item2 i').removeClass("icon-heart-empty").addClass("icon-heart-empty2");
+		$(this).css("color","#fe558c");
+	});
+	})(Zepto)
+	</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.SignUserDAO">
+	<sql id="page">limit #{pageStart},#{pageSize}</sql>
+	<sql id="loadConfigUrlFiledSql"> 
+		select i.id,
+		i.create_at as createDate,
+		i.modify_at as modifyDate,
+		i.data_from as dataFrom,
+		i.creator_id as creatorId,
+		i.sum_sign_num as sumSignNum,
+		i.continue_sign as continueSign
+    </sql>
+
+	<select id="findAllSignUser" resultType="com.busap.vcs.data.entity.SignUser">
+		<include refid="loadConfigUrlFiledSql"/>
+		from sign_user i 
+	</select>
+	<select id="findSignUserByuid" resultType="com.busap.vcs.data.entity.SignUser">
+		<include refid="loadConfigUrlFiledSql"/>
+		from sign_user i where creator_id =#{uid} 
+	</select>
+
+</mapper>

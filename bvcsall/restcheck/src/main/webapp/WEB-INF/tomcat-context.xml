@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+
+-->
+<!-- 部署时的JNDI属性-->
+<Context>
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <Environment name="db-0-Url" override="false" type="java.lang.String"
+                 value="jdbc:mysql://localhost:3306/vcs?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"/>
+    <Environment name="db-0-user" override="false" type="java.lang.String" value="vcs"/>
+    <Environment name="db-0-password" override="false" type="java.lang.String" value="123456"/>
+
+    <Environment name="vcs.media.upload.path" override="false" type="java.lang.String" value="/FTP/{channelName}/upload"/>
+
+    <Environment name="vcs.media.transcode.path" override="false" type="java.lang.String" value="/FTP/{channelName}/transcode"/>
+
+
+    <!-- 转码相关的配置 -->
+    <Environment name="vcs.transcode.ftp.source" override="false" type="java.lang.String"
+                 value="ftp://test:test@192.166.62.78/{channelName}/upload"/>
+    <Environment name="vcs.transcode.ftp.target" override="false" type="java.lang.String"
+                 value="ftp://test:test@192.166.62.78/{channelName}/transcode"/>
+
+    <Environment name="vcs.transcode.http.requesturl" override="false" type="java.lang.String"
+                 value="http://192.166.62.11:8020"/>
+
+    <!-- 播流相关 -->
+    <Environment name="vcs.wowza.ws.url" override="false" type="java.lang.String"
+                 value="http://192.166.62.49:8081/wowza4VCS"/>
+    <Environment name="vcs.cpm.ws.url" override="false" type="java.lang.String" value="http://192.166.62.11:8020"/>
+
+    <Environment name="vcs.channel.icon.path" override="false" type="java.lang.String" value="/FTP/upload/image/"/>
+
+
+</Context>

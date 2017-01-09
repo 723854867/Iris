@@ -1,0 +1,906 @@
+/* line 6, ../../sass/base/_base.scss */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* line 11, ../../sass/base/_base.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+}
+
+/* line 19, ../../sass/base/_base.scss */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none;
+}
+
+/* line 29, ../../sass/base/_base.scss */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 35, ../../sass/base/_base.scss */
+h1, h2, h3, h4, h5, h6, p {
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 41, ../../sass/base/_base.scss */
+img {
+  border: 0;
+  max-width: 100%;
+}
+
+/* line 46, ../../sass/base/_base.scss */
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 52, ../../sass/base/_base.scss */
+a {
+  color: blue;
+  text-decoration: none;
+  output: none;
+  color: #333;
+}
+
+/* line 59, ../../sass/base/_base.scss */
+input, button, textarea {
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* line 68, ../../sass/base/_base.scss */
+.fr {
+  float: right;
+}
+
+/* line 71, ../../sass/base/_base.scss */
+.fl {
+  float: left;
+}
+
+/*
+ * Retina Sprites for Compass
+ * by:              Gaya Kessler
+ * last update:     03/11/14
+ *
+ * Usage:
+ * 1. create two folders in your image directory (in this case 'icons' and 'icons-2x').
+ * 2. adjust the foldernames defined below if you use different names.
+ * 3. create sprite images for pixel ratio 1 screens and put them in the first folder.
+ * 4. create sprite images for pixel ratio 2 screens and put them in the second folder, use the same filenames.
+ * 5. use the sprite-image in your Sass/Scss using: '@include use-sprite(<sprite-name>)'
+ */
+/* line 33, ../../sass/base/_other.scss */
+.playBox video {
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
+  vertical-align: bottom;
+  background-color: #000000;
+}
+/* line 42, ../../sass/base/_other.scss */
+.playBox img {
+  min-height: 200px;
+}
+
+/* line 48, ../../sass/base/_other.scss */
+.promptBox {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: fixed;
+  top: 45%;
+  font-size: 1.4em;
+  line-height: 24px;
+  max-width: 90%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* line 67, ../../sass/base/_other.scss */
+.downBar {
+  width: 100%;
+  background: #91c41f;
+  position: fixed;
+  bottom: 0;
+  color: #fff;
+  text-align: center;
+  padding: 12px 0;
+  z-index: 1000;
+  display: none;
+}
+/* line 77, ../../sass/base/_other.scss */
+.downBar .downClose {
+  float: left;
+  display: inline-block;
+  position: relative;
+  left: 15px;
+  top: 5px;
+  font-size: 18px;
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -11px -20px;
+  height: 11px;
+  width: 11px;
+}
+/* line 86, ../../sass/base/_other.scss */
+.downBar a {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* line 91, ../../sass/base/_other.scss */
+.downBar2 {
+  color: #333;
+  background: #fff;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 16px;
+  z-index: 1000;
+  border-top: solid 1px #ccc;
+}
+/* line 100, ../../sass/base/_other.scss */
+.downBar2 a {
+  border: solid 1px #91c41f;
+  padding: 5px 18px;
+  border-radius: 5px;
+}
+
+/* line 106, ../../sass/base/_other.scss */
+.openApp a {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* line 112, ../../sass/base/_other.scss */
+.maskBox {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.6;
+  position: fixed;
+  top: 0;
+  z-index: 110;
+  float: left;
+}
+
+/* line 125, ../../sass/base/_other.scss */
+.shareWarp {
+  position: relative;
+}
+
+/* line 128, ../../sass/base/_other.scss */
+.shareWxMask {
+  background: url(../../img/mask.png) no-repeat;
+  background-size: 100% 100%;
+  width: 100%;
+  min-height: 150px;
+  position: fixed;
+  top: 0;
+  z-index: 120;
+}
+
+/* line 137, ../../sass/base/_other.scss */
+.shareBox1 {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background: #fff;
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 1s ease;
+}
+/* line 146, ../../sass/base/_other.scss */
+.shareBox1 h4 {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  margin: 20px 10px 10px 10px;
+}
+/* line 152, ../../sass/base/_other.scss */
+.shareBox1 .shareList {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+/* line 156, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul {
+  overflow-y: auto;
+  margin: 0 auto;
+}
+/* line 160, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li {
+  float: left;
+  width: 50px;
+  margin: 10px 13px;
+  text-align: center;
+  width: 65px;
+}
+/* line 166, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li a {
+  display: inline-block;
+  margin: auto;
+  margin-bottom: 8px;
+}
+/* line 167, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li p {
+  color: #333;
+}
+/* line 168, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .qq {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: 0 -560px;
+  height: 50px;
+  width: 50px;
+  display: block;
+}
+/* line 172, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .QZone {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -140px -461px;
+  height: 50px;
+  width: 50px;
+  display: block;
+}
+/* line 176, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .wx {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -50px -560px;
+  height: 50px;
+  width: 50px;
+  display: block;
+}
+/* line 180, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .wxq {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -90px -461px;
+  height: 50px;
+  width: 50px;
+  display: block;
+}
+/* line 184, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .sinawb {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -190px -461px;
+  height: 50px;
+  width: 50px;
+  display: block;
+}
+/* line 191, ../../sass/base/_other.scss */
+.shareBox1 .sharewpBox {
+  width: 100%;
+  background: #fff;
+  position: relative;
+  top: -8px;
+}
+/* line 196, ../../sass/base/_other.scss */
+.shareBox1 .sharewpBox .sharewp {
+  border-radius: 5px;
+  background: #91c41f;
+  width: 95%;
+  padding: 10px 0;
+  display: block;
+  margin: auto;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+}
+/* line 209, ../../sass/base/_other.scss */
+.shareBox1 .cancel {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+}
+
+/* line 217, ../../sass/base/_other.scss */
+#videoTag {
+  display: none;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+/* line 223, ../../sass/base/_other.scss */
+.playBox {
+  position: relative;
+}
+/* line 225, ../../sass/base/_other.scss */
+.playBox .videoPic {
+  vertical-align: bottom;
+  width: 100%;
+  min-height: 320px;
+}
+/* line 230, ../../sass/base/_other.scss */
+.playBox .canPlay {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -100px -560px;
+  height: 60px;
+  width: 60px;
+  z-index: 100;
+}
+
+/* line 248, ../../sass/base/_other.scss */
+.loadMore {
+  text-align: center;
+  border-top: solid 1px #d9d9d9;
+  border-bottom: solid 1px #d9d9d9;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  display: none;
+  color: #999999;
+}
+
+/* line 258, ../../sass/base/_other.scss */
+.scrollTop {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -238px -169px;
+  height: 30px;
+  width: 30px;
+  position: fixed;
+  bottom: 70px;
+  right: 10px;
+  z-index: 110;
+}
+
+/* line 266, ../../sass/base/_other.scss */
+span[id^="cnzz"] {
+  display: none;
+}
+
+/* line 271, ../../sass/base/_other.scss */
+.main, .head, .personalCenter, .personalBg, .activeUseList, .recommendContent {
+  max-width: 640px;
+  min-width: 318px;
+  margin: auto;
+}
+
+/* line 276, ../../sass/base/_other.scss */
+.loadMore {
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+/* line 280, ../../sass/base/_other.scss */
+.rankloadMore {
+  width: 100%;
+}
+
+/* line 283, ../../sass/base/_other.scss */
+.downBar {
+  max-width: 640px;
+  min-width: 318px;
+  margin: auto;
+}
+
+/* line 291, ../../sass/base/_other.scss */
+.sharePic {
+  position: absolute;
+  opacity: 0;
+}
+
+/* line 296, ../../sass/base/_other.scss */
+.skyBox {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+  display: none;
+}
+
+/* line 305, ../../sass/base/_other.scss */
+.skyBox-anz {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  z-index: 999999;
+  display: none;
+}
+
+/* line 9, ../../sass/Connect.scss */
+.head {
+  padding: 10px 0;
+  border-bottom: solid 1px #d9d9d9;
+  overflow: hidden;
+  background-color: #f7f7f7;
+  width: 100%;
+  z-index: 10;
+}
+
+/* line 13, ../../sass/Connect.scss */
+.logo {
+  background: url(../../img/icons-2x/logo.png) no-repeat;
+  width: 66px;
+  height: 30px;
+  background-size: 100% 100%;
+  margin-top: 2px;
+  margin-left: 10px;
+  float: left;
+  dispaly: inline-block;
+}
+
+/* line 19, ../../sass/Connect.scss */
+.lagarNav {
+  font-size: 0.7em;
+}
+/* line 21, ../../sass/Connect.scss */
+.lagarNav li {
+  float: left;
+  dispaly: inline-block;
+}
+
+/* line 25, ../../sass/Connect.scss */
+.lagarNav {
+  float: right;
+  dispaly: inline-block;
+}
+/* line 27, ../../sass/Connect.scss */
+.lagarNav ul li {
+  text-align: center;
+  line-height: 10px;
+  margin: 0 5px;
+  width: 35px;
+  color: #333;
+}
+/* line 33, ../../sass/Connect.scss */
+.lagarNav ul li img {
+  width: 70%;
+  height: 22px;
+}
+
+/* line 36, ../../sass/Connect.scss */
+.bgBox2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  display: none;
+  font-size: 20px;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 150px;
+  z-index: 9999999;
+  overflow: hidden;
+}
+
+@media all and (device-width: 320px) {
+  /* line 8, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 35px;
+    background-size: cover;
+  }
+}
+@media all and (device-width: 375px) {
+  /* line 16, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 41px;
+    background-size: cover;
+  }
+}
+@media screen and (max-width: 415px) {
+  /* line 24, ../../sass/personalCenter/personalDetailSingle.scss */
+  .videoList1 ul li dd:first-of-type {
+    font-size: 16px;
+  }
+}
+@media all and (device-width: 360px) {
+  /* line 29, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 39px;
+    background-size: cover;
+  }
+}
+@media all and (device-width: 384px) {
+  /* line 37, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 42px;
+    background-size: cover;
+  }
+}
+@media all and (device-width: 414px) {
+  /* line 45, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 45px;
+    background-size: cover;
+  }
+}
+@media all and (device-width: 412px) {
+  /* line 53, ../../sass/personalCenter/personalDetailSingle.scss */
+  .lineBg {
+    background: url(../../img/personalBg/lineBg.jpg);
+    width: 100%;
+    height: 45px;
+    background-size: cover;
+  }
+}
+/* line 60, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg {
+  position: relative;
+  margin-top: 50px;
+}
+/* line 63, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg img {
+  width: 100%;
+}
+/* line 64, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg img.userHomePic {
+  vertical-align: bottom;
+}
+/* line 67, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg ul {
+  position: absolute;
+  bottom: 10px;
+  left: 11px;
+}
+/* line 71, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg ul li {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 300px;
+  font-size: 16px;
+  color: #ffffff;
+  height: 20px;
+  line-height: 20px;
+}
+/* line 81, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg ul li strong {
+  font-size: 15px;
+}
+/* line 84, ../../sass/personalCenter/personalDetailSingle.scss */
+.personalBg ul li img {
+  width: 12px;
+  margin: 0 5px;
+}
+
+/* line 91, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg {
+  border-bottom: 1px solid #cccccc;
+}
+/* line 93, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg p {
+  padding-top: 5px;
+}
+/* line 95, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg p a {
+  margin-left: 28px;
+}
+/* line 97, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg p a img {
+  width: 24px;
+  margin-top: 0;
+}
+/* line 102, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg p img {
+  width: 15px;
+  float: left;
+  margin-top: 5px;
+  padding-left: 5px;
+}
+/* line 108, ../../sass/personalCenter/personalDetailSingle.scss */
+.lineBg p span {
+  float: left;
+  display: block;
+  margin-top: 5px;
+  color: #999999;
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+/* line 120, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoListSort {
+  color: #333333;
+  background: #fff;
+  border-bottom: solid 1px #ccc;
+  padding: 10px;
+  text-align: right;
+}
+/* line 126, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoListSort .arrowDownIcon {
+  display: inline-block;
+  position: relative;
+  top: 3px;
+  margin-left: 3px;
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -133px -44px;
+  height: 13px;
+  width: 13px;
+}
+/* line 136, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li {
+  width: 100%;
+  position: relative;
+  background: #fff;
+}
+/* line 141, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl {
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
+}
+/* line 145, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dt {
+  float: left;
+  dispaly: inline-block;
+  position: relative;
+}
+/* line 148, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dt img {
+  margin: 3px 0 0 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 6px;
+}
+/* line 155, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:first-of-type {
+  float: left;
+  dispaly: inline-block;
+  margin-left: 10px;
+  line-height: 16px;
+}
+/* line 159, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:first-of-type p:first-of-type {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333333;
+  line-height: 20px;
+}
+/* line 165, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:first-of-type p:nth-of-type(2) {
+  font-weight: bold;
+  font-size: 12px;
+  color: #999999;
+  line-height: 20px;
+}
+/* line 171, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:first-of-type p.myDate {
+  font-size: 14px;
+}
+/* line 176, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:nth-of-type(2) {
+  float: right;
+  padding-top: 13px;
+}
+/* line 179, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:nth-of-type(2) .playIcon {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -71px -44px;
+  height: 12px;
+  width: 12px;
+  display: inline-block;
+}
+/* line 183, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li dl dd:nth-of-type(2) .playData {
+  font-size: 14px;
+  color: #333;
+  padding-left: 5px;
+  line-height: 15px;
+  color: #999999;
+}
+/* line 193, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .playBox video {
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
+  vertical-align: bottom;
+}
+/* line 202, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox {
+  display: box;
+  display: -webkit-box;
+  display: -moz-box;
+}
+/* line 206, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox div {
+  padding: 10px 0 0 0;
+}
+/* line 208, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox div em {
+  display: inline-block;
+  margin: auto;
+  position: relative;
+  top: 3px;
+}
+/* line 214, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox div span {
+  line-height: 10px;
+  color: #999999;
+  display: inline-block;
+  height: 20px;
+  width: 40px;
+  position: relative;
+  top: -5px;
+  text-align: left;
+}
+/* line 223, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .zan {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 227, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .zan em {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -268px -116px;
+  height: 24px;
+  width: 24px;
+}
+/* line 232, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .commit {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 236, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .commit em {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -220px -116px;
+  height: 24px;
+  width: 24px;
+}
+/* line 242, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .Forward {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 246, ../../sass/personalCenter/personalDetailSingle.scss */
+.activeUseList .videoList1 ul li .shareBox .Forward em {
+  background-image: url('/resth5/img/icons-2x-sf42bef2630.png');
+  background-size: 320px 700px;
+  background-position: -192px -62px;
+  height: 24px;
+  width: 24px;
+}
+
+/* line 255, ../../sass/personalCenter/personalDetailSingle.scss */
+.downloadApp {
+  width: 100%;
+  clear: both;
+}
+/* line 258, ../../sass/personalCenter/personalDetailSingle.scss */
+.downloadApp a {
+  width: 100%;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #ffffff;
+  background-color: #91c41f;
+  position: fixed;
+  bottom: 0;
+  font-size: 16px;
+}
+
+/* line 271, ../../sass/personalCenter/personalDetailSingle.scss */
+.header {
+  height: 50px;
+  line-height: 50px;
+  background: #f7f7f7;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+}
+
+/* line 280, ../../sass/personalCenter/personalDetailSingle.scss */
+.head-logo {
+  position: absolute;
+  left: 9px;
+  top: 10px;
+  background: url(../../img/icons-2x/logo.png) no-repeat;
+  width: 66px;
+  height: 30px;
+  background-size: 100% 100%;
+}
+
+/* line 289, ../../sass/personalCenter/personalDetailSingle.scss */
+.btn-download {
+  width: 135px;
+  height: 38px;
+  color: #fff;
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 6px;
+  line-height: 36px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 15px;
+}
+
+/* line 302, ../../sass/personalCenter/personalDetailSingle.scss */
+.btn-bg1 {
+  background: #7cd300;
+}
+
+/* line 305, ../../sass/personalCenter/personalDetailSingle.scss */
+.icon-download {
+  background: url(../../img/down_logo2.png) no-repeat;
+  background-size: 100% 100%;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  position: relative;
+  top: 6px;
+}
+
+/* line 315, ../../sass/personalCenter/personalDetailSingle.scss */
+footer {
+  text-align: center;
+  width: 100%;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  color: #ffffff;
+  background-color: #7cd300;
+  font-size: 16px;
+}

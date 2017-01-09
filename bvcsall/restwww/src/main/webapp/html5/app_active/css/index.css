@@ -1,0 +1,780 @@
+/* line 6, ../sass/_base.scss */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* line 11, ../sass/_base.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+}
+
+/* line 19, ../sass/_base.scss */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none;
+}
+
+/* line 28, ../sass/_base.scss */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 34, ../sass/_base.scss */
+h1, h2, h3, h4, h5, h6, p {
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 40, ../sass/_base.scss */
+img {
+  border: 0;
+}
+
+/* line 45, ../sass/_base.scss */
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 51, ../sass/_base.scss */
+a {
+  color: blue;
+  text-decoration: none;
+  output: none;
+  color: #333;
+}
+
+/* line 58, ../sass/_base.scss */
+input, button, textarea {
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* line 67, ../sass/_base.scss */
+.fr {
+  float: right;
+}
+
+/* line 70, ../sass/_base.scss */
+.fl {
+  float: left;
+}
+
+/*
+ * Retina Sprites for Compass
+ * by:              Gaya Kessler
+ * last update:     03/11/14
+ *
+ * Usage:
+ * 1. create two folders in your image directory (in this case 'icons' and 'icons-2x').
+ * 2. adjust the foldernames defined below if you use different names.
+ * 3. create sprite images for pixel ratio 1 screens and put them in the first folder.
+ * 4. create sprite images for pixel ratio 2 screens and put them in the second folder, use the same filenames.
+ * 5. use the sprite-image in your Sass/Scss using: '@include use-sprite(<sprite-name>)'
+ */
+/* line 112, icon/*.png */
+.icon-sprite {
+  background-image: url('/img/icon-sb305bf4fc9.png');
+  background-repeat: no-repeat;
+}
+
+/* line 9, ../sass/index.scss */
+.main {
+  height: auto;
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  margin: auto;
+}
+/* line 17, ../sass/index.scss */
+.main .black {
+  height: 30%;
+  width: 100%;
+  display: block;
+  position: relative;
+}
+/* line 23, ../sass/index.scss */
+.main .bgImg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+}
+/* line 29, ../sass/index.scss */
+.main .tree {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+/* line 35, ../sass/index.scss */
+.main .tree .tree-body .tree-head {
+  width: 59%;
+  position: relative;
+  z-index: 11;
+}
+/* line 41, ../sass/index.scss */
+.main .tree .tips {
+  width: 190px;
+  display: inline-block;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  margin-left: -95px;
+  z-index: 16;
+}
+/* line 51, ../sass/index.scss */
+.main .tree .tips img {
+  width: 100%;
+}
+/* line 56, ../sass/index.scss */
+.main .tree .tree-foot {
+  position: relative;
+  top: 85%;
+  left: 0%;
+  width: 45%;
+  z-index: 10;
+  margin-top: -45px;
+}
+/* line 64, ../sass/index.scss */
+.main .tree .cur {
+  animation: mymove 1.5s linear;
+  -webkit-animation: mymove 1.5s linear;
+  transform-origin: 100% 50%;
+  -webkit-transform-origin: 100% 100%;
+}
+/* line 71, ../sass/index.scss */
+.main .shareBtn {
+  position: relative;
+  text-align: center;
+  z-index: 25;
+}
+/* line 76, ../sass/index.scss */
+.main .shareBtn img {
+  width: 45%;
+}
+/* line 80, ../sass/index.scss */
+.main .rewardList {
+  position: relative;
+  width: 55%;
+  height: 25px;
+  left: 25%;
+  top: 10px;
+  font-size: 14px;
+  color: #666;
+  overflow: hidden;
+}
+/* line 89, ../sass/index.scss */
+.main .rewardList .horm {
+  background: url(../img/icon/horn.png) no-repeat;
+  background-size: 100% 100%;
+  width: 22px;
+  height: 20px;
+  display: inline-block;
+  float: left;
+  margin-right: 8px;
+}
+/* line 98, ../sass/index.scss */
+.main .rewardList ul {
+  float: left;
+}
+/* line 100, ../sass/index.scss */
+.main .rewardList ul li {
+  line-height: 24px;
+}
+
+/* line 107, ../sass/index.scss */
+.win-box1 {
+  width: 80%;
+  margin: 30% auto;
+  position: relative;
+}
+/* line 111, ../sass/index.scss */
+.win-box1 .close-box {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* line 119, ../sass/index.scss */
+.win-box1 .ok-box {
+  position: absolute;
+  left: 15%;
+  display: block;
+  width: 70%;
+  height: 45px;
+  bottom: 16%;
+}
+/* line 127, ../sass/index.scss */
+.win-box1 img {
+  width: 100%;
+}
+
+/* line 132, ../sass/index.scss */
+.winin-integral .win-box2 {
+  width: 80%;
+  height: 46%;
+  margin: 30% auto;
+  position: relative;
+  background: url(../img/award-2.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 139, ../sass/index.scss */
+.winin-integral .win-box2 .close-box {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* line 147, ../sass/index.scss */
+.winin-integral .win-box2 .complete-btn {
+  position: absolute;
+  left: 15%;
+  display: block;
+  width: 70%;
+  height: 45px;
+  bottom: 16%;
+}
+/* line 155, ../sass/index.scss */
+.winin-integral .win-box2 .win-msg {
+  width: 88%;
+  margin: auto;
+  text-align: left;
+  position: relative;
+  top: 45%;
+  font-size: 18px;
+  color: #ffb96e;
+}
+/* line 163, ../sass/index.scss */
+.winin-integral .win-box2 .win-msg strong {
+  color: #fffc9d;
+  font-weight: 100;
+}
+/* line 166, ../sass/index.scss */
+.winin-integral .win-box2 .win-msg strong span {
+  color: #fff;
+}
+
+/* line 174, ../sass/index.scss */
+.winin-apple .win-box2 {
+  width: 86%;
+  height: 75%;
+  margin: 15% auto 0 auto;
+  position: relative;
+  background: url(../img/award1.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 181, ../sass/index.scss */
+.winin-apple .win-box2 .close-box {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* line 189, ../sass/index.scss */
+.winin-apple .win-box2 .complete-btn {
+  position: absolute;
+  left: 50%;
+  margin-left: -61px;
+  display: block;
+  background: url(../img/completeBtn-grey.png) no-repeat;
+  background-size: 100% 100%;
+  width: 122px;
+  height: 40px;
+  bottom: 8%;
+}
+/* line 201, ../sass/index.scss */
+.winin-apple .win-box2 .btn-ok {
+  background: url(../img/completeBtn.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 205, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg {
+  width: 80%;
+  margin: auto;
+  position: relative;
+  top: 35%;
+}
+/* line 210, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .ward-msg {
+  font-size: 18px;
+  color: #ffb96e;
+}
+/* line 213, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .ward-msg strong {
+  color: #fffc9d;
+  font-weight: 100;
+}
+/* line 216, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .ward-msg strong span {
+  color: #fff;
+}
+/* line 221, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .info-item {
+  margin: 8px 0;
+  overflow: hidden;
+}
+/* line 224, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .info-item label {
+  color: #fffc9d;
+  font-size: 14px;
+  float: left;
+  width: 70px;
+  padding: 8px 0;
+  text-align: right;
+}
+/* line 232, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .info-item .info-txt {
+  float: left;
+  border-radius: 15px;
+  padding: 5px 10px;
+  background: #862627;
+  color: #fff;
+  font-size: 16px;
+  width: 56%;
+}
+/* line 241, ../sass/index.scss */
+.winin-apple .win-box2 .win-msg .info-item .address {
+  float: left;
+  border-radius: 15px;
+  padding: 5px 10px;
+  background: #862627;
+  color: #fff;
+  font-size: 16px;
+  width: 56%;
+  height: 30px;
+  resize: none;
+}
+
+/* line 258, ../sass/index.scss */
+.winin-phone .win-box2 {
+  width: 86%;
+  height: 72%;
+  margin: 25% auto 0 auto;
+  position: relative;
+  background: url(../img/award1.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 265, ../sass/index.scss */
+.winin-phone .win-box2 .close-box {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* line 273, ../sass/index.scss */
+.winin-phone .win-box2 .ok-btn {
+  position: absolute;
+  left: 50%;
+  margin-left: -61px;
+  display: block;
+  background: url(../img/completeBtn-grey.png) no-repeat;
+  background-size: 100% 100%;
+  width: 122px;
+  height: 40px;
+  bottom: 8%;
+}
+/* line 285, ../sass/index.scss */
+.winin-phone .win-box2 .btn-ok {
+  background: url(../img/completeBtn.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 289, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg {
+  width: 80%;
+  margin: auto;
+  position: relative;
+  top: 32%;
+}
+/* line 294, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .ward-msg {
+  font-size: 18px;
+  color: #ffb96e;
+}
+/* line 297, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .ward-msg strong {
+  color: #fffc9d;
+  font-weight: 100;
+}
+/* line 300, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .ward-msg strong span {
+  color: #fff;
+}
+/* line 305, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .info-item {
+  margin: 8px 0;
+  overflow: hidden;
+}
+/* line 308, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .info-item label {
+  color: #fffc9d;
+  font-size: 14px;
+  float: left;
+  width: 70px;
+  padding: 8px 0;
+  text-align: right;
+}
+/* line 316, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .info-item .info-txt {
+  float: left;
+  border-radius: 15px;
+  padding: 5px 10px;
+  background: #862627;
+  color: #fff;
+  font-size: 16px;
+  width: 56%;
+}
+/* line 325, ../sass/index.scss */
+.winin-phone .win-box2 .win-msg .info-item .address {
+  float: left;
+  border-radius: 15px;
+  padding: 5px 10px;
+  background: #862627;
+  color: #fff;
+  font-size: 16px;
+  width: 56%;
+  height: 30px;
+  resize: none;
+}
+
+/* line 342, ../sass/index.scss */
+.introduces .win-box1 {
+  margin: 15% auto;
+}
+/* line 344, ../sass/index.scss */
+.introduces .win-box1 .close-box {
+  top: 0;
+}
+
+/* line 352, ../sass/index.scss */
+.winin-express .win-box2 {
+  width: 80%;
+  height: 46%;
+  margin: 30% auto;
+  position: relative;
+  background: url(../img/express.png) no-repeat;
+  background-size: 100% 100%;
+}
+/* line 359, ../sass/index.scss */
+.winin-express .win-box2 .close-box {
+  position: absolute;
+  right: 0;
+  top: 20%;
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+/* line 367, ../sass/index.scss */
+.winin-express .win-box2 .complete-btn {
+  position: absolute;
+  left: 15%;
+  display: block;
+  width: 70%;
+  height: 45px;
+  bottom: 16%;
+}
+/* line 375, ../sass/index.scss */
+.winin-express .win-box2 .win-msg {
+  width: 88%;
+  margin: auto;
+  text-align: left;
+  position: relative;
+  top: 54%;
+  font-size: 18px;
+  color: #ffb96e;
+}
+/* line 383, ../sass/index.scss */
+.winin-express .win-box2 .win-msg strong {
+  color: #fffc9d;
+  font-weight: 100;
+}
+/* line 386, ../sass/index.scss */
+.winin-express .win-box2 .win-msg strong span {
+  color: #fff;
+}
+
+/* line 393, ../sass/index.scss */
+.winin-apple, .winin-phone, .winin-integral, .firstwin, .winin-express, .end-body, .shareTips, .introduces {
+  display: none;
+}
+
+@keyframes mytips {
+  0% {
+    transform: rotate(-5deg);
+  }
+  25% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+@-webkit-keyframes mytips {
+  0% {
+    -webkit-transform: rotate(-5deg);
+  }
+  25% {
+    -webkit-transform: rotate(0deg);
+  }
+  50% {
+    -webkit-transform: rotate(5deg);
+  }
+  75% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(-5deg);
+  }
+}
+@keyframes mymove {
+  0% {
+    transform: rotate(0deg) translate(0px, 0);
+  }
+  10% {
+    transform: rotate(3deg) translate(3px, 3px);
+  }
+  20% {
+    transform: rotate(0deg) translate(0px, 0);
+  }
+  30% {
+    transform: rotate(3deg) translate(3px, 3px);
+  }
+  40% {
+    transform: rotate(0deg) translate(0px, 0);
+  }
+  50% {
+    transform: rotate(3deg) translate(3px, 3px);
+  }
+  60% {
+    transform: rotate(0deg) translate(0px, 0px);
+  }
+  70% {
+    transform: rotate(3deg) translate(3px, 3px);
+  }
+  80% {
+    transform: rotate(0deg) translate(0px, 0px);
+  }
+  90% {
+    transform: rotate(3deg) translate(3px, 3px);
+  }
+  100% {
+    transform: rotate(0deg) translate(0px, 0);
+  }
+}
+@-webkit-keyframes mymove {
+  0% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+  10% {
+    -webkit-transform: rotate(3deg) translate(3px, 3px);
+  }
+  20% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+  30% {
+    -webkit-transform: rotate(3deg) translate(3px, 3px);
+  }
+  40% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+  50% {
+    -webkit-transform: rotate(3deg) translate(3px, 3px);
+  }
+  60% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+  70% {
+    -webkit-transform: rotate(3deg) translate(3px, 3px);
+  }
+  80% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+  90% {
+    -webkit-transform: rotate(3deg) translate(3px, 3px);
+  }
+  100% {
+    -webkit-transform: rotate(0deg) translate(0px, 0);
+  }
+}
+@-moz-keyframes mymove {
+  0% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+  10% {
+    -moz-transform: rotate(3deg) translate(3px, 3px);
+  }
+  20% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+  30% {
+    -moz-transform: rotate(3deg) translate(3px, 3px);
+  }
+  40% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+  50% {
+    -moz-transform: rotate(3deg) translate(3px, 3px);
+  }
+  60% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+  70% {
+    -moz-transform: rotate(3deg) translate(3px, 3px);
+  }
+  80% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+  90% {
+    -moz-transform: rotate(3deg) translate(3px, 3px);
+  }
+  100% {
+    -moz-transform: rotate(0deg) translate(0px, 0);
+  }
+}
+/* line 544, ../sass/index.scss */
+.end-body {
+  background: url(../img/endBg.jpg) repeat-y bottom;
+  width: 100%;
+  height: 600px;
+  background-size: 100% 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  display: none;
+}
+
+/* line 554, ../sass/index.scss */
+.end-main {
+  overflow: hidden;
+  height: auto;
+  min-width: 320px;
+  max-width: 420px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: auto;
+}
+/* line 563, ../sass/index.scss */
+.end-main .end-title {
+  font-size: 18px;
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+}
+/* line 569, ../sass/index.scss */
+.end-main .activePic {
+  width: 90%;
+  margin: auto;
+  overflow: hidden;
+}
+/* line 573, ../sass/index.scss */
+.end-main .activePic a img {
+  width: 100%;
+}
+/* line 577, ../sass/index.scss */
+.end-main .end-btn {
+  width: 92%;
+  margin: 15px auto;
+  overflow: hidden;
+}
+/* line 581, ../sass/index.scss */
+.end-main .end-btn .back-game {
+  width: 45%;
+  display: inline-block;
+}
+/* line 584, ../sass/index.scss */
+.end-main .end-btn .back-game img {
+  width: 100%;
+}
+/* line 588, ../sass/index.scss */
+.end-main .end-btn .down-app {
+  width: 45%;
+  display: inline-block;
+}
+/* line 591, ../sass/index.scss */
+.end-main .end-btn .down-app img {
+  width: 100%;
+}
+
+/* line 598, ../sass/index.scss */
+.shareTips {
+  text-align: center;
+  font-size: 18px;
+}
+/* line 601, ../sass/index.scss */
+.shareTips img {
+  width: 96%;
+  margin-top: 15px;
+}
+
+/* line 607, ../sass/index.scss */
+.introduces-btn {
+  position: absolute;
+  z-index: 13;
+}
+/* line 610, ../sass/index.scss */
+.introduces-btn img {
+  width: 75px;
+  margin: 10px 0 0 20px;
+}
+
+/* line 616, ../sass/index.scss */
+.skyLayer {
+  background: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 26;
+}
+
+/* line 624, ../sass/index.scss */
+.notWx {
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* line 628, ../sass/index.scss */
+span[id^="cnzz"] {
+  display: none;
+}
+
+/* line 632, ../sass/index.scss */
+.share-icon {
+  position: absolute;
+  opacity: 0;
+}

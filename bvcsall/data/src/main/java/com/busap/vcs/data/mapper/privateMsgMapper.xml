@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.PrivateMsgDAO">
+	<insert id="insertMsg" parameterType="com.busap.vcs.data.entity.PrivateMsg">
+		insert into private_msg(id,sender,reciever,create_time,content,content_type,status)
+			values(#{id},#{sender},#{reciever}, #{createTime},#{content},#{contentType},0);
+	</insert>
+	
+	<update id="readMsg" parameterType="String">
+		update private_msg set status=1 where id=#{id}
+	</update>
+	
+	<select id="searchMsg" resultType="com.busap.vcs.data.entity.PrivateMsg">
+		select p.id,p.sender,r.`name` as senderName,p.reciever,p.content,p.content_type as contentType,p.create_time as createTime 
+		from private_msg p,ruser r
+		where p.sender=r.id and p.sender=#{sender} and p.reciever=#{reciever} and `status`=0 and p.create_time>=#{createTime}
+	</select>
+	
+	<select id="unreadCount" resultType="map">
+		<![CDATA[
+			select p.sender as sender,count(p.id) as count,p.create_time as createTime from private_msg p, (select sender,create_time from private_msg 
+									where reciever=#{uid} and status=0  GROUP BY sender ORDER BY create_time ) p1
+				where reciever=#{uid} and p.create_time>=p1.create_time and p.sender=p1.sender 
+				GROUP BY p.sender
+		]]>
+	</select>
+</mapper>

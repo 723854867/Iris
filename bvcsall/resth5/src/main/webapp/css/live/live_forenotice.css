@@ -1,0 +1,1105 @@
+/* line 6, ../../sass/base/_base.scss */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* line 11, ../../sass/base/_base.scss */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+}
+
+/* line 19, ../../sass/base/_base.scss */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none;
+}
+
+/* line 28, ../../sass/base/_base.scss */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 34, ../../sass/base/_base.scss */
+h1, h2, h3, h4, h5, h6, p {
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 40, ../../sass/base/_base.scss */
+img {
+  border: 0;
+  max-width: 100%;
+}
+
+/* line 45, ../../sass/base/_base.scss */
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 51, ../../sass/base/_base.scss */
+a {
+  color: blue;
+  text-decoration: none;
+  output: none;
+  color: #333;
+}
+
+/* line 58, ../../sass/base/_base.scss */
+input, button, textarea {
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* line 67, ../../sass/base/_base.scss */
+.fr {
+  float: right;
+}
+
+/* line 70, ../../sass/base/_base.scss */
+.fl {
+  float: left;
+}
+
+/*
+ * Retina Sprites for Compass
+ * by:              Gaya Kessler
+ * last update:     03/11/14
+ *
+ * Usage:
+ * 1. create two folders in your image directory (in this case 'icons' and 'icons-2x').
+ * 2. adjust the foldernames defined below if you use different names.
+ * 3. create sprite images for pixel ratio 1 screens and put them in the first folder.
+ * 4. create sprite images for pixel ratio 2 screens and put them in the second folder, use the same filenames.
+ * 5. use the sprite-image in your Sass/Scss using: '@include use-sprite(<sprite-name>)'
+ */
+/* line 33, ../../sass/base/_other.scss */
+.playBox video {
+  background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
+  display: block;
+  vertical-align: bottom;
+  background-color: #000000;
+}
+/* line 42, ../../sass/base/_other.scss */
+.playBox img {
+  min-height: 200px;
+}
+
+/* line 48, ../../sass/base/_other.scss */
+.promptBox {
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  position: fixed;
+  top: 45%;
+  font-size: 1.4em;
+  line-height: 24px;
+  max-width: 90%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* line 67, ../../sass/base/_other.scss */
+.downBar {
+  width: 100%;
+  background: #91c41f;
+  position: fixed;
+  bottom: 0;
+  color: #fff;
+  text-align: center;
+  padding: 12px 0;
+  z-index: 1000;
+  display: none;
+}
+/* line 77, ../../sass/base/_other.scss */
+.downBar .downClose {
+  float: left;
+  display: inline-block;
+  position: relative;
+  left: 15px;
+  top: 5px;
+  font-size: 18px;
+}
+/* line 86, ../../sass/base/_other.scss */
+.downBar a {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* line 91, ../../sass/base/_other.scss */
+.downBar2 {
+  color: #333;
+  background: #fff;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 16px;
+  z-index: 1000;
+  border-top: solid 1px #ccc;
+}
+/* line 100, ../../sass/base/_other.scss */
+.downBar2 a {
+  border: solid 1px #91c41f;
+  padding: 5px 18px;
+  border-radius: 5px;
+}
+
+/* line 106, ../../sass/base/_other.scss */
+.openApp a {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* line 112, ../../sass/base/_other.scss */
+.maskBox {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.6;
+  position: fixed;
+  top: 0;
+  z-index: 110;
+  float: left;
+}
+
+/* line 125, ../../sass/base/_other.scss */
+.shareWarp {
+  position: relative;
+}
+
+/* line 128, ../../sass/base/_other.scss */
+.shareWxMask {
+  background: url(../../img/mask.png) no-repeat;
+  background-size: 100% 100%;
+  width: 100%;
+  min-height: 150px;
+  position: fixed;
+  top: 0;
+  z-index: 120;
+}
+
+/* line 137, ../../sass/base/_other.scss */
+.shareBox1 {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  background: #fff;
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 1s ease;
+}
+/* line 145, ../../sass/base/_other.scss */
+.shareBox1 h4 {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  margin: 20px 10px 10px 10px;
+}
+/* line 151, ../../sass/base/_other.scss */
+.shareBox1 .shareList {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+/* line 155, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul {
+  overflow-y: auto;
+  margin: 0 auto;
+}
+/* line 159, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li {
+  float: left;
+  width: 50px;
+  margin: 10px 13px;
+  text-align: center;
+  width: 65px;
+}
+/* line 165, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li a {
+  display: inline-block;
+  margin: auto;
+  margin-bottom: 8px;
+}
+/* line 166, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li p {
+  color: #333;
+}
+/* line 167, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .qq {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -171px -529px;
+  height: 57px;
+  width: 57px;
+  display: block;
+}
+/* line 171, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .QZone {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -96px -586px;
+  height: 57px;
+  width: 57px;
+  display: block;
+}
+/* line 175, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .wx {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: 0 -529px;
+  height: 57px;
+  width: 57px;
+  display: block;
+}
+/* line 179, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .wxq {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -57px -529px;
+  height: 57px;
+  width: 57px;
+  display: block;
+}
+/* line 183, ../../sass/base/_other.scss */
+.shareBox1 .shareList ul li .sinawb {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -114px -529px;
+  height: 57px;
+  width: 57px;
+  display: block;
+}
+/* line 190, ../../sass/base/_other.scss */
+.shareBox1 .sharewpBox {
+  width: 100%;
+  background: #fff;
+  position: relative;
+  top: -8px;
+}
+/* line 195, ../../sass/base/_other.scss */
+.shareBox1 .sharewpBox .sharewp {
+  border-radius: 5px;
+  background: #91c41f;
+  width: 95%;
+  padding: 10px 0;
+  display: block;
+  margin: auto;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+}
+/* line 208, ../../sass/base/_other.scss */
+.shareBox1 .cancel {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+}
+
+/* line 216, ../../sass/base/_other.scss */
+#videoTag {
+  display: none;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+/* line 222, ../../sass/base/_other.scss */
+.playBox {
+  position: relative;
+}
+/* line 224, ../../sass/base/_other.scss */
+.playBox .videoPic {
+  vertical-align: bottom;
+  width: 100%;
+  min-height: 320px;
+}
+/* line 229, ../../sass/base/_other.scss */
+.playBox .canPlay {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  z-index: 100;
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: 0 -586px;
+  height: 96px;
+  width: 96px;
+}
+
+/* line 245, ../../sass/base/_other.scss */
+.loadMore {
+  text-align: center;
+  border-top: solid 1px #d9d9d9;
+  border-bottom: solid 1px #d9d9d9;
+  padding: 10px 0;
+  width: 100%;
+  text-align: center;
+  display: none;
+  color: #999999;
+}
+
+/* line 255, ../../sass/base/_other.scss */
+.scrollTop {
+  position: fixed;
+  bottom: 70px;
+  right: 10px;
+  z-index: 110;
+}
+
+/* line 262, ../../sass/base/_other.scss */
+span[id^="cnzz"] {
+  display: none;
+}
+
+/* line 267, ../../sass/base/_other.scss */
+.main, .head, .personalCenter, .personalBg, .activeUseList, .recommendContent {
+  max-width: 640px;
+  min-width: 318px;
+  margin: auto;
+}
+
+/* line 272, ../../sass/base/_other.scss */
+.loadMore {
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+/* line 276, ../../sass/base/_other.scss */
+.rankloadMore {
+  width: 100%;
+}
+
+/* line 279, ../../sass/base/_other.scss */
+.downBar {
+  max-width: 640px;
+  min-width: 318px;
+  margin: auto;
+}
+
+/* line 287, ../../sass/base/_other.scss */
+.sharePic {
+  position: absolute;
+  opacity: 0;
+}
+
+/* line 292, ../../sass/base/_other.scss */
+.skyBox {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+  display: none;
+}
+
+/* line 301, ../../sass/base/_other.scss */
+.skyBox-anz {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  z-index: 999999;
+  display: none;
+}
+
+/* line 8, ../../sass/Connect.scss */
+.head {
+  padding: 10px 0;
+  overflow: hidden;
+  background-color: #fff;
+  width: 100%;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+}
+/* line 12, ../../sass/Connect.scss */
+.head .logo {
+  background: url(../../img/icons-2x/logo_new.png) no-repeat;
+  width: 36px;
+  height: 36px;
+  background-size: 100% 100%;
+  margin-top: 2px;
+  margin-left: 15px;
+  float: left;
+  display: inline-block;
+  border: 1px solid #e8e8e8;
+  border-radius: 9px;
+}
+/* line 20, ../../sass/Connect.scss */
+.head .word-logo {
+  float: left;
+  display: inline-block;
+  width: 40%;
+  padding: 10px 0 0 12px;
+  font-size: 18px;
+  color: #999;
+  font-weight: 100;
+}
+/* line 26, ../../sass/Connect.scss */
+.head .down-Btn {
+  width: 102px;
+  float: right;
+  display: inline-block;
+  margin: 10px 5px 0 0;
+}
+/* line 30, ../../sass/Connect.scss */
+.head .down-Btn a {
+  display: inline-block;
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: 0 -149px;
+  height: 24px;
+  width: 102px;
+}
+
+/* line 37, ../../sass/Connect.scss */
+.topBlock {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  border-bottom: 1px solid #e5b7c3;
+  background-color: rgba(237, 237, 237, 0.77);
+  z-index: 100;
+}
+/* line 45, ../../sass/Connect.scss */
+.topBlock img {
+  padding: 10px;
+  display: block;
+  float: left;
+}
+/* line 50, ../../sass/Connect.scss */
+.topBlock dl {
+  float: left;
+  background: none;
+  border-radius: 0;
+  color: #4f4f4f;
+  margin-top: 8px;
+}
+/* line 56, ../../sass/Connect.scss */
+.topBlock dl p:first-of-type {
+  font-size: 15px;
+  text-align: left;
+}
+/* line 60, ../../sass/Connect.scss */
+.topBlock dl p:nth-of-type(2) {
+  font-size: 12px;
+}
+/* line 64, ../../sass/Connect.scss */
+.topBlock .joinBtn {
+  float: right;
+  color: #ffffff;
+  font-size: 13px;
+  border-radius: 15px;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 15px;
+  margin-right: 15px;
+  background-color: #f8698f;
+  text-align: center;
+}
+
+/* line 78, ../../sass/Connect.scss */
+.bgBox2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000000;
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  display: none;
+  font-size: 20px;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 150px;
+  z-index: 9999999;
+  overflow: hidden;
+}
+
+/* line 7, ../../sass/live/live_forenotice.scss */
+body {
+  float: left;
+}
+
+/* line 10, ../../sass/live/live_forenotice.scss */
+.main {
+  position: relative;
+  float: left;
+  margin-top: 59px;
+  background-color: #ffffff;
+}
+/* line 15, ../../sass/live/live_forenotice.scss */
+.main .topContent {
+  float: left;
+  border: none;
+  width: 100%;
+}
+/* line 19, ../../sass/live/live_forenotice.scss */
+.main .topContent a.logo {
+  display: inline-block;
+  float: left;
+  height: 44px;
+  margin-left: 10px;
+}
+/* line 25, ../../sass/live/live_forenotice.scss */
+.main .topContent h2 {
+  float: left;
+  font-size: 20px;
+  color: #666666;
+  height: 44px;
+  line-height: 44px;
+}
+/* line 32, ../../sass/live/live_forenotice.scss */
+.main .topContent a.downloadBlive {
+  float: right;
+  margin-right: 10px;
+  height: 44px;
+  line-height: 44px;
+}
+/* line 37, ../../sass/live/live_forenotice.scss */
+.main .topContent a.downloadBlive img {
+  width: 100px;
+  margin-top: 10px;
+}
+
+/* line 45, ../../sass/live/live_forenotice.scss */
+.playBox {
+  float: left;
+  width: 100%;
+}
+/* line 48, ../../sass/live/live_forenotice.scss */
+.playBox img.videoPic {
+  width: 100%;
+  min-height: 300px;
+  float: left;
+}
+/* line 53, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo {
+  color: #ffffff;
+  font-size: 14px;
+  float: left;
+}
+/* line 57, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p {
+  color: #cccccc;
+  margin: 5px 10px 0 0;
+  padding: 10px 10px 10px 0;
+}
+/* line 61, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p span {
+  color: #91c41f;
+}
+/* line 64, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p img {
+  margin: 3px 0 0 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 6px;
+  float: left;
+}
+/* line 71, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p em {
+  font-style: normal;
+  display: inline-block;
+}
+/* line 75, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p em.dis {
+  float: left;
+}
+/* line 78, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p em.liverName {
+  font-style: normal;
+  width: 80px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float: left;
+}
+/* line 85, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p.address {
+  height: 35px;
+  line-height: 35px;
+  width: 160px;
+}
+/* line 90, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p.noticeTime {
+  width: 210px;
+}
+/* line 93, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p.name {
+  height: 40px;
+  line-height: 40px;
+}
+/* line 96, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p.name .portraitV {
+  position: relative;
+  float: left;
+  display: inline-block;
+}
+/* line 100, ../../sass/live/live_forenotice.scss */
+.playBox .liveInfo p.name .portraitV img.addV {
+  width: 12px;
+  height: 12px;
+  border-radius: 0;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+/* line 112, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg {
+  width: 100%;
+  background: #fff;
+}
+/* line 115, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg .evalutionListCon .emptydata {
+  text-align: center;
+  color: #999;
+  font-size: 16px;
+  padding: 15px;
+}
+/* line 121, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl {
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
+}
+/* line 125, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dt {
+  position: relative;
+  float: left;
+}
+/* line 128, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dt img {
+  margin: 3px 0 0 0;
+  height: 34px;
+  width: 34px;
+  border-radius: 17px;
+  min-height: 0;
+}
+/* line 135, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dt .userV1 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -33px -24px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+}
+/* line 141, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dt .userV2 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -12px -48px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: -0px;
+  bottom: 4px;
+}
+/* line 147, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dt .userV3 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -24px -48px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: -0px;
+  bottom: 4px;
+}
+/* line 154, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:first-of-type {
+  float: left;
+  margin-left: 10px;
+  line-height: 16px;
+}
+/* line 158, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:first-of-type p:first-of-type {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  color: #666666;
+}
+/* line 164, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:first-of-type p:nth-of-type(2) {
+  line-height: 18px;
+  font-size: 14px;
+  color: #999999;
+}
+/* line 171, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:nth-of-type(2) {
+  float: right;
+  margin: 0;
+}
+/* line 174, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:nth-of-type(2) a {
+  display: block;
+  margin-top: 8px;
+}
+/* line 177, ../../sass/live/live_forenotice.scss */
+.playBox .listUserMsg dl dd:nth-of-type(2) a img {
+  width: 72px;
+  min-height: 0;
+}
+/* line 185, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox {
+  width: 90%;
+  height: 35px;
+  display: box;
+  display: -webkit-box;
+  display: -moz-box;
+  margin: 0 auto;
+}
+/* line 192, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox div {
+  padding: 0;
+}
+/* line 194, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox div em {
+  display: inline-block;
+  margin: auto;
+  position: relative;
+  top: 3px;
+}
+/* line 200, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox div span {
+  line-height: 10px;
+  color: #999999;
+  display: inline-block;
+  height: 20px;
+  width: 40px;
+  position: relative;
+  top: -5px;
+  text-align: left;
+}
+/* line 209, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .read {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 213, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .read em {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -136px -72px;
+  height: 24px;
+  width: 24px;
+}
+/* line 217, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .zan {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 221, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .zan em {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -160px -72px;
+  height: 24px;
+  width: 24px;
+}
+/* line 225, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .commit {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 229, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .commit em {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -120px -120px;
+  height: 24px;
+  width: 24px;
+}
+/* line 234, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .Forward {
+  text-align: center;
+  box-flex: 1;
+  -webkit-box-flex: 1;
+}
+/* line 238, ../../sass/live/live_forenotice.scss */
+.playBox .shareBox .Forward em {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -40px -72px;
+  height: 24px;
+  width: 24px;
+}
+
+/* line 245, ../../sass/live/live_forenotice.scss */
+.liverSentence {
+  font-size: 13px;
+  width: 94%;
+  float: left;
+  color: #999999;
+  text-indent: 11px;
+  height: 45px;
+  line-height: 45px;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  margin: 5px 3%;
+  position: relative;
+}
+/* line 257, ../../sass/live/live_forenotice.scss */
+.liverSentence img {
+  position: absolute;
+  top: -18px;
+  left: 16px;
+  width: 30px;
+  min-height: 0;
+}
+
+/* line 265, ../../sass/live/live_forenotice.scss */
+.noticeTime {
+  font-size: 13px;
+  width: 94%;
+  float: left;
+  color: #999999;
+  text-indent: 11px;
+  height: 45px;
+  line-height: 45px;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  margin: 5px 3%;
+}
+
+/* line 277, ../../sass/live/live_forenotice.scss */
+.downloadApp {
+  text-align: center;
+  height: 34px;
+  line-height: 34px;
+  width: 100%;
+  float: left;
+}
+
+/* line 284, ../../sass/live/live_forenotice.scss */
+.bottomBanner {
+  float: left;
+}
+/* line 286, ../../sass/live/live_forenotice.scss */
+.bottomBanner a {
+  width: 60%;
+  display: block;
+  margin: 10px auto;
+}
+/* line 290, ../../sass/live/live_forenotice.scss */
+.bottomBanner a img {
+  width: 100%;
+  vertical-align: bottom;
+}
+
+/* line 297, ../../sass/live/live_forenotice.scss */
+.hotRecommend {
+  background-color: #f2f2f2;
+  float: left;
+  width: 100%;
+}
+/* line 301, ../../sass/live/live_forenotice.scss */
+.hotRecommend h2 {
+  color: #999999;
+  text-indent: 10px;
+  height: 34px;
+  line-height: 34px;
+  font-size: 15px;
+  background-color: #ffffff;
+  margin-top: 4px;
+}
+/* line 310, ../../sass/live/live_forenotice.scss */
+.hotRecommend .videoListBox {
+  float: left;
+  width: 100%;
+}
+/* line 313, ../../sass/live/live_forenotice.scss */
+.hotRecommend .videoListBox ul {
+  position: absolute;
+  left: -6px;
+}
+/* line 316, ../../sass/live/live_forenotice.scss */
+.hotRecommend .videoListBox ul li {
+  width: 33.3%;
+  float: left;
+  margin-top: 2px;
+  margin-left: 2px;
+  overflow: hidden;
+}
+/* line 322, ../../sass/live/live_forenotice.scss */
+.hotRecommend .videoListBox ul li a {
+  display: block;
+}
+/* line 324, ../../sass/live/live_forenotice.scss */
+.hotRecommend .videoListBox ul li a img.hotPic {
+  width: 100%;
+}
+
+/* line 332, ../../sass/live/live_forenotice.scss */
+.commentBox {
+  float: left;
+  width: 100%;
+}
+/* line 335, ../../sass/live/live_forenotice.scss */
+.commentBox h2 {
+  color: #999999;
+  text-indent: 10px;
+  height: 34px;
+  line-height: 34px;
+  border-bottom: solid 1px #f2f2f2;
+  padding: 6px 0;
+  font-size: 15px;
+}
+/* line 344, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon {
+  width: 100%;
+  margin-top: 12px;
+}
+/* line 347, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon p {
+  font-size: 13px;
+  color: #999;
+}
+/* line 351, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl {
+  overflow: hidden;
+  margin: 0;
+  padding: 10px;
+  border-bottom: solid 1px #f2f2f2;
+}
+/* line 356, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dt {
+  position: relative;
+  float: left;
+}
+/* line 359, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dt img {
+  margin: 3px 0 0 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+}
+/* line 365, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dt .userV1 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -33px -24px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+}
+/* line 371, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dt .userV2 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -12px -48px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: -0px;
+  bottom: 4px;
+}
+/* line 377, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dt .userV3 {
+  background-image: url('/resth5/img/icons-2x-s31007c57c5.png');
+  background-size: 285px 682px;
+  background-position: -24px -48px;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  right: -0px;
+  bottom: 4px;
+}
+/* line 384, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dd:first-of-type {
+  float: left;
+  dispaly: inline-block;
+  margin-left: 10px;
+  line-height: 16px;
+  width: 64%;
+}
+/* line 391, ../../sass/live/live_forenotice.scss */
+.commentBox .evalutionListCon dl dd:nth-of-type(2) {
+  float: right;
+  color: #999999;
+  margin: 0;
+  margin-top: 10px;
+}
+
+/* line 400, ../../sass/live/live_forenotice.scss */
+.icons {
+  width: 100%;
+  float: left;
+}
+
+/* line 404, ../../sass/live/live_forenotice.scss */
+.skyBox, .skyBox1 {
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  top: 0;
+  z-index: 120;
+  display: none;
+  opacity: 0.7;
+}
+/* line 413, ../../sass/live/live_forenotice.scss */
+.skyBox img, .skyBox1 img {
+  width: 100%;
+}
+
+/* line 417, ../../sass/live/live_forenotice.scss */
+.skyBox-anz {
+  width: 100%;
+  height: 100%;
+  background: black;
+  position: fixed;
+  top: 0;
+  z-index: 120;
+  display: none;
+}
+/* line 425, ../../sass/live/live_forenotice.scss */
+.skyBox-anz img {
+  width: 100%;
+}

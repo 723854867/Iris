@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.PrizeDetailDao">
+
+    <resultMap id="BaseResultMap" type="com.busap.vcs.data.model.PrizeDetailDisplay">
+        <id column="id" property="id"/>
+        <result column="create_at" property="createDate"/>
+        <result column="modify_at" property="modifyDate"/>
+        <result column="data_from" property="dataFrom"/>
+        <result column="creator_id" property="creatorId"/>
+        <result column="prize_id" property="prizeId"/>
+        <result column="prize_level" property="prizeLevel"/>
+        <result column="prize_level_name" property="prizeLevelName"/>
+        <result column="prize_name" property="prizeName"/>
+        <result column="user_id" property="userId"/>
+        <result column="pic" property="userPic"/>
+        <result column="vstat" property="vstat"/>
+        <result column="username" property="username"/>
+    </resultMap>
+    
+    <sql id="page">limit #{pageStart},#{pageSize}</sql>
+
+    <sql id="where_sql">
+        <where>
+            <if test="id != null">
+                AND pd.id = #{id}
+            </if>
+            <if test="prizeId != null">
+                AND pd.prize_id = #{prizeId}
+            </if>
+            <if test="prizeLevel != null">
+                AND pd.prize_level = #{prizeLevel}
+            </if>
+            <if test="name != null and name != ''">
+                AND r.name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="username != null and username != ''">
+                AND r.username LIKE CONCAT('%',#{username},'%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND r.phone LIKE CONCAT('%',#{phone},'%')
+            </if>
+            <if test="userId != null">
+                AND pd.user_id = #{userId}
+            </if>
+        </where>
+    </sql>
+
+    <select id="select" parameterType="com.busap.vcs.data.model.PrizeDetailDisplay" resultMap="BaseResultMap">
+        SELECT
+        pd.id,
+        pd.prize_id,
+        pd.prize_level,
+        pd.prize_level_name,
+        r.name,
+        r.pic,
+        pd.creator_id,
+        pd.create_at,
+        pd.prize_name,
+        pd.user_id,
+        r.username,
+        r.phone
+        FROM prize_detail pd
+        LEFT JOIN prize p ON p.id = pd.prize_id
+        LEFT JOIN ruser r ON r.id = pd.user_id
+        <include refid="where_sql"/>
+        ORDER BY pd.prize_level ASC
+    </select>
+    
+    <select id="selectByPrizeId" resultMap="BaseResultMap">
+        SELECT
+        pd.id,
+        pd.prize_id,
+        pd.prize_level,
+        pd.prize_level_name,
+        r.name as username,
+        r.pic,
+        r.vstat,
+        pd.creator_id,
+        pd.create_at,
+        pd.prize_name
+        FROM prize_detail pd
+        LEFT JOIN prize p ON p.id = pd.prize_id
+        LEFT JOIN ruser r ON r.id = pd.user_id
+        WHERE pd.prize_id = #{prizeId} AND pd.prize_level=#{prizeLevel}
+        <include refid="page"/>
+    </select>
+    
+    <select id="selectAllByPrizeId" resultMap="BaseResultMap">
+        SELECT
+        pd.id,
+        pd.prize_id,
+        pd.prize_level,
+        pd.prize_level_name,
+        r.name as username,
+        r.pic,
+        r.vstat
+        pd.creator_id,
+        pd.create_at,
+        pd.prize_name
+        FROM prize_detail pd
+        LEFT JOIN prize p ON p.id = pd.prize_id
+        LEFT JOIN ruser r ON r.id = pd.user_id
+        WHERE pd.prize_id = #{prizeId} AND pd.prize_level=#{prizeLevel}
+    </select>
+    
+    <select id="selectPrizeLevel" resultType="Integer">
+        SELECT
+        DISTINCT(prize_level)
+        FROM prize_detail pd
+		WHERE pd.prize_id = #{prizeId} order by prize_level asc
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        id,
+        prize_id,
+        prize_name,
+        prize_level,
+        prize_level_name,
+        user_id
+        FROM prize_detail
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="com.busap.vcs.data.entity.PrizeDetail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO prize_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="prizeId != null">
+                prize_id,
+            </if>
+            <if test="prizeLevel != null">
+                prize_level,
+            </if>
+            <if test="prizeLevelName != null and prizeLevelName != ''">
+                prize_level_name,
+            </if>
+            <if test="prizeName != null and prizeName != ''">
+                prize_name,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="createDateStr != null">
+                create_at,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="prizeId != null">
+                #{prizeId,jdbcType=BIGINT},
+            </if>
+            <if test="prizeLevel != null">
+                #{prizeLevel,jdbcType=INTEGER},
+            </if>
+            <if test="prizeLevelName != null and prizeLevelName != ''">
+                #{prizeLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeName != null and prizeName != ''">
+                #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createDateStr != null">
+                #{createDateStr,jdbcType=TIMESTAMP},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                #{dataFrom,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.busap.vcs.data.entity.PrizeDetail">
+        UPDATE prize_detail
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="prizeId != null">
+                prize_id = #{prizeId,jdbcType=BIGINT},
+            </if>
+            <if test="prizeLevel != null">
+                prize_level = #{prizeLevel,jdbcType=INTEGER},
+            </if>
+            <if test="prizeLevelName != null and prizeLevelName != ''">
+                prize_level_name = #{prizeLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="prizeName != null and prizeName != ''">
+                prize_name = #{prizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null and dataFrom != ''">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            modify_at = now(),
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="batchInsertPrizeDetail" useGeneratedKeys="true" parameterType="java.util.List">
+        INSERT INTO prize_detail (prize_id,prize_level,prize_level_name,prize_name,user_id,creator_id,create_at,data_from)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.prizeId},#{item.prizeLevel},#{item.prizeLevelName},#{item.prizeName},#{item.userId},#{item.creatorId},#{item.createDateStr},#{item.dataFrom})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM prize_detail WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busap.vcs.data.mapper.ExchangeRecodeMapper" >
+  <resultMap id="BaseResultMap" type="com.busap.vcs.data.entity.ExchangeRecode" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="transfer_id" property="transferId" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="BIGINT" />
+    <result column="time_transferred" property="timeTransferred" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="diamond" property="diamond" jdbcType="INTEGER" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="recipient" property="recipient" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="failure_msg" property="failureMsg" jdbcType="VARCHAR" />
+    <result column="transaction_no" property="transactionNo" jdbcType="VARCHAR" />
+    <result column="produce_id" property="produceId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="exchange_point" property="exchangePoint" jdbcType="INTEGER" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="body" property="body" jdbcType="VARCHAR" />
+    <result column="extra" property="extra" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, transfer_id, created, time_transferred, status, channel, order_no, amount, diamond, 
+    currency, recipient, description, failure_msg, transaction_no, produce_id, user_id, 
+    exchange_point, subject, body, extra
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.busap.vcs.data.entity.ExchangeRecodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from exchange_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from exchange_recode
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from exchange_recode
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.busap.vcs.data.entity.ExchangeRecodeExample" >
+    delete from exchange_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.busap.vcs.data.entity.ExchangeRecode" >
+    insert into exchange_recode (id, transfer_id, created, 
+      time_transferred, status, channel, 
+      order_no, amount, diamond, 
+      currency, recipient, description, 
+      failure_msg, transaction_no, produce_id, 
+      user_id, exchange_point, subject, 
+      body, extra)
+    values (#{id,jdbcType=BIGINT}, #{transferId,jdbcType=VARCHAR}, #{created,jdbcType=BIGINT}, 
+      #{timeTransferred,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{diamond,jdbcType=INTEGER}, 
+      #{currency,jdbcType=VARCHAR}, #{recipient,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{failureMsg,jdbcType=VARCHAR}, #{transactionNo,jdbcType=VARCHAR}, #{produceId,jdbcType=BIGINT}, 
+      #{userId,jdbcType=BIGINT}, #{exchangePoint,jdbcType=INTEGER}, #{subject,jdbcType=VARCHAR}, 
+      #{body,jdbcType=VARCHAR}, #{extra,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.busap.vcs.data.entity.ExchangeRecode" >
+    insert into exchange_recode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="transferId != null" >
+        transfer_id,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+      <if test="timeTransferred != null" >
+        time_transferred,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="channel != null" >
+        channel,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="diamond != null" >
+        diamond,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="recipient != null" >
+        recipient,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="failureMsg != null" >
+        failure_msg,
+      </if>
+      <if test="transactionNo != null" >
+        transaction_no,
+      </if>
+      <if test="produceId != null" >
+        produce_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="exchangePoint != null" >
+        exchange_point,
+      </if>
+      <if test="subject != null" >
+        subject,
+      </if>
+      <if test="body != null" >
+        body,
+      </if>
+      <if test="extra != null" >
+        extra,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="transferId != null" >
+        #{transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=BIGINT},
+      </if>
+      <if test="timeTransferred != null" >
+        #{timeTransferred,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="diamond != null" >
+        #{diamond,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="recipient != null" >
+        #{recipient,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="failureMsg != null" >
+        #{failureMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNo != null" >
+        #{transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="produceId != null" >
+        #{produceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="exchangePoint != null" >
+        #{exchangePoint,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null" >
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null" >
+        #{extra,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.busap.vcs.data.entity.ExchangeRecodeExample" resultType="java.lang.Integer" >
+    select count(*) from exchange_recode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update exchange_recode
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.transferId != null" >
+        transfer_id = #{record.transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.created != null" >
+        created = #{record.created,jdbcType=BIGINT},
+      </if>
+      <if test="record.timeTransferred != null" >
+        time_transferred = #{record.timeTransferred,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.diamond != null" >
+        diamond = #{record.diamond,jdbcType=INTEGER},
+      </if>
+      <if test="record.currency != null" >
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recipient != null" >
+        recipient = #{record.recipient,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.failureMsg != null" >
+        failure_msg = #{record.failureMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transactionNo != null" >
+        transaction_no = #{record.transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.produceId != null" >
+        produce_id = #{record.produceId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.exchangePoint != null" >
+        exchange_point = #{record.exchangePoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.subject != null" >
+        subject = #{record.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.body != null" >
+        body = #{record.body,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extra != null" >
+        extra = #{record.extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update exchange_recode
+    set id = #{record.id,jdbcType=BIGINT},
+      transfer_id = #{record.transferId,jdbcType=VARCHAR},
+      created = #{record.created,jdbcType=BIGINT},
+      time_transferred = #{record.timeTransferred,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=VARCHAR},
+      channel = #{record.channel,jdbcType=VARCHAR},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      diamond = #{record.diamond,jdbcType=INTEGER},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      recipient = #{record.recipient,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      failure_msg = #{record.failureMsg,jdbcType=VARCHAR},
+      transaction_no = #{record.transactionNo,jdbcType=VARCHAR},
+      produce_id = #{record.produceId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      exchange_point = #{record.exchangePoint,jdbcType=INTEGER},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      body = #{record.body,jdbcType=VARCHAR},
+      extra = #{record.extra,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.busap.vcs.data.entity.ExchangeRecode" >
+    update exchange_recode
+    <set >
+      <if test="transferId != null" >
+        transfer_id = #{transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="created != null" >
+        created = #{created,jdbcType=BIGINT},
+      </if>
+      <if test="timeTransferred != null" >
+        time_transferred = #{timeTransferred,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="diamond != null" >
+        diamond = #{diamond,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="recipient != null" >
+        recipient = #{recipient,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="failureMsg != null" >
+        failure_msg = #{failureMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionNo != null" >
+        transaction_no = #{transactionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="produceId != null" >
+        produce_id = #{produceId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="exchangePoint != null" >
+        exchange_point = #{exchangePoint,jdbcType=INTEGER},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="extra != null" >
+        extra = #{extra,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.ExchangeRecode" >
+    update exchange_recode
+    set transfer_id = #{transferId,jdbcType=VARCHAR},
+      created = #{created,jdbcType=BIGINT},
+      time_transferred = #{timeTransferred,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      diamond = #{diamond,jdbcType=INTEGER},
+      currency = #{currency,jdbcType=VARCHAR},
+      recipient = #{recipient,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      failure_msg = #{failureMsg,jdbcType=VARCHAR},
+      transaction_no = #{transactionNo,jdbcType=VARCHAR},
+      produce_id = #{produceId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      exchange_point = #{exchangePoint,jdbcType=INTEGER},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      extra = #{extra,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <sql id="userExchangeRecordSql">
+    <where>
+      <if test="organizationId != null">
+        AND r.organization_id = #{organizationId,jdbcType=BIGINT}
+      </if>
+      <choose>
+        <when test="userKey != null and userKey != ''">
+          <if test="userKey == 1">
+            <if test="userKeyword != null and userKeyword != ''">
+              AND r.id = #{userKeyword}
+            </if>
+          </if>
+          <if test="userKey == 2">
+            <if test="userKeyword != null and userKeyword != ''">
+              AND r.username LIKE CONCAT('%',#{userKeyword},'%')
+            </if>
+          </if>
+          <if test="userKey == 3">
+            <if test="userKeyword != null and userKeyword != ''">
+              AND r.name LIKE CONCAT('%',#{userKeyword},'%')
+            </if>
+          </if>
+          <if test="userKey == 4">
+            <if test="userKeyword != null and userKeyword != ''">
+              AND (r.username=#{userKeyword} or r.phone LIKE CONCAT('%',#{userKeyword},'%') or r.band_phone LIKE CONCAT('%',#{userKeyword},'%'))
+            </if>
+          </if>
+        </when>
+      </choose>
+      <if test="status != null and status !=''">
+        AND er.status = #{status,jdbcType=VARCHAR}
+      </if>
+      <if test="channel != null and channel != ''">
+        AND er.channel = #{channel,jdbcType=VARCHAR}
+      </if>
+      <if test="startDate != null and startDate != ''">
+        <![CDATA[ AND created  >= #{startDate,jdbcType=INTEGER} ]]>
+      </if>
+      <if test="endDate != null and endDate != ''">
+        <![CDATA[ AND created  <= #{endDate,jdbcType=INTEGER} ]]>
+      </if>
+    </where>
+  </sql>
+
+  <select id="selectUserExchangeRecord" parameterType="map" resultType="com.busap.vcs.data.model.UserExchangeRecord">
+    SELECT
+    er.id,
+    er.user_id AS userId,
+    r.name,
+    r.band_phone AS phone,
+    r.username,
+    er.amount,
+    er.produce_id AS produceId,
+    er.channel,
+    er.status,
+    er.exchange_point AS exchangePoint,
+    op.received AS received,
+    er.created,
+    org.org_name as orgName
+    FROM exchange_recode er
+    LEFT JOIN ruser r ON r.id = er.user_id
+    LEFT JOIN order_pay op ON op.order_no = er.order_no
+    LEFT JOIN organization org ON r.organization_id=org.id
+    <include refid="userExchangeRecordSql"/>
+    ORDER BY er.created DESC
+  </select>
+
+
+
+  <select id="selectGoldCoinAndGoldCount" parameterType="map" resultType="map">
+    SELECT
+    IFNULL(SUM(er.exchange_point),0) AS exchangePoint,
+    IFNULL(SUM(op.received),0) AS received,
+    IFNULL(SUM(er.amount),0) AS amount
+    FROM exchange_recode er
+    LEFT JOIN ruser r ON r.id = er.user_id
+    LEFT JOIN order_pay op ON op.order_no = er.order_no
+    <include refid="userExchangeRecordSql"/>
+  </select>
+
+  <select id="selectPersonCountByUserId" parameterType="map" resultType="java.lang.Integer">
+    SELECT COUNT(t.id) FROM(
+    SELECT
+    er.id
+    FROM exchange_recode er
+    LEFT JOIN ruser r ON r.id = er.user_id
+    LEFT JOIN order_pay op ON op.order_no = er.order_no
+    <include refid="userExchangeRecordSql"/>
+    GROUP BY er.user_id
+    ) t
+  </select>
+  
+  <select id="selectExportUserExchangeRecord" parameterType="map" resultType="com.busap.vcs.data.model.ExportUserExchangeRecord">
+    SELECT
+    er.id,
+    er.user_id AS userId,
+    r.name,
+    r.band_phone AS phone,
+    r.username,
+    er.amount/100 AS amount,
+    CASE
+    WHEN er.channel = 'exchange' THEN '兑换'
+    WHEN er.channel = 'wx_pub' THEN '提现'
+    WHEN er.channel = 'org' THEN '机构'
+    END AS channel,
+    CASE
+    WHEN er.status = 'paid' THEN '成功'
+    WHEN er.status = 'failed' THEN '失败'
+    WHEN er.status = 'pending' THEN '处理中'
+    END AS status,
+    er.exchange_point AS exchangePoint,
+    op.received AS received,
+    er.created
+    FROM exchange_recode er
+    LEFT JOIN ruser r ON r.id = er.user_id
+    LEFT JOIN order_pay op ON op.order_no = er.order_no
+    <include refid="userExchangeRecordSql"/>
+    ORDER BY er.created DESC
+  </select>
+</mapper>

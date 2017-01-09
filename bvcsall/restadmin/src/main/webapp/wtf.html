@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+function displayHlsFiles(input){
+var filelist = document.getElementById('filelist');
+for (var i = 0; i < filelist.childNodes.length; i++){ filelist.removeChild(filelist.childNodes[i]); }
+for (var i = 0; i < input.files.length; i++) {
+   var mbs = (input.files[i].size / (1024*1024)).toFixed(2);
+   var filename = input.files[i].name;
+   var texts = filename + " [ "+mbs+" mb] ";
+   var li = document.createElement('li');
+   li.innerHTML = texts;
+   filelist.appendChild(li);
+}
+}
+</script>
+</head>
+<body>
+<FORM ACTION="http://10.18.20.64:63880/hls/upload/formpostmultipart" ENCTYPE="multipart/form-data" METHOD="POST">
+<p>POST MULTIPART FORM 
+<INPUT TYPE="submit" NAME="submit"></INPUT>
+<HR WIDTH=NOSHADE color="blue"></p>
+<input size=36 type=file id="hlsfiles" name="hlsfile" multiple=true onchange="displayHlsFiles(this);">
+<ul id="filelist"><ul/>
+</FROM>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busap.vcs.data.mapper.AnchorDao">
+
+    <resultMap id="BaseResultMap" type="com.busap.vcs.data.entity.Anchor">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="create_at" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="creator_id" jdbcType="BIGINT" property="creatorId"/>
+        <result column="data_from" jdbcType="VARCHAR" property="dataFrom"/>
+        <result column="modify_at" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="qiniu_stream_id" jdbcType="VARCHAR" property="qiniuStreamId"/>
+        <result column="point_count" jdbcType="INTEGER" property="pointCount"/>
+        <result column="certificate_number" property="certificateNumber" jdbcType="VARCHAR"/>
+        <result column="certificate_type" property="certificateType" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="pic_one" property="picOne" jdbcType="VARCHAR"/>
+        <result column="pic_three" property="picThree" jdbcType="VARCHAR"/>
+        <result column="pic_two" property="picTwo" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="wechat" property="wechat" jdbcType="VARCHAR"/>
+        <result column="bank_name" property="bankName" jdbcType="VARCHAR"/>
+        <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR"/>
+        <result column="bank_number" property="bankNumber" jdbcType="VARCHAR"/>
+        <result column="bank_province" property="bankProvince" jdbcType="VARCHAR"/>
+        <result column="bank_city" property="bankCity" jdbcType="VARCHAR"/>
+        <result column="bank_address" property="bankAddress" jdbcType="VARCHAR"/>
+        <result column="basic_salary" property="basicSalary" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="where_sql">
+        <where>
+            <if test="key !=null and key != ''">
+                r.id = #{key,jdbcType=VARCHAR}
+                OR
+                r.name LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select id, create_at, creator_id, data_from, modify_at, qiniu_stream_id, point_count,
+        certificate_number, certificate_type,
+        phone, pic_one, pic_three,bank_number,bank_province,bank_city,bank_address,bank_name,
+        pic_two, qq, real_name,basic_salary,branch_bank_name,
+        sex, status, wechat
+        from anchor
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectAnchorIncome" resultType="com.busap.vcs.data.model.AnchorIncome" parameterType="map">
+        SELECT
+        r.id AS userId,r.name,r.username AS userName,r.phone,
+        a.point_count AS pointCount,
+        a.id,a.lock_points as lockPoints,a.settled_points as settledPoints
+        FROM anchor a
+        LEFT JOIN ruser r ON r.id = a.creator_id
+        <where>
+        	1=1
+            <if test="key !=null and key == 'id'">
+               and r.id = #{value,jdbcType=VARCHAR}
+            </if>
+            <if test="key !=null and key == 'name'">
+            	and r.name LIKE CONCAT('%',#{value,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="key !=null and key == 'phone'">
+            	and r.phone LIKE CONCAT('%',#{value,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        
+        ORDER BY a.point_count DESC
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.busap.vcs.data.entity.Anchor">
+        update anchor
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="dataFrom != null">
+                data_from = #{dataFrom,jdbcType=VARCHAR},
+            </if>
+            modify_at = now(),
+            <if test="pointCount != null">
+                point_count = #{pointCount,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="rejectReason != null">
+                reject_reason = #{rejectReason,jdbcType=VARCHAR},
+            </if>
+            <if test="bankName != null and bankName != ''">
+                bank_name = #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNumber != null and bankNumber != ''">
+                bank_number = #{bankNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null and realName != ''">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="certificateType != null">
+                certificate_type = #{certificateType,jdbcType=INTEGER},
+            </if>
+            <if test="certificateNumber != null and certificateNumber != ''">
+                certificate_number = #{certificateNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="basicSalary != null">
+                basic_salary = #{basicSalary,jdbcType=DECIMAL},
+            </if>
+            <if test="branchBankName != null and branchBankName != ''">
+                branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="map">
+        select id, create_at, creator_id, data_from, modify_at, qiniu_stream_id, point_count,
+        certificate_number, certificate_type, phone, pic_one, pic_three, pic_two, qq, real_name,basic_salary,
+        sex, status, wechat,reject_reason,bank_number,bank_province,bank_city,bank_address,bank_name,branch_bank_name
+        from anchor
+        <where>
+            status != -2
+            <if test="status != null">
+                AND status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="phone !=null and phone != ''">
+                AND phone = #{phone,jdbcType=VARCHAR}
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=BIGINT}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getAnchorTotalPoints" resultType="long">
+    	select sum(a.point_count)
+    	 FROM anchor a
+        LEFT JOIN ruser r ON r.id = a.creator_id
+        <where>
+        	1=1
+            <if test="key !=null and key == 'id'">
+               and r.id = #{value,jdbcType=VARCHAR}
+            </if>
+            <if test="key !=null and key == 'name'">
+            	and r.name LIKE CONCAT('%',#{value,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="key !=null and key == 'phone'">
+            	and r.phone LIKE CONCAT('%',#{value,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAnchorLiveDetail" parameterType="map" resultType="com.busap.vcs.data.model.AnchorDetailDisplay">
+        SELECT
+        ru.id,
+        ru.name,
+        ru.phone,
+        ru.band_phone AS bandPhone,
+        o.org_name AS orgName,
+        a.create_at AS createDate,
+        SUM(r.gift_number) AS giftNumber,
+        SUM(r.point_number) AS pointNumber,
+        SUM(r.duration) AS duration
+        FROM room r
+        LEFT JOIN ruser ru ON ru.id = r.creator_id
+        LEFT JOIN anchor a ON a.creator_id = ru.id
+        LEFT JOIN organization o ON o.id = ru.organization_id
+        WHERE ru.id = #{id,jdbcType=BIGINT}
+        AND r.praise_number > 0
+        <if test="startDate !=null and startDate != ''">
+            <![CDATA[ AND DATE_FORMAT(r.create_at, '%Y-%m-%d')  >= #{startDate,jdbcType=TIMESTAMP} ]]>
+        </if>
+        <if test="endDate !=null and endDate != ''">
+            <![CDATA[ AND DATE_FORMAT(r.create_at, '%Y-%m-%d')  <= #{endDate,jdbcType=TIMESTAMP} ]]>
+        </if>
+    </select>
+
+    <select id="selectAnchorLiveDetailRecord" parameterType="map" resultType="com.busap.vcs.data.model.AnchorDetailDisplay">
+        SELECT
+        r.title,
+        r.max_access_number AS maxAccessNumber,
+        r.create_at AS createDate,
+        r.gift_number AS giftNumber,
+        r.point_number AS pointNumber,
+        r.duration AS duration,
+        r.praise_number AS praiseNumber
+        FROM room r
+        WHERE r.creator_id = #{id,jdbcType=BIGINT}
+        AND r.praise_number > 0
+        ORDER BY r.id DESC
+    </select>
+
+    <select id="selectAnchorByStreamId" resultType="com.busap.vcs.data.model.AnchorInfo" parameterType="map">
+        SELECT
+        r.id,
+        r.name,
+        CASE
+        WHEN r.band_phone IS NULL THEN r.phone
+        END AS phone,
+        r.username,
+        MAX(ro.id) AS roomId,
+        ro.creator_id AS userId
+        FROM anchor a LEFT JOIN ruser r ON r.id = a.creator_id
+        LEFT JOIN room ro ON ro.creator_id = r.id
+        <where>
+            <if test="qiniuStreamId != null and qiniuStreamId != ''">
+                AND a.qiniu_stream_id = #{qiniuStreamId,jdbcType=VARCHAR}
+            </if>
+            <if test="streamId != null and streamId != ''">
+                AND a.stream_id = #{streamId,jdbcType=VARCHAR}
+            </if>
+            <!--<if test="status != null">
+                AND ro.status = #{status,jdbcType=INTEGER}
+            </if>-->
+        </where>
+    </select>
+
+    <select id="selectOrganizationAnchorList" resultType="com.busap.vcs.data.model.OrganizationAnchorDisplay" parameterType="map">
+        SELECT
+        a.id,
+        a.certificate_number AS certificateNumber,
+        a.certificate_type AS certificateType,
+        a.real_name AS realName,
+        a.bank_number AS bankNumber,
+        a.bank_name AS bankName,
+        a.branch_bank_name AS branchBankName,
+        a.basic_salary AS basicSalary,
+        r.name,
+        a.phone AS phone,
+        a.create_at AS createDate,
+        r.id AS userId
+        FROM ruser r
+        LEFT JOIN
+        anchor a ON a.creator_id = r.id
+        <where>
+            <if test="organizationId != null">
+                r.organization_id = #{organizationId,jdbcType=BIGINT}
+            </if>
+            <if test="userId != null">
+                r.id = #{userId,jdbcType=BIGINT}
+            </if>
+            <choose>
+                <when test="userKey != null and userKey != ''">
+                    <if test="userKey == 1">
+                        <if test="userKeyword != null and userKeyword != ''">
+                            AND r.id = #{userKeyword}
+                        </if>
+                    </if>
+                    <if test="userKey == 2">
+                        <if test="userKeyword != null and userKeyword != ''">
+                            AND r.username LIKE CONCAT('%',#{userKeyword},'%')
+                        </if>
+                    </if>
+                    <if test="userKey == 3">
+                        <if test="userKeyword != null and userKeyword != ''">
+                            AND r.name LIKE CONCAT('%',#{userKeyword},'%')
+                        </if>
+                    </if>
+                    <if test="userKey == 4">
+                        <if test="userKeyword != null and userKeyword != ''">
+                            AND (r.band_phone=#{userKeyword} or r.username=#{userKeyword} or r.phone LIKE CONCAT('%',#{userKeyword},'%'))
+                        </if>
+                    </if>
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="selectMaxRoomIdByStreamId" resultType="java.lang.Long" parameterType="java.lang.String">
+        SELECT
+        MAX(ro.id) AS roomId
+        FROM anchor a LEFT JOIN room ro ON ro.creator_id = a.creator_id
+        WHERE a.stream_id = #{streamId,jdbcType=VARCHAR}
+        LIMIT 1
+    </select>
+
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.ComboBoxDao">
+
+	<resultMap id="BaseResultMap" type="com.busap.vcs.data.model.ComboBoxData">
+		<result column="code_id" property="id" jdbcType="INTEGER"/>
+		<result column="code_name" property="text" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<select id="selectMusicTypeComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		type_name AS text
+		FROM
+		music_type
+	</select>
+
+	<select id="selectUserComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		username AS text
+		FROM
+		user
+		WHERE is_locked = 0
+	</select>
+
+	<select id="selectComboBoxLabels" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		name AS text
+		FROM
+		label
+		ORDER BY num DESC
+	</select>
+
+	<select id="selectActivityCombobox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		title AS text
+		FROM
+		activity
+		ORDER BY create_at DESC
+	</select>
+
+	<select id="selectPermissionCombobox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		name AS text
+		FROM
+		permission
+		WHERE pid != 0
+		ORDER BY sort DESC
+	</select>
+
+	<select id="selectOrganizationComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		org_name AS text
+		FROM
+		organization
+		ORDER BY create_at DESC
+	</select>
+
+	<select id="selectUserComboBoxByType" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		id,
+		username AS text
+		FROM
+		ruser
+		WHERE is_locked = 0
+		<if test="type != null">
+			<choose>
+				<when test="type == 1">
+					AND type = "majia"
+				</when>
+				<when test="type == 2">
+					AND allow_publish = 0
+				</when>
+			</choose>
+		</if>
+	</select>
+
+	<select id="selectSingerTypeComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		name AS text
+		FROM
+		singer_type
+		ORDER BY create_at DESC
+	</select>
+
+	<select id="selectSingerComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		name AS text
+		FROM
+		singer
+		ORDER BY create_at DESC
+	</select>
+
+	<select id="selectAlbumComboBox" resultMap="BaseResultMap" parameterType="String">
+		SELECT
+		id,
+		name AS text
+		FROM
+		album
+		ORDER BY create_at DESC
+	</select>
+
+	<select id="selectRegPlatformCombobox" resultMap="BaseResultMap" parameterType="String">
+		SELECT reg_platform AS id,reg_platform AS text FROM `ruser`
+		WHERE reg_platform IS NOT NULL
+		GROUP BY reg_platform
+	</select>
+
+</mapper>

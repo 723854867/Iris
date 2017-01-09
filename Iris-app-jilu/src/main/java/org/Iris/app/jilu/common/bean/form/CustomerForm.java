@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
 import org.Iris.app.jilu.common.JiLuResourceUtil;
+import org.Iris.app.jilu.common.bean.enums.CustomerStatusMod;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 
 public class CustomerForm {
@@ -23,8 +24,10 @@ public class CustomerForm {
 		this.memo = customer.getMemo();
 		this.purchaseSum = customer.getPurchaseSum();
 		this.lastPurchaseTime = customer.getLastPurchaseTime();
-		this.IDFrontage = JiLuResourceUtil.customerIDFrontageUri(customer);
-		this.IDBehind = JiLuResourceUtil.customerIDBehindUri(customer);
+		if (CustomerStatusMod.hasIdBehind(customer))
+			this.IDBehind = JiLuResourceUtil.customerIDBehindUri(customer);
+		if (CustomerStatusMod.hasIdFrontage(customer))
+			this.IDFrontage = JiLuResourceUtil.customerIDFrontageUri(customer);
 	}
 
 	public long getCustomerId() {

@@ -1,0 +1,543 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif; }
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  background: #f2f2f2;
+  color: #333;
+  word-wrap: break-word;
+  -webkit-text-size-adjust: none; }
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+h1, h2, h3, h4, h5, h6, p {
+  font-weight: normal;
+  margin: 0;
+  padding: 0; }
+
+img {
+  border: 0; }
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a {
+  text-decoration: none;
+  output: none;
+  color: #333; }
+
+input, button, textarea {
+  -webkit-tap-highlight-color: transparent;
+  border: none;
+  outline: none;
+  /*-webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;*/ }
+
+.fr {
+  float: right; }
+
+.fl {
+  float: left; }
+
+body {
+  font-size: 12px;
+  color: #333;
+  background: #fff; }
+
+.main {
+  margin: auto;
+}
+
+.top{
+  overflow: hidden;
+  background: url(../img/topBg.jpg) repeat-x;
+  height: 80px;
+  width:100%;
+  background-size: 100% 100%;
+}
+.warp_l_tit{
+  text-align: center;
+  padding:10px;
+  font-size: 22px;
+  color:#ff5568;
+  border-bottom: solid 1px #ccc;
+}
+.warp_l_info{
+  color:#666;
+  padding:10px;
+}
+  .top_box{
+    width:1100px;
+    position:relative;
+    left:50%;
+    margin-left:-550px;
+  }
+  .logo{
+    width:110px;
+    margin:16px;
+  }
+  .user-box{
+    width:200px;
+    margin:10px 10px 0 10px;
+    line-height: 20px;
+    color:#fff;
+  }
+  .for_log{
+    display: none;
+    width:100px;
+    margin:30px 10px 0 10px;
+    line-height: 20px;
+    color:#fff;
+    cursor: pointer;
+  }
+  .user-box a{
+    color:#fff;
+  }
+  .user-info{
+    margin:8px 0 0 10px;
+    position: relative;
+  }
+  .user_pic{
+    width:45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-top: 8px;
+  }
+.warp{
+  width:1100px;
+  height: 800px;
+  overflow: hidden;
+  border:solid 1px #ccc;
+  position:relative;
+  left:50%;
+  margin-left:-550px;
+}
+  .warp_con{
+    width:90%;
+    margin:20px auto;
+  }
+  .warp_l{
+    line-height: 24px;
+    padding:15px;
+    width:296px;
+    height:100%;
+    border-right:solid 1px #CCCCCC;
+    background: #f1f1f1;
+  }
+  .warp_r{
+    width:770px;
+  }
+  .warp_tips{
+    color:#999;
+  }
+  .warp_item{
+    width:100%;
+    margin:0px 0 20px 0;
+    overflow: hidden;
+  }
+  .warp_item_r{
+    width:84%;
+    float: left;
+  }
+  .warp_item label{
+    float: left;
+    width:110px;
+    text-align: right;
+    color:#000;
+    font-weight: bold;
+  }
+  .recharge_list{
+    width:84%;
+  }
+  .recharge_list ul{
+    display: block;
+    overflow: hidden;
+    clear: both;
+  }
+  .recharge_list ul li{
+    border:solid 2px #ddd;
+    width:170px;
+    height: 65px;
+    margin:0 10px 10px 0;
+    text-align: center;
+    float: left;
+    position: relative;
+    display: block;
+    line-height: 19px;
+    cursor: pointer;
+    padding-top: 3px;
+    font-size:12px;
+  }
+  .recharge_list ul li input,.pay_icon_list ul li input{
+    display: none;
+  }
+  .recharge_list ul li.on{
+    border:solid 2px #ff5568;
+  }
+.recharge_list ul li.on .giveCount{
+  background: #ff5568;
+  color:#fff;
+
+}
+
+.recharge_list .is_give_list{
+  line-height: 30px;
+}
+  .giveCount{
+    position: absolute;
+    left:0;
+    bottom:0;
+    width:100%;
+    text-align: center;
+    background: #f1f1f1;
+    padding:2px 0;
+    color:#666;
+    display: block;
+    height: 18px;
+    line-height: 18px;
+  }
+  .zdy_val_box{
+    display: none;
+    margin:15px 0;
+    line-height: 24px;
+    width:100%;
+    clear:both;
+    float: left;
+  }
+  .pay_all{
+    line-height: 24px;
+    border-bottom: solid 1px #ccc;
+    padding-bottom: 10px;
+    overflow: hidden;
+    display:block;
+    width:100%;
+    float: left;
+  }
+  .zdy_txt{
+    border:solid 1px #ccc;
+    padding:3px 5px;
+    width:100px;
+    margin:0 10px;
+  }
+  .pay_icon_list{
+
+  }
+  .zdy_count{
+    color:#f63f54;
+    font-size:14px;
+  }
+  .pay_icon_list ul li{
+    position: relative;
+    float: left;
+    width:125px;
+    height: 45px;
+    margin:0px 10px 10px 0;
+
+    border:solid 2px #ccc;
+    cursor:pointer;
+    overflow: hidden;
+    display: block;
+    text-align: center;
+    line-height: 45px;
+  }
+  .pay_icon_list ul{
+    overflow: hidden;
+    clear:both;
+
+  }
+  .pay_icon_list ul li.on{
+    border:solid 2px red;
+  }
+  .pay_icon_list ul li img{
+    width:110px;
+    height:25px;
+    margin-top: 10px;
+  }
+.pay_icon_list ul li.more_bank,.pay_icon_list ul li.more_up{
+    font-size: 16px;
+    text-align: center;
+    line-height: 45px;
+    _line-height:42px;
+
+  }
+  .hide_bank_list{
+    display: none;
+  }
+  .corner{
+    position: absolute;
+    right: 0;
+    bottom:0;
+    background: url(../img/corner.png);
+    background-size: 100% 100%;
+    width:15px;
+    height: 16px;
+    display: none;
+  }
+  .recharge_list .zdy_btn{
+    line-height: 60px;
+  }
+  .btn_box{
+    margin-left:110px;
+  }
+  .recharge_btn{
+    width:160px;
+    height: 54px;
+    line-height: 54px;
+    font-size: 16px;
+    background: #999;
+    color:#fff;
+    display: block;
+    text-align: center;
+  }
+
+  .recharge_btn_ok{
+    background: #ff5568;
+  }
+  .foot{
+    padding:8px 0;
+    line-height: 24px;
+    text-align: center;
+    color:#888;
+  }
+
+
+.tip_box{
+  width:450px;
+  position: absolute;
+  left: 50%;
+  top:30%;
+  margin-left:-225px;
+  border:solid 1px #ccc;
+  background: #fff;
+  z-index: 31;
+  display: none;
+}
+.tip_warp{
+  width:64%;
+  position: relative;
+  left: 18%;
+}
+.tip_warp p{
+  margin:10px;
+  line-height: 30px;
+  text-align: center;
+}
+.close_tip a{
+  color: #1fa1cb;
+}
+.close_tip a:hover{
+  color:#333;
+}
+  .log_box{
+    width:450px;
+    position: absolute;
+    left: 50%;
+    top:30%;
+    margin-left:-225px;
+    border:solid 1px #ccc;
+    background: #fff;
+    z-index: 31;
+    display: none;
+  }
+  .log_top{
+    background: #f1f1f1;
+    position: relative;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
+  .close_btn{
+    width:18px;
+    height: 18px;
+    position: absolute;
+    right:10px;
+    top:10px;
+  }
+  .log_warp{
+    width:64%;
+    position: relative;
+    left: 18%;
+  }
+  .log_item{
+    margin:15px 0 0 0;
+
+  }
+  .log_item label{
+    display: inline-block;
+    width:60px;
+    text-align: right;
+    color:#333;
+    font-weight: bold;
+  }
+  .log_txt{
+    border:solid 1px #CCC;
+    /*padding:5px;*/
+    height: 35px;
+    line-height: 35px;
+    display:inline-block;
+    width:200px;
+    padding:0 5px;
+  }
+  .log_tips{
+    position: relative;
+    left:20%;
+    padding-top:10px;
+    width:65%;
+    margin:20px 0;
+    border-top: solid 1px #ccc;
+    line-height: 28px;
+    color:#666;
+    font-size: 12px;
+  }
+
+  .exit_btn{
+    position: absolute;
+    right: -30px;
+    _top:-3px;
+    top:5px;
+    margin-left:10px;
+    display: inline-block;
+    width:16px;
+    height: 18px;
+    background: url(../img/icon_ext.png);
+    background-size: 100% 100%;
+  }
+  .exit_box{
+    position: absolute;
+    border: solid 1px #999;
+    background: #fff;
+    color: #333;
+    width: 54px;
+    height:25px;
+    line-height: 25px;
+    text-align: center;
+    top: 20px;
+    left: 59px;
+    display: none;
+    cursor: pointer;
+  }
+  .err_msg{
+    padding: 10px 10px 0 10px;
+    margin-left: 55px;
+  }
+.log_btn{
+  margin-left:65px;
+  width:120px;
+  padding:10px 10px;
+  background: #999;
+  color:#fff;
+  display: block;
+  text-align: center;
+}
+.balance{
+  color: #FF3300;
+}
+.log_btn_ok{
+  background: #FF3300;
+}
+
+.btn{
+  margin-left:65px;
+  width:120px;
+  padding:10px 10px;
+  background: #FF3300;
+  color:#fff;
+  display: block;
+  text-align: center;
+}
+
+.tipsWarp {
+  background: #000;
+  filter:alpha(opacity:80);
+  opacity:0.8;
+  padding: 10px;
+  border-radius: 8px;
+  width: 20%;
+  font-size: 14px;
+  color: #fff;
+  position: fixed;
+  _position: absolute;
+  left: 40%;
+  top: 40%;
+  z-index: 50;
+  text-align: center; }
+.skyBox {
+  background: #000;
+  filter:alpha(opacity:60);
+  opacity:0.6;
+  position: fixed;
+  _position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 30;
+  width: 100%;
+  height: 100%;
+  display: none; }
+
+
+
+
+
+
+/*结果*/
+.pay_status_box{
+  width:100%;
+  overflow: hidden;
+  margin:30px auto;
+}
+.sucess_bg{
+  background: url(../img/success.png) no-repeat;
+  background-size: 100% 100%;
+  height: 112px;
+  width:112px;
+  display: inline-block;
+}
+.fial_bg{
+  background: url(../img/fail.png) no-repeat;
+  background-size: 100% 100%;
+  height:112px;
+  width:112px;
+  display: inline-block;
+}
+.pay_info{
+  width:350px;
+  margin-left:20px;
+  line-height: 22px;
+  margin-top:25px;
+}
+.go_recharge{
+  width:120px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  background: #ff5568;
+  color:#fff;
+  display: block;
+  text-align: center;
+  margin-top:30px;
+}
+
+
+
+
+
+
+
+
+

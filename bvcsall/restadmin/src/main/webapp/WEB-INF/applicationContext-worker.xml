@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+	default-lazy-init="true">
+
+	<!--24小时收视排行榜 5分钟执行一次 start-->
+	<bean id="dayHotVideoScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="hotVideoRankingList">
+		<property name="targetObject">
+			<ref bean="hotVideoRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryDayHotVideosToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="dayHotVideoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="dayHotVideoScheduler">
+		<property name="jobDetail">
+			<ref bean="dayHotVideoScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--24小时排行榜 5分钟执行一次 end-->
+
+	<!--周收视排行榜 5分钟执行一次 start-->
+	<bean id="weekHotVideoScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="hotVideoRankingList">
+		<property name="targetObject">
+			<ref bean="hotVideoRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryWeekHotVideosToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="weekHotVideoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="weekHotVideoScheduler">
+		<property name="jobDetail">
+			<ref bean="weekHotVideoScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--周收视排行榜 5分钟执行一次 end-->
+
+	<!--月收视排行榜 60分钟执行一次 start-->
+	<bean id="monthHotVideoScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="hotVideoRankingList">
+		<property name="targetObject">
+			<ref bean="hotVideoRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryMonthHotVideosToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="monthHotVideoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="monthHotVideoScheduler">
+		<property name="jobDetail">
+			<ref bean="monthHotVideoScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/60 * * * ?</value>
+		</property>
+	</bean>
+	<!--月收视排行榜 60分钟执行一次 end-->
+
+	<!--年收视排行榜 每周一凌晨1点执行一次 start-->
+	<bean id="yearHotVideoScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="hotVideoRankingList">
+		<property name="targetObject">
+			<ref bean="hotVideoRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryYearHotVideosToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="yearHotVideoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="yearHotVideoScheduler">
+		<property name="jobDetail">
+			<ref bean="yearHotVideoScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 ? * MON</value>
+		</property>
+	</bean>
+	<!--年收视排行榜 每周一凌晨1点执行一次 end-->
+
+	<!--24小时人气排行榜 5分钟执行一次 start-->
+	<bean id="dayUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="userPopularityRankingList">
+		<property name="targetObject">
+			<ref bean="userPopularityRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryDayUserPopularityToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="dayUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="dayUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="dayUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--24小时人气排行榜 5分钟执行一次 end-->
+
+	<!--周人气排行榜 每天凌晨5点执行一次 start-->
+	<bean id="weekUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="userPopularityRankingList">
+		<property name="targetObject">
+			<ref bean="userPopularityRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryWeekUserPopularityToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="weekUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="weekUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="weekUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 5 * * ?</value>
+		</property>
+	</bean>
+	<!--周人气排行榜 每天凌晨5点执行一次 end-->
+
+	<!--月人气排行榜 每天凌晨6点执行一次 start-->
+	<bean id="monthUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="userPopularityRankingList">
+		<property name="targetObject">
+			<ref bean="userPopularityRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryMonthUserPopularityToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="monthUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="monthUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="monthUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 6 * * ?</value>
+		</property>
+	</bean>
+	<!--月人气排行榜 每天凌晨6点执行一次 end-->
+
+	<!--年人气排行榜 每周二凌晨三点执行一次 start-->
+	<bean id="yearUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="userPopularityRankingList">
+		<property name="targetObject">
+			<ref bean="userPopularityRankingList"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryYearUserPopularityToRedis</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="yearUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="yearUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="yearUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 ? * TUE</value>
+		</property>
+	</bean>
+	<!--年人气排行榜 每周二凌晨三点执行一次 end-->
+
+	<!--24小时人气重新计算 每天凌晨3点执行一次 start-->
+	<bean id="reCalculationDayUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="reCalculationUserPopularity">
+		<property name="targetObject">
+			<ref bean="reCalculationUserPopularity"/>
+		</property>
+		<property name="targetMethod">
+			<value>reCalculationDayUserPopularity</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="reCalculationDayUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="reCalculationDayUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="reCalculationDayUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 * * ?</value>
+		</property>
+	</bean>
+	<!--24小时人气重新计算 每天凌晨3点执行一次 end-->
+
+	<!--周人气重新计算 每天凌晨2点执行一次 start-->
+	<bean id="reCalculationWeekUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="reCalculationUserPopularity">
+		<property name="targetObject">
+			<ref bean="reCalculationUserPopularity"/>
+		</property>
+		<property name="targetMethod">
+			<value>reCalculationWeekUserPopularity</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="reCalculationWeekUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="reCalculationWeekUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="reCalculationWeekUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 2 * * ?</value>
+		</property>
+	</bean>
+	<!--周人气重新计算 每天凌晨2点执行一次 start-->
+
+	<!--月人气重新计算 每天凌晨4点执行一次 start-->
+	<bean id="reCalculationMonthUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="reCalculationUserPopularity">
+		<property name="targetObject">
+			<ref bean="reCalculationUserPopularity"/>
+		</property>
+		<property name="targetMethod">
+			<value>reCalculationMonthUserPopularity</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="reCalculationMonthUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="reCalculationMonthUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="reCalculationMonthUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 4 * * ?</value>
+		</property>
+	</bean>
+	<!--月人气重新计算 每天凌晨4点执行一次 end-->
+
+	<!--年人气重新计算 每周一凌晨1点执行一次 start-->
+	<bean id="reCalculationYearUserPopularityScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="reCalculationUserPopularity">
+		<property name="targetObject">
+			<ref bean="reCalculationUserPopularity"/>
+		</property>
+		<property name="targetMethod">
+			<value>reCalculationYearUserPopularity</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="reCalculationYearUserPopularityTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="reCalculationYearUserPopularityScheduler">
+		<property name="jobDetail">
+			<ref bean="reCalculationYearUserPopularityScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0 3 ? * MON</value>
+		</property>
+	</bean>
+	<!--年人气重新计算 每周一凌晨1点执行一次 end-->
+
+	<!--计算最新直播房间ID start-->
+	<bean id="refreshNewestLiveRoomScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="checkLiveRoomService">
+		<property name="targetObject">
+			<ref bean="checkLiveRoomService"/>
+		</property>
+		<property name="targetMethod">
+			<value>refreshNewestLiveRoom</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="refreshNewestLiveRoomTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="refreshNewestLiveRoomScheduler">
+		<property name="jobDetail">
+			<ref bean="refreshNewestLiveRoomScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	<!--计算最新直播房间ID end 一分钟执行一次-->
+
+	<!--一周首播用户 start-->
+	<bean id="queryPeriodFirstTimeLiveUserScheduler"
+		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+		  depends-on="firstTimeLiveUserService">
+		<property name="targetObject">
+			<ref bean="firstTimeLiveUserService"/>
+		</property>
+		<property name="targetMethod">
+			<value>queryPeriodFirstTimeLiveUser</value>
+		</property>
+		<property name="concurrent" value="false"/>
+	</bean>
+
+	<bean id="queryPeriodFirstTimeLiveUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"
+		  depends-on="queryPeriodFirstTimeLiveUserScheduler">
+		<property name="jobDetail">
+			<ref bean="queryPeriodFirstTimeLiveUserScheduler"/>
+		</property>
+		<property name="cronExpression">
+			<value>0 0/60 * * * ?</value>
+		</property>
+	</bean>
+	<!--一周首播用户 end 60分钟执行一次-->
+
+
+
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="true">
+		<property name="triggers">
+			<list>
+            <!--    <ref bean="dayHotVideoTrigger"/>
+				<ref bean="weekHotVideoTrigger"/>
+				<ref bean="monthHotVideoTrigger"/>-->
+				<!--<ref bean="yearHotVideoTrigger"/>-->
+			<!--	<ref bean="dayUserPopularityTrigger"/>
+				<ref bean="weekUserPopularityTrigger"/>
+				<ref bean="monthUserPopularityTrigger"/>-->
+				<!--<ref bean="yearUserPopularityTrigger"/>-->
+				<!--<ref bean="reCalculationDayUserPopularityTrigger"/>
+				<ref bean="reCalculationWeekUserPopularityTrigger"/>
+				<ref bean="reCalculationMonthUserPopularityTrigger"/>-->
+				<!--<ref bean="reCalculationYearUserPopularityTrigger"/>-->
+				<ref bean="refreshNewestLiveRoomTrigger"/>
+				<ref bean="queryPeriodFirstTimeLiveUserTrigger"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

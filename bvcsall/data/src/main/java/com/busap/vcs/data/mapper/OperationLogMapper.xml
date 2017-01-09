@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.OperationLogDao">
+	<sql id="page">limit #{pageStart},#{pageSize}</sql>
+
+	<sql id="where_sql">
+		<where>
+			<if test="uname !=null and uname != ''">
+				AND o.uname = #{uname}
+			</if>
+			<if test="moduleType !=null and moduleType != ''">
+				AND o.module_type = #{moduleType}
+			</if>
+			<if test="roleId !=null and roleId != ''">
+				AND r.id = #{roleId}
+			</if>
+			<if test="startTime !=null and startTime != ''">
+				<![CDATA[ AND DATE_FORMAT(o.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="endTime !=null and endTime != ''">
+				<![CDATA[ AND DATE_FORMAT(o.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="permissionId != null">
+				AND o.permission_id = #{permissionId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="select" resultType="com.busap.vcs.data.model.OperationLogDisplay" parameterType="java.util.Map">
+		SELECT
+		o.id,
+		o.create_at AS createDate,
+		o.creator_id AS creatorId,
+		o.modify_at AS modifyDate,
+		o.description,
+		o.module_type AS moduleType,
+		o.objectid,
+		o.objectname,
+		o.oper_type AS operType,
+		o.referer,
+		o.req_type AS reqType,
+		o.req_url AS reqUrl,
+		o.uid,
+		o.uname,
+		o.data_from AS dataFrom,
+		r.name,
+		o.ip,
+		r.id AS roleId,
+		p.name AS permissionName
+		FROM operation_log o
+		LEFT JOIN user u ON u.id = uid
+		LEFT JOIN user_role ur ON ur.user = u.id
+		LEFT JOIN role r ON r.id = ur.roles
+		LEFT JOIN permission p ON p.id = o.permission_id
+		<include refid="where_sql"/>
+		ORDER BY id DESC
+		<!--<include refid="page"/>-->
+	</select>
+
+	<select id="selectPermissionByName" parameterType="java.util.Map" resultType="com.busap.vcs.data.entity.Permission">
+		SELECT * FROM permission WHERE name = #{name}
+	</select>
+
+<!--	<select id="selectCount"  resultType="java.lang.Integer" parameterType="map">
+		SELECT
+		COUNT(1)
+		FROM operation_log o
+		LEFT JOIN user u ON u.id = uid
+		LEFT JOIN user_role ur ON ur.user = u.id
+		LEFT JOIN role r ON r.id = ur.roles
+		<include refid="where_sql"/>
+	</select>-->
+
+	<insert id="insert" parameterType="com.busap.vcs.data.entity.OperationLog" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO operation_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="creatorId != null">
+				creator_id,
+			</if>
+			<if test="description != null and description != ''">
+				description,
+			</if>
+			<if test="moduleType != null and moduleType != ''">
+				module_type,
+			</if>
+			<if test="objectid != null and objectid != ''">
+				objectid,
+			</if>
+			<if test="objectname != null and objectname != ''">
+				objectname,
+			</if>
+			<if test="operType != null and operType != ''">
+				oper_type,
+			</if>
+			<if test="referer != null and referer != ''">
+				referer,
+			</if>
+			<if test="reqType != null and reqType != ''">
+				req_type,
+			</if>
+			<if test="reqUrl != null and reqUrl != ''">
+				req_url,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="uname != null and uname != ''">
+				uname,
+			</if>
+			<if test="dataFrom != null and dataFrom != ''">
+				data_from,
+			</if>
+			<if test="ip != null and ip != ''">
+				ip,
+			</if>
+			<if test="permissionId != null and permissionId != ''">
+				permission_id,
+			</if>
+			create_at,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="creatorId != null">
+				#{creatorId,jdbcType=BIGINT},
+			</if>
+			<if test="description != null and description != ''">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleType != null and moduleType != ''">
+				#{moduleType,jdbcType=VARCHAR},
+			</if>
+			<if test="objectid != null and objectid != ''">
+				#{objectid,jdbcType=VARCHAR},
+			</if>
+			<if test="objectname != null and objectname != ''">
+				#{objectname,jdbcType=VARCHAR},
+			</if>
+			<if test="operType != null and operType != ''">
+				#{operType,jdbcType=VARCHAR},
+			</if>
+			<if test="referer != null and referer != ''">
+				#{referer,jdbcType=VARCHAR},
+			</if>
+			<if test="reqType != null and reqType != ''">
+				#{reqType,jdbcType=VARCHAR},
+			</if>
+			<if test="reqUrl != null and reqUrl != ''">
+				#{reqUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="uname != null and uname != ''">
+				#{uname,jdbcType=VARCHAR},
+			</if>
+			<if test="dataFrom != null and dataFrom != ''">
+				#{dataFrom,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null and ip != ''">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="permissionId != null and permissionId != ''">
+				#{permissionId,jdbcType=INTEGER},
+			</if>
+			now(),
+		</trim>
+	</insert>
+
+</mapper>

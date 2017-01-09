@@ -1,0 +1,298 @@
+@import '../base/_base';
+@import '../base/_colorFont';
+@import '../base/_other';
+@import '../base/retina-sprites';
+@import '../Connect';
+
+@mixin fullWidth{
+	width:100%;
+}
+@mixin txtCenter{
+	text-align:center;
+}
+@mixin borderSmall($color){
+	border:solid 1px $color;
+}
+@mixin bgColor($color){
+	background:$color;
+}
+body{
+	background:#f2f2f2;
+}
+.main{
+	width:100%; 
+	margin-top:54px;
+	
+}
+video{position:relative;z-index:1;}
+.nav{
+	width:100%;
+	overflow:hidden;
+	p{
+		padding:10px;
+		color:#999;
+		font-size:1.2rem;
+	}
+}
+.addV{
+	@include use-sprite(user_icon_yellow);
+	display:inline-block;
+	position:absolute;
+	left:21px; top:21px;
+}
+
+.videoList1{
+	// padding-bottom:38px;
+	margin-top:10px;
+	
+	.playBox{
+		video{ 
+			background:url(../../../img/test.jpg) no-repeat;
+			background-size: $numFull $numFull;
+			@include fullWidth;
+			height:100%;
+			display:block; 
+			vertical-align:bottom;
+			//min-height:200px;
+		}
+	}
+	.shareBox{
+		display:box;
+		display:-webkit-box;
+		display:-moz-box;
+	}
+	.openApp{
+		width:100%; 
+		font-size:1.4rem;
+		background:#91c41f;
+		@include txtCenter;
+		padding:12px 0;
+		color:#f2f2f2;
+	}
+	.listUserMsg{
+		border-bottom:solid 1px #ccc; 
+		width:100%;
+		position:relative;
+		background:#fff;
+		dl{
+			overflow:hidden;
+			margin:0;
+			padding:10px;
+			dt{
+				@include floatL;
+				position:relative;
+				img{
+					margin:3px 0 0 0;
+					height:30px;
+					width:30px;
+					border-radius:6px;
+				}
+			}
+			dd:first-of-type{
+				@include floatL;
+				margin-left:10px;
+				line-height:1.6rem;
+				p:first-of-type{
+					font-weight:bold;
+					font-size:1.3rem;
+					color:$fontcolor-333;
+				}
+				p:nth-of-type(2){
+					font-weight:bold;
+					font-size:1.2rem;
+					color:$fontcolor-999;
+				}
+			}
+			dd:nth-of-type(2){
+				float:right;	
+				.playData{
+					display:inline-block;
+					@include use-sprite(follow);
+					margin-top:5px;
+				}
+			}
+		}
+		
+	}
+
+
+	.commontBox{
+		overflow: hidden;
+		@include bgColor(#fff);
+		.greet{
+			@include fullWidth;
+			text-align:center;
+			a{ 
+				display:inline-block;
+				width:100px;
+				height: 24px;
+				line-height: 24px;
+				text-align: center;
+				background:#f2f2f2;
+				@include borderSmall(#d9d9d9);
+				border-radius:10px;
+				color:#666;
+				margin:15px 10px 10px 10px;
+				.loveIcon{
+					width:24px;height:24px; 
+					margin:0px 8px 0 0;
+					display:inline-block;
+					position:relative;
+					top:3px;
+					@include use-sprite(love-24);
+				}
+				.shareIcon{
+					width:24px;height:24px; display:inline-block;
+					position:relative;
+					top:3px;
+					margin:0px 8px 0 0;
+					@include use-sprite(Forward-24);
+				}
+			}
+		}
+		.wishWord{
+			padding:10px;
+			font-size: 1.4rem;
+		}
+		.likeUser{
+			overflow: hidden;
+			padding-left:10px;
+			margin:0 0 10px 0;
+			dd{
+				float:left;
+				font-size: 1.4rem;
+				color:$fontcolor-999;
+				@include txtCenter;
+				line-height: 24px;
+				margin:0;
+				@include use-sprite(love-number-bac);
+			}
+			dt{
+				float: left;
+				img{
+					width:25px; height:25px;
+					margin:0 3px 0 0;
+				}
+			}
+		}
+		.activeAbout{
+			@include txtCenter;
+			overflow: hidden;
+			height: 60px;
+			font-size:1.4rem;
+			@include bgColor(#f7f7f7);
+			border-top:solid 1px #ccc;
+			p{
+				color:$fontcolor-333;
+				padding:8px 0 8px 0;
+			}
+			a{
+				@include borderSmall(#91c41f);
+				padding:5px 10px;
+				color: #91c41f;
+				border-radius:8px;
+			}
+		}
+		.commont{
+			border-top:solid 1px #ccc;
+			
+			.commontHead{
+				display: -moz-box; 
+			    display: -webkit-box; 
+			    display: box;
+			    li:first-child{
+			    	border-right:solid 1px #ccc;
+			    }
+				li{ 
+					@include txtCenter;
+					@include bgColor(#f7f7f7);
+					border-bottom:solid 1px #ccc;
+					-moz-box-flex: 1; 
+				    -webkit-box-flex: 1; 
+				    box-flex: 1;
+				}
+				label{
+					font-size: 1.4rem;
+					padding:10px 0;
+					width: 50%; margin:auto;
+					height: 100%; display:block;
+				}
+				.on label{
+					border-bottom:solid 2px #91c41f;
+					color: #91c41f;
+				}
+			}
+			.listUserMsg{
+				border-bottom:solid 1px #ccc; 
+				width:100%;
+				position:relative;
+				background:#fff;
+				dl{
+					overflow:hidden;
+					margin:0;
+					padding:10px;
+					dt{
+						@include floatL;
+						position:relative;
+						img{
+							margin:3px 0 0 0;
+							height:30px;
+							width:30px;
+							border-radius:6px;
+						}
+					}
+					dd:first-of-type{
+						@include floatL;
+						margin-left:10px;
+						line-height:1.6rem;
+						p:first-of-type{
+							font-weight:bold;
+							font-size:1.3rem;
+							color:$fontcolor-333;
+						}
+						p:nth-of-type(2){
+							font-weight:bold;
+							font-size:1.2rem;
+							color:$fontcolor-999;
+						}
+					}
+					dd:nth-of-type(2){
+						float:right;	
+						.playData{
+							display:inline-block;
+							@include use-sprite(follow);
+							margin-top:5px;
+						}
+					}
+				}
+				
+			}
+
+		}
+
+	}
+}
+
+
+.commontFireBox{
+	margin:8px;
+	.commontTxt{
+			border-radius:8px;
+			@include borderSmall(#bfbfbf);
+			@include bgColor(#fff);
+			padding:3px 8px;
+			height: 24px;
+			line-height: 24px;
+			width:80%;
+			font-size: 1.5rem;
+		}
+	.commontSub{
+		font-size: 1.8rem;
+		color:$fontcolor-333;
+		position:relative;
+		top:5px;
+	}
+}
+
+
+

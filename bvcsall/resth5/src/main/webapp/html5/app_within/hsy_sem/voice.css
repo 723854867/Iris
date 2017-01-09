@@ -1,0 +1,135 @@
+*{
+    margin:0; padding:0;
+    list-style: none;
+}
+body{
+    background: #000;
+    margin: 0;
+    padding:0;
+    font-size: 62.5%;
+    font-family: arial, \5b8b\4f53;
+}
+img{
+    border:none;
+}
+.main{
+    width: 100%;
+    height: 100%;
+    margin:auto;
+    position: absolute;
+    left:0;
+    top:0;
+    overflow: hidden;
+}
+
+.bg{
+    width: 100%;
+    max-width: 1920px;
+    margin: auto;
+    text-align: center;
+    display:block;
+}
+.pic-box{
+    position: relative;
+    left:20%;
+    top:30%;
+    width:28%;
+}
+.logo-box{
+    text-align: left;
+    width:100%;
+}
+.logo{
+    width:90%;
+}
+.download-box{
+    margin-top: 40px;
+    width:100%;
+}
+.download-btn{
+    float: left;
+    width:65%;
+    margin-right:0px;
+}
+.download-btn a{
+    display:block;
+}
+.download-btn a:first-of-type{
+    margin-bottom: 15px;
+}
+.download-btn img{
+    width:90%;
+}
+.hsy_info{
+    font-size:1.4rem;
+    font-weight: bold;
+    color:#fff;
+    position: relative;
+    left:0px;
+    margin:50px 0;
+}
+
+@media only screen and (min-width: 1900px) {/*当屏幕宽度大于等于801px时，采取下面css样式*/
+    .hsy_info{
+        font-size: 2rem;
+    }
+
+}
+@media only screen and (max-width: 1200px) {
+    .hsy_info{
+        font-size: 1.4rem;
+    }
+
+
+}
+
+
+.erma{
+    float: left;
+    width: 31%;
+}
+.erma img{
+    width:100%;
+}
+
+
+/*mob page*/
+.warp{
+    max-width: 640px;
+    min-width: 320px;
+    margin: auto;
+    position: relative;
+}
+.mob_bg{
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    display:block;
+}
+.mob_download_btn img{
+    width:80%;
+    display: block;
+    position: absolute;
+    left:10%;
+    top:78%;
+}
+.foot-msg{
+    text-align: center; font-size: 1.2em; color:#fff; line-height: 20px;
+}
+.foot{
+    width: 100%;
+    background: #fe0e53;
+    line-height: 20px;
+    font-size: 16px;
+    padding:16px;
+    text-align: center;
+}
+span[id^="cnzz"] {
+    display: none;
+}
+
+
+
+
+
+

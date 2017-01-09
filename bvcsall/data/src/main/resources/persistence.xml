@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+			 http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="persistenceUnit"
+		transaction-type="RESOURCE_LOCAL">
+		<class>com.busap.vcs.data.entity.User</class>
+		<class>com.busap.vcs.data.entity.Evaluation</class>
+		<class>com.busap.vcs.data.entity.Favorite</class>
+		<class>com.busap.vcs.data.entity.Praise</class>
+		<class>com.busap.vcs.data.entity.Video</class> 
+		<class>com.busap.vcs.data.entity.Permission</class>
+		<class>com.busap.vcs.data.entity.Role</class>
+		<class>com.busap.vcs.data.entity.Tag</class>
+		<class>com.busap.vcs.data.entity.Test</class>
+<!-- 		<class>com.busap.vcs.data.entity.WfocusPic</class> -->
+		<class>com.busap.vcs.data.entity.OperationLog</class>
+<!-- 		<class>com.busap.vcs.data.entity.Wuser</class> -->
+<!-- 		<class>com.busap.vcs.data.entity.Wrole</class> -->
+<!-- 		<class>com.busap.vcs.data.entity.Wpermission</class> -->
+		<class>com.busap.vcs.data.entity.Client</class>
+		<class>com.busap.vcs.data.entity.Ruser</class>
+		<class>com.busap.vcs.data.entity.Activity</class>
+		<class>com.busap.vcs.data.entity.ActivityVideo</class>
+		<class>com.busap.vcs.data.entity.Complain</class>
+		<class>com.busap.vcs.data.entity.Notification</class>
+        <class>com.busap.vcs.data.entity.Version</class>
+        <class>com.busap.vcs.data.entity.PlayHistory</class>
+        <class>com.busap.vcs.data.entity.SensitiveWord</class>
+		
+	</persistence-unit>
+</persistence>

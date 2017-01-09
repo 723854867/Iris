@@ -19,6 +19,6 @@ public interface RelationMapper {
 	@SelectProvider(type = RelationSQLBuilder.class, method = "count")
 	long count(@Param("merchantId") long merchantId);
 	
-	@SelectProvider(type = RelationSQLBuilder.class, method = "getByPage")
-	List<PubRelation> getByPage(@Param("start") int start, @Param("limit") int limit); 
+	@SelectProvider(type = RelationSQLBuilder.class, method = "getPager")
+	List<PubRelation> getPager(@Param("merchantId") long merchantId, @Param("start") long start, @Param("pageSize") int pageSize);
 }

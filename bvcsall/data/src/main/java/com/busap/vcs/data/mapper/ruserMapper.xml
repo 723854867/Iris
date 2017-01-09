@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.busap.vcs.data.mapper.RuserDAO">
+
+	<select id="getRusers" resultType="com.busap.vcs.data.entity.Ruser">
+		select
+		id,
+		create_at as createDate,
+		email,
+		login_ip  as loginIp,
+		name,
+		phone,
+		type,
+		username,
+		addr,
+		sex,
+		signature,
+		pic,
+		home_pic as homePic,
+		data_from as dataFrom,
+		video_count as videoCount,
+		third_from as thirdFrom,
+		third_userame as thirdUserame,
+		birthday,
+		stat,
+		vstat as vipStat,fans_count as fansCount,attention_count as attentionCount,sign_sum as signSum
+		from ruser where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		 	#{item}
+		</foreach>
+	</select>
+
+	<update id="incAllVideoCount">
+		update ruser u set u.all_video_count=u.all_video_count+1 where u.id=#{uid}
+	</update>
+
+
+	<update id="decVideoCountAndAllCount">
+		update ruser u set u.all_video_count=u.all_video_count-1,u.video_count=u.video_count-1 where u.id=#{uid}
+	</update>
+
+
+	<update id="decAllVideoCount">
+		update ruser u set u.all_video_count=u.all_video_count-1 where u.id=#{uid}
+	</update>
+
+	<sql id="page">limit #{pageStart},#{pageSize}</sql>
+
+	<select id="getNormalUser" resultType="com.busap.vcs.data.entity.Ruser">
+			select
+				id,
+				create_at as createDate,
+				email,
+				login_ip  as loginIp,
+				name,
+				phone,
+				type,
+				username,
+				addr,
+				sex,
+				signature,
+				pic,
+				home_pic as homePic,
+				data_from as dataFrom,
+				video_count as videoCount,
+				third_from as thirdFrom,
+				third_userame as thirdUserame,
+				birthday,
+				stat,
+				rank_able as rankAble,
+				vstat as vipStat,fans_count as fansCount,attention_count as attentionCount,sign_sum as signSum
+				from ruser
+				where 1=1
+				<if test="type != null">
+					and type=#{type}
+				</if>
+				<if test="name != null">
+					and name like "%"#{name}"%"
+				</if>
+				<if test="username != null">
+					and username like "%"#{username}"%"
+				</if>
+				<if test="phone != null">
+					and phone like "%"#{phone}"%"
+				</if>
+				<if test="id != null">
+					and id=#{id}
+				</if>
+			order by create_at desc
+
+			<include refid="page"/>
+	</select>
+
+	<select id="findUserByPhoneOrName" resultType="com.busap.vcs.data.entity.Ruser">
+			select
+				a.id,
+				a.create_at as createDate,
+				a.email,
+				a.login_ip  as loginIp,
+				a.name,
+				a.phone,
+				a.type,
+				a.username,
+				a.addr,
+				a.sex,
+				a.signature,
+				a.pic,
+				a.home_pic as homePic,
+				a.data_from as dataFrom,
+				a.video_count as videoCount,
+				a.third_from as thirdFrom,
+				a.third_userame as thirdUserame,
+				a.birthday,
+				a.stat,
+				a.vstat as vipStat,a.fans_count as fansCount,a.attention_count as attentionCount,sign_sum as signSum
+				<if test="uid!=null">
+					,(select count(b.attention_id) from attention b where b.creator_id=#{uid} and b.attention_id=a.id)>0 as isAttention
+				</if>
+			from ruser a
+				where (a.name like "%"#{keyWord}"%" or (a.username like "%"#{keyWord}"%" and a.third_from !='sina' and a.third_from !='qq' and a.third_from !='wechat'))
+				<if test="timestamp!=null">
+			    	 <![CDATA[and a.create_at<#{timestamp}]]>
+			    </if>
+			order by a.create_at desc limit #{count}
+
+	</select>
+
+	<select id="getNormalUserCount" resultType="Integer">
+		select count(*) from ruser
+		where 1=1
+			<if test="type != null">
+				and type=#{type}
+			</if>
+			<if test="name != null">
+				and name like "%"#{name}"%"
+			</if>
+			<if test="username != null">
+				and username like "%"#{username}"%"
+			</if>
+			<if test="phone != null">
+				and phone like "%"#{phone}"%"
+			</if>
+			<if test="id != null">
+				and id=#{id}
+			</if>
+	</select>
+
+	<select id="getRusersFromContacts" resultType="com.busap.vcs.data.vo.InviteFriendVO">
+		select
+			id,
+			1 as isWopaiUser,
+			(select count(a.attention_id) from attention a where a.creator_id=#{uid} and a.attention_id=r.id)>0 as isAttention,
+			name as wopaiNickname,
+			pic as wopaiPic,
+			type,
+			vstat as vipStat,
+			username,
+			third_userame as thirdUsername,
+			"contacts" as dataFrom,sign_sum as signSum
+		from ruser r where r.username in
+			<foreach item="item" index="index" collection="phoneNumbers" open="(" separator="," close=")">
+			 	#{item}
+			</foreach>
+		order by isAttention asc
+	</select>
+
+	<select id="getRusersFromThirdPart" resultType="com.busap.vcs.data.vo.InviteFriendVO">
+		select
+			id,
+			1 as isWopaiUser,
+			0 as isAttention,
+			name as wopaiNickname,
+			pic as wopaiPic,
+			type,
+			vstat as vipStat,
+			username,
+			third_userame as thirdUsername,
+			third_from as dataFrom,sign_sum as signSum
+
+		from ruser r where
+			third_from = #{thirdPart} and
+			third_userame in
+			<foreach item="item" index="index" collection="thirdUsernames" open="(" separator="," close=")">
+			 	#{item}
+			</foreach>
+		order by isAttention asc
+	</select>
+	<!--
+	<select id="execDayUserPopularityProc" statementType="CALLABLE" >
+    	 <![CDATA[
+	        {call proc_userDayHot(
+	            #{videoCountRate,mode=IN,jdbcType=DOUBLE},
+	            #{fansCountRate,mode=IN,jdbcType=DOUBLE}
+	        )}
+	    ]]>
+    </select>
+     -->
+     <update id="execDayUserPopularityProc">
+     	UPDATE ruser set day_popularity=#{popularity} where id=#{uid};
+     </update>
+    <select id="findDayUserPopularityTop50" resultType="com.busap.vcs.data.entity.Ruser">  
+    	<![CDATA[
+	    	select 
+				id,create_at as createDate,email,login_ip  as loginIp, 
+				name,phone, type,username,addr,sex,signature, pic,                      
+				home_pic as homePic,data_from as dataFrom,video_count as videoCount,              
+				third_from as thirdFrom,third_userame as thirdUserame,          
+				birthday, stat,vstat as vipStat,fans_count as fansCount,
+				attention_count as attentionCount,sign_sum as signSum,day_popularity as dayPopularity
+			from ruser where rank_able<>1
+			order by day_popularity desc limit #{count}
+		]]>
+    </select>
+
+    <select id="dayUserVideos" resultType="Integer">
+    	<![CDATA[
+    		select count(v.id) as videoCount from video v where TIMESTAMPDIFF(DAY,v.create_at,now())<7 and (v.flow_stat='published' or v.flow_stat='check_ok')  and v.creator_id=#{uid};
+    	]]>
+    </select>
+
+	<!--七天粉丝数量-->
+    <select id="dayUserFans" resultType="Integer">
+    	<![CDATA[
+    		select count(a.creator_id) as fansCount from attention a where TIMESTAMPDIFF(DAY,a.create_date,now())<7 and attention_id=#{uid};
+    	]]>
+    </select>
+
+    <select id="last5DayUserNum" resultType="map" parameterType="java.lang.String">
+    	select DATE_FORMAT(create_at,'%Y-%m-%d') as date,count(id) as count
+    	 from ruser
+    	 WHERE <![CDATA[ create_at >= #{date,jdbcType=VARCHAR} ]]>
+    	 GROUP BY date 
+    	 ORDER BY date desc
+    </select>
+
+    <select id="findCalculateRankUsers" resultType="Long">
+    	<![CDATA[
+	    	select u.id
+			from ruser u
+			where u.id in(select v.creator_id from video v where TIMESTAMPDIFF(DAY,v.create_at,now())<7 
+				and (v.flow_stat='check_ok' or v.flow_stat='published')) or u.id in(select a.attention_id from attention a where TIMESTAMPDIFF(DAY,a.create_date,now())<7);
+    	]]>
+    </select>
+
+	<sql id="where_sql">
+		<where>
+			<if test="id !=  null">
+				AND ruser.id = #{id,jdbcType=BIGINT}
+			</if>
+			<if test="name != null and name !=''">
+				AND ruser.name LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="username != null and username !=''">
+				AND ruser.username LIKE CONCAT('%',#{username,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="phone != null and phone !=''">
+				AND ruser.phone LIKE CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="type !=  null">
+				AND ruser.type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="stat !=  null">
+				AND ruser.stat = #{stat,jdbcType=INTEGER}
+			</if>
+			<if test="vipStat !=  null">
+				AND ruser.vstat = #{vipStat,jdbcType=INTEGER}
+			</if>
+			<if test="openId !=  null">
+				AND ruser.open_id = #{openId,jdbcType=VARCHAR}
+			</if>
+			<if test="sex !=  null">
+				AND ruser.sex = #{sex,jdbcType=INTEGER}
+			</if>
+			<if test="thirdFrom !=  null and thirdFrom !=''">
+				AND ruser.third_from = #{thirdFrom,jdbcType=VARCHAR}
+			</if>
+			<if test="appVersion !=  null and appVersion !=''">
+				AND ruser.app_version = #{appVersion,jdbcType=VARCHAR}
+			</if>
+			<if test="rankAble !=  null">
+				AND ruser.rank_able = #{rankAble,jdbcType=INTEGER}
+			</if>
+			<if test="addr != null and addr !=''">
+				AND ruser.addr LIKE CONCAT('%',#{addr,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="startCount !=  null">
+				AND ruser.video_count <![CDATA[ >= ]]> #{startCount,jdbcType=INTEGER}
+			</if>
+			<if test="endCount !=  null">
+				AND ruser.video_count <![CDATA[ <= ]]> #{endCount,jdbcType=INTEGER}
+			</if>
+			<if test="startTime !=null and startTime != ''">
+				<![CDATA[ AND DATE_FORMAT(ruser.create_at, '%Y-%m-%d')  >= #{startTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="endTime !=null and endTime != ''">
+				<![CDATA[ AND DATE_FORMAT(ruser.create_at, '%Y-%m-%d')  <= #{endTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="loginStartTime !=null and loginStartTime != ''">
+				<![CDATA[ AND DATE_FORMAT(ruser.login_date, '%Y-%m-%d')  >= #{loginStartTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<if test="loginEndTime !=null and loginEndTime != ''">
+				<![CDATA[ AND DATE_FORMAT(ruser.login_date, '%Y-%m-%d')  <= #{loginEndTime,jdbcType=TIMESTAMP} ]]>
+			</if>
+			<choose>
+				<when test="userKey != null and userKey != ''">
+					<if test="userKey == 1">
+						<if test="userKeyword != null and userKeyword != ''">
+							AND ruser.id = #{userKeyword}
+						</if>
+					</if>
+					<if test="userKey == 2">
+						<if test="userKeyword != null and userKeyword != ''">
+							AND ruser.username LIKE CONCAT('%',#{userKeyword},'%')
+						</if>
+					</if>
+					<if test="userKey == 3">
+						<if test="userKeyword != null and userKeyword != ''">
+							AND ruser.name LIKE CONCAT('%',#{userKeyword},'%')
+						</if>
+					</if>
+					<if test="userKey == 4">
+						<if test="userKeyword != null and userKeyword != ''">
+							AND (ruser.band_phone=#{userKeyword} or ruser.username=#{userKeyword} or ruser.phone LIKE CONCAT('%',#{userKeyword},'%'))
+						</if>
+					</if>
+				</when>
+			</choose>
+			<if test="regPlatformChannel == null or regPlatformChannel ==''">
+				<if test="regPlatform != null and regPlatform !=''">
+					<if test="regPlatform =='ios'">
+						AND ruser.reg_platform LIKE CONCAT('%',#{regPlatform,jdbcType=VARCHAR},'%')
+					</if>
+					<if test="regPlatform =='h5'">
+						AND ruser.reg_platform LIKE CONCAT('%',#{regPlatform,jdbcType=VARCHAR},'%')
+					</if>
+					<if test="regPlatform =='android'">
+						AND ruser.reg_platform is not null AND ruser.reg_platform NOT LIKE "%ios%" AND ruser.reg_platform NOT LIKE "%h5%"
+					</if>
+				</if>	
+			</if>
+			<if test="regPlatformChannel != null and regPlatformChannel !=''">
+				AND ruser.reg_platform = #{regPlatformChannel,jdbcType=VARCHAR}
+			</if>
+			<if test="allowPublish !=  null">
+				AND ruser.allow_publish = #{allowPublish,jdbcType=INTEGER}
+			</if>
+			<if test="isAnchor !=  null">
+				AND ruser.is_anchor = #{isAnchor,jdbcType=INTEGER}
+			</if>
+			<if test="organizationId !=  null">
+				AND ruser.organization_Id = #{organizationId,jdbcType=BIGINT}
+			</if>
+			<if test=" recommendBit!=  null">
+				AND ruser.recommend_bit = #{recommendBit,jdbcType=BIGINT}
+			</if>
+			<if test="isBlacklist != null">
+				<choose>
+					<when test="isBlacklist != 1">
+						AND (ruser.is_blacklist = 0 OR ruser.is_blacklist IS NULL)
+					</when>
+					<otherwise>
+						AND ruser.is_blacklist = #{isBlacklist,jdbcType=INTEGER}
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</sql>
+
+	<select id="selectRusers" resultType="com.busap.vcs.data.entity.Ruser" parameterType="java.util.Map">
+		SELECT
+		id,
+		name,
+		username,
+		signature,
+		addr,
+		phone,
+		video_count AS videoCount,
+		stat,
+		login_date AS loginDate,
+		type,
+		vstat AS vipStat,
+		rank_able AS rankAble,
+		create_at AS createDate,
+		vip_weight AS vipWeight,
+		day_popularity AS dayPopularity,
+		24hour_popularity AS twentyFourHourPopularity,
+		week_popularity AS weekPopularity,
+		month_popularity AS monthPopularity,
+		year_popularity AS yearPopularity,
+		fans_count AS fansCount,
+		pic,
+		sign_sum AS signSum,
+		reg_platform AS regPlatform,
+		live_weight AS liveWeight,
+		is_anchor AS isAnchor,
+		is_blacklist AS isBlacklist
+		FROM ruser
+		<include refid="where_sql"/>
+		<choose>
+			<when test="order != '' and order != null">ORDER BY #{sort} #{order}</when>
+			<otherwise>ORDER BY videoCount DESC </otherwise>
+		</choose>
+	</select>
+
+	<select id="selectWopaiRusers" resultType="com.busap.vcs.data.model.RuserDisplay" parameterType="java.util.Map">
+		SELECT
+		ruser.id,
+		ruser.name,
+		username,
+		signature,
+		addr,
+		IFNULL(phone,band_phone) as phone,
+		video_count AS videoCount,
+		stat,
+		login_date AS loginDate,
+		type,
+		vstat AS vipStat,
+		rank_able AS rankAble,
+		ruser.create_at AS createDate,
+		vip_weight AS vipWeight,
+/*		day_popularity AS dayPopularity,
+		24hour_popularity AS twentyFourHourPopularity,
+		week_popularity AS weekPopularity,
+		month_popularity AS monthPopularity,
+		year_popularity AS yearPopularity,*/
+		fans_count AS fansCount,
+		pic,
+		sign_sum AS signSum,
+		reg_platform AS regPlatform,
+		app_version AS appVersion,
+		live_weight AS liveWeight,
+		is_anchor AS isAnchor,
+		recommend_bit AS recommendBit,
+		third_from AS thirdFrom,
+		is_blacklist AS isBlackList,
+		o.org_name AS orgName
+		/*,
+		IFNULL(t.realFansCount,0) AS realFansCount*/
+		FROM ruser
+		LEFT JOIN organization o ON o.id = ruser.organization_id
+		/*LEFT JOIN (
+		select attention_id AS attentionId,count(*) AS realFansCount from attention WHERE majia_attention = 0 GROUP BY attention_id
+		) t ON t.attentionId = ruser.id*/
+		<include refid="where_sql"/>
+		<choose>
+			<when test="order != '' and order != null">ORDER BY #{sort} #{order}</when>
+			<otherwise>ORDER BY id DESC </otherwise>
+		</choose>
+		<include refid="page"/>
+	</select>
+
+	<select id="selectRealFansCountById" resultType="java.lang.Long" parameterType="java.lang.Long">
+		select count(*) AS realFansCount from attention WHERE majia_attention = 0 AND attention_id = #{id,jdbcType=BIGINT} GROUP BY attention_id
+	</select>
+
+	<select id="selectRusersCount"  resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		COUNT(1)
+		FROM ruser
+		<include refid="where_sql"/>
+	</select>
+
+	<delete id="deleteRuser" parameterType="Long">
+		DELETE FROM ruser WHERE id = #{id}
+	</delete>
+
+	<select id="selectByPrimaryKey" parameterType="Long" resultType="com.busap.vcs.data.entity.Ruser">
+		SELECT
+		id,
+		name,
+		signature,
+		addr,
+		video_count AS videoCount,
+		stat,
+		type,
+		vstat AS vipStat,
+		rank_able AS rankAble,
+		create_at AS createDate,
+		sex,
+		pic,
+		vip_weight AS vipWeight,
+		allow_publish AS allowPublish,
+		live_weight AS liveWeight,
+		is_anchor AS isAnchor,
+		day_popularity AS dayPopularity,
+		24hour_popularity AS twentyFourHourPopularity,
+		week_popularity AS weekPopularity,
+		month_popularity AS monthPopularity,
+		year_popularity AS yearPopularity,
+		fans_count AS fansCount,
+		attention_count AS attentionCount,
+		sign_sum AS signSum,
+		pic,
+		is_enabled AS isEnabled,
+		is_locked AS isLocked,
+		all_video_count AS allVideoCount,
+		third_from AS thirdFrom,
+		allow_evaluation AS allowEvaluation,
+		organization_id AS organizationId,
+		is_blacklist AS isBlacklist,
+		live_type AS liveType,
+		band_phone AS bandPhone,
+		recommend_bit AS recommendBit
+		FROM ruser WHERE id = #{id}
+	</select>
+
+	<update id="updateRuser" parameterType="com.busap.vcs.data.entity.Ruser">
+		UPDATE ruser
+		<set>
+			<if test="id != null">
+				id = #{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null and name!=''">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="signature != null and signature!=''">
+				signature = #{signature,jdbcType=VARCHAR},
+			</if>
+			<if test="stat != null">
+				stat = #{stat,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="vipStat != null">
+				vstat = #{vipStat,jdbcType=INTEGER},
+			</if>
+			<if test="vipWeight != null">
+				vip_weight = #{vipWeight,jdbcType=INTEGER},
+			</if>
+			<if test="liveWeight != null">
+				live_weight = #{liveWeight,jdbcType=INTEGER},
+			</if>
+			<if test="rankAble != null">
+				rank_able = #{rankAble,jdbcType=INTEGER},
+			</if>
+			modify_at = now(),
+			<if test="pic != null  and pic!=''">
+				pic = #{pic,jdbcType=VARCHAR},
+			</if>
+			<if test="twentyFourHourPopularity != null">
+				24hour_popularity = #{twentyFourHourPopularity,jdbcType=DECIMAL},
+			</if>
+			<if test="weekPopularity != null">
+				week_popularity = #{weekPopularity,jdbcType=DECIMAL},
+			</if>
+			<if test="monthPopularity != null">
+				month_popularity = #{monthPopularity,jdbcType=DECIMAL},
+			</if>
+			<if test="yearPopularity != null">
+				year_popularity = #{yearPopularity,jdbcType=DECIMAL},
+			</if>
+			<if test="allowPublish != null">
+				allow_publish = #{allowPublish,jdbcType=INTEGER},
+			</if>
+			<if test="isAnchor != null">
+				is_anchor = #{isAnchor,jdbcType=INTEGER},
+			</if>
+			<if test="openId != null">
+				open_id = #{openId,jdbcType=VARCHAR},
+			</if>
+			<choose>
+				<when test="organizationId != null">
+					organization_id = #{organizationId,jdbcType=BIGINT},
+				</when>
+				<otherwise>
+					organization_id = NULL,
+				</otherwise>
+			</choose>
+			<if test="isBlacklist != null">
+				is_blacklist = #{isBlacklist,jdbcType=INTEGER},
+			</if>
+			<if test="liveType != null">
+				live_type = #{liveType,jdbcType=INTEGER},
+			</if>
+			<if test="recommendBit != null">
+				recommend_bit = #{recommendBit,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<insert id="insertRuser" parameterType="com.busap.vcs.data.entity.Ruser" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ruser
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			create_at,
+			<if test="isEnabled != null">
+				is_enabled,
+			</if>
+			<if test="isLocked != null">
+				is_locked,
+			</if>
+			<if test="password != null and password != ''">
+				password,
+			</if>
+			<if test="type != null and type != ''">
+				type,
+			</if>
+			<if test="username != null and username != ''">
+				username,
+			</if>
+			<if test="name != null and name != ''">
+				name,
+			</if>
+			<if test="stat != null">
+				stat,
+			</if>
+			<if test="vipStat != null">
+				vstat,
+			</if>
+			<if test="vipWeight != null">
+				vip_weight,
+			</if>
+			<if test="pic != null and pic != ''">
+				pic,
+			</if>
+			<if test="signature != null and signature != ''">
+				signature,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			now(),
+			<if test="isEnabled != null">
+				#{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="isLocked != null">
+				#{isLocked,jdbcType=INTEGER},
+			</if>
+			<if test="password != null and password != ''">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null and type != ''">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="username != null and username != ''">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null and name != ''">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="stat != null">
+				#{stat,jdbcType=INTEGER},
+			</if>
+			<if test="vipStat != null">
+				#{vipStat,jdbcType=INTEGER},
+			</if>
+			<if test="vipWeight != null">
+				#{vipWeight,jdbcType=INTEGER},
+			</if>
+			<if test="pic != null and pic != ''">
+				#{pic,jdbcType=VARCHAR},
+			</if>
+			<if test="signature != null and signature != ''">
+				#{signature,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="batchRankAbleToAllow" parameterType="java.lang.String">
+		UPDATE ruser
+		<set>
+			rank_able = 0
+		</set>
+		WHERE id IN
+		<foreach item="item" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="batchRankAbleToBan" parameterType="java.lang.String">
+		UPDATE ruser
+		<set>
+			rank_able = 1
+		</set>
+		WHERE id IN
+		<foreach item="item" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<!--计算用户一定时间范围内粉丝数量 Calculate the number of users fans-->
+	<select id="selectUserFansByTime" resultType="Integer" parameterType="java.util.Map">
+    		SELECT COUNT(creator_id) AS fansCount
+    		FROM attention
+    		WHERE
+    		attention_id=#{uid}
+            <if test="type != null and type != ''">
+                <choose>
+                    <when test="type == 'day'">
+                        AND TIMESTAMPDIFF(HOUR,create_date,now()) <![CDATA[ < ]]> 24
+                    </when>
+                    <when test="type == 'week'">
+                        AND TIMESTAMPDIFF(DAY,create_date,now()) <![CDATA[ < ]]> 7
+                    </when>
+                    <when test="type == 'month'">
+                        AND TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 1
+                    </when>
+                    <when test="type == 'year'">
+                        AND TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 12
+                    </when>
+                </choose>
+            </if>
+	</select>
+
+    <sql id="popularity_sql">
+        <if test="type != null and type != ''">
+            <choose>
+                <when test="type == 'day'">
+                    AND TIMESTAMPDIFF(HOUR,create_at,now()) <![CDATA[ < ]]> 24
+                </when>
+                <when test="type == 'week'">
+                    AND TIMESTAMPDIFF(DAY,create_at,now()) <![CDATA[ < ]]> 7
+                </when>
+                <when test="type == 'month'">
+                    AND TIMESTAMPDIFF(MONTH,create_at,now()) <![CDATA[ < ]]> 1
+                </when>
+                <when test="type == 'year'">
+                    AND TIMESTAMPDIFF(MONTH,create_at,now()) <![CDATA[ < ]]> 12
+                </when>
+            </choose>
+        </if>
+    </sql>
+
+	<!--计算用户一定时间范围内上传视频数量 Calculate the number of users fans-->
+	<select id="selectUserVideosByTime" resultType="Integer">
+    		SELECT COUNT(id) AS videoCount FROM video
+    		WHERE
+    		(flow_stat='published' OR flow_stat='check_ok')
+    		AND creator_id=#{uid}
+            <include refid="popularity_sql"/>
+	</select>
+
+	<select id="selectNeedReCalculateUsers" resultType="Long" parameterType="java.util.List">
+	    	SELECT u.id
+			FROM ruser u
+			WHERE u.id IN
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+              <!--(
+                  SELECT creator_id FROM
+                  video
+                  WHERE
+                    (
+                      flow_stat='check_ok' OR flow_stat='published'
+                    )
+                    <include refid="popularity_sql"/>
+              )
+              OR u.id
+              IN(
+                 SELECT attention_id FROM attention
+                 WHERE
+                <if test="type != null and type != ''">
+                    <choose>
+                        <when test="type == 'day'">
+                            TIMESTAMPDIFF(HOUR,create_date,now()) <![CDATA[ < ]]> 24
+                        </when>
+                        <when test="type == 'week'">
+                            TIMESTAMPDIFF(DAY,create_date,now()) <![CDATA[ < ]]> 7
+                        </when>
+                        <when test="type == 'month'">
+                            TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 1
+                        </when>
+                        <when test="type == 'year'">
+                            TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 12
+                        </when>
+                    </choose>
+                </if>
+              )-->
+	</select>
+
+	<select id="selectUserIdByVideoTime" resultType="Long" parameterType="java.util.Map">
+		SELECT creator_id FROM
+		video
+		WHERE
+		(
+		flow_stat='check_ok' OR flow_stat='published'
+		)
+		/*AND rank_able <![CDATA[ <> ]]> 1*/
+		<include refid="popularity_sql"/>
+		GROUP BY creator_id
+	</select>
+
+	<select id="selectUserIdByAttentionTime" resultType="Long" parameterType="java.util.Map">
+		SELECT attention_id FROM attention
+		WHERE
+		<if test="type != null and type != ''">
+			<choose>
+				<when test="type == 'day'">
+					TIMESTAMPDIFF(HOUR,create_date,now()) <![CDATA[ < ]]> 24
+				</when>
+				<when test="type == 'week'">
+					TIMESTAMPDIFF(DAY,create_date,now()) <![CDATA[ < ]]> 7
+				</when>
+				<when test="type == 'month'">
+					TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 1
+				</when>
+				<when test="type == 'year'">
+					TIMESTAMPDIFF(MONTH,create_date,now()) <![CDATA[ < ]]> 12
+				</when>
+			</choose>
+		</if>
+		GROUP BY attention_id
+	</select>
+
+	<select id="selectUserPopularityByTime" resultType="com.busap.vcs.data.entity.Ruser" parameterType="java.util.Map">
+	    	SELECT
+				id,
+				create_at AS createDate,
+				email,
+				login_ip AS loginIp,
+				name,
+				phone,
+				type,
+				username,
+				addr,
+				sex,
+				signature,
+				pic,
+				home_pic AS homePic,
+				data_from AS dataFrom,
+				video_count AS videoCount,
+				third_from AS thirdFrom,
+				third_userame AS thirdUserame,
+				birthday,
+				stat,
+				vstat AS vipStat,
+				fans_count AS fansCount,
+				attention_count AS attentionCount,
+				sign_sum AS signSum,
+				day_popularity AS dayPopularity,
+				24hour_popularity AS twentyFourHourPopularity,
+				week_popularity AS weekPopularity,
+				month_popularity AS monthPopularity,
+				year_popularity AS yearPopularity
+			FROM ruser
+			WHERE rank_able <![CDATA[ <> ]]> 1
+			<if test="userId != null">
+				AND id = #{userId}
+			</if>
+			<if test="type != null and type != ''">
+				<choose>
+					<when test="type == 'day'">
+						ORDER BY 24hour_popularity DESC
+					</when>
+					<when test="type == 'week'">
+						ORDER BY week_popularity DESC
+					</when>
+					<when test="type == 'month'">
+						ORDER BY month_popularity DESC
+					</when>
+					<when test="type == 'year'">
+						ORDER BY year_popularity DESC
+					</when>
+				</choose>
+			</if>
+			LIMIT #{count}
+	</select>
+
+	<update id="updateUserPopularity" parameterType="java.util.Map">
+		UPDATE ruser
+		<set>
+			<if test="type == 'day'">
+				24hour_popularity=#{popularity}
+			</if>
+			<if test="type == 'week'">
+				week_popularity=#{popularity}
+			</if>
+			<if test="type == 'month'">
+				month_popularity=#{popularity}
+			</if>
+			<if test="type == 'year'">
+				year_popularity=#{popularity}
+			</if>
+		</set>
+		WHERE id=#{uid}
+	</update>
+
+	<update id="updateRuserPopularity" parameterType="java.util.Map">
+		UPDATE ruser
+		<set>
+			<if test="twentyFourHourPopularity != null">
+				24hour_popularity = #{twentyFourHourPopularity,jdbcType=DECIMAL}
+			</if>
+			<if test="weekPopularity != null">
+				week_popularity = #{weekPopularity,jdbcType=DECIMAL}
+			</if>
+			<if test="monthPopularity != null">
+				month_popularity = #{monthPopularity,jdbcType=DECIMAL}
+			</if>
+			<if test="yearPopularity != null">
+				year_popularity = #{yearPopularity,jdbcType=DECIMAL}
+			</if>
+		</set>
+		WHERE id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateUserDayPopularityZero" parameterType="java.util.List">
+		UPDATE ruser
+		<set>
+			24hour_popularity = 0
+		</set>
+		WHERE id NOT IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND (24hour_popularity <![CDATA[ <> ]]> 0 OR 24hour_popularity IS NULL)
+	</update>
+
+	<update id="updateUserWeekPopularityZero" parameterType="java.util.List">
+		UPDATE ruser
+		<set>
+			week_popularity = 0
+		</set>
+		WHERE id NOT IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND (week_popularity <![CDATA[ <> ]]> 0 OR week_popularity IS NULL)
+	</update>
+
+	<update id="updateUserMonthPopularityZero" parameterType="java.util.List">
+		UPDATE ruser
+		<set>
+			month_popularity = 0
+		</set>
+		WHERE id NOT IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND (month_popularity <![CDATA[ <> ]]> 0 OR month_popularity IS NULL)
+	</update>
+
+	<update id="updateUserYearPopularityZero" parameterType="java.util.List">
+		UPDATE ruser
+		<set>
+			year_popularity = 0
+		</set>
+		WHERE id NOT IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND (year_popularity <![CDATA[ <> ]]> 0 OR year_popularity IS NULL)
+	</update>
+
+	<select id="selectWopaiUsers" resultType="com.busap.vcs.data.model.ExportWopaiUser" parameterType="java.util.Map">
+		SELECT
+		id,
+		name,
+		video_count AS videoCount,
+		fans_count AS fansCount,
+		IFNULL(t.realFansCount,0) AS realFansCount,
+		sign_sum AS signSum,
+		24hour_popularity AS twentyFourPopularity,
+		week_popularity AS weekPopularity,
+		month_popularity AS monthPopularity,
+		create_at AS createDate,
+		CASE WHEN(sex = 1) THEN "男"
+		WHEN(sex = 0) THEN "女"
+		ELSE "未知" END AS sex,
+		(year(now())-year(birthday)-1) + ( DATE_FORMAT(birthday, '%m%d') <![CDATA[ <= ]]> DATE_FORMAT(NOW(), '%m%d') ) AS age,
+		addr AS address
+		FROM ruser
+		LEFT JOIN (
+		select attention_id AS attentionId,count(*) AS realFansCount from attention WHERE majia_attention = 0 GROUP BY attention_id
+		) t ON t.attentionId = ruser.id
+		<include refid="where_sql"/>
+		ORDER BY create_at DESC
+		<if test="exportCount != null">
+			LIMIT #{exportCount,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<select id="selectWopaiUserToExcel" resultType="com.busap.vcs.data.model.ExportWopaiNormalUser" parameterType="java.util.Map">
+		SELECT
+		ruser.id,
+		ruser.name,
+		ruser.video_count AS videoCount,
+		ruser.fans_count AS fansCount,
+		/*IFNULL(a.realFansCount,0) AS realFansCount,*/
+		ruser.sign_sum AS signSum,
+		ruser.create_at AS createDate,
+		CASE WHEN(ruser.sex = 1) THEN "男"
+		WHEN(ruser.sex = 0) THEN "女"
+		ELSE "未知" END AS sex,
+		(year(now())-year(ruser.birthday)-1) + ( DATE_FORMAT(ruser.birthday, '%m%d') <![CDATA[ <= ]]>DATE_FORMAT(NOW(), '%m%d') ) AS age,
+		ruser.addr AS address
+		FROM ruser/*
+		LEFT JOIN (
+		select attention_id AS attentionId,count(*) AS realFansCount from attention WHERE majia_attention = 0 GROUP BY attention_id
+		) a ON a.attentionId = ruser.id*/
+		<include refid="where_sql"/>
+		ORDER BY ruser.create_at DESC
+	</select>
+
+</mapper>

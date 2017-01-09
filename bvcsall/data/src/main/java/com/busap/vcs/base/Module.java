@@ -1,0 +1,6 @@
+package com.busap.vcs.base;
+
+
+public enum Module {
+	VIDEO,PRAISE,COMMENT,BNOTICE,FOCUS,PLAY,FORWARD,LIVE,LIVE_NOTICE,IDENTIFY,BERRY
+}
