@@ -107,7 +107,8 @@ public class MerchantService extends RedisCache {
 		luaOperate.evalLua(JiLuLuaCommand.ACCOUNT_REFRESH.name(), 2, 
 				MerchantKeyGenerator.accountMerchantMapKey(type), 
 				MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()), 
-				String.valueOf(memMerchant.getMerchantId()), 
+				account, 
+				String.valueOf(memMerchant.getMerchantId()),
 				SerializeUtil.JsonUtil.GSON.toJson(memAccount));
 //		aliyunService.createMerchantFolder(merchant);     看客户端 sts 接上之后是否可以自己直接创建商户的文件夹
 		return new Merchant(memMerchant);
