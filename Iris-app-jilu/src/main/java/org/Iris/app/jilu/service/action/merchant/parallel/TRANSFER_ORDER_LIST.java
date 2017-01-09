@@ -21,7 +21,7 @@ public class TRANSFER_ORDER_LIST extends ParallelMerchantAction{
 		List<MemOrder> mList = merchant.getTransferOrderListByMerchantId(merchant.getMemMerchant().getMerchantId());
 		if(mList == null || mList.size() == 0)
 			return Result.jsonSuccess();
-		return Result.jsonSuccess(merchant.getOrderChangeListModelList(mList));
+		return Result.jsonSuccess(merchant.getTransferOrderListModelList(mList));
 	}
 	
 }

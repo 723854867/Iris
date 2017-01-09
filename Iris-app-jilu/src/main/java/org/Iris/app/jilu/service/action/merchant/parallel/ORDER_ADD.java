@@ -31,6 +31,6 @@ public class ORDER_ADD extends ParallelMerchantAction {
 		MemCustomer customer = merchant.getCustomer(customerId);
 		if(customer == null)
 			throw IllegalConstException.errorException(JiLuParams.CUSTOMER_ID);
-		return merchant.createOrder(customer, list);
+		return merchantService.createOrder(customer, list,merchant);
 	}
 }

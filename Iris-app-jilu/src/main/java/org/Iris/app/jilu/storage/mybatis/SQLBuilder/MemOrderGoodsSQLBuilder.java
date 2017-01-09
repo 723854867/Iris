@@ -72,7 +72,7 @@ public class MemOrderGoodsSQLBuilder {
 		}
 		stringBuilder.append(" end, packet_id = case id");
 		for(MemOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getPacketId());
+			stringBuilder.append(" when "+orderGoods.getId()+" then '"+orderGoods.getPacketId()+"'");
 		}
 		stringBuilder.append(" end, status = case id");
 		for(MemOrderGoods orderGoods:list){

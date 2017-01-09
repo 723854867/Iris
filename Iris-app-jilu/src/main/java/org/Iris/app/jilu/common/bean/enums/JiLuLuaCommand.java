@@ -11,5 +11,7 @@ public enum JiLuLuaCommand {
 	
 	ACCOUNT_REFRESH,
 	
+	ORDER_STATUS,
+	
 	REMOVE_FRIEND_APPLY;
 }

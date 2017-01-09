@@ -48,7 +48,7 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 			list.add(mGood);
 		}
 		
-		return Result.jsonSuccess(merchant.orderChange(superOrder,memMerchant,list));
+		return Result.jsonSuccess(merchantService.orderChange(superOrder,memMerchant,list,merchant));
 	}
 
 	

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import org.Iris.app.jilu.common.AppConfig;
@@ -25,6 +24,7 @@ import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
+import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
@@ -44,7 +44,6 @@ import org.Iris.util.lang.DateUtils;
 import org.Iris.util.reflect.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 
@@ -303,58 +302,6 @@ public class Merchant implements Beans {
 	}
 	
 	/**
-	 * 创建订单
-	 * 
-	 * @throws Exception
-	 */
-	@Transactional
-	public String createOrder(MemCustomer customer,List<MemOrderGoods> list) {
-		String orderId = System.currentTimeMillis()+""+new Random().nextInt(10);
-		for(MemOrderGoods ogs: list){
-			CfgGoods goods = getGoodsById(ogs.getGoodsId());
-			if(goods == null)
-				return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
-			ogs.setOrderId(orderId);
-			ogs.setGoodsName(goods.getZhName());
-			ogs.setStatus(0);
-			int time = DateUtils.currentTime();
-			ogs.setCreated(time);
-			ogs.setUpdated(time);
-		}
-		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(), memMerchant.getAddress(),
-				customer.getCustomerId(), customer.getName(), customer.getMobile(), customer.getAddress(),0);
-		memOrderMapper.insert(order);
-		memOrderGoodsMapper.batchInsert(list);
-		redisOperate.hmset(order.redisKey(), order);
-		redisOperate.batchHmset(list);
-		return Result.jsonSuccess(order);
-	}
-
-	/**
-	 * 更新订单
-	 * 
-	 * @param order
-	 * @param addGoodsList
-	 * @param updateGoodsList
-	 * @param deleteGoodsList
-	 */
-	@Transactional
-	public void updateOrder(MemOrder order,List<MemOrderGoods> addGoodsList,List<MemOrderGoods> updateGoodsList,List<MemOrderGoods> deleteGoodsList){
-		if(addGoodsList!=null){
-			memOrderGoodsMapper.batchInsert(addGoodsList);
-			redisOperate.batchHmset(addGoodsList);
-		}
-		if (updateGoodsList != null) {
-			memOrderGoodsMapper.batchUpdate(updateGoodsList);
-			redisOperate.batchHmset(updateGoodsList);
-		}
-		if (deleteGoodsList != null) {
-			memOrderGoodsMapper.batchDelete(deleteGoodsList);
-			redisOperate.batchDelete(deleteGoodsList);
-		}
-	}
-
-	/**
 	 * 根据商户号和订单号获取订单基本信息
 	 * 
 	 * @param orderId
@@ -425,48 +372,6 @@ public class Merchant implements Beans {
 	public void orderLock(MemOrder order){
 		memOrderMapper.update(order);
 		redisOperate.hmset(order.redisKey(),order);
-	}
-
-	/**
-	 * 转单
-	 * 
-	 * @param superOrder
-	 *            父订单
-	 * @param merchant
-	 *            转单商户对象
-	 * @param ogs
-	 *            转单产品列表
-	 */
-	@Transactional
-	public MemOrder orderChange(MemOrder superOrder,MemMerchant memMerchant,List<MemOrderGoods> ogs){
-		superOrder.setSuperOrderId(superOrder.getOrderId());
-		superOrder.setOrderId(System.currentTimeMillis() + "" + new Random().nextInt(10));
-		int time = DateUtils.currentTime();
-		superOrder.setCreated(time);
-		superOrder.setUpdated(time);
-		superOrder.setSuperMerchantId(getMemMerchant().getMerchantId());
-		superOrder.setSuperMerchantName(getMemMerchant().getName());
-		superOrder.setMerchantId(memMerchant.getMerchantId());
-		superOrder.setMerchantName(memMerchant.getName());
-		superOrder.setMerchantAddress(memMerchant.getAddress());
-		superOrder.setStatus(2);
-		memOrderMapper.insert(superOrder);
-		//处理产品列表
-		for(MemOrderGoods goods : ogs){
-			goods.setStatus(2);
-			goods.setUpdated(DateUtils.currentTime());
-		}
-		memOrderGoodsMapper.batchUpdate(ogs);
-		redisOperate.batchHmset(ogs);
-		for(MemOrderGoods goods : ogs){
-			goods.setOrderId(superOrder.getOrderId());
-			goods.setUpdated(DateUtils.currentTime());
-			goods.setCreated(DateUtils.currentTime());
-		}
-		memOrderGoodsMapper.batchInsert(ogs);
-		redisOperate.hmset(superOrder.redisKey(), superOrder);
-		redisOperate.batchHmset(ogs);
-		return superOrder;
 	}
 
 	/**
@@ -547,132 +452,14 @@ public class Merchant implements Beans {
 		}
 		return orderChangeModels;
 	}
-
-	/**
-	 * 拒绝转单操作/取消转单
-	 * 
-	 * @param orderId
-	 */
-	@Transactional
-	public void refuseOrder(String orderId, String superOrderId, long merchantId) {
-		// 删除转单订单即子订单
-		memOrderMapper.delete(merchantId, orderId);
-		// 删除转单产品列表
-		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
-		memOrderGoodsMapper.batchDelete(list);
-		// 更新父订单产品状态
-		List<MemOrderGoods> superGoodsList = new ArrayList<MemOrderGoods>();
-		for (MemOrderGoods merchantOrderGoods : list) {
-			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
-			mOrderGoods.setStatus(0);
-			mOrderGoods.setUpdated(DateUtils.currentTime());
-			superGoodsList.add(mOrderGoods);
-		}
-		memOrderGoodsMapper.batchUpdate(superGoodsList);
-		// 更新缓存
-		redisOperate.del(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId));
-		for (MemOrderGoods goods : list) {
-			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goods.getGoodsId()));
-		}
-		redisOperate.batchHmset(superGoodsList);
-	}
 	
-	/**
-	 * 接收转单
-	 * 
-	 * @param changeOrderList
-	 * @param orderId
-	 * @param superOrderId
-	 * @param merchantId
-	 */
-	@Transactional
-	public void receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
-			long merchantId) {
-		// 更新子订单状态
-		MemOrder order = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId), new MemOrder());
-		order.setStatus(0);
-		order.setUpdated(DateUtils.currentTime());
-		memOrderMapper.update(order);
-		// 查找本次转单申请的所有产品
-		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
-		List<Long> recevieGoodsIds = new ArrayList<Long>();
-		for (MemOrderGoods goods : receiveGoodsList)
-			recevieGoodsIds.add(goods.getGoodsId());
-
-		Iterator<MemOrderGoods> it = list.iterator();
-		while (it.hasNext()) {
-			MemOrderGoods goods = it.next();
-			if (recevieGoodsIds.contains(goods.getGoodsId()))
-				it.remove();
+	public List<TransferOrderModel> getTransferOrderListModelList(List<MemOrder> mList){
+		List<TransferOrderModel> orderChangeModels = new ArrayList<>();
+		for(MemOrder order : mList){
+			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
+			orderChangeModels.add(new TransferOrderModel(order.getOrderId(),order.getMerchantName(),order.getMerchantId(), list));
 		}
-		if (null != list && list.size() > 0)
-			memOrderGoodsMapper.batchDelete(list);
-		memOrderGoodsMapper.batchUpdate(receiveGoodsList);
-		// 更新父订单产品状态
-		List<MemOrderGoods> superRecevieGoodsList = new ArrayList<MemOrderGoods>();
-		for (MemOrderGoods merchantOrderGoods : receiveGoodsList) {
-			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
-			mOrderGoods.setStatus(3);
-			mOrderGoods.setUpdated(DateUtils.currentTime());
-			superRecevieGoodsList.add(mOrderGoods);
-		}
-		List<MemOrderGoods> superRefuseGoodsList = new ArrayList<MemOrderGoods>();
-		if (null != list && list.size() > 0) {
-			for (MemOrderGoods merchantOrderGoods : list) {
-				MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
-				mOrderGoods.setStatus(0);
-				mOrderGoods.setUpdated(DateUtils.currentTime());
-				superRefuseGoodsList.add(mOrderGoods);
-			}
-			memOrderGoodsMapper.batchUpdate(superRefuseGoodsList);
-		}
-		memOrderGoodsMapper.batchUpdate(superRecevieGoodsList);
-
-		// 更新缓存
-		redisOperate.hmset(order.redisKey(), order);
-		if (null != list && list.size() > 0) {
-			for (MemOrderGoods goods : list) {
-				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goods.getGoodsId()));
-			}
-			redisOperate.batchHmset(superRefuseGoodsList);
-		}
-		redisOperate.batchHmset(receiveGoodsList);
-		redisOperate.batchHmset(superRecevieGoodsList);
-	}
-	/**
-	 * 分包
-	 * @param orderId
-	 * @param goodsList 1:2;3:4
-	 * @return
-	 */
-	@Transactional
-	public String orderPacket(String orderId,String packetGoodsList){
-		String[] packetGoods = packetGoodsList.split(";");
-		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
-		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
-		for(String str : packetGoods){
-			String[] goods = str.split(":");
-			for(String goodsId : goods){
-				MemOrderGoods mGoods = getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
-				if (mGoods == null)
-					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
-				if(mGoods.getStatus()!=0)
-					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
-				String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
-				MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,getMemMerchant().getMerchantId());
-				packetList.add(packet);
-				mGoods.setStatus(4);
-				int time = DateUtils.currentTime();
-				mGoods.setUpdated(time);
-				mGoods.setPacketId(packetId);
-				orderGoodsList.add(mGoods);
-			}
-		}
-		memOrderPacketMapper.batchInsert(packetList);
-		memOrderGoodsMapper.batchUpdate(orderGoodsList);
-		redisOperate.batchHmset(packetList);
-		redisOperate.batchHmset(orderGoodsList);
-		return Result.jsonSuccess();
+		return orderChangeModels;
 	}
 	
 	/**
