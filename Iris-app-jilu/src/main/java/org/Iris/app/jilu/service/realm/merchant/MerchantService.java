@@ -153,6 +153,8 @@ public class MerchantService extends RedisCache {
 		redisOperate.hmset(order.redisKey(), order);
 		redisOperate.batchHmset(list);
 		
+		redisOperate.hset(MerchantKeyGenerator.merchantOrderStatusDataKey(orderId), "goodsCount", String.valueOf(list.size()));
+		
 		return Result.jsonSuccess(order);
 	}
 	
