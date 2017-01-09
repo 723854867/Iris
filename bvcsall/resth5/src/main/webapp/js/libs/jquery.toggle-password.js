@@ -1,1 +1,0 @@
-!function(t){t.fn.togglePassword=function(e){var s=t.extend(t.fn.togglePassword.defaults,e),a=t(this);t(s.el).bind(s.ev,function(){"password"==t(a).attr("type")?t(a).attr("type","text").next().removeClass("pwdSHBtn1").addClass("pwdSHBtn"):t(a).attr("type","password").next().removeClass("pwdSHBtn").addClass("pwdSHBtn1")})},t.fn.togglePassword.defaults={ev:"click"}}(jQuery);
