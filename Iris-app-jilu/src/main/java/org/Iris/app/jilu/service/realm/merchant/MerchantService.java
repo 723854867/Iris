@@ -288,14 +288,7 @@ public class MerchantService extends RedisCache {
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(order.getSuperOrderId());
 		status.setTransformCount(status.getTransformCount()-list.size());
-		memOrderStatusMapper.update(status);
-		redisOperate.hmset(status.redisKey(), status);
-		
-		int orderStatus = luaOperate.getOrderStatus(status);
-		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), order.getSuperOrderId());
-		superOrder.setStatus(orderStatus);
-		memOrderMapper.update(superOrder);
-		redisOperate.hmset(superOrder.redisKey(), superOrder);
+		setOrderStatus(merchant, order.getSuperOrderId(), order.getSuperMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		// 更新缓存
@@ -361,14 +354,7 @@ public class MerchantService extends RedisCache {
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(superOrderId);
 		status.setTransformSuccessCount(status.getTransformSuccessCount()+receiveGoodsList.size());
 		status.setTransformCount(status.getTransformCount()-list.size());
-		memOrderStatusMapper.update(status);
-		redisOperate.hmset(status.redisKey(), status);
-		
-		int orderStatus = luaOperate.getOrderStatus(status);
-		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), superOrderId);
-		superOrder.setStatus(orderStatus);
-		memOrderMapper.update(superOrder);
-		redisOperate.hmset(superOrder.redisKey(), superOrder);
+		setOrderStatus(merchant, superOrderId, order.getSuperMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		// 更新缓存
@@ -405,7 +391,7 @@ public class MerchantService extends RedisCache {
 				String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
 				MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
 				packetList.add(packet);
-				mGoods.setStatus(4);
+				mGoods.setStatus(3);
 				int time = DateUtils.currentTime();
 				mGoods.setUpdated(time);
 				mGoods.setPacketId(packetId);
@@ -418,14 +404,7 @@ public class MerchantService extends RedisCache {
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(orderId);
 		status.setPacketCount(status.getPacketCount()+packetGoods.length);
-		memOrderStatusMapper.update(status);
-		redisOperate.hmset(status.redisKey(), status);
-		
-		int orderStatus = luaOperate.getOrderStatus(status);
-		MemOrder superOrder = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
-		superOrder.setStatus(orderStatus);
-		memOrderMapper.update(superOrder);
-		redisOperate.hmset(superOrder.redisKey(), superOrder);
+		setOrderStatus(merchant, orderId, merchant.getMemMerchant().getMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		redisOperate.batchHmset(packetList);
@@ -445,12 +424,63 @@ public class MerchantService extends RedisCache {
 		if(packet == null)
 			return Result.jsonError(JiLuCode.PACKET_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.PACKET_NOT_EXIST.defaultValue(), packetId));
 		packet.setExpressCode(expressCode);
+		packet.setStatus(4);
 		packet.setUpdated(DateUtils.currentTime());
 		memOrderPacketMapper.update(packet);
-		
-		
-		
 		redisOperate.hmset(packet.redisKey(), packet);
+		//设置产品状态运输中
+		List<MemOrderGoods> list = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(packetId);
+		for(MemOrderGoods goods : list)
+			goods.setStatus(4);
+		memOrderGoodsMapper.batchUpdate(list);
+		redisOperate.batchHmset(list);
+		/*更新订单状态 和 订单状态表 开始*/
+		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(packet.getOrderId());
+		status.setPacketCount(status.getPacketCount()-1);
+		status.setTransportCount(status.getTransportCount()+1);
+		setOrderStatus(merchant, packet.getOrderId(), packet.getMerchantId(), status);
+		/*更新订单状态 和 订单状态表 结束*/
 		return Result.jsonSuccess(packet);
 	}
+	
+	/**
+	 * 邮包运输完成
+	 * @param packetId
+	 * @param merchant
+	 * @return
+	 */
+	@Transactional
+	public String packetFinished(String packetId,Merchant merchant){
+		MemOrderPacket packet = merchant.getMemOrderPacket(packetId);
+		if(packet == null)
+			return Result.jsonError(JiLuCode.PACKET_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.PACKET_NOT_EXIST.defaultValue(), packetId));
+		packet.setStatus(5);
+		packet.setUpdated(DateUtils.currentTime());
+		memOrderPacketMapper.update(packet);
+		redisOperate.hmset(packet.redisKey(), packet);
+		//设置产品状态运输中
+		List<MemOrderGoods> list = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(packetId);
+		for(MemOrderGoods goods : list)
+			goods.setStatus(5);
+		memOrderGoodsMapper.batchUpdate(list);
+		redisOperate.batchHmset(list);
+		/*更新订单状态 和 订单状态表 开始*/
+		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(packet.getOrderId());
+		status.setTransportCount(status.getTransportCount()-1);
+		status.setFinishedCount(status.getFinishedCount()+1);
+		setOrderStatus(merchant, packet.getOrderId(), packet.getMerchantId(), status);
+		/*更新订单状态 和 订单状态表 结束*/
+		return Result.jsonSuccess(packet);
+	}
+	
+	protected void setOrderStatus(Merchant merchant,String orderId,long merchantId,MemOrderStatus status){
+		MemOrder order = merchant.getMerchantOrderById(merchantId, orderId);
+		memOrderStatusMapper.update(status);
+		redisOperate.hmset(status.redisKey(), status);
+		int orderStatus = luaOperate.getOrderStatus(status);
+		order.setStatus(orderStatus);
+		memOrderMapper.update(order);
+		redisOperate.hmset(order.redisKey(), order);
+	}
+	
 }

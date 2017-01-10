@@ -9,6 +9,7 @@ public class OrderForm {
 	private String merchantName;
 	private long customerId;
 	private String customerName;
+	private int status;
 	private int created;
 	private int updated;
 	
@@ -18,6 +19,7 @@ public class OrderForm {
 		this.merchantName = order.getMerchantName();
 		this.customerId = order.getCustomerId();
 		this.customerName = order.getCustomerName();
+		this.status = order.getStatus();
 		this.created = order.getCreated();
 		this.updated = order.getUpdated();
 	}
@@ -60,6 +62,14 @@ public class OrderForm {
 
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public int getCreated() {
