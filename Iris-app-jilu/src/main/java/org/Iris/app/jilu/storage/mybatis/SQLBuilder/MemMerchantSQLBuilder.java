@@ -19,8 +19,6 @@ public class MemMerchantSQLBuilder {
 		return new SQL() {
 			{
 				INSERT_INTO(Table.MEM_MERCHANT.mark());
-				VALUES("name", 				"#{name}");
-				VALUES("address", 			"#{address}");
 				VALUES("last_login_time", 	"#{lastLoginTime}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");

@@ -10,7 +10,6 @@ public final class CommonKeyGenerator {
 	private static final String ACCOUNT_CAPTCHA_COUNT				= "string:tmp:account:{0}:{1}:captcha:count";			// 账号 - 验证码获取次数 对应关系；0-表示账号类型，1-表示账号值
 	private static final String RELATION_LOCK_KEY					= "string:tmp:relation:{0}:lock";						// 
 	
-	private static final String CREATE_MARK_DATA					= "hash:tmp:create:{0}:mark";							// 登录失败之后产生一个临时token，有效期三分钟，token保存该登录的账号信息,在创建商户时使用		
 	private static final String RELATION_MAP						= "hash:cache:relation:map";							//  
 	
 	public static final String accountCaptchaKey(AccountType type, String account) {
@@ -27,10 +26,6 @@ public final class CommonKeyGenerator {
 	
 	// *********************************************************************************************
 
-	public static final String createMarkDataKey(String token) { 
-		return MessageFormat.format(CREATE_MARK_DATA, token);
-	}
-	
 	public static final String relationMapKey() {
 		return RELATION_MAP;
 	}

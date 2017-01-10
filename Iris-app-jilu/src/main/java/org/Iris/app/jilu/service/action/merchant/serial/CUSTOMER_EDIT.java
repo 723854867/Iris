@@ -14,8 +14,8 @@ public class CUSTOMER_EDIT extends SerialMerchantAction {
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		String mobile = session.getKVParam(JiLuParams.MOBILE);
 		String memo = session.getKVParam(JiLuParams.MEMO);
-		
+		int mod = session. getKVParam(JiLuParams.MOD);
 		Merchant merchant = session.getMerchant();
-		return merchant.editCustomer(customerId, name, mobile, address, memo);
+		return merchant.editCustomer(customerId, name, mobile, address, memo, mod);
 	}
 }

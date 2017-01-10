@@ -13,6 +13,7 @@ import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
+import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
@@ -32,7 +33,6 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
-import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -135,6 +135,7 @@ public class Merchant implements Beans {
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
 		memMerchant.setUpdated(DateUtils.currentTime());
+		memMerchant.setStatusMod(MerchantStatusMod.QUALIFIED.mod());
 		_updateMerchant();
 	}
 	
@@ -162,7 +163,7 @@ public class Merchant implements Beans {
 	 * 修改客户
 	 * 
 	 */
-	public String editCustomer(long customerId, String name, String mobile, String address, String memo) { 
+	public String editCustomer(long customerId, String name, String mobile, String address, String memo, int mod) { 
 		MemCustomer customer = getCustomer(customerId);
 		if (null == customer)
 			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
@@ -174,6 +175,7 @@ public class Merchant implements Beans {
 		customer.setAddress(address);
 		customer.setMobile(mobile);
 		customer.setMemo(memo);
+		customer.setStatusMod(mod);
 		_updateCustomer(customer, nameSort);
 		return Result.jsonSuccess();
 	}
@@ -298,17 +300,6 @@ public class Merchant implements Beans {
 		redisOperate.hset(MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId()), String.valueOf(customer.getCustomerId()), customer.toString());
 		if (nameSort && _isCustomerListLoaded(customer.getMerchantId()))
 			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()), Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)), String.valueOf(customer.getCustomerId()));
-	}
-	
-	/**
-	 * 好友列表
-	 * 
-	 * @param page
-	 * @param pageSize
-	 * @return
-	 */
-	public Pager<PubRelation> friendList(int page, int pageSize) {
-		return null;
 	}
 	
 	/**

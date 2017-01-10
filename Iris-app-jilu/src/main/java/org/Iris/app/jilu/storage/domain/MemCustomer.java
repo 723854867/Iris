@@ -7,6 +7,7 @@ public class MemCustomer {
 
 	private long customerId;
 	private long merchantId;
+	private int statusMod;
 	private String name;
 	private String mobile;
 	private String address;
@@ -39,6 +40,14 @@ public class MemCustomer {
 
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
+	}
+	
+	public int getStatusMod() {
+		return statusMod;
+	}
+	
+	public void setStatusMod(int statusMod) {
+		this.statusMod = statusMod;
 	}
 
 	public String getName() {

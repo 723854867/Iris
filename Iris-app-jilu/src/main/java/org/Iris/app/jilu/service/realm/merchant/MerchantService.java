@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
-import org.Iris.app.jilu.common.bean.model.AccountModel;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
@@ -101,11 +100,10 @@ public class MerchantService extends RedisCache {
 	 * @return
 	 */
 	@Transactional
-	public Merchant createMerchant(AccountModel am, String name, String address) {
-		AccountType type = AccountType.match(am.getType());
-		MemMerchant memMerchant = BeanCreator.newMemMerchant(name, address);
+	public Merchant createMerchant(String account, AccountType type) {
+		MemMerchant memMerchant = BeanCreator.newMemMerchant();
 		memMerchantMapper.insert(memMerchant);
-		MemAccount memAccount = BeanCreator.newMemAccount(type, am.getAccount(), memMerchant.getCreated(), memMerchant.getMerchantId());
+		MemAccount memAccount = BeanCreator.newMemAccount(type, account, memMerchant.getCreated(), memMerchant.getMerchantId());
 		memAccountMapper.insert(memAccount);
 
 		// 更新缓存
@@ -113,7 +111,8 @@ public class MerchantService extends RedisCache {
 		luaOperate.evalLua(JiLuLuaCommand.ACCOUNT_REFRESH.name(), 2, 
 				MerchantKeyGenerator.accountMerchantMapKey(type), 
 				MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()), 
-				String.valueOf(memMerchant.getMerchantId()), 
+				account, 
+				String.valueOf(memMerchant.getMerchantId()),
 				SerializeUtil.JsonUtil.GSON.toJson(memAccount));
 //		aliyunService.createMerchantFolder(merchant);     看客户端 sts 接上之后是否可以自己直接创建商户的文件夹
 		return new Merchant(memMerchant);

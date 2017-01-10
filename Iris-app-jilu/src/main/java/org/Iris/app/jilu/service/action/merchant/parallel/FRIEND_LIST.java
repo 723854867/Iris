@@ -13,7 +13,7 @@ public class FRIEND_LIST extends ParallelMerchantAction {
 	protected String execute0(MerchantSession session) {
 		int page = session.getKVParam(JiLuParams.PAGE);
 		int pageSize = session.getKVParam(JiLuParams.PAGE_SIZE);
-		Pager<PubRelation> pager = session.getMerchant().friendList(page, pageSize);
+		Pager<PubRelation> pager = relationService.friendList(session.getMerchant(), page, pageSize);
 		return Result.jsonSuccess(pager);
 	}
 }

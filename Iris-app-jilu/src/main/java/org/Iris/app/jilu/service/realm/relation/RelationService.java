@@ -182,6 +182,10 @@ public class RelationService extends RedisCache {
 		}
 	}
 	
+	public Pager<PubRelation> friendList(Merchant merchant, int page, int pageSize) { 
+		return relationManager.friendList(merchant.getMemMerchant().getMerchantId(), page, pageSize);
+	}
+	
 	private String _relationId(long merchantId1, long merchantId2) { 
 		if (merchantId1 > merchantId2)
 			return merchantId2 + "_" + merchantId1;

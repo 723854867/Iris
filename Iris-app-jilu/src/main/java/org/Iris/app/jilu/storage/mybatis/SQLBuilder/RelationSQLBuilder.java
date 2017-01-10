@@ -29,4 +29,29 @@ public class RelationSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String count() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.RELATION.mark());
+				WHERE("(acceptor = #{merchantId} OR applier = #{merchantId})");
+				AND();
+				WHERE("mod = 1");
+			}
+		}.toString();
+	}
+	
+	public String getPager() {
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.RELATION.mark());
+				WHERE("(acceptor = #{merchantId} OR applier = #{merchantId})");
+				AND();
+				WHERE("mod = 1");
+				WHERE("limit #{start}, #{pageSize}");
+			}
+		}.toString();
+	}
 }
