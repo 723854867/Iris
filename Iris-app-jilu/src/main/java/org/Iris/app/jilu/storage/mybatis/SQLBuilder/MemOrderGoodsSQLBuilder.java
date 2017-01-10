@@ -167,5 +167,17 @@ public class MemOrderGoodsSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String getPacketMerchantOrderGoodsByPacketId(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER_GOODS.mark());
+				WHERE("packet_id=#{packetId}");
+				AND();
+				WHERE("status=4");
+			}
+		}.toString();
+	}
 
 }

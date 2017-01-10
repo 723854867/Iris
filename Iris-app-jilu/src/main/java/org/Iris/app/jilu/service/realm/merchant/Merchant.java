@@ -31,6 +31,7 @@ import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
+import org.Iris.app.jilu.storage.domain.MemOrderStatus;
 import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
@@ -457,7 +458,7 @@ public class Merchant implements Beans {
 		List<OrderChangeModel> orderChangeModels = new ArrayList<>();
 		for(MemOrder order : mList){
 			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
-			orderChangeModels.add(new OrderChangeModel(order.getOrderId(),order.getSuperMerchantName(),order.getSuperMerchantId(), list));
+			orderChangeModels.add(new OrderChangeModel(order.getOrderId(),order.getSuperMerchantName(),order.getSuperMerchantId(),order.getStatus(), list));
 		}
 		return orderChangeModels;
 	}
@@ -466,7 +467,7 @@ public class Merchant implements Beans {
 		List<TransferOrderModel> orderChangeModels = new ArrayList<>();
 		for(MemOrder order : mList){
 			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
-			orderChangeModels.add(new TransferOrderModel(order.getOrderId(),order.getMerchantName(),order.getMerchantId(), list));
+			orderChangeModels.add(new TransferOrderModel(order.getOrderId(),order.getMerchantName(),order.getMerchantId(), order.getStatus(),list));
 		}
 		return orderChangeModels;
 	}
@@ -565,6 +566,18 @@ public class Merchant implements Beans {
 			childOrderList.add(new OrderForm(order));
 		
 		return Result.jsonSuccess(new OrderDetailedModel(orderInfo, notFinishGoodsList, changeGoodsList, packetList, childOrderList));
+	}
+	
+	/**
+	 * 获取订单状态对象
+	 * @param orderId
+	 * @return
+	 */
+	public MemOrderStatus getMemOrderStatusByOrderId(String orderId){
+		MemOrderStatus status = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderStatusDataKey(orderId), new MemOrderStatus());
+		if(status == null)
+			status = memOrderStatusMapper.getMemOrderStatusByOrderId(orderId);
+		return status;
 	}
 	
 	/**

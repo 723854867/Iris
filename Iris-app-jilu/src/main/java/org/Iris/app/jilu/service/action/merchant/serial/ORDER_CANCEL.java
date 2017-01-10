@@ -26,7 +26,7 @@ public class ORDER_CANCEL extends SerialMerchantAction{
 		String superOrderId = order.getSuperOrderId();
 		if(null == superOrderId)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		merchantService.refuseOrder(orderId, superOrderId, merchantId);
+		merchantService.refuseOrder(order,merchant);
 		return Result.jsonSuccess();
 	}
 

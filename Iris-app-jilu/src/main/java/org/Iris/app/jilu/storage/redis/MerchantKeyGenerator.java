@@ -96,13 +96,6 @@ public final class MerchantKeyGenerator {
 	private static final String MERCHANT_ORDER_PACKET_DATA				= "hash:db:merchant:{0}:order:packet:{1}";
 	private static final String MERCHANT_GOODS_STORE_DATA				= "hash:db:merchant:{0}:goods:store:{1}";
 	
-//	private static final String MERCHANT_ORDER_GOODS_COUNT				= "string:merchant:order:{0}:goods:count";//订单产品数量
-//	private static final String MERCHANT_ORDER_CHANGESUCCESS_COUNT		= "string:merchant:order:{0}:changeSuccess:count";//订单转单成功产品数量
-//	private static final String MERCHANT_ORDER_CHANGE_COUNT				= "string:merchant:order:{0}:change:count";//主订单正在转单中的数量
-//	private static final String MERCHANT_ORDER_PACKET_COUNT				= "string:merchant:order:{0}:packet:count";//主订单处于打包状态的数量
-//	private static final String MERCHANT_ORDER_TRANSPORT_COUNT			= "string:merchant:order:{0}:transport:count";//主订单处于运输状态的数量
-//	private static final String MERCHANT_ORDER_FINISH_COUNT			    = "string:merchant:order:{0}:finish:count";//主订单邮包完成的数量
-	
 	private static final String MERCHANT_ORDER_STATUS_DATA				= "hash:db:merchant:order:{}:status";//记录订单的各种状态数量
 	
 	

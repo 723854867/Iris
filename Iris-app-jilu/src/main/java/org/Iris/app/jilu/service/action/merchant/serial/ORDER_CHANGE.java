@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
-import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;

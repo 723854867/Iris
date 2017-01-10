@@ -14,18 +14,20 @@ public class TransferOrderModel {
 	private String orderId;
 	private String changeMerhcantName;
 	private long changeMerhcantId;
+	private int status;
 	private List<MemOrderGoods> transferOrderGoodsLilst;
 
 	public TransferOrderModel() {
 		super();
 	}
 
-	public TransferOrderModel(String orderId, String changeMerhcantName, long changeMerhcantId,
+	public TransferOrderModel(String orderId, String changeMerhcantName, long changeMerhcantId,int status,
 			List<MemOrderGoods> transferOrderGoodsLilst) {
 		super();
 		this.orderId = orderId;
 		this.changeMerhcantName = changeMerhcantName;
 		this.changeMerhcantId = changeMerhcantId;
+		this.status = status;
 		this.transferOrderGoodsLilst = transferOrderGoodsLilst;
 	}
 
@@ -51,6 +53,14 @@ public class TransferOrderModel {
 
 	public void setChangeMerhcantId(long changeMerhcantId) {
 		this.changeMerhcantId = changeMerhcantId;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public List<MemOrderGoods> getTransferOrderGoodsLilst() {

@@ -51,7 +51,7 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 			mGood.setStatus(0);
 			receiveGoodsList_.add(mGood);
 		}
-		merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId);
+		merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId,merchant);
 		return Result.jsonSuccess();
 	}
 
