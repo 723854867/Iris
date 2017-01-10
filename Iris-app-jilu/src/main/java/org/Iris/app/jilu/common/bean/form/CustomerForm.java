@@ -15,6 +15,7 @@ public class CustomerForm {
 	private String IDBehind;
 	private String purchaseSum;
 	private int lastPurchaseTime;
+	private String IDNumber;
 	
 	public CustomerForm(MemCustomer customer) {
 		this.customerId = customer.getCustomerId();
@@ -24,6 +25,7 @@ public class CustomerForm {
 		this.memo = customer.getMemo();
 		this.purchaseSum = customer.getPurchaseSum();
 		this.lastPurchaseTime = customer.getLastPurchaseTime();
+		this.IDNumber = customer.getIDNumber();
 		if (CustomerStatusMod.hasIdBehind(customer))
 			this.IDBehind = JiLuResourceUtil.customerIDBehindUri(customer);
 		if (CustomerStatusMod.hasIdFrontage(customer))
@@ -100,5 +102,13 @@ public class CustomerForm {
 
 	public void setLastPurchaseTime(int lastPurchaseTime) {
 		this.lastPurchaseTime = lastPurchaseTime;
+	}
+	
+	public String getIDNumber() {
+		return IDNumber;
+	}
+	
+	public void setIDNumber(String iDNumber) {
+		IDNumber = iDNumber;
 	}
 }
