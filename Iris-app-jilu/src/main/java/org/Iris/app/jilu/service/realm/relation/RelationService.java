@@ -157,6 +157,21 @@ public class RelationService extends RedisCache {
 		}
 	}
 	
+	/**
+	 * 删除好友
+	 * 
+	 * @param merchant
+	 * @param targetId
+	 * @return
+	 */
+	public String deleteFriend(Merchant merchant, long targetId) {
+		String id = _relationId(merchant.getMemMerchant().getMerchantId(), targetId);
+		if (!relationManager.delete(id))
+			return Result.jsonError(JiLuCode.RELATION_NOT_EXIST);
+		redisOperate.hdel(CommonKeyGenerator.relationMapKey(), id);
+		return Result.jsonSuccess();
+	}
+	
 	private String _rejectApply(Merchant merchant, FriendApplyModel applyModel) {
 		return Result.jsonSuccess();
 	}

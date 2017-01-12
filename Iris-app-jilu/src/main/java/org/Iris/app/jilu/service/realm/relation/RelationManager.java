@@ -35,4 +35,8 @@ public class RelationManager {
 		List<PubRelation> list = relationMapper.getPager(merchantId, start, pageSize);
 		return new Pager<PubRelation>(total, list);
 	}
+	
+	public boolean delete(String id) {
+		return 1 == relationMapper.delete(id);
+	}
 }

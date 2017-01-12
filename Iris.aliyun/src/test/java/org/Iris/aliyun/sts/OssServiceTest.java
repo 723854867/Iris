@@ -17,12 +17,13 @@ public class OssServiceTest {
 		
 //		test();
 //		testPolicy();
+		test();
 	}
 	
 	public static void test() { 
-		String secretToken = "CAIS7AF1q6Ft5B2yfSjIqonHGsz+lO5A0vbTd2XHgEYwSOt4jLbvrzz2IHpMdHBuAOAfsfswlWpT6v8alq1vRoRZHdZhqwyIrcY5yxioRqacke7XhOV2pf/IMGyXDAGBr622Su7lTdTbV+6wYlTf7EFayqf7cjPQND7Mc+f+6/hdY88QQxOzYBdfGd5SPXECksIBMmbLPvvfWXyDwEioVRY44lMh1zIhtPvjnZDEtiCz1gOqlrUnwK3qOYWhYsVWO5Nybsy4xuQedNCainYAskYTpP4p0/MVo2yb54mHYltQ5wjDL+fP7s23svmgkAaCcRqAAZPrC2ZEXIL+b75Zr6rDCx7CVXiJwFjSzM6y4r9Nuj2+z0+5nVa1Flbqf5mohDSt1phmVJ0TL/GElZjjYpEYOIWMDMfCBohxwZV7479GdHiwxll39ahBOa5OLmU2Hd8OhZ1taAYt+skmGyZfUZzuVVoUzn2hnvyugLxWPFgqDYAp";
-		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.KJrQvJy1ae48uCvdFeDdTcsDM", "ZZmKMJg7ducprZEwaT3YTvWBGZLFGAg157HkL67SPxr", secretToken);
-		ossClient.putObject("jilu-test", "common/nams/", new ByteArrayInputStream(new byte[0]));
+		String secretToken = "CAIS0AN1q6Ft5B2yfSjIpK6GecDk3L5M44+baEXfoUoFZrlhoqryqDz2IHpMdHBuAOAfsfswlWpT6v8alqNWRoVORUXCcY4ptmW+c/BQINivgde8yJBZolLPewHKefKSvqL7Z+H+U6mqGJOEYEzFkSle2KbzcS7YMXWuLZyOj+wIDLkQRRLqL0B0ZrFsKxBltdUROFbIKP+pKWSKuGfLC1dysQcO3wEL4K+kkMqH8Uic3h+oyO4RusHtL4O4KMJrOZJ4VbXD1edtJK3ay3wSuVoY9qZykelY9Czb+dqaBlxW5VLEQRi9kLBGKAt+edJ/ecptp+T9kvtVo/Hak5+NpT9GIeBSVVaiJuCn29CWN+61dLRYcq3gaVDMyczNTJOX1TkpenUGLghHVsM8I3trc3wWRyrdN7Ws9SLkAE+qQLPX17otg9gnjQfq/N6XYkSCWKne1CsCMZ81aV9vbnxc1Gf6IKgdaF4OIRE1BbeRUMBvYQtC7qblpwbSXyt8iSgQ/d+GPq+G4vlCN9ShA80ajtdFOK4r6TV6Ew7FLJu1kVoReWBfRrJb7bLgI5fX6sXemr3DOLCfWqlY5QoLK2uN9nKXKHFRKTC0+tA4dUpAZTIIOgJ0mRqAAX8qkPNHORRNcPT5xyR1amPvohV4CZFFq0LmcHUfTgQLckltDRd1LK/Y9hlOdeKZYmTKCItVrCVEJpVdEoBZOvsjR9Xonbu0Ce1DwMc9BF4tFjSFMGlSLQ7D7DxmQPRpKm2HckWRahTF6a4hL0wzjD/5cWv1rd5iXMA7S98AgzcO";
+		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.Em32zP1amTMpjcnEJPj6MMoYJ", "FrzbxDkqPFTzRexZVNaZfpVWEaPdj6qfPuiKAaFp264h", secretToken);
+		ossClient.putObject("jilu-test", "common/9", new ByteArrayInputStream(new byte[0]));
 	}
 	
 	public static void testPolicy() {
