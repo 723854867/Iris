@@ -44,6 +44,7 @@ public class MemOrderPacketSQLBuilder {
 				SET("label=#{label}");
 				SET("latitude=#{latitude}");
 				SET("longitude=#{longitude}");
+				SET("status=#{status}");
 				SET("updated=#{updated}");
 				WHERE("packet_id=#{packetId}");
 			}

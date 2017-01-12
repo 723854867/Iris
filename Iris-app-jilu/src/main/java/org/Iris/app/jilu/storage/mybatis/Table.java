@@ -11,6 +11,7 @@ public enum Table {
 	MEM_ORDER_GOODS("mem_order_goods"),
 	MEM_ORDER_PACKET("mem_order_packet"),
 	MEM_GOODS_STORE("mem_goods_store"),
+	MEM_ORDER_STATUS("mem_order_status"),
 	
 	RELATION("relation");
 	

@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.redis;
 
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
+import org.Iris.app.jilu.storage.domain.MemOrderStatus;
 import org.Iris.redis.operate.lua.LuaOperate;
 
 public class JiLuLuaOperate extends LuaOperate {
@@ -20,5 +21,9 @@ public class JiLuLuaOperate extends LuaOperate {
 	public long tokenReplace(String merchantLockKey, String merchantDataKey, String tokenMerchantMapKey, 
 			String lockId, String token, String time, String merchantId, String lockTimeout) { 
 		return evalLua(JiLuLuaCommand.TOKEN_REPLACE.name(), 3, merchantLockKey, merchantDataKey, tokenMerchantMapKey, lockId, token, time, merchantId, lockTimeout);
+	}
+	
+	public long getOrderStatus(MemOrderStatus status){
+		return evalLua(JiLuLuaCommand.ORDER_STATUS.name(), 1, MerchantKeyGenerator.merchantOrderStatusDataKey(status.getOrderId()));
 	}
 }

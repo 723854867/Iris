@@ -20,6 +20,7 @@ public class MemOrderPacket implements RedisHashBean{
 	private String label;
 	private String latitude;
 	private String longitude;
+	private int status;
 	private int created;
 	private int updated;
 	
@@ -87,6 +88,13 @@ public class MemOrderPacket implements RedisHashBean{
 	}
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	public int getCreated() {
 		return created;
