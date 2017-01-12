@@ -175,7 +175,7 @@ public class MemOrderGoodsSQLBuilder {
 				FROM(Table.MEM_ORDER_GOODS.mark());
 				WHERE("packet_id=#{packetId}");
 				AND();
-				WHERE("status=4");
+				WHERE("status=3");
 			}
 		}.toString();
 	}

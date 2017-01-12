@@ -23,8 +23,7 @@ public class JiLuLuaOperate extends LuaOperate {
 		return evalLua(JiLuLuaCommand.TOKEN_REPLACE.name(), 3, merchantLockKey, merchantDataKey, tokenMerchantMapKey, lockId, token, time, merchantId, lockTimeout);
 	}
 	
-	public int getOrderStatus(MemOrderStatus status){
-		return evalLua(JiLuLuaCommand.ORDER_STATUS.name(), 7, MerchantKeyGenerator.merchantOrderStatusDataKey(status.getOrderId()),
-				"goodsCount","transformSuccessCount","transformCount","packetCount","transportCount","finishedCount");
+	public long getOrderStatus(MemOrderStatus status){
+		return evalLua(JiLuLuaCommand.ORDER_STATUS.name(), 1, MerchantKeyGenerator.merchantOrderStatusDataKey(status.getOrderId()));
 	}
 }

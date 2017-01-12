@@ -96,7 +96,7 @@ public final class MerchantKeyGenerator {
 	private static final String MERCHANT_ORDER_PACKET_DATA				= "hash:db:merchant:{0}:order:packet:{1}";
 	private static final String MERCHANT_GOODS_STORE_DATA				= "hash:db:merchant:{0}:goods:store:{1}";
 	
-	private static final String MERCHANT_ORDER_STATUS_DATA				= "hash:db:merchant:order:{}:status";//记录订单的各种状态数量
+	private static final String MERCHANT_ORDER_STATUS_DATA				= "hash:db:merchant:order:{0}:status";//记录订单的各种状态数量
 	
 	
 	// **********************************************************************************************

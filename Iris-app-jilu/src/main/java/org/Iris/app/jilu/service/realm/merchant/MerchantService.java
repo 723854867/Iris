@@ -184,7 +184,7 @@ public class MerchantService extends RedisCache {
 		}
 		if (deleteGoodsList != null) {
 			memOrderGoodsMapper.batchDelete(deleteGoodsList);
-			sum-=addGoodsList.size();
+			sum-=deleteGoodsList.size();
 		}
 		//更新订单状态表 mem_order_status
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(order.getOrderId());
@@ -232,13 +232,19 @@ public class MerchantService extends RedisCache {
 			goods.setStatus(1);
 			goods.setUpdated(DateUtils.currentTime());
 		}
-		List<MemOrderGoods> addGoods = ogs;
-		for(MemOrderGoods goods : addGoods){
-			goods.setOrderId(superOrder.getOrderId());
-			goods.setStatus(2);
+		List<MemOrderGoods> addGoods = new ArrayList<MemOrderGoods>();
+		for(MemOrderGoods goods : ogs){
+			MemOrderGoods memOrderGoods = new MemOrderGoods();
+			memOrderGoods.setOrderId(superOrder.getOrderId());
+			memOrderGoods.setGoodsId(goods.getGoodsId());
+			memOrderGoods.setGoodsName(goods.getGoodsName());
+			memOrderGoods.setCount(goods.getCount());
+			memOrderGoods.setUnitPrice(goods.getUnitPrice());
+			memOrderGoods.setStatus(2);
 			time = DateUtils.currentTime();
-			goods.setUpdated(time);
-			goods.setCreated(time);
+			memOrderGoods.setUpdated(time);
+			memOrderGoods.setCreated(time);
+			addGoods.add(memOrderGoods);
 		}
 		memOrderMapper.insert(superOrder);
 		memOrderGoodsMapper.batchUpdate(ogs);
@@ -248,7 +254,7 @@ public class MerchantService extends RedisCache {
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(superOrder.getSuperOrderId());
 		status.setTransformCount(status.getTransformCount()+ogs.size());
 		memOrderStatusMapper.update(status);
-		MemOrder order = merchant.getMerchantOrderById(memMerchant.getMerchantId(), superOrder.getSuperOrderId());
+		MemOrder order = merchant.getMerchantOrderById(superOrder.getSuperMerchantId(), superOrder.getSuperOrderId());
 		if(order.getStatus() != 1){
 			order.setStatus(1);
 			memOrderMapper.update(order);
@@ -314,6 +320,8 @@ public class MerchantService extends RedisCache {
 		order.setStatus(0);
 		order.setUpdated(DateUtils.currentTime());
 		memOrderMapper.update(order);
+		//保存新建子订单状态信息
+		memOrderStatusMapper.insert(new MemOrderStatus(orderId,receiveGoodsList.size()));
 		// 查找本次转单申请的所有产品
 		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
 		List<Long> recevieGoodsIds = new ArrayList<Long>();
@@ -352,7 +360,7 @@ public class MerchantService extends RedisCache {
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(superOrderId);
 		status.setTransformSuccessCount(status.getTransformSuccessCount()+receiveGoodsList.size());
-		status.setTransformCount(status.getTransformCount()-list.size());
+		status.setTransformCount(status.getTransformCount()-receiveGoodsList.size());
 		setOrderStatus(merchant, superOrderId, order.getSuperMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
@@ -476,8 +484,8 @@ public class MerchantService extends RedisCache {
 		MemOrder order = merchant.getMerchantOrderById(merchantId, orderId);
 		memOrderStatusMapper.update(status);
 		redisOperate.hmset(status.redisKey(), status);
-		int orderStatus = luaOperate.getOrderStatus(status);
-		order.setStatus(orderStatus);
+		long orderStatus = luaOperate.getOrderStatus(status);
+		order.setStatus((int)orderStatus);
 		memOrderMapper.update(order);
 		redisOperate.hmset(order.redisKey(), order);
 	}
