@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.RelationSQLBuilder;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -21,4 +22,7 @@ public interface RelationMapper {
 	
 	@SelectProvider(type = RelationSQLBuilder.class, method = "getPager")
 	List<PubRelation> getPager(@Param("merchantId") long merchantId, @Param("start") long start, @Param("pageSize") int pageSize);
+	
+	@DeleteProvider(type = RelationSQLBuilder.class, method = "delete")
+	int delete(String id);
 }

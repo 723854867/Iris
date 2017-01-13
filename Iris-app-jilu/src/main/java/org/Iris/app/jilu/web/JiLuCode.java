@@ -24,8 +24,9 @@ public enum JiLuCode implements ICode {
 	SELF_LIMIT(212, "self limit"),
 	ORDER_GOODS_NOT_CHANGING(213, "order_goods {0} not changing"),
 	RELATION_EXIST(214, "relation exist"),
-	FRIEND_APPLY_NOT_EXIST(25, "friend apply not exist"),
-	PACKET_NOT_EXIST(216, "packet {0} not exist");
+	RELATION_NOT_EXIST(215, "relation not exist"),
+	FRIEND_APPLY_NOT_EXIST(216, "friend apply not exist"),
+	PACKET_NOT_EXIST(217, "packet {0} not exist");
 	
 	private int code;
 	private String defaultVaule;

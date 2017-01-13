@@ -54,4 +54,13 @@ public class RelationSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String delete() { 
+		return new SQL() {
+			{
+				DELETE_FROM(Table.RELATION.mark());
+				WHERE("id=#{id}");
+			}
+		}.toString();
+	}
 }
