@@ -416,7 +416,7 @@ public class Merchant implements Beans {
 		CfgGoods memGoods = getGoodsById(goodsId);
 		if (memGoods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		if (usName != null)
+		if (zhName != null)
 			memGoods.setZhName(zhName);
 		if (usName != null)
 			memGoods.setUsName(usName);
