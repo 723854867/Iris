@@ -8,13 +8,15 @@ public class MemGoodsStore implements RedisHashBean{
 
 	private long merchantId;
 	private long goodsId;
+	private String goodsName;
 	private int count;
 	private int created;
 	private int updated;
 	
-	public MemGoodsStore(long merchantId, long goodsId, int count) {
+	public MemGoodsStore(long merchantId, long goodsId,String goodsName ,int count) {
 		this.merchantId = merchantId;
 		this.goodsId = goodsId;
+		this.goodsName = goodsName;
 		this.count = count;
 		int time = DateUtils.currentTime();
 		this.created = time;
@@ -33,6 +35,12 @@ public class MemGoodsStore implements RedisHashBean{
 	}
 	public void setGoodsId(long goodsId) {
 		this.goodsId = goodsId;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
 	}
 	public int getCount() {
 		return count;

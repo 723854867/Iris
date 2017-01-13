@@ -1,24 +1,17 @@
-package org.Iris.app.jilu.service.action.merchant.parallel;
+package org.Iris.app.jilu.service.action.merchant.serial;
 
-import org.Iris.app.jilu.common.BeanCreator;
-import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
+import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
-import org.Iris.core.service.bean.Result;
 
-/**
- * 商户添加产品
- * 
- * @author fansd
- */
-public class GOODS_ADD extends ParallelMerchantAction {
-	
+public class GOODS_EDIT extends SerialMerchantAction{
+
 	@Override
 	protected String execute0(MerchantSession session) {
-		String goodsCode = session.getKVParam(JiLuParams.GOODS_CODE);
-		String zhName = session.getKVParam(JiLuParams.ZH_NAME);
-		String goodsFormat = session.getKVParam(JiLuParams.GOODS_FORMAT);
+		long goodsId = session.getKVParam(JiLuParams.GOODS_ID);
+		String zhName = session.getKVParamOptional(JiLuParams.ZH_NAME);
+		String goodsFormat = session.getKVParamOptional(JiLuParams.GOODS_FORMAT);
 		String usName = session.getKVParamOptional(JiLuParams.US_NAME);
 		String classification = session.getKVParamOptional(JiLuParams.CLASSIFICATION);
 		String zhBrand = session.getKVParamOptional(JiLuParams.ZH_BRAND);
@@ -30,7 +23,7 @@ public class GOODS_ADD extends ParallelMerchantAction {
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
 		String unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
 		Merchant merchant = session.getMerchant();
-		return merchantService.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, 
-				usBrand, unit, Float.valueOf(weight), alias, barcode, sku,unitPrice,merchant),merchant);
+		return merchant.updateGoods(goodsId, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku, unitPrice);
 	}
+	
 }

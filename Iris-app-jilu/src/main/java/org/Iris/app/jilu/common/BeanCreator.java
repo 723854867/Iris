@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.common;
 
 import org.Iris.app.jilu.common.model.AccountType;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
@@ -55,7 +56,7 @@ public class BeanCreator {
 	}
 	
 	public static CfgGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
-			String usBrand, String unit, float weight, String alias, String barcode, String sku,String unitPrice){
+			String usBrand, String unit, float weight, String alias, String barcode, String sku,String unitPrice,Merchant merchant){
 		CfgGoods memGoods = new CfgGoods();
 		memGoods.setGoodsCode(goodsCode);
 		memGoods.setZhName(zhName);
@@ -73,6 +74,8 @@ public class BeanCreator {
 		memGoods.setCreated(time);
 		memGoods.setUpdated(time);
 		memGoods.setUnitPrice(unitPrice);
+		memGoods.setSource(String.valueOf(merchant.getMemMerchant().getMerchantId()));
+		memGoods.setMerchantName(merchant.getMemMerchant().getName());
 		return memGoods;
 	}
 	

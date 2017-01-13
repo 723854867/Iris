@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemCustomerSQLBuilder;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -49,4 +50,20 @@ public interface MemCustomerMapper {
 	 */
 	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getCustomersByIds")
 	List<MemCustomer> getCustomersByIds(Set<Tuple> set);
+	
+	@DeleteProvider(type = MemCustomerSQLBuilder.class, method = "delete")
+	void delete(MemCustomer customer);
+	
+	/**
+	 * 获取商户的客户列表 
+	 * 
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMerchantCustomersByNameOrPhone")
+	List<MemCustomer> getMerchantCustomersByNameOrPhone(@Param("merchantId") long merchantId,@Param("value") String value,@Param("start") int start,@Param("pageSize") int pageSize); 
+
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getCountByNameOrPhone")
+	long getCountByNameOrPhone(@Param("merchantId") long merchantId,@Param("value") String value); 
+
 }

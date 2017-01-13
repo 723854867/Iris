@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.Iris.app.jilu.storage.mybatis.Table;
@@ -72,5 +73,26 @@ public class MemCustomerSQLBuilder {
 		builder.deleteCharAt(builder.length() - 1);
 		builder.append(")");
 		return builder.toString();
+	}
+	
+	public String delete(){
+		return new SQL(){
+			{
+				DELETE_FROM(Table.MEM_CUSTOMER.mark());
+				WHERE("merchant_id = #{merchantId}");
+				AND();
+				WHERE("customer_id = #{customerId}");
+			}
+		}.toString();
+	}
+	
+	public String getMerchantCustomersByNameOrPhone(Map<String, Object> para){
+		return "select * from "+Table.MEM_CUSTOMER.mark()+" where merchant_id = #{merchantId} "
+				+ "and (name like '%"+para.get("value")+"%' or mobile like '%"+para.get("value")+"%') LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getCountByNameOrPhone(Map<String, Object> para){
+		return "select count(1) from "+Table.MEM_CUSTOMER.mark()+" where merchant_id = #{merchantId} "
+				+ "and (name like '%"+para.get("value")+"%' or mobile like '%"+para.get("value")+"%')";
 	}
 }

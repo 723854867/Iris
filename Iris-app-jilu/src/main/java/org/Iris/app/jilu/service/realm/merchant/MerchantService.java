@@ -14,12 +14,15 @@ import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
@@ -52,7 +55,10 @@ public class MerchantService extends RedisCache {
 	private MemOrderPacketMapper memOrderPacketMapper;
 	@Resource
 	private MemOrderStatusMapper memOrderStatusMapper;
-	
+	@Resource
+	private CfgGoodsMapper cfgGoodsMapper;
+	@Resource
+	private MemGoodsStoreMapper memGoodsStoreMapper;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -488,6 +494,22 @@ public class MerchantService extends RedisCache {
 		order.setStatus((int)orderStatus);
 		memOrderMapper.update(order);
 		redisOperate.hmset(order.redisKey(), order);
+	}
+	
+	/**
+	 * 插入商品
+	 * 
+	 * @param memGoods
+	 */
+	@Transactional
+	public String insertGoods(CfgGoods memGoods,Merchant merchant) {
+		cfgGoodsMapper.insert(memGoods);
+		//目前在商户添加商品之后自动生成一条该商户商品的产品库信息
+		MemGoodsStore store = new MemGoodsStore(merchant.getMemMerchant().getMerchantId(), memGoods.getGoodsId(),memGoods.getZhName(), 100);
+		memGoodsStoreMapper.insert(store);
+		redisOperate.hmset(memGoods.redisKey(), memGoods);
+		redisOperate.hmset(store.redisKey(), store);
+		return Result.jsonSuccess(memGoods);
 	}
 	
 }

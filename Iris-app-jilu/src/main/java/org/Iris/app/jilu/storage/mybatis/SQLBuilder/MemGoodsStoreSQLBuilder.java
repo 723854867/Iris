@@ -15,6 +15,7 @@ public class MemGoodsStoreSQLBuilder {
 				INSERT_INTO(Table.MEM_GOODS_STORE.mark());
 				VALUES("merchant_id", 		"#{merchantId}");
 				VALUES("goods_id", 			"#{goodsId}");
+				VALUES("goods_name", 		"#{goodsName}");
 				VALUES("count", 			"#{count}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
@@ -56,5 +57,19 @@ public class MemGoodsStoreSQLBuilder {
 				WHERE("goods_id=#{goodsId}");
 			}
 		}.toString();
+	}
+	
+	public String getCountBymerchantId(){
+		return new SQL(){
+			{
+				SELECT("count(1)");
+				FROM(Table.MEM_GOODS_STORE.mark());
+				WHERE("merchant_id=#{merchantId}");
+			}
+		}.toString();
+	}
+	
+	public String getMemGoodsStoreList(){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where merchant_id=#{merchantId} LIMIT #{start},#{pageSize}";
 	}
 }

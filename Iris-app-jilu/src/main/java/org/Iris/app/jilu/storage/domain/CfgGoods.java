@@ -19,6 +19,8 @@ public class CfgGoods implements RedisHashBean {
 	private String barcode;
 	private String sku;
 	private String unitPrice;
+	private String source;//目前暂时只有商户 如果是商户则存储商户id
+	private String merchantName;
 	private int created;
 	private int updated;
 
@@ -136,6 +138,18 @@ public class CfgGoods implements RedisHashBean {
 	}
 	public void setUnitPrice(String unitPrice) {
 		this.unitPrice = unitPrice;
+	}
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
+	public String getMerchantName() {
+		return merchantName;
+	}
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 	public int getCreated() {
 		return created;

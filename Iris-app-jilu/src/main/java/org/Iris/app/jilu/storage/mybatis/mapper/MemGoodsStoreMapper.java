@@ -22,4 +22,10 @@ public interface MemGoodsStoreMapper {
 	
 	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreById")
 	MemGoodsStore getMemGoodsStoreById(@Param("merchantId") long merchantId,@Param("goodsId") long goodsId);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getCountBymerchantId")
+	long getCountBymerchantId(long merchantId);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreList")
+	List<MemGoodsStore> getMemGoodsStoreList(@Param("start")int page,@Param("pageSize")int pageSize,@Param("merchantId")long merhcantId);
 }
