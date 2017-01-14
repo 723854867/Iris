@@ -55,6 +55,17 @@ public class CfgGoodsSQLBuilder {
 		}.toString();
 	}
 	
+	public String delete(){
+		return new SQL(){
+			{
+				DELETE_FROM(Table.CFG_GOODS.mark());
+				WHERE("goods_id=#{goodsId}");
+				AND();
+				WHERE("source=#{source}");
+			}
+		}.toString();
+	}
+	
 	public String getGoodsById(){
 		return new SQL(){
 			{

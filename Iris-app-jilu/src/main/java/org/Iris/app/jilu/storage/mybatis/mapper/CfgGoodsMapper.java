@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.CfgGoodsSQLBuilder;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -18,6 +19,9 @@ public interface CfgGoodsMapper {
 	
 	@UpdateProvider(type = CfgGoodsSQLBuilder.class, method = "update")
 	void update(CfgGoods memGoods);
+	
+	@DeleteProvider(type = CfgGoodsSQLBuilder.class, method = "delete")
+	void delete(CfgGoods memGoods);
 
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsById")
 	CfgGoods getGoodsById(long goodsId);

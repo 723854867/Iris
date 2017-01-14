@@ -73,7 +73,7 @@ public class BeanCreator {
 		int time = DateUtils.currentTime();
 		memGoods.setCreated(time);
 		memGoods.setUpdated(time);
-		memGoods.setUnitPrice(unitPrice);
+		memGoods.setUnitPrice(unitPrice==null ?"1.00":unitPrice);
 		memGoods.setSource(String.valueOf(merchant.getMemMerchant().getMerchantId()));
 		memGoods.setMerchantName(merchant.getMemMerchant().getName());
 		return memGoods;

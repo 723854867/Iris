@@ -404,6 +404,21 @@ public class Merchant implements Beans {
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
 		redisOperate.hmset(store.redisKey(), store);
 	}
+	/**
+	 * 删除商品
+	 * @param goodsId
+	 * @return
+	 */
+	public String removeGoods(long goodsId){
+		CfgGoods goods = getGoodsById(goodsId);
+		if(goods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		if(!goods.getSource().equals(String.valueOf(getMemMerchant().getMerchantId())))
+			return Result.jsonError(JiLuCode.GOODS_DELETE_LIMIT.constId(), MessageFormat.format(JiLuCode.GOODS_DELETE_LIMIT.defaultValue(), goodsId));
+		cfgGoodsMapper.delete(goods);
+		redisOperate.del(goods.redisKey());
+		return Result.jsonSuccess();
+	}
 
 	/**
 	 * 更新商品
