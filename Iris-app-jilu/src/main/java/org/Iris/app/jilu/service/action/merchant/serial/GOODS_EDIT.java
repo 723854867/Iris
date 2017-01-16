@@ -17,13 +17,13 @@ public class GOODS_EDIT extends SerialMerchantAction{
 		String zhBrand = session.getKVParamOptional(JiLuParams.ZH_BRAND);
 		String usBrand = session.getKVParamOptional(JiLuParams.US_BRAND);
 		String unit = session.getKVParamOptional(JiLuParams.UNIT);
-		String weight = session.getKVParamOptional(JiLuParams.WEIGHT);
+		long weight = session.getKVParamOptional(JiLuParams.WEIGHT);
 		String alias = session.getKVParamOptional(JiLuParams.ALIAS);
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
-		String unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
+		long unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
 		Merchant merchant = session.getMerchant();
-		return merchant.updateGoods(goodsId, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit, Float.valueOf(weight), alias, barcode, sku, unitPrice);
+		return merchant.updateGoods(goodsId, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit,weight, alias, barcode, sku, unitPrice);
 	}
 	
 }

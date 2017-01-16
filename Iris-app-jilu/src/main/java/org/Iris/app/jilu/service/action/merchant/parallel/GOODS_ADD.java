@@ -5,7 +5,6 @@ import org.Iris.app.jilu.service.action.merchant.ParallelMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
-import org.Iris.core.service.bean.Result;
 
 /**
  * 商户添加产品
@@ -24,13 +23,13 @@ public class GOODS_ADD extends ParallelMerchantAction {
 		String zhBrand = session.getKVParamOptional(JiLuParams.ZH_BRAND);
 		String usBrand = session.getKVParamOptional(JiLuParams.US_BRAND);
 		String unit = session.getKVParamOptional(JiLuParams.UNIT);
-		String weight = session.getKVParamOptional(JiLuParams.WEIGHT);
+		long weight = session.getKVParamOptional(JiLuParams.WEIGHT);
 		String alias = session.getKVParamOptional(JiLuParams.ALIAS);
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
-		String unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
+		long unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
 		Merchant merchant = session.getMerchant();
 		return merchantService.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, 
-				usBrand, unit, Float.valueOf(weight), alias, barcode, sku,unitPrice,merchant),merchant);
+				usBrand, unit, weight, alias, barcode, sku,unitPrice,merchant),merchant);
 	}
 }

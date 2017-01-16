@@ -56,7 +56,7 @@ public class BeanCreator {
 	}
 	
 	public static CfgGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
-			String usBrand, String unit, float weight, String alias, String barcode, String sku,String unitPrice,Merchant merchant){
+			String usBrand, String unit, float weight, String alias, String barcode, String sku,float unitPrice,Merchant merchant){
 		CfgGoods memGoods = new CfgGoods();
 		memGoods.setGoodsCode(goodsCode);
 		memGoods.setZhName(zhName);
@@ -73,7 +73,7 @@ public class BeanCreator {
 		int time = DateUtils.currentTime();
 		memGoods.setCreated(time);
 		memGoods.setUpdated(time);
-		memGoods.setUnitPrice(unitPrice==null ?"1.00":unitPrice);
+		memGoods.setUnitPrice(unitPrice==0 ?1:unitPrice);
 		memGoods.setSource(String.valueOf(merchant.getMemMerchant().getMerchantId()));
 		memGoods.setMerchantName(merchant.getMemMerchant().getName());
 		return memGoods;

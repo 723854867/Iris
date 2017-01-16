@@ -427,7 +427,7 @@ public class Merchant implements Beans {
 	 */
 	public String updateGoods(long goodsId, String zhName, String usName, String goodsFormat, String classification,
 			String zhBrand, String usBrand, String unit, float weight, String alias, String barcode, String sku,
-			String unitPrice) {
+			float unitPrice) {
 		CfgGoods memGoods = getGoodsById(goodsId);
 		if (memGoods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
@@ -453,7 +453,7 @@ public class Merchant implements Beans {
 			memGoods.setBarcode(barcode);
 		if (sku != null)
 			memGoods.setSku(sku);
-		if (unitPrice != null)
+		if (unitPrice != 0)
 			memGoods.setUnitPrice(unitPrice);
 		int time = DateUtils.currentTime();
 		memGoods.setUpdated(time);
@@ -738,6 +738,18 @@ public class Merchant implements Beans {
 		for (MemCustomer customer : list)
 			forms.add(new CustomerForm(customer));
 		return Result.jsonSuccess(new Pager<CustomerForm>(count, forms));
+	}
+	
+	/**
+	 * 查看商品信息
+	 * @param goodsId
+	 * @return
+	 */
+	public String getGoodsInfo(long goodsId){
+		CfgGoods goods = getGoodsById(goodsId);
+		if(goods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		return Result.jsonSuccess(goods);
 	}
 
 	/**

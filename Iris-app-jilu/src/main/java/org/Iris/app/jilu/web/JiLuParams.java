@@ -60,7 +60,7 @@ public interface JiLuParams {
 	final IrisStrConst ZH_BRAND								= new IrisStrConst("zhBrand", 123);
 	final IrisStrConst US_BRAND								= new IrisStrConst("usBrand", 124);
 	final IrisStrConst UNIT								    = new IrisStrConst("unit", 125);
-	final IrisStrConst WEIGHT							    = new IrisStrConst("weight","0", 126);
+	final IrisLongConst WEIGHT							    = new IrisLongConst("weight",0, 126);
 	final IrisStrConst ALIAS							    = new IrisStrConst("alias", 127);
 	final IrisStrConst BARCODE							    = new IrisStrConst("barcode", 128);
 	final IrisStrConst SKU							        = new IrisStrConst("sku", 129);
@@ -79,7 +79,7 @@ public interface JiLuParams {
 	final IrisStrConst LABEL								= new IrisStrConst("label", 142);
 	final IrisStrConst LATITUDE								= new IrisStrConst("latitude", 143);
 	final IrisStrConst LONGITUDE							= new IrisStrConst("longitude", 144);
-	final IrisStrConst UNITPRICE							= new IrisStrConst("unitPrice", 145);
+	final IrisLongConst UNITPRICE							= new IrisLongConst("unitPrice",1, 126);
 	final IrisStrConst QUERYID								= new IrisStrConst("queryId", 146);
 	final IrisIntConst MOD									= new IrisIntConst("mod", 0, 147);
 	final IrisStrConst VALUE								= new IrisStrConst("value", 148);
