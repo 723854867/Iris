@@ -10,6 +10,8 @@ public class MerchantForm {
 	private long merchantId;
 	private String token;
 	private String avatar;
+	private String name;
+	private String address;
 	private int statusMod;
 	
 	public MerchantForm(Merchant merchant) {
@@ -17,6 +19,9 @@ public class MerchantForm {
 		this.merchantId = memMerchant.getMerchantId();
 		this.token = memMerchant.getToken();
 		this.statusMod = memMerchant.getStatusMod();
+		this.name = memMerchant.getName();
+		this.address = memMerchant.getAddress();
+		
 		if (MerchantStatusMod.isQualified(memMerchant))
 			this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
 	}
@@ -33,6 +38,14 @@ public class MerchantForm {
 		return avatar;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
 	public int getStatusMod() {
 		return statusMod;
 	}
