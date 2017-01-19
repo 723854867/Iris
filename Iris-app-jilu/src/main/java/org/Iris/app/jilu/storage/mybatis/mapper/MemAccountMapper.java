@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
+import java.util.List;
+
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemAccountSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -12,4 +14,7 @@ public interface MemAccountMapper {
 	
 	@InsertProvider(type = MemAccountSQLBuilder.class, method = "insert")
 	void insert(MemAccount account);
+	
+	@SelectProvider(type = MemAccountSQLBuilder.class, method = "getByMerchantId")
+	List<MemAccount> getByMerchantId(long merchantId);
 }

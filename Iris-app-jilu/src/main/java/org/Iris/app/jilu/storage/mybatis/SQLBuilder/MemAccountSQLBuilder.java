@@ -27,4 +27,14 @@ public class MemAccountSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String getByMerchantId(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ACCOUNT.mark());
+				WHERE("merchant_id = #{merchantId}");
+			}
+		}.toString();
+	}
 }

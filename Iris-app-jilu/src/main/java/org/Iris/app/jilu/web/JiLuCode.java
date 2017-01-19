@@ -27,7 +27,8 @@ public enum JiLuCode implements ICode {
 	RELATION_NOT_EXIST(215, "relation not exist"),
 	FRIEND_APPLY_NOT_EXIST(216, "friend apply not exist"),
 	PACKET_NOT_EXIST(217, "packet {0} not exist"),
-	GOODS_DELETE_LIMIT(218, "can not delete other merchant goods {0}");
+	GOODS_DELETE_LIMIT(218, "can not delete other merchant goods {0}"),
+	ACCOUNT_ALREADY_BINDED(219, "account {0} already binded");
 	
 	private int code;
 	private String defaultVaule;

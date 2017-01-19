@@ -46,7 +46,12 @@ public class CommonService extends RedisCache {
 				merchant = merchantService.createMerchant(account, type);
 			if (!merchant.login(account, false))
 				return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
-			return Result.jsonSuccess(new MerchantForm(merchant));
+			MerchantForm merchantForm = new MerchantForm(merchant);
+			if(type==AccountType.MOBILE)
+				merchantForm.setPhoneStatus(1);
+			if(type==AccountType.EMAIL)
+				merchantForm.setEmailStatus(1);
+			return Result.jsonSuccess(merchantForm);
 		case WECHAT:
 			return Result.jsonSuccess();
 		default:

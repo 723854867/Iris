@@ -20,6 +20,7 @@ import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
+import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.form.OrderPacketForm;
@@ -29,6 +30,7 @@ import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
@@ -36,6 +38,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -750,6 +753,25 @@ public class Merchant implements Beans {
 		if(goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		return Result.jsonSuccess(goods);
+	}
+	
+	/**
+	 * 获取商户信息
+	 * @return
+	 */
+	public String getMerchantInfo(){
+		MerchantForm merchantForm = new MerchantForm(this);
+		List<MemAccount> list = memAccountMapper.getByMerchantId(getMemMerchant().getMerchantId());
+		if(list.size() > 1){
+			merchantForm.setPhoneStatus(1);
+			merchantForm.setEmailStatus(1);
+		}else{
+			if(list.get(0).getType() == 0)
+				merchantForm.setPhoneStatus(1);
+			if(list.get(0).getType() == 1)
+				merchantForm.setEmailStatus(1);
+		}
+		return Result.jsonSuccess(merchantForm);
 	}
 
 	/**
