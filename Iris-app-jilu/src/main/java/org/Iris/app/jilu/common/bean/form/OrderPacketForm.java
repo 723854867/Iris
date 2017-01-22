@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
+import java.util.List;
+
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 
 public class OrderPacketForm {
@@ -12,8 +14,9 @@ public class OrderPacketForm {
 	private String expressCode;
 	private String postage;
 	private String label;
+	private List<OrderGoodsForm> packetOrderGoodsList;
 	
-	public OrderPacketForm(MemOrderPacket packet){
+	public OrderPacketForm(MemOrderPacket packet,List<OrderGoodsForm> packetOrderGoodsList){
 		this.packetId = packet.getPacketId();
 		this.orderId = packet.getOrderId();
 		this.merchantId = packet.getMerchantId();
@@ -22,6 +25,7 @@ public class OrderPacketForm {
 		this.expressCode = packet.getExpressCode();
 		this.postage = packet.getPostage();
 		this.label = packet.getLabel();
+		this.packetOrderGoodsList = packetOrderGoodsList;
 	}
 	
 	public String getPacketId() {
@@ -72,7 +76,13 @@ public class OrderPacketForm {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	
+
+	public List<OrderGoodsForm> getPacketOrderGoodsList() {
+		return packetOrderGoodsList;
+	}
+
+	public void setPacketOrderGoodsList(List<OrderGoodsForm> packetOrderGoodsList) {
+		this.packetOrderGoodsList = packetOrderGoodsList;
+	}
 	
 }

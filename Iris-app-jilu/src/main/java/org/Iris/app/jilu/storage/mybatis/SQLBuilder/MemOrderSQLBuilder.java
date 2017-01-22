@@ -124,6 +124,29 @@ public class MemOrderSQLBuilder {
 		}.toString();
 	}
 	
+	public String getOrderListByMerchantId(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("merchant_id=#{merchantId}");
+			}
+		}.toString();
+	}
+	
+	public String getTransferMerchantOrderListByOrderId(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("super_order_id = #{orderId}");
+				AND();
+				WHERE("status=2");
+				ORDER_BY("created");
+			}
+		}.toString();
+	}
+	
 	public String delete(){
 		return new SQL(){
 			{
