@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.service.realm;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
@@ -7,6 +9,8 @@ import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
+import org.Iris.app.jilu.storage.domain.MemAccount;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.RedisCache;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -25,6 +29,8 @@ public class CommonService extends RedisCache {
 	private CourierService courierService;
 	@Resource
 	private MerchantService merchantService;
+	@Resource
+	private MemAccountMapper memAccountMapper;
 
 	/**
 	 * 登陆
@@ -47,10 +53,15 @@ public class CommonService extends RedisCache {
 			if (!merchant.login(account, false))
 				return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
 			MerchantForm merchantForm = new MerchantForm(merchant);
-			if(type==AccountType.MOBILE)
-				merchantForm.setPhoneStatus(1);
-			if(type==AccountType.EMAIL)
-				merchantForm.setEmailStatus(1);
+			List<MemAccount> list = memAccountMapper.getByMerchantId(merchantForm.getMerchantId());
+			for(MemAccount memAccount : list){
+				if(memAccount.getType() == 0){
+					merchantForm.setPhone(memAccount.getAccount());
+				}
+				if(memAccount.getType() == 1){
+					merchantForm.setEmail(memAccount.getAccount());
+				}
+			}
 			return Result.jsonSuccess(merchantForm);
 		case WECHAT:
 			return Result.jsonSuccess();

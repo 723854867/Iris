@@ -762,14 +762,13 @@ public class Merchant implements Beans {
 	public String getMerchantInfo(){
 		MerchantForm merchantForm = new MerchantForm(this);
 		List<MemAccount> list = memAccountMapper.getByMerchantId(getMemMerchant().getMerchantId());
-		if(list.size() > 1){
-			merchantForm.setPhoneStatus(1);
-			merchantForm.setEmailStatus(1);
-		}else{
-			if(list.get(0).getType() == 0)
-				merchantForm.setPhoneStatus(1);
-			if(list.get(0).getType() == 1)
-				merchantForm.setEmailStatus(1);
+		for(MemAccount memAccount : list){
+			if(memAccount.getType() == 0){
+				merchantForm.setPhone(memAccount.getAccount());
+			}
+			if(memAccount.getType() == 1){
+				merchantForm.setEmail(memAccount.getAccount());
+			}
 		}
 		return Result.jsonSuccess(merchantForm);
 	}

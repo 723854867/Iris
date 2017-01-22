@@ -146,7 +146,13 @@ public class MerchantService extends RedisCache {
 				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
 			MemAccount memAccount = BeanCreator.newMemAccount(type, account, DateUtils.currentTime(), merchantId);
 			try {
-				memAccountMapper.insert(memAccount);
+				if(memAccountMapper.getByMerchantIdAndType(merchantId, type.mark()) == null)
+					memAccountMapper.insert(memAccount);
+				else{
+					memAccountMapper.update(memAccount);
+					redisOperate.hdel(MerchantKeyGenerator.accountMerchantMapKey(type),account);
+					redisOperate.hdel(MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()),account);
+				}
 			} catch (DuplicateKeyException e) {
 				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
 			}
@@ -432,9 +438,14 @@ public class MerchantService extends RedisCache {
 	@Transactional
 	public String orderPacket(String orderId,String packetGoodsList,Merchant merchant){
 		String[] packetGoods = packetGoodsList.split(";");
+		StringBuilder builder = new StringBuilder();
 		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
 		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
 		for(String str : packetGoods){
+			String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
+			MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
+			packetList.add(packet);
+			builder.append(packetId+";");
 			String[] goods = str.split(":");
 			for(String goodsId : goods){
 				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
@@ -442,9 +453,6 @@ public class MerchantService extends RedisCache {
 					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
 				if(mGoods.getStatus()!=0)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
-				String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
-				MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
-				packetList.add(packet);
 				mGoods.setStatus(3);
 				int time = DateUtils.currentTime();
 				mGoods.setUpdated(time);
@@ -463,7 +471,7 @@ public class MerchantService extends RedisCache {
 		
 		redisOperate.batchHmset(packetList);
 		redisOperate.batchHmset(orderGoodsList);
-		return Result.jsonSuccess();
+		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
 	}
 	
 	/**

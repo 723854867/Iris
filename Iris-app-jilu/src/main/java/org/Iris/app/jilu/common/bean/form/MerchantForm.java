@@ -13,8 +13,8 @@ public class MerchantForm {
 	private String name;
 	private String address;
 	private int statusMod;
-	private int phoneStatus;
-	private int emailStatus;
+	private String phone;
+	private String email;
 	
 	public MerchantForm(Merchant merchant) {
 		MemMerchant memMerchant = merchant.getMemMerchant();
@@ -75,20 +75,20 @@ public class MerchantForm {
 		this.statusMod = statusMod;
 	}
 
-	public int getPhoneStatus() {
-		return phoneStatus;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhoneStatus(int phoneStatus) {
-		this.phoneStatus = phoneStatus;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public int getEmailStatus() {
-		return emailStatus;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmailStatus(int emailStatus) {
-		this.emailStatus = emailStatus;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 	
