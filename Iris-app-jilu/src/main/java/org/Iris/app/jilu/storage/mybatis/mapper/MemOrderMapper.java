@@ -75,7 +75,15 @@ public interface MemOrderMapper {
 	 * @return
 	 */
 	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderListByMerchantId")
-	List<MemOrder> getOrderListByMerchantId(long merchantId);
+	List<MemOrder> getOrderListByMerchantId(@Param("merchantId") long merchantId, @Param("start") int start, @Param("pageSize") int pageSize);
+	
+	/**
+	 * 查找当前商户的所有订单总数
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderCountByMerchantId")
+	long getOrderCountByMerchantId(@Param("merchantId") long merchantId);
 	
 	/**
 	 * 通过订单号获取正在转单中的订单列表

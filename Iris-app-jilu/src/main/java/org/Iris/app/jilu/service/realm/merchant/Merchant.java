@@ -377,12 +377,15 @@ public class Merchant implements Beans {
 	 * 查找自己的所有订单基本信息
 	 * @return
 	 */
-	public String getMyOrderList(){
-		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId());
+	public String getMyOrderList(int page,int pageSize){
+		long count = memOrderMapper.getOrderCountByMerchantId(getMemMerchant().getMerchantId());
+		if (count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),(page-1)*pageSize,pageSize);
 		List<OrderForm> orderForms = new ArrayList<OrderForm>();
 		for (MemOrder order : list)
 			orderForms.add(new OrderForm(order));
-		return Result.jsonSuccess(orderForms);
+		return Result.jsonSuccess(new Pager<OrderForm>(count, orderForms));
 	}
 
 	/**

@@ -125,9 +125,14 @@ public class MemOrderSQLBuilder {
 	}
 	
 	public String getOrderListByMerchantId(){
-		return new SQL() {
+		
+		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} order by created LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getOrderCountByMerchantId(){
+		return new SQL(){
 			{
-				SELECT("*");
+				SELECT("count(1)");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 			}
