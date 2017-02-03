@@ -69,6 +69,30 @@ public interface MemOrderMapper {
 	@SelectProvider(type = MemOrderSQLBuilder.class, method="getTransferMerchantOrderList")
 	List<MemOrder> getTransferMerchantOrderList(long merchantId);
 	
+	/**
+	 * 查找当前商户的所有订单（创建者为该商户）
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderListByMerchantId")
+	List<MemOrder> getOrderListByMerchantId(@Param("merchantId") long merchantId, @Param("start") int start, @Param("pageSize") int pageSize);
+	
+	/**
+	 * 查找当前商户的所有订单总数
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getOrderCountByMerchantId")
+	long getOrderCountByMerchantId(@Param("merchantId") long merchantId);
+	
+	/**
+	 * 通过订单号获取正在转单中的订单列表
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getTransferMerchantOrderListByOrderId")
+	List<MemOrder> getTransferMerchantOrderListByOrderId(String orderId);
+	
 	@DeleteProvider(type = MemOrderSQLBuilder.class, method="delete")
 	void delete(@Param("merchantId") long merchantId,@Param("orderId") String orderId);
 }

@@ -15,6 +15,18 @@ public class MemAccountSQLBuilder {
 		}.toString();
 	}
 	
+	public String getByMerchantIdAndType(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ACCOUNT.mark());
+				WHERE("merchant_id = #{merchantId}");
+				AND();
+				WHERE("type = #{type}");
+			}
+		}.toString();
+	}
+	
 	public String insert() { 
 		return new SQL() {
 			{
@@ -24,6 +36,29 @@ public class MemAccountSQLBuilder {
 				VALUES("merchant_id", 		"#{merchantId}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
+			}
+		}.toString();
+	}
+	
+	public String update(){
+		return new SQL(){
+			{
+				UPDATE(Table.MEM_ACCOUNT.mark());
+				SET("account=#{account}");
+				SET("updated=#{updated}");
+				WHERE("merchant_id = #{merchantId}");
+				AND();
+				WHERE("type = #{type}");
+			}
+		}.toString();
+	}
+	
+	public String getByMerchantId(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ACCOUNT.mark());
+				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();
 	}

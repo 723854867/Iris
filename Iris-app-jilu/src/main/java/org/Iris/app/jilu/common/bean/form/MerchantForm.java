@@ -13,6 +13,8 @@ public class MerchantForm {
 	private String name;
 	private String address;
 	private int statusMod;
+	private String phone;
+	private String email;
 	
 	public MerchantForm(Merchant merchant) {
 		MemMerchant memMerchant = merchant.getMemMerchant();
@@ -21,32 +23,73 @@ public class MerchantForm {
 		this.statusMod = memMerchant.getStatusMod();
 		this.name = memMerchant.getName();
 		this.address = memMerchant.getAddress();
-		
 		if (MerchantStatusMod.isQualified(memMerchant))
 			this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
 	}
-	
+
 	public long getMerchantId() {
 		return merchantId;
 	}
-	
+
+	public void setMerchantId(long merchantId) {
+		this.merchantId = merchantId;
+	}
+
 	public String getToken() {
 		return token;
 	}
-	
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getAvatar() {
 		return avatar;
 	}
-	
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getAddress() {
 		return address;
 	}
 
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public int getStatusMod() {
 		return statusMod;
 	}
+
+	public void setStatusMod(int statusMod) {
+		this.statusMod = statusMod;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 }

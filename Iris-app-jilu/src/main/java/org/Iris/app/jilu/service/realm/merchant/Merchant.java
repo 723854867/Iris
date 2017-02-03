@@ -20,6 +20,7 @@ import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
+import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.form.OrderPacketForm;
@@ -29,6 +30,7 @@ import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
@@ -36,6 +38,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -369,6 +372,21 @@ public class Merchant implements Beans {
 			orderForms.add(new OrderForm(order));
 		return Result.jsonSuccess(orderForms);
 	}
+	
+	/**
+	 * 查找自己的所有订单基本信息
+	 * @return
+	 */
+	public String getMyOrderList(int page,int pageSize){
+		long count = memOrderMapper.getOrderCountByMerchantId(getMemMerchant().getMerchantId());
+		if (count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),(page-1)*pageSize,pageSize);
+		List<OrderForm> orderForms = new ArrayList<OrderForm>();
+		for (MemOrder order : list)
+			orderForms.add(new OrderForm(order));
+		return Result.jsonSuccess(new Pager<OrderForm>(count, orderForms));
+	}
 
 	/**
 	 * 获取MerchantOrderGoods列表 通过List<MerchantOrderGoods>
@@ -532,8 +550,11 @@ public class Merchant implements Beans {
 		List<TransferOrderModel> orderChangeModels = new ArrayList<>();
 		for (MemOrder order : mList) {
 			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
+			List<OrderGoodsForm> orderGoodsForms = new ArrayList<OrderGoodsForm>();
+			for (MemOrderGoods memOrderGoods : list)
+				orderGoodsForms.add(new OrderGoodsForm(memOrderGoods));
 			orderChangeModels.add(new TransferOrderModel(order.getOrderId(), order.getMerchantName(),
-					order.getMerchantId(), order.getStatus(), list));
+					order.getMerchantId(), orderGoodsForms));
 		}
 		return orderChangeModels;
 	}
@@ -627,30 +648,34 @@ public class Merchant implements Beans {
 	 */
 	public String getOrderDetailedInfoByOrderId(String orderId) {
 		// 获取本订单基本信息
-		OrderForm orderInfo = new OrderForm(getOrderByOrderId(orderId));
+		MemOrder order = getOrderByOrderId(orderId);
+		OrderForm orderInfo = new OrderForm(order);
 		// 获取未完成产品
 		List<MemOrderGoods> notFinishOrderGoods = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByOrderId(orderId);
 		List<OrderGoodsForm> notFinishGoodsList = new ArrayList<OrderGoodsForm>();
 		for (MemOrderGoods memOrderGoods : notFinishOrderGoods)
 			notFinishGoodsList.add(new OrderGoodsForm(memOrderGoods));
-		// 获取正在转单中的产品
-		List<MemOrderGoods> changeingOrderGoods = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
-		List<OrderGoodsForm> changeGoodsList = new ArrayList<OrderGoodsForm>();
-		for (MemOrderGoods memOrderGoods : changeingOrderGoods)
-			changeGoodsList.add(new OrderGoodsForm(memOrderGoods));
+		// 获取正在转单中的订单信息
+		List<MemOrder> mList = memOrderMapper.getTransferMerchantOrderListByOrderId(orderId);
+		List<TransferOrderModel> transferOrderModel = getTransferOrderListModelList(mList);
 		// 获取已打包的信息
 		List<MemOrderPacket> packets = memOrderPacketMapper.getMemOrderPacketByOrderId(orderId);
 		List<OrderPacketForm> packetList = new ArrayList<OrderPacketForm>();
-		for (MemOrderPacket memOrderPacket : packets)
-			packetList.add(new OrderPacketForm(memOrderPacket));
+		for (MemOrderPacket memOrderPacket : packets){
+			List<MemOrderGoods> goodsList = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(memOrderPacket.getPacketId());
+			List<OrderGoodsForm> packetOrderGoodsList = new ArrayList<OrderGoodsForm>();
+			for (MemOrderGoods memOrderGoods : goodsList)
+				packetOrderGoodsList.add(new OrderGoodsForm(memOrderGoods));
+			packetList.add(new OrderPacketForm(memOrderPacket,packetOrderGoodsList));
+		}
 		// 获取子订单信息
 		List<MemOrder> childOrders = memOrderMapper.getChildOrderByOrderId(orderId);
 		List<OrderForm> childOrderList = new ArrayList<OrderForm>();
-		for (MemOrder order : childOrders)
-			childOrderList.add(new OrderForm(order));
+		for (MemOrder memOrder : childOrders)
+			childOrderList.add(new OrderForm(memOrder));
 
 		return Result.jsonSuccess(
-				new OrderDetailedModel(orderInfo, notFinishGoodsList, changeGoodsList, packetList, childOrderList));
+				new OrderDetailedModel(orderInfo, notFinishGoodsList, transferOrderModel, packetList, childOrderList));
 	}
 
 	/**
@@ -750,6 +775,24 @@ public class Merchant implements Beans {
 		if(goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		return Result.jsonSuccess(goods);
+	}
+	
+	/**
+	 * 获取商户信息
+	 * @return
+	 */
+	public String getMerchantInfo(){
+		MerchantForm merchantForm = new MerchantForm(this);
+		List<MemAccount> list = memAccountMapper.getByMerchantId(getMemMerchant().getMerchantId());
+		for(MemAccount memAccount : list){
+			if(memAccount.getType() == 0){
+				merchantForm.setPhone(memAccount.getAccount());
+			}
+			if(memAccount.getType() == 1){
+				merchantForm.setEmail(memAccount.getAccount());
+			}
+		}
+		return Result.jsonSuccess(merchantForm);
 	}
 
 	/**

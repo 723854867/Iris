@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.model.AccountType;
+import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
@@ -32,9 +33,12 @@ import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.storage.redis.RedisCache;
 import org.Iris.app.jilu.web.JiLuCode;
+import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +63,8 @@ public class MerchantService extends RedisCache {
 	private CfgGoodsMapper cfgGoodsMapper;
 	@Resource
 	private MemGoodsStoreMapper memGoodsStoreMapper;
+	@Resource
+	private CourierService courierService;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -122,6 +128,47 @@ public class MerchantService extends RedisCache {
 				SerializeUtil.JsonUtil.GSON.toJson(memAccount));
 //		aliyunService.createMerchantFolder(merchant);     看客户端 sts 接上之后是否可以自己直接创建商户的文件夹
 		return new Merchant(memMerchant);
+	}
+	
+	/**
+	 * 手机或邮箱绑定
+	 * @param account
+	 */
+	public String bindingPhoneOrMobile(String account,AccountType type,String captch,long merchantId){
+		switch (type) {
+		case MOBILE:
+		case EMAIL:
+			if (!courierService.verifyCaptch(type, account, captch))
+				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
+			
+			Merchant merchant = getMerchantByAccount(type, account);
+			if(merchant != null)
+				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
+			MemAccount memAccount = BeanCreator.newMemAccount(type, account, DateUtils.currentTime(), merchantId);
+			try {
+				if(memAccountMapper.getByMerchantIdAndType(merchantId, type.mark()) == null)
+					memAccountMapper.insert(memAccount);
+				else{
+					memAccountMapper.update(memAccount);
+					redisOperate.hdel(MerchantKeyGenerator.accountMerchantMapKey(type),account);
+					redisOperate.hdel(MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()),account);
+				}
+			} catch (DuplicateKeyException e) {
+				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
+			}
+			// 更新缓存
+			luaOperate.evalLua(JiLuLuaCommand.ACCOUNT_REFRESH.name(), 2, 
+					MerchantKeyGenerator.accountMerchantMapKey(type), 
+					MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()), 
+					account, 
+					String.valueOf(merchantId),
+					SerializeUtil.JsonUtil.GSON.toJson(memAccount));
+			return Result.jsonSuccess();
+		case WECHAT:
+			return Result.jsonSuccess();
+		default:
+			throw IllegalConstException.errorException(JiLuParams.TYPE);
+		}
 	}
 	
 	/**
@@ -391,9 +438,14 @@ public class MerchantService extends RedisCache {
 	@Transactional
 	public String orderPacket(String orderId,String packetGoodsList,Merchant merchant){
 		String[] packetGoods = packetGoodsList.split(";");
+		StringBuilder builder = new StringBuilder();
 		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
 		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
 		for(String str : packetGoods){
+			String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
+			MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
+			packetList.add(packet);
+			builder.append(packetId+";");
 			String[] goods = str.split(":");
 			for(String goodsId : goods){
 				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
@@ -401,9 +453,6 @@ public class MerchantService extends RedisCache {
 					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
 				if(mGoods.getStatus()!=0)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
-				String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
-				MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
-				packetList.add(packet);
 				mGoods.setStatus(3);
 				int time = DateUtils.currentTime();
 				mGoods.setUpdated(time);
@@ -422,7 +471,7 @@ public class MerchantService extends RedisCache {
 		
 		redisOperate.batchHmset(packetList);
 		redisOperate.batchHmset(orderGoodsList);
-		return Result.jsonSuccess();
+		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
 	}
 	
 	/**

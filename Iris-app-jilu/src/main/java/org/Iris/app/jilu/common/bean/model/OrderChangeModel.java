@@ -15,18 +15,18 @@ public class OrderChangeModel {
 	private String superMerchantName;
 	private long superMerhcantId;
 	private int status;
-	private List<MemOrderGoods> changeOrderGoodsLilst;
+	private List<MemOrderGoods> changeOrderGoodsList;
 
 	public OrderChangeModel() {
 		super();
 	}
 
-	public OrderChangeModel(String orderId,String superMerchantName, long superMerhcantId, int status, List<MemOrderGoods> changeOrderGoodsLilst) {
+	public OrderChangeModel(String orderId,String superMerchantName, long superMerhcantId, int status,List<MemOrderGoods> changeOrderGoodsList) {
 		this.orderId = orderId;
 		this.superMerchantName = superMerchantName;
 		this.superMerhcantId = superMerhcantId;
 		this.status = status;
-		this.changeOrderGoodsLilst = changeOrderGoodsLilst;
+		this.changeOrderGoodsList = changeOrderGoodsList;
 	}
 
 	public String getOrderId() {
@@ -61,13 +61,12 @@ public class OrderChangeModel {
 		this.status = status;
 	}
 
-	public List<MemOrderGoods> getChangeOrderGoodsLilst() {
-		return changeOrderGoodsLilst;
+	public List<MemOrderGoods> getChangeOrderGoodsList() {
+		return changeOrderGoodsList;
 	}
 
-	public void setChangeOrderGoodsLilst(List<MemOrderGoods> changeOrderGoodsLilst) {
-		this.changeOrderGoodsLilst = changeOrderGoodsLilst;
+	public void setChangeOrderGoodsList(List<MemOrderGoods> changeOrderGoodsList) {
+		this.changeOrderGoodsList = changeOrderGoodsList;
 	}
 
-	
 }

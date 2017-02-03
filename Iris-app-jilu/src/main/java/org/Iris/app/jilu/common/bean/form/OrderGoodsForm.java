@@ -50,5 +50,4 @@ public class OrderGoodsForm {
 	public void setUnitPrice(String unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	
 }
