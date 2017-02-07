@@ -364,7 +364,7 @@
 				<artifactId>protostuff-core</artifactId>
 				<version>${protostuff.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
