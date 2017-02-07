@@ -794,6 +794,15 @@ public class Merchant implements Beans {
 		}
 		return Result.jsonSuccess(merchantForm);
 	}
+	/**
+	 * 同步商户对应的个推cid
+	 * @param cid
+	 * @return
+	 */
+	public String sycMerchantToCID(String cid){
+		redisOperate.hset(MerchantKeyGenerator.merchantCIDDataKey(getMemMerchant().getMerchantId()), String.valueOf(getMemMerchant().getMerchantId()), cid);
+		return Result.jsonSuccess();
+	}
 
 	/**
 	 * 判断商户的客户排序列表是否已经加载

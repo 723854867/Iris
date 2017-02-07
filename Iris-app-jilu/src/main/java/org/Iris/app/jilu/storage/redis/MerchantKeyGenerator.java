@@ -30,6 +30,8 @@ public final class MerchantKeyGenerator {
 	private static final String CUSTOMER_LIST_PURCHASE_RECENT			= "zset:cache:merchant:{0}:customer:list:purchase:recent";		// 商户所属客户列表 - 最近购物时间排序
 	private static final String CUSTOMER_LIST_NAME						= "zset:cache:merchant:{0}:customer:list:name";					// 商户所属客户列表 - 名字排序列表
 	private static final String FRIEND_APPLY_LIST						= "zset:cache:merchant:{0}:friend:apply:list";					// 
+	
+	private static final String MERCHANT_CID_DATA						= "hash:db:merchant:{}:cid";									// 商户对应的个推客户端cid
 
 	public static final String merchantLockKey(long merchantId) {
 		return MessageFormat.format(MERCHANT_LOCK, String.valueOf(merchantId));
@@ -89,6 +91,10 @@ public final class MerchantKeyGenerator {
 	
 	public static final String friendApplyListKey(long merchantId) { 
 		return MessageFormat.format(FRIEND_APPLY_LIST, String.valueOf(merchantId));
+	}
+	
+	public static final String merchantCIDDataKey(long merchantId) {
+		return MessageFormat.format(MERCHANT_CID_DATA, merchantId);
 	}
 	
 	private static final String MERCHANT_ORDER_DATA						= "hash:db:merchant:{0}:order:{1}";
