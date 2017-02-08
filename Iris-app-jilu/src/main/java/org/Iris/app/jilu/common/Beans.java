@@ -3,6 +3,7 @@ package org.Iris.app.jilu.common;
 import org.Iris.app.jilu.service.realm.CommonService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
+import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
@@ -40,4 +41,6 @@ public interface Beans {
 	final MemGoodsStoreMapper memGoodsStoreMapper = SpringContextUtil.getBean("memGoodsStoreMapper", MemGoodsStoreMapper.class);
 	final MemOrderStatusMapper memOrderStatusMapper = SpringContextUtil.getBean("memOrderStatusMapper", MemOrderStatusMapper.class);
 	final MemAccountMapper memAccountMapper = SpringContextUtil.getBean("memAccountMapper", MemAccountMapper.class);
+	
+	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
 }
