@@ -3,7 +3,7 @@ package org.Iris.igt.push;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.Iris.igt.template.NotificationTemplateDemo;
+import org.Iris.igt.template.TransmissionTemplateDemo;
 
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.AppMessage;
@@ -27,11 +27,15 @@ public class AppPushManager {
 	private String masterSecret;
 	private String url;
 	private IGtPush push;
-	private NotificationTemplateDemo notificationTemplateDemo;
+	//private NotificationTemplateDemo notificationTemplateDemo;
+	//private IOSTemplateDemo iosTemplateDemo;
+	private TransmissionTemplateDemo transmissionTemplateDemo;
 	
 	public void init(){
 		push = new IGtPush(url, appKey, masterSecret);
-		notificationTemplateDemo = new NotificationTemplateDemo(appId,masterSecret);
+		//notificationTemplateDemo = new NotificationTemplateDemo(appId,appKey);
+		transmissionTemplateDemo = new TransmissionTemplateDemo(appId, appKey);
+		//iosTemplateDemo = new IOSTemplateDemo(appId, appKey);
 	}
 	
 	public IPushResult pushToSingle(String cid, String title, String text){
@@ -39,7 +43,7 @@ public class AppPushManager {
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选
 		message.setOfflineExpireTime(24 * 3600 * 1000);
-		message.setData(notificationTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
 		// 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
 		message.setPushNetWorkType(0);
 
@@ -59,7 +63,7 @@ public class AppPushManager {
 	 */
 	public IPushResult pushToList(List<String> cids, String title, String text) {
 		ListMessage message = new ListMessage();
-		message.setData(notificationTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
 		// 设置消息离线，并设置离线时间
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选
@@ -84,7 +88,7 @@ public class AppPushManager {
 	 */
 	public IPushResult pushToApp(String title, String text) {
 		AppMessage message = new AppMessage();
-		message.setData(notificationTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
 
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选
@@ -108,4 +112,22 @@ public class AppPushManager {
 
 		return push.pushMessageToApp(message);
 	}
+	
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
+	}
+
+	public void setMasterSecret(String masterSecret) {
+		this.masterSecret = masterSecret;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	
 }

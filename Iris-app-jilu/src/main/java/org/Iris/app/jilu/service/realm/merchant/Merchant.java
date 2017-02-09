@@ -29,8 +29,10 @@ import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
+import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
+import org.Iris.app.jilu.storage.domain.MemCid;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
@@ -799,9 +801,24 @@ public class Merchant implements Beans {
 	 * @param cid
 	 * @return
 	 */
-	public String sycMerchantToCID(String cid){
-		redisOperate.hset(MerchantKeyGenerator.merchantCIDDataKey(getMemMerchant().getMerchantId()), String.valueOf(getMemMerchant().getMerchantId()), cid);
-		return Result.jsonSuccess();
+	public String sycMerchantToCID(String cid,int type){
+		long merchantId = getMemMerchant().getMerchantId();
+		MemCid memCid = getMemCid();
+		if(memCid == null){
+			memCid = new MemCid(merchantId, cid, type);
+			memCidMapper.insert(memCid);
+		}else{
+			memCidMapper.update(memCid);
+		}
+		redisOperate.hmset(MerchantKeyGenerator.merchantCIDDataKey(merchantId), memCid);
+		return Result.jsonSuccess(memCid);
+	}
+	
+	public MemCid getMemCid(){
+		MemCid memCid = redisOperate.hgetAll(MerchantKeyGenerator.merchantCIDDataKey(getMemMerchant().getMerchantId()), new MemCid());
+		if(memCid == null)
+			memCid = memCidMapper.getMemCid(getMemMerchant().getMerchantId());
+		return memCid;
 	}
 
 	/**
