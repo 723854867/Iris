@@ -29,7 +29,20 @@
 		<constructor-arg index="0" value="${app.name}" />
 		<property name="jmsService" ref="jmsService" />
 		<property name="aliyunService" ref="aliyunService" />
+		<property name="wyyxService" ref="wyyxService" />
 		<property name="locale" ref="lang" />
+	</bean>
+	
+	 <!-- httpclient 配置 -->
+    <bean id="httpProxy" class="org.Iris.util.network.http.HttpProxy">
+		<property name="syncHttp" ref="syncHttp"/>
+	</bean>
+	<bean id="syncHttp" class="org.Iris.util.network.http.SyncHttpAdapter">
+		<property name="sslEnabled" value="true" />
+		<property name="retryCount" value="3" />							<!-- 失败重连次数 -->
+		<property name="maxConn" value="200" />								<!-- 最大连接数 -->
+		<property name="maxConnPerRoute" value="200" />						<!-- 每个路由能打开的最大连接数 -->
+		<property name="keepAliveTime" value="30000" />						<!-- 空闲连接回收超时时间 30s -->
 	</bean>
 	
 	<bean class="org.Iris.core.util.SpringContextUtil" />

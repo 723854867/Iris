@@ -32,6 +32,7 @@ public final class MerchantKeyGenerator {
 	private static final String FRIEND_APPLY_LIST						= "zset:cache:merchant:{0}:friend:apply:list";					// 
 	
 	private static final String MERCHANT_CID_DATA						= "hash:db:merchant:{0}:cid";									// 商户对应的个推客户端cid
+	private static final String MERCHANT_ACCID_DATA						= "hash:db:merchant:{0}:accid";									// 商户对应的云信im账号
 
 	public static final String merchantLockKey(long merchantId) {
 		return MessageFormat.format(MERCHANT_LOCK, String.valueOf(merchantId));
@@ -95,6 +96,10 @@ public final class MerchantKeyGenerator {
 	
 	public static final String merchantCIDDataKey(long merchantId) {
 		return MessageFormat.format(MERCHANT_CID_DATA, merchantId);
+	}
+	
+	public static final String merchantACCIDDataKey(long merchantId) {
+		return MessageFormat.format(MERCHANT_ACCID_DATA, merchantId);
 	}
 	
 	private static final String MERCHANT_ORDER_DATA						= "hash:db:merchant:{0}:order:{1}";

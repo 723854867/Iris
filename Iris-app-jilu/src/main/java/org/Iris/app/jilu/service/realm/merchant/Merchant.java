@@ -25,12 +25,13 @@ import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.form.OrderPacketForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
+import org.Iris.app.jilu.common.bean.form.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
-import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
@@ -40,7 +41,6 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -813,12 +813,33 @@ public class Merchant implements Beans {
 		redisOperate.hmset(MerchantKeyGenerator.merchantCIDDataKey(merchantId), memCid);
 		return Result.jsonSuccess(memCid);
 	}
-	
+	/**
+	 * 获取商户对应个推clientId
+	 * @return
+	 */
 	public MemCid getMemCid(){
 		MemCid memCid = redisOperate.hgetAll(MerchantKeyGenerator.merchantCIDDataKey(getMemMerchant().getMerchantId()), new MemCid());
 		if(memCid == null)
 			memCid = memCidMapper.getMemCid(getMemMerchant().getMerchantId());
 		return memCid;
+	}
+	/**
+	 * 获取网易云信账号
+	 * @return
+	 * @throws Exception
+	 */
+	public MemAccid getMemAccid(){
+		MemAccid memAccid = redisOperate.hgetAll(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), new MemAccid());
+		if(memAccid == null)
+			memAccid = memAccidMapper.getMemAccid(getMemMerchant().getMerchantId());
+		if(memAccid == null){
+			//通过网易云信接口获取
+			WyyxCreateAccountResultForm result = wyyxService.createWyyxIdAndToken(getMemMerchant().getMerchantId()+"_");
+			memAccid = new MemAccid(getMemMerchant().getMerchantId(),result);
+			memAccidMapper.insert(memAccid);
+			redisOperate.hmset(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), memAccid);
+		}
+		return memAccid;
 	}
 
 	/**

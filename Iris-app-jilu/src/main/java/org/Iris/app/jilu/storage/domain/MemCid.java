@@ -1,10 +1,13 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 import org.Iris.util.lang.DateUtils;
-
+/**
+ * 个推客户端注册id
+ * @author 樊水东
+ * 2017年2月10日
+ */
 public class MemCid implements RedisHashBean{
 
 	private long merchantId;

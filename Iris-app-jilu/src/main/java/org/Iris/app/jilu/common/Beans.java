@@ -6,7 +6,9 @@ import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
+import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
@@ -20,6 +22,7 @@ import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.core.util.SpringContextUtil;
 import org.Iris.redis.operate.RedisOperate;
 import org.Iris.redis.operate.lock.DistributeLock;
+import org.Iris.util.network.http.HttpProxy;
 
 public interface Beans {
 	
@@ -43,6 +46,9 @@ public interface Beans {
 	final MemOrderStatusMapper memOrderStatusMapper = SpringContextUtil.getBean("memOrderStatusMapper", MemOrderStatusMapper.class);
 	final MemAccountMapper memAccountMapper = SpringContextUtil.getBean("memAccountMapper", MemAccountMapper.class);
 	final MemCidMapper memCidMapper = SpringContextUtil.getBean("memCidMapper", MemCidMapper.class);
+	final MemAccidMapper memAccidMapper = SpringContextUtil.getBean("memAccidMapper", MemAccidMapper.class);
+	final HttpProxy httpProxy = SpringContextUtil.getBean("httpProxy", HttpProxy.class);
 	
 	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
+	final WyyxService wyyxService = SpringContextUtil.getBean("wyyxService", WyyxService.class);
 }

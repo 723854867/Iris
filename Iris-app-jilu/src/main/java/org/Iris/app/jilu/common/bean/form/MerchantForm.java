@@ -15,6 +15,8 @@ public class MerchantForm {
 	private int statusMod;
 	private String phone;
 	private String email;
+	private String accid;
+	private String accidToken;
 	
 	public MerchantForm(Merchant merchant) {
 		MemMerchant memMerchant = merchant.getMemMerchant();
@@ -89,6 +91,22 @@ public class MerchantForm {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getAccid() {
+		return accid;
+	}
+
+	public void setAccid(String accid) {
+		this.accid = accid;
+	}
+
+	public String getAccidToken() {
+		return accidToken;
+	}
+
+	public void setAccidToken(String accidToken) {
+		this.accidToken = accidToken;
 	}
 	
 	

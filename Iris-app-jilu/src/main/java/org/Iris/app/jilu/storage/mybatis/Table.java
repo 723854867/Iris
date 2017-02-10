@@ -13,6 +13,7 @@ public enum Table {
 	MEM_GOODS_STORE("mem_goods_store"),
 	MEM_ORDER_STATUS("mem_order_status"),
 	MEM_CID("mem_cid"),
+	MEM_ACCID("mem_accid"),
 	
 	RELATION("relation");
 	
