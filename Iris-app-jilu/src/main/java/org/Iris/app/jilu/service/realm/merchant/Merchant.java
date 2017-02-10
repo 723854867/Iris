@@ -142,12 +142,18 @@ public class Merchant implements Beans {
 	 * 
 	 * @return
 	 */
-	public void editInfo(String name, String address) {
+	public String editInfo(String name, String address) {
 		memMerchant.setAddress(address);
 		memMerchant.setName(name);
 		memMerchant.setUpdated(DateUtils.currentTime());
 		memMerchant.setStatusMod(MerchantStatusMod.QUALIFIED.mod());
 		_updateMerchant();
+		MerchantForm merchantForm = new MerchantForm(this);
+		//加网易云信账号信息
+		MemAccid memAccid = getMemAccid();
+		merchantForm.setAccid(memAccid.getAccid());
+		merchantForm.setAccidToken(memAccid.getToken());
+		return Result.jsonSuccess(merchantForm);
 	}
 
 	/**
@@ -803,7 +809,7 @@ public class Merchant implements Beans {
 	 */
 	public String sycMerchantToCID(String cid,int type){
 		long merchantId = getMemMerchant().getMerchantId();
-		MemCid memCid = getMemCid();
+		MemCid memCid = getMemCid(memMerchant.getMerchantId());
 		if(memCid == null){
 			memCid = new MemCid(merchantId, cid, type);
 			memCidMapper.insert(memCid);
@@ -817,10 +823,10 @@ public class Merchant implements Beans {
 	 * 获取商户对应个推clientId
 	 * @return
 	 */
-	public MemCid getMemCid(){
-		MemCid memCid = redisOperate.hgetAll(MerchantKeyGenerator.merchantCIDDataKey(getMemMerchant().getMerchantId()), new MemCid());
+	public MemCid getMemCid(long merchantId){
+		MemCid memCid = redisOperate.hgetAll(MerchantKeyGenerator.merchantCIDDataKey(merchantId), new MemCid());
 		if(memCid == null)
-			memCid = memCidMapper.getMemCid(getMemMerchant().getMerchantId());
+			memCid = memCidMapper.getMemCid(merchantId);
 		return memCid;
 	}
 	/**

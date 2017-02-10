@@ -1,8 +1,9 @@
 package org.Iris.app.jilu.service.realm.wyyx;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.WyyxCreateAccountResultForm;
@@ -10,9 +11,7 @@ import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.network.http.HttpProxy;
 import org.Iris.util.network.http.handler.SyncJsonRespHandler;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
@@ -38,6 +37,8 @@ public class WyyxService {
 	private String nonce;
 	private String curTime;
 	private String checkSum;
+	@Resource
+	private HttpProxy httpProxy;
 
 	public void init() {
 		this.appKey = "709be4058503ae62a09172f7584e8602";
@@ -46,7 +47,7 @@ public class WyyxService {
 		this.curTime = String.valueOf((System.currentTimeMillis() / 1000L));
 		this.checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);
 		try {
-			Beans.httpProxy.init();
+			httpProxy.init();
 		} catch (Exception e) {
 			logger.error("httpProxy init fail");
 			System.exit(1);
@@ -69,7 +70,7 @@ public class WyyxService {
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
 			// 执行请求
-			return Beans.httpProxy.syncRequest(httpPost,
+			return httpProxy.syncRequest(httpPost,
 					SyncJsonRespHandler.<WyyxCreateAccountResultForm> build(WyyxCreateAccountResultForm.class));
 		} catch (Exception e) {
 			Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED);

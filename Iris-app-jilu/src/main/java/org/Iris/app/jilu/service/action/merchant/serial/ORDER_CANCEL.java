@@ -7,6 +7,7 @@ import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
+import org.Iris.util.common.JsonAppender;
 
 /**
  * 商户取消转单
@@ -27,6 +28,10 @@ public class ORDER_CANCEL extends SerialMerchantAction{
 		if(null == superOrderId)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		merchantService.refuseOrder(order,merchant);
+		//推送转单取消信息  参数：转单单号，转单父订单号
+		String msg = JsonAppender.newAppender().append("orderId", orderId).append("superOrderId", superOrderId).toString();
+		igtService.pushToSingle(merchant.getMemCid(merchantId).getClientId(), "", msg);
+		
 		return Result.jsonSuccess();
 	}
 

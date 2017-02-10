@@ -12,6 +12,7 @@ import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
+import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
@@ -36,6 +37,7 @@ import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
+import org.Iris.util.common.JsonAppender;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
@@ -65,6 +67,8 @@ public class MerchantService extends RedisCache {
 	private MemGoodsStoreMapper memGoodsStoreMapper;
 	@Resource
 	private CourierService courierService;
+	@Resource
+	private IgtService igtService;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -318,6 +322,11 @@ public class MerchantService extends RedisCache {
 		redisOperate.hmset(superOrder.redisKey(), superOrder);
 		redisOperate.batchHmset(ogs);
 		redisOperate.batchHmset(addGoods);
+		
+		//推送转单信息  参数：转单方名字，转单单号，转单时间
+		String msg = JsonAppender.newAppender().append("name", merchant.getMemMerchant().getName()).append("orderId", superOrder.getOrderId()).append("created", time).toString();
+		igtService.pushToSingle(merchant.getMemCid(superOrder.getMerchantId()).getClientId(), "", msg);
+		
 		return superOrder;
 	}
 	
@@ -427,6 +436,10 @@ public class MerchantService extends RedisCache {
 		}
 		redisOperate.batchHmset(receiveGoodsList);
 		redisOperate.batchHmset(superRecevieGoodsList);
+		
+		//推送转单接收信息  参数：转单单号，转单父订单号
+		String msg = JsonAppender.newAppender().append("orderId", orderId).append("superOrderId", superOrderId).toString();
+		igtService.pushToSingle(merchant.getMemCid(order.getSuperMerchantId()).getClientId(), "", msg);
 	}
 	
 	/**
