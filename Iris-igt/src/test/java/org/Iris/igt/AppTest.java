@@ -2,8 +2,6 @@ package org.Iris.igt;
 
 import org.Iris.igt.push.AppPushManager;
 
-import com.gexin.rp.sdk.base.IPushResult;
-
 import junit.framework.TestCase;
 
 /**
@@ -26,6 +24,7 @@ public class AppTest extends TestCase {
 		
 		appPush.init();
 		
-		IPushResult result = appPush.pushToApp("title", "服务端test");
+		//appPush.pushToApp("", "服务端test");
+		appPush.pushToSingle("25e75e1ee094be59c32cb3fe066f046e","", "服务端单推");
 	}
 }

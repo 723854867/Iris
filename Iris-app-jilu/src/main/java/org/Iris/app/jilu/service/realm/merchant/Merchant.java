@@ -809,9 +809,9 @@ public class Merchant implements Beans {
 	 */
 	public String sycMerchantToCID(String cid,int type){
 		long merchantId = getMemMerchant().getMerchantId();
-		MemCid memCid = getMemCid(memMerchant.getMerchantId());
-		if(memCid == null){
-			memCid = new MemCid(merchantId, cid, type);
+		MemCid memCid = new MemCid(merchantId, cid, type);
+		MemCid memCid_ = getMemCid(memMerchant.getMerchantId());
+		if(memCid_ == null){
 			memCidMapper.insert(memCid);
 		}else{
 			memCidMapper.update(memCid);
