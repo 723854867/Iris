@@ -9,6 +9,7 @@ import java.util.Random;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
+import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
@@ -264,26 +265,26 @@ public class MerchantService extends RedisCache {
 	/**
 	 * 转单
 	 * 
-	 * @param superOrder
-	 *            父订单
+	 * @param order
+	 *            转单商户订单
 	 * @param merchant
 	 *            转单商户对象
 	 * @param ogs
 	 *            转单产品列表
 	 */
 	@Transactional
-	public MemOrder orderChange(MemOrder superOrder,MemMerchant memMerchant,List<MemOrderGoods> ogs,Merchant merchant){
-		superOrder.setSuperOrderId(superOrder.getOrderId());
-		superOrder.setOrderId(System.currentTimeMillis() + "" + new Random().nextInt(10));
+	public MemOrder orderChange(MemOrder order,MemMerchant memMerchant,List<MemOrderGoods> ogs,Merchant merchant){
+		order.setSuperOrderId(order.getOrderId());
+		order.setOrderId(System.currentTimeMillis() + "" + new Random().nextInt(10));
 		int time = DateUtils.currentTime();
-		superOrder.setCreated(time);
-		superOrder.setUpdated(time);
-		superOrder.setSuperMerchantId(merchant.getMemMerchant().getMerchantId());
-		superOrder.setSuperMerchantName(merchant.getMemMerchant().getName());
-		superOrder.setMerchantId(memMerchant.getMerchantId());
-		superOrder.setMerchantName(memMerchant.getName());
-		superOrder.setMerchantAddress(memMerchant.getAddress());
-		superOrder.setStatus(2);
+		order.setCreated(time);
+		order.setUpdated(time);
+		order.setSuperMerchantId(merchant.getMemMerchant().getMerchantId());
+		order.setSuperMerchantName(merchant.getMemMerchant().getName());
+		order.setMerchantId(memMerchant.getMerchantId());
+		order.setMerchantName(memMerchant.getName());
+		order.setMerchantAddress(memMerchant.getAddress());
+		order.setStatus(2);
 		//处理产品列表
 		for(MemOrderGoods goods : ogs){
 			goods.setStatus(1);
@@ -292,7 +293,7 @@ public class MerchantService extends RedisCache {
 		List<MemOrderGoods> addGoods = new ArrayList<MemOrderGoods>();
 		for(MemOrderGoods goods : ogs){
 			MemOrderGoods memOrderGoods = new MemOrderGoods();
-			memOrderGoods.setOrderId(superOrder.getOrderId());
+			memOrderGoods.setOrderId(order.getOrderId());
 			memOrderGoods.setGoodsId(goods.getGoodsId());
 			memOrderGoods.setGoodsName(goods.getGoodsName());
 			memOrderGoods.setCount(goods.getCount());
@@ -303,31 +304,35 @@ public class MerchantService extends RedisCache {
 			memOrderGoods.setCreated(time);
 			addGoods.add(memOrderGoods);
 		}
-		memOrderMapper.insert(superOrder);
+		memOrderMapper.insert(order);
 		memOrderGoodsMapper.batchUpdate(ogs);
 		memOrderGoodsMapper.batchInsert(addGoods);
 		
-		//更新父订单状态表mem_order_status
-		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(superOrder.getSuperOrderId());
+		/*更新父订单状态表mem_order_status start*/
+		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(order.getSuperOrderId());
 		status.setTransformCount(status.getTransformCount()+ogs.size());
 		memOrderStatusMapper.update(status);
-		MemOrder order = merchant.getMerchantOrderById(superOrder.getSuperMerchantId(), superOrder.getSuperOrderId());
-		if(order.getStatus() != 1){
-			order.setStatus(1);
-			memOrderMapper.update(order);
-			redisOperate.hmset(order.redisKey(), order);
+		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), order.getSuperOrderId());
+		if(superOrder.getStatus() != 1){
+			superOrder.setStatus(1);
+			memOrderMapper.update(superOrder);
+			redisOperate.hmset(superOrder.redisKey(), superOrder);
+			//推送订单状态改变消息
+			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getMerchantId()), superOrder.getOrderId(), "", 1);
+			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getSuperMerchantId()), 
+					superOrder.getSuperOrderId(),superOrder.getOrderId(),1);
 		}
 		redisOperate.hmset(status.redisKey(),status);
+		/*更新父订单状态表mem_order_status end*/
 		
-		redisOperate.hmset(superOrder.redisKey(), superOrder);
+		redisOperate.hmset(order.redisKey(), order);
 		redisOperate.batchHmset(ogs);
 		redisOperate.batchHmset(addGoods);
 		
-		//推送转单信息  参数：转单方名字，转单单号，转单时间
-		String msg = JsonAppender.newAppender().append("name", merchant.getMemMerchant().getName()).append("orderId", superOrder.getOrderId()).append("created", time).toString();
-		igtService.pushToSingle(merchant.getMemCid(superOrder.getMerchantId()).getClientId(), "", msg);
-		
-		return superOrder;
+		//推送转单信息  参数：转单方名字，转单订单号，转单时间
+		JiLuPushUtil.OrderTransformPush(merchant.getMemCid(order.getMerchantId()),
+				merchant.getMemMerchant().getName(), order.getOrderId(), time);
+		return order;
 	}
 	
 	/**
@@ -438,8 +443,7 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(superRecevieGoodsList);
 		
 		//推送转单接收信息  参数：转单单号，转单父订单号
-		String msg = JsonAppender.newAppender().append("orderId", orderId).append("superOrderId", superOrderId).toString();
-		igtService.pushToSingle(merchant.getMemCid(order.getSuperMerchantId()).getClientId(), "", msg);
+		JiLuPushUtil.OrderReceivePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
 	}
 	
 	/**
@@ -553,9 +557,15 @@ public class MerchantService extends RedisCache {
 		memOrderStatusMapper.update(status);
 		redisOperate.hmset(status.redisKey(), status);
 		long orderStatus = luaOperate.getOrderStatus(status);
-		order.setStatus((int)orderStatus);
-		memOrderMapper.update(order);
-		redisOperate.hmset(order.redisKey(), order);
+		if(order.getStatus() != orderStatus){
+			order.setStatus((int)orderStatus);
+			memOrderMapper.update(order);
+			redisOperate.hmset(order.redisKey(), order);
+			//推送订单状态改变信息
+			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(merchantId), orderId, "", order.getStatus());
+			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(order.getSuperMerchantId()), 
+					order.getSuperOrderId(), orderId, order.getStatus());
+		}
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
+import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -29,8 +30,7 @@ public class ORDER_CANCEL extends SerialMerchantAction{
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		merchantService.refuseOrder(order,merchant);
 		//推送转单取消信息  参数：转单单号，转单父订单号
-		String msg = JsonAppender.newAppender().append("orderId", orderId).append("superOrderId", superOrderId).toString();
-		igtService.pushToSingle(merchant.getMemCid(merchantId).getClientId(), "", msg);
+		JiLuPushUtil.OrderCancelPush(merchant.getMemCid(merchantId), orderId, superOrderId);
 		
 		return Result.jsonSuccess();
 	}

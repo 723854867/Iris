@@ -6,11 +6,34 @@ package org.Iris.app.jilu.common.bean.enums;
  */
 public enum IgtPushType {
 
-	TRANSFORM(0);
+	/**
+	 * 转单推送
+	 */
+	ORDER_TRANSFORM(0),
+	/**
+	 * 转单被取消
+	 */
+	ORDER_CANCEL(1),
+	/**
+	 * 转单被接受
+	 */
+	ORDER_RECEIVE(2),
+	/**
+	 * 转单被拒绝
+	 */
+	ORDER_REFUSE(3),
+	/**
+	 * 订单状态改变
+	 */
+	ORDER_STATUS_CHANGE(4);
 	
 	private int mark;
 	
 	private IgtPushType(int mark){
 		this.mark = mark;
+	}
+	
+	public int mark(){
+		return this.mark;
 	}
 }

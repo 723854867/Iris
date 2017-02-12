@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
+import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -7,7 +8,6 @@ import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
-import org.Iris.util.common.JsonAppender;
 
 /**
  * 拒绝转单
@@ -30,9 +30,7 @@ public class ORDER_REFUSE extends SerialMerchantAction{
 		merchantService.refuseOrder(order, merchant);
 		
 		//推送转单拒绝信息  参数：转单单号，转单父订单号
-		String msg = JsonAppender.newAppender().append("orderId", orderId).append("superOrderId", superOrderId).toString();
-		igtService.pushToSingle(merchant.getMemCid(order.getSuperMerchantId()).getClientId(), "", msg);
-		
+		JiLuPushUtil.OrderRefusePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
 		return Result.jsonSuccess();
 	}
 
