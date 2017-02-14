@@ -29,7 +29,9 @@ public enum JiLuCode implements ICode {
 	PACKET_NOT_EXIST(217, "packet {0} not exist"),
 	GOODS_DELETE_LIMIT(218, "can not delete other merchant goods {0}"),
 	ACCOUNT_ALREADY_BINDED(219, "account {0} already binded"),
-	WYYX_ACCOUNT_CREATE_FAIL(220, "get wyyx account fail");
+	WYYX_ACCOUNT_CREATE_FAIL(220, "get wyyx account fail"),
+	GET_WEIXIN_ACCESSTOKEN_FAIL(221, "get weixin access token fail"),
+	WEIXIN_ACCESSTOKEN_EXPAIRED(222, "weixin access_token expired");
 	
 	private int code;
 	private String defaultVaule;

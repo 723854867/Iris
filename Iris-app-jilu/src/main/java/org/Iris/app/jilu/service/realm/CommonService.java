@@ -5,22 +5,26 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
+import org.Iris.app.jilu.common.bean.form.WeiXinAccessTokenResult;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
+import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
-import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.storage.redis.RedisCache;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
-import org.omg.CORBA.PUBLIC_MEMBER;
+import org.Iris.redis.model.EXPX;
+import org.Iris.redis.model.NXXX;
+import org.Iris.util.common.JsonAppender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +38,8 @@ public class CommonService extends RedisCache {
 	private MerchantService merchantService;
 	@Resource
 	private MemAccountMapper memAccountMapper;
+	@Resource
+	private WeiXinService weiXinService;
 
 	/**
 	 * 登陆
@@ -77,5 +83,26 @@ public class CommonService extends RedisCache {
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
 		
+	}
+	/**
+	 * 通过客户端传入的code获取微信接口调用token
+	 * @param code
+	 * @return
+	 */
+	public String getAccessToken(String code){
+		WeiXinAccessTokenResult result = weiXinService.getAccessToken(code);
+		if(result.getAccess_token()!=null){
+			redisOperate.setnxpx(CommonKeyGenerator.weiXinAccessTokenKey(), result.getAccess_token(), NXXX.NX, EXPX.EX, Long.valueOf(result.getExpires_in()));
+		}
+//			return Result.jsonSuccess(result);
+//		
+//		String accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey());
+//		if(accessToken == null){
+//			String refreshToken = redisOperate.get(CommonKeyGenerator.weiXinRefreshTokenKey());
+//			if(refreshToken == null)
+//				return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
+//		}
+//		
+		return Result.jsonSuccess(); 
 	}
 }

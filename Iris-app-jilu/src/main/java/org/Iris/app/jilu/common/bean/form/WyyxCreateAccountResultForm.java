@@ -4,6 +4,7 @@ public class WyyxCreateAccountResultForm {
 
 	private int code;
 	private Result info;
+	private String desc;
 
 	public int getCode() {
 		return code;
@@ -21,7 +22,15 @@ public class WyyxCreateAccountResultForm {
 		this.info = info;
 	}
 
-	 public class Result {
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public class Result {
 		private String token;
 		private String accid;
 		private String name;

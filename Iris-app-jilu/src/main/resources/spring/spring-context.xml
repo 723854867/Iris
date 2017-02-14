@@ -26,7 +26,7 @@
 	</bean>
 	
 	 <!-- httpclient 配置 -->
-    <bean id="httpProxy" class="org.Iris.util.network.http.HttpProxy">
+    <bean id="httpProxy" class="org.Iris.util.network.http.HttpProxy" init-method="init">
 		<property name="syncHttp" ref="syncHttp"/>
 	</bean>
 	<bean id="syncHttp" class="org.Iris.util.network.http.SyncHttpAdapter">
@@ -42,6 +42,7 @@
 		<property name="jmsService" ref="jmsService" />
 		<property name="aliyunService" ref="aliyunService" />
 		<property name="wyyxService" ref="wyyxService" />
+		<property name="weiXinService" ref="weiXinService" />
 		<property name="locale" ref="lang" />
 	</bean>
 	

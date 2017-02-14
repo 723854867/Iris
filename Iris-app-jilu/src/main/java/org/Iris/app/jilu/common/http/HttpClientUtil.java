@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.service.realm.wyyx;
+package org.Iris.app.jilu.common.http;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,11 +13,10 @@ public class HttpClientUtil {
 
 	static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 	
-	public static URI setUri(String http,String ip,int port,String path){
+	public static URI setUri(String http,String host,String path){
 		URIBuilder builder = new URIBuilder();
 		builder.setScheme(http);
-		builder.setHost(ip);
-		builder.setPort(port);
+		builder.setHost(host);
 		builder.setPath(path);
 		try {
 			return builder.build();
@@ -28,6 +27,6 @@ public class HttpClientUtil {
 	}
 	
 	public static HttpPost getPost(ApiUri apiUri){
-		return new HttpPost(setUri(apiUri.getHttp(),apiUri.getIp(),apiUri.getPort(),apiUri.getPath()));
+		return new HttpPost(setUri(apiUri.getHttp(),apiUri.getHost(),apiUri.getPath()));
 	}
 }

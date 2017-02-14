@@ -841,6 +841,12 @@ public class Merchant implements Beans {
 		if(memAccid == null){
 			//通过网易云信接口获取
 			WyyxCreateAccountResultForm result = wyyxService.createWyyxIdAndToken(getMemMerchant().getMerchantId()+"_");
+			if(result.getCode() != 200){
+				if(result.getDesc().equals("already register"))
+					result = wyyxService.refreshWyyxIdAndToken(getMemMerchant().getMerchantId()+"_");
+				else
+					throw IllegalConstException.errorException(JiLuCode.WYYX_ACCOUNT_CREATE_FAIL);
+			}
 			memAccid = new MemAccid(getMemMerchant().getMerchantId(),result);
 			memAccidMapper.insert(memAccid);
 			redisOperate.hmset(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), memAccid);

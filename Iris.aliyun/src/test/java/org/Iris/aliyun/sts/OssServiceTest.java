@@ -10,15 +10,10 @@ import java.io.InputStream;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.ObjectMetadata;
 
 public class OssServiceTest {
 
 	public static void main(String[] args) throws IOException {
-		String secretToken = "CAIS4QN1q6Ft5B2yfSjIp4eNG8zEoZ5QgaWAYW3Ds0Q+RvhvgoLZlzz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4qssyXKphskMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhcL24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUcjc1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABjTXop89V+EQYTA+jCXXWjT6CBA1qO8q+S+6yiUeypbyqZHepX1kDqXtPsBO1Bbpb35q+1XF5FXtRV1mCBQRHsmCjCzat0pNojHtSSHpVy2QLrm+1gBVZXDDCD6DOXO8jzAgtizAkYUGTl+ueFDyQgNMKtn3ESR5l6MRSdXOWqN0=";
-		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.FD8PvpLAq6gkcKrWDkJwCmGru",
-				"FZx5N65rLKBcaBAKkwKHbVrrQboRY9bL3QpiN6YEdnt3", secretToken);
-		ossClient.getObject(new GetObjectRequest("jilu-test", "common/merchant/24/"),new File("C:\\Users\\Administrator\\Desktop\\3.jpg"));
 //		InputStream in = object.getObjectContent();
 //		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 //		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("C:\\Users\\Administrator\\Desktop\\3.jpg")));
@@ -29,18 +24,25 @@ public class OssServiceTest {
 //		while ((temp = in.read()) != -1) {// -1为文件读完的标志
 //			writer.write(temp);
 //		}
-		//System.out.println(new String(b,0,len));
-	    test();
+//		System.out.println(new String(b,0,len));
+	    get();
 	}
 
 	public static void test() throws FileNotFoundException {
-		String secretToken = "CAIS4QN1q6Ft5B2yfSjIp4eNG8zEoZ5QgaWAYW3Ds0Q+RvhvgoLZlzz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4qssyXKphskMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhcL24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUcjc1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABjTXop89V+EQYTA+jCXXWjT6CBA1qO8q+S+6yiUeypbyqZHepX1kDqXtPsBO1Bbpb35q+1XF5FXtRV1mCBQRHsmCjCzat0pNojHtSSHpVy2QLrm+1gBVZXDDCD6DOXO8jzAgtizAkYUGTl+ueFDyQgNMKtn3ESR5l6MRSdXOWqN0=";
-		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.FD8PvpLAq6gkcKrWDkJwCmGru",
-				"FZx5N65rLKBcaBAKkwKHbVrrQboRY9bL3QpiN6YEdnt3", secretToken);
+		String secretToken = "CAIS4QN1q6Ft5B2yfSjIqrDEIMKAuLZx5POncXLwgUwhes5CjYud1jz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4qssyAKLUUqMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhcL24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUcjc1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABAj8Rh7F4pXNhJsdRricy+AS1jhNYEmzrGzHKu4a3BviBjUfSKL2vxEZl05Epz92lf8e+8X0o04QgW1bu4hBN5/9Vrwa5GX1beUjHasqXeo4YB2jfa0RJ9RNVOBOG9NJ/6QKzyFNBtV6FkhKO3v8SPLL/WsD3o5WrzbJraReLfV0=";
+		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.Ksqkx4UiPS1LsTAeLtvAnbN64",
+				"GMiJBgAm9puvu7hkDEmpt5Qvd3ii8ULx7uiXhWucs4UP", secretToken);
 		
 		InputStream inputStream = new FileInputStream("C:\\Users\\Administrator\\Desktop\\2.jpg");
 		
-		ossClient.putObject("jilu-test", "common/merchant/24", inputStream);
+		ossClient.putObject("jilu-test", "common/merchant/test/fsd.jpg", inputStream);
+	}
+	
+	public static void get(){
+		String secretToken = "CAIS4QN1q6Ft5B2yfSjIqrDEIMKAuLZx5POncXLwgUwhes5CjYud1jz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4qssyAKLUUqMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhcL24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUcjc1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABAj8Rh7F4pXNhJsdRricy+AS1jhNYEmzrGzHKu4a3BviBjUfSKL2vxEZl05Epz92lf8e+8X0o04QgW1bu4hBN5/9Vrwa5GX1beUjHasqXeo4YB2jfa0RJ9RNVOBOG9NJ/6QKzyFNBtV6FkhKO3v8SPLL/WsD3o5WrzbJraReLfV0=";
+		OSSClient ossClient = new OSSClient("http://oss-cn-shanghai.aliyuncs.com", "STS.Ksqkx4UiPS1LsTAeLtvAnbN64",
+				"GMiJBgAm9puvu7hkDEmpt5Qvd3ii8ULx7uiXhWucs4UP", secretToken);
+		ossClient.getObject(new GetObjectRequest("jilu-test", "common/merchant/test/fsd.jpg"),new File("C:\\Users\\Administrator\\Desktop\\4.jpg"));
 	}
 
 	public static void testPolicy() {
