@@ -15,6 +15,7 @@ public class MerchantForm {
 	private int statusMod;
 	private String phone;
 	private String email;
+	private String weixin;
 	private String accid;
 	private String accidToken;
 	
@@ -91,6 +92,14 @@ public class MerchantForm {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
 	}
 
 	public String getAccid() {

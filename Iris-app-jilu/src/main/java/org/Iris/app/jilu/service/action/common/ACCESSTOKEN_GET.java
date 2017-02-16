@@ -14,7 +14,7 @@ public class ACCESSTOKEN_GET extends CommonAction{
 	@Override
 	protected String execute0(IrisSession session) {
 		String code = session.getKVParam(JiLuParams.CODE);
-		return null;
+		return commonService.getAccessToken(code);
 	}
 
 }

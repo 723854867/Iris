@@ -793,11 +793,18 @@ public class Merchant implements Beans {
 		MerchantForm merchantForm = new MerchantForm(this);
 		List<MemAccount> list = memAccountMapper.getByMerchantId(getMemMerchant().getMerchantId());
 		for(MemAccount memAccount : list){
-			if(memAccount.getType() == 0){
+			switch (memAccount.getType()) {
+			case 0:
 				merchantForm.setPhone(memAccount.getAccount());
-			}
-			if(memAccount.getType() == 1){
+				break;
+			case 1:
 				merchantForm.setEmail(memAccount.getAccount());
+				break;
+			case 2:
+				merchantForm.setWeixin(memAccount.getAccount());
+				break;
+			default:
+				break;
 			}
 		}
 		return Result.jsonSuccess(merchantForm);

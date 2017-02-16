@@ -577,10 +577,10 @@ public class MerchantService extends RedisCache {
 	public String insertGoods(CfgGoods memGoods,Merchant merchant) {
 		cfgGoodsMapper.insert(memGoods);
 		//目前在商户添加商品之后自动生成一条该商户商品的产品库信息
-		MemGoodsStore store = new MemGoodsStore(merchant.getMemMerchant().getMerchantId(), memGoods.getGoodsId(),memGoods.getZhName(), 100);
-		memGoodsStoreMapper.insert(store);
+		//MemGoodsStore store = new MemGoodsStore(merchant.getMemMerchant().getMerchantId(), memGoods.getGoodsId(),memGoods.getZhName(), 100);
+		//memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
-		redisOperate.hmset(store.redisKey(), store);
+		//redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess(memGoods);
 	}
 	

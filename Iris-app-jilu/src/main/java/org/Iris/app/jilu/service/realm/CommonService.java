@@ -65,11 +65,14 @@ public class CommonService extends RedisCache {
 			MerchantForm merchantForm = new MerchantForm(merchant);
 			List<MemAccount> list = memAccountMapper.getByMerchantId(merchantForm.getMerchantId());
 			for(MemAccount memAccount : list){
-				if(memAccount.getType() == 0){
+				switch (memAccount.getType()) {
+				case 0:
 					merchantForm.setPhone(memAccount.getAccount());
-				}
-				if(memAccount.getType() == 1){
+				case 1:
 					merchantForm.setEmail(memAccount.getAccount());
+				case 2:
+					merchantForm.setWeixin(memAccount.getAccount());
+				default:
 				}
 			}
 			//加网易云信账号信息
@@ -78,6 +81,10 @@ public class CommonService extends RedisCache {
 			merchantForm.setAccidToken(memAccid.getToken());
 			return Result.jsonSuccess(merchantForm);
 		case WECHAT:
+			String accessToken = redisOperate.hget(CommonKeyGenerator.weiXinAccessTokenKey(),account);
+			if(accessToken == null){
+				String freshToken = redisOperate.hget(CommonKeyGenerator.weiXinRefreshTokenKey(), account);
+			}
 			return Result.jsonSuccess();
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
@@ -93,16 +100,9 @@ public class CommonService extends RedisCache {
 		WeiXinAccessTokenResult result = weiXinService.getAccessToken(code);
 		if(result.getAccess_token()!=null){
 			redisOperate.setnxpx(CommonKeyGenerator.weiXinAccessTokenKey(), result.getAccess_token(), NXXX.NX, EXPX.EX, Long.valueOf(result.getExpires_in()));
+			redisOperate.hmget(CommonKeyGenerator.weiXinAccessTokenKey(), result.getOpenid(),result.getAccess_token());
+			redisOperate.hmget(CommonKeyGenerator.weiXinRefreshTokenKey(), result.getOpenid(),result.getRefresh_token());
 		}
-//			return Result.jsonSuccess(result);
-//		
-//		String accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey());
-//		if(accessToken == null){
-//			String refreshToken = redisOperate.get(CommonKeyGenerator.weiXinRefreshTokenKey());
-//			if(refreshToken == null)
-//				return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
-//		}
-//		
-		return Result.jsonSuccess(); 
+		return Result.jsonSuccess(result); 
 	}
 }

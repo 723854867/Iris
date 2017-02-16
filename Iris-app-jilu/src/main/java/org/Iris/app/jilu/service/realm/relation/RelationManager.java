@@ -50,7 +50,7 @@ public class RelationManager {
 			MemAccid memAccid = merchant.getMemAccid();
 			friendListModel.setFriendName(merchant.getMemMerchant().getName());
 			if(memAccid!=null){
-				friendListModel.setAccid(memAccid.getAccid());
+				friendListModel.setAccid(memAccid.getAccid());	
 				friendListModel.setToken(memAccid.getToken());
 			}
 			friendListModels.add(friendListModel);
