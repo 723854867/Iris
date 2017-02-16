@@ -13,6 +13,7 @@ import org.Iris.app.jilu.common.bean.enums.RelationMod;
 import org.Iris.app.jilu.common.bean.form.FriendApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.FriendApplyModel;
+import org.Iris.app.jilu.common.bean.model.FriendListModel;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
@@ -123,7 +124,7 @@ public class RelationService extends RedisCache {
 			scores[i] = tuple.getScore();
 			i++;
 		}
-		List<String> list = redisOperate.hmget(key, members);
+		List<String> list = redisOperate.hmget(MerchantKeyGenerator.friendApplyDataKey(merchant.getMemMerchant().getMerchantId()), members);
 		List<FriendApplyForm> data = new ArrayList<FriendApplyForm>();
 		for (i = 0; i < members.length; i++) {
 			String res = list.get(i);
@@ -197,7 +198,7 @@ public class RelationService extends RedisCache {
 		}
 	}
 	
-	public Pager<PubRelation> friendList(Merchant merchant, int page, int pageSize) { 
+	public Pager<FriendListModel> friendList(Merchant merchant, int page, int pageSize) { 
 		return relationManager.friendList(merchant.getMemMerchant().getMerchantId(), page, pageSize);
 	}
 	

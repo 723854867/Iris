@@ -23,7 +23,7 @@ public class FRIEND_APPLY extends ParallelMerchantAction {
 		Merchant target = merchantService.getMerchantById(targetId);
 		if (null == target)
 			return Result.jsonError(JiLuCode.TARGET_MERCHANT_NOT_EXIST);
-		relationService.apply(merchant, target, session.getKVParam(JiLuParams.MEMO));
-		return Result.jsonSuccess();
+		return relationService.apply(merchant, target, session.getKVParam(JiLuParams.MEMO));
+		 
 	}
 }

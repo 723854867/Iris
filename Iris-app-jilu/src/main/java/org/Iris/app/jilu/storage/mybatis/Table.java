@@ -15,7 +15,7 @@ public enum Table {
 	MEM_CID("mem_cid"),
 	MEM_ACCID("mem_accid"),
 	
-	RELATION("relation");
+	RELATION("pub_relation");
 	
 	private String mark;
 	
