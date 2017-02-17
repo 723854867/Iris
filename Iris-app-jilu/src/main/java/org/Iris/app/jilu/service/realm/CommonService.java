@@ -11,8 +11,10 @@ import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
+import org.Iris.app.jilu.storage.domain.BgConfig;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
+import org.Iris.app.jilu.storage.mybatis.mapper.BgConfigMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
@@ -23,8 +25,6 @@ import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.redis.model.EXPX;
-import org.Iris.redis.model.NXXX;
-import org.Iris.util.common.JsonAppender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,7 +40,8 @@ public class CommonService extends RedisCache {
 	private MemAccountMapper memAccountMapper;
 	@Resource
 	private WeiXinService weiXinService;
-
+	@Resource
+	private BgConfigMapper bgConfigMapper;
 	/**
 	 * 登陆
 	 * 
@@ -135,5 +136,16 @@ public class CommonService extends RedisCache {
 		}else{
 			throw IllegalConstException.errorException(JiLuCode.REFRESH_TOKEN_FAIL);
 		}
+	}
+	/**
+	 * 修改后台配置
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public String updateBgConfig(String key,String value){
+		bgConfigMapper.update(new BgConfig(key,value));
+		redisOperate.hset(CommonKeyGenerator.bgConfigDataKey(), key, value);
+		return Result.jsonSuccess();
 	}
 }

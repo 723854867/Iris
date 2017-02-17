@@ -2,6 +2,7 @@ package org.Iris.app.jilu.storage.mybatis;
 
 public enum Table {
 	
+	BG_CONFIG("bg_config"),
 	CFG_GOODS("cfg_goods"),
 
 	MEM_MERCHANT("mem_merchant"),
