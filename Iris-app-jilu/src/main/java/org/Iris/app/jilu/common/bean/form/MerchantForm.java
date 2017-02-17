@@ -15,7 +15,8 @@ public class MerchantForm {
 	private int statusMod;
 	private String phone;
 	private String email;
-	private String weixin;
+	private String openId;
+	private String accessToken;
 	private String accid;
 	private String accidToken;
 	
@@ -94,12 +95,12 @@ public class MerchantForm {
 		this.email = email;
 	}
 
-	public String getWeixin() {
-		return weixin;
+	public String getOpenId() {
+		return openId;
 	}
 
-	public void setWeixin(String weixin) {
-		this.weixin = weixin;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 	public String getAccid() {
@@ -117,6 +118,13 @@ public class MerchantForm {
 	public void setAccidToken(String accidToken) {
 		this.accidToken = accidToken;
 	}
-	
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 	
 }

@@ -51,45 +51,61 @@ public class CommonService extends RedisCache {
 	 * @throws Exception 
 	 */
 	public String login(AccountType type, String account, String captch){ 
+		String accessToken = null;
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
 			if (!courierService.verifyCaptch(type, account, captch))
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
-			
-			Merchant merchant = merchantService.getMerchantByAccount(type, account);
-			if (null == merchant)
-				merchant = merchantService.createMerchant(account, type);
-			if (!merchant.login(account, false))
-				return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
-			MerchantForm merchantForm = new MerchantForm(merchant);
-			List<MemAccount> list = memAccountMapper.getByMerchantId(merchantForm.getMerchantId());
-			for(MemAccount memAccount : list){
-				switch (memAccount.getType()) {
-				case 0:
-					merchantForm.setPhone(memAccount.getAccount());
-				case 1:
-					merchantForm.setEmail(memAccount.getAccount());
-				case 2:
-					merchantForm.setWeixin(memAccount.getAccount());
-				default:
-				}
-			}
-			//加网易云信账号信息
-			MemAccid memAccid = merchant.getMemAccid();
-			merchantForm.setAccid(memAccid.getAccid());
-			merchantForm.setAccidToken(memAccid.getToken());
-			return Result.jsonSuccess(merchantForm);
+			break;
 		case WECHAT:
-			String accessToken = redisOperate.hget(CommonKeyGenerator.weiXinAccessTokenKey(),account);
+			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
 			if(accessToken == null){
-				String freshToken = redisOperate.hget(CommonKeyGenerator.weiXinRefreshTokenKey(), account);
+				String freshToken = redisOperate.get(CommonKeyGenerator.weiXinRefreshTokenKey(account));
+				if(freshToken == null)
+					return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
+				accessToken = refreshAccessToken(freshToken);
+			}else{
+				if(!accessToken.equals(captch))
+					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
 			}
-			return Result.jsonSuccess();
+			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
 		
+		Merchant merchant = merchantService.getMerchantByAccount(type, account);
+		if (null == merchant)
+			merchant = merchantService.createMerchant(account, type);
+		if (!merchant.login(account, false))
+			return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
+		MerchantForm merchantForm = getMerchantForm(merchant);
+		merchantForm.setAccessToken(accessToken);
+		return Result.jsonSuccess(getMerchantForm(merchant));
+		
+	}
+	private MerchantForm getMerchantForm(Merchant merchant) {
+		MerchantForm merchantForm = new MerchantForm(merchant);
+		List<MemAccount> list = memAccountMapper.getByMerchantId(merchantForm.getMerchantId());
+		for(MemAccount memAccount : list){
+			switch (memAccount.getType()) {
+			case 0:
+				merchantForm.setPhone(memAccount.getAccount());
+				break;
+			case 1:
+				merchantForm.setEmail(memAccount.getAccount());
+				break;
+			case 2:
+				merchantForm.setOpenId(memAccount.getAccount());
+				break;
+			default:
+			}
+		}
+		//加网易云信账号信息
+		MemAccid memAccid = merchant.getMemAccid();
+		merchantForm.setAccid(memAccid.getAccid());
+		merchantForm.setAccidToken(memAccid.getToken());
+		return merchantForm;
 	}
 	/**
 	 * 通过客户端传入的code获取微信接口调用token
@@ -99,10 +115,25 @@ public class CommonService extends RedisCache {
 	public String getAccessToken(String code){
 		WeiXinAccessTokenResult result = weiXinService.getAccessToken(code);
 		if(result.getAccess_token()!=null){
-			redisOperate.setnxpx(CommonKeyGenerator.weiXinAccessTokenKey(), result.getAccess_token(), NXXX.NX, EXPX.EX, Long.valueOf(result.getExpires_in()));
-			redisOperate.hmget(CommonKeyGenerator.weiXinAccessTokenKey(), result.getOpenid(),result.getAccess_token());
-			redisOperate.hmget(CommonKeyGenerator.weiXinRefreshTokenKey(), result.getOpenid(),result.getRefresh_token());
+			redisOperate.setnxpx(CommonKeyGenerator.weiXinAccessTokenKey(result.getOpenid()), result.getAccess_token(), null, EXPX.EX, Long.valueOf(result.getExpires_in()));
+			//refreshToken 微信服务器30天过去 我们这里设置29天过期
+			redisOperate.setnxpx(CommonKeyGenerator.weiXinRefreshTokenKey(result.getOpenid()), result.getRefresh_token(), null, EXPX.EX, 29*24*60*60);
+			return Result.jsonSuccess(result); 
+		}else{
+			return Result.jsonError(result.getErrcode(), result.getErrmsg());
 		}
-		return Result.jsonSuccess(result); 
+		
+	}
+	
+	public String refreshAccessToken(String freshToken){
+		WeiXinAccessTokenResult result = weiXinService.refreshAccessToken(freshToken);
+		if(result.getAccess_token()!=null){
+			redisOperate.setnxpx(CommonKeyGenerator.weiXinAccessTokenKey(result.getOpenid()), result.getAccess_token(), null, EXPX.EX, Long.valueOf(result.getExpires_in()));
+			//refreshToken 微信服务器30天过去 我们这里设置29天过期
+			redisOperate.setnxpx(CommonKeyGenerator.weiXinRefreshTokenKey(result.getOpenid()), result.getRefresh_token(), null, EXPX.EX, 29*24*60*60);
+			return result.getAccess_token();
+		}else{
+			throw IllegalConstException.errorException(JiLuCode.REFRESH_TOKEN_FAIL);
+		}
 	}
 }

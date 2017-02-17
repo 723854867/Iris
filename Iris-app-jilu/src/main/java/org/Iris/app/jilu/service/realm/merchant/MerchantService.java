@@ -31,6 +31,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.storage.redis.RedisCache;
@@ -140,40 +141,48 @@ public class MerchantService extends RedisCache {
 	 * @param account
 	 */
 	public String bindingPhoneOrMobile(String account,AccountType type,String captch,long merchantId){
+		String accessToken = null;
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
 			if (!courierService.verifyCaptch(type, account, captch))
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
-			
-			Merchant merchant = getMerchantByAccount(type, account);
-			if(merchant != null)
-				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
-			MemAccount memAccount = BeanCreator.newMemAccount(type, account, DateUtils.currentTime(), merchantId);
-			try {
-				if(memAccountMapper.getByMerchantIdAndType(merchantId, type.mark()) == null)
-					memAccountMapper.insert(memAccount);
-				else{
-					memAccountMapper.update(memAccount);
-					redisOperate.hdel(MerchantKeyGenerator.accountMerchantMapKey(type),account);
-					redisOperate.hdel(MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()),account);
-				}
-			} catch (DuplicateKeyException e) {
-				return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
-			}
-			// 更新缓存
-			luaOperate.evalLua(JiLuLuaCommand.ACCOUNT_REFRESH.name(), 2, 
-					MerchantKeyGenerator.accountMerchantMapKey(type), 
-					MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()), 
-					account, 
-					String.valueOf(merchantId),
-					SerializeUtil.JsonUtil.GSON.toJson(memAccount));
-			return Result.jsonSuccess();
+			break;
 		case WECHAT:
-			return Result.jsonSuccess();
+			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
+			if(accessToken == null){
+				return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
+			}else{
+				if(!accessToken.equals(captch))
+					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
+			}
+			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
+		Merchant merchant = getMerchantByAccount(type, account);
+		if(merchant != null)
+			return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
+		MemAccount memAccount = BeanCreator.newMemAccount(type, account, DateUtils.currentTime(), merchantId);
+		try {
+			if(memAccountMapper.getByMerchantIdAndType(merchantId, type.mark()) == null)
+				memAccountMapper.insert(memAccount);
+			else{
+				memAccountMapper.update(memAccount);
+				redisOperate.hdel(MerchantKeyGenerator.accountMerchantMapKey(type),account);
+				redisOperate.hdel(MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()),account);
+			}
+		} catch (DuplicateKeyException e) {
+			return Result.jsonError(JiLuCode.ACCOUNT_ALREADY_BINDED.constId(),MessageFormat.format(JiLuCode.ACCOUNT_ALREADY_BINDED.defaultValue(), account));
+		}
+		// 更新缓存
+		luaOperate.evalLua(JiLuLuaCommand.ACCOUNT_REFRESH.name(), 2, 
+				MerchantKeyGenerator.accountMerchantMapKey(type), 
+				MerchantKeyGenerator.accountDataKey(memAccount.getMerchantId()), 
+				account, 
+				String.valueOf(merchantId),
+				SerializeUtil.JsonUtil.GSON.toJson(memAccount));
+		return Result.jsonSuccess();
 	}
 	
 	/**
@@ -576,11 +585,7 @@ public class MerchantService extends RedisCache {
 	@Transactional
 	public String insertGoods(CfgGoods memGoods,Merchant merchant) {
 		cfgGoodsMapper.insert(memGoods);
-		//目前在商户添加商品之后自动生成一条该商户商品的产品库信息
-		//MemGoodsStore store = new MemGoodsStore(merchant.getMemMerchant().getMerchantId(), memGoods.getGoodsId(),memGoods.getZhName(), 100);
-		//memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
-		//redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess(memGoods);
 	}
 	

@@ -31,7 +31,9 @@ public enum JiLuCode implements ICode {
 	ACCOUNT_ALREADY_BINDED(219, "account {0} already binded"),
 	WYYX_ACCOUNT_CREATE_FAIL(220, "get wyyx account fail"),
 	GET_WEIXIN_ACCESSTOKEN_FAIL(221, "get weixin access token fail"),
-	WEIXIN_ACCESSTOKEN_EXPAIRED(222, "weixin access_token expired");
+	WEIXIN_ACCESSTOKEN_EXPAIRED(222, "weixin access_token expired"),
+	ACCESSTOKEN_ERROR(223, "weixin access_token error"),
+	REFRESH_TOKEN_FAIL(224, "weixin refresh token fail");
 	
 	private int code;
 	private String defaultVaule;

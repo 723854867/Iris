@@ -26,12 +26,10 @@ public class WeiXinService {
 
 	private String appId;
 	private String appSecret;
-	private String grant_type;
 	
 	public void init(){
 		this.appId = "";
 		this.appSecret = "";
-		this.grant_type = "authorization_code";
 	}
 	
 	public WeiXinAccessTokenResult getAccessToken(String code){
@@ -45,6 +43,19 @@ public class WeiXinService {
 			return Beans.httpProxy.syncRequest(post, SyncJsonRespHandler.<WeiXinAccessTokenResult> build(WeiXinAccessTokenResult.class));
 		} catch (IOException e) {
 			throw IllegalConstException.errorException(JiLuCode.GET_WEIXIN_ACCESSTOKEN_FAIL);
+		}
+	}
+	
+	public WeiXinAccessTokenResult refreshAccessToken(String refresh_token){
+		HttpPost post = HttpClientUtil.getPost(ApiUri.WEIXIN_REFRESH_TOKEN);
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("appid", appId));
+		params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+		params.add(new BasicNameValuePair("refresh_token", refresh_token));
+		try {
+			return Beans.httpProxy.syncRequest(post, SyncJsonRespHandler.<WeiXinAccessTokenResult> build(WeiXinAccessTokenResult.class));
+		} catch (IOException e) {
+			throw IllegalConstException.errorException(JiLuCode.REFRESH_TOKEN_FAIL);
 		}
 	}
 
@@ -62,14 +73,6 @@ public class WeiXinService {
 
 	public void setAppSecret(String appSecret) {
 		this.appSecret = appSecret;
-	}
-
-	public String getGrant_type() {
-		return grant_type;
-	}
-
-	public void setGrant_type(String grant_type) {
-		this.grant_type = grant_type;
 	}
 	
 }

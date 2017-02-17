@@ -115,6 +115,7 @@ public class BeanCreator {
 		packet.setPacketId(packetId);;
 		packet.setOrderId(orderId);
 		packet.setMerchantId(merchantId);
+		packet.setStatus(3);
 		int time = DateUtils.currentTime();
 		packet.setCreated(time);
 		packet.setUpdated(time);

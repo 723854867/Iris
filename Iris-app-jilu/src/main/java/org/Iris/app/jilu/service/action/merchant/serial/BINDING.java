@@ -15,7 +15,19 @@ public class BINDING extends SerialMerchantAction{
 	@Override
 	protected String execute0(MerchantSession session) {
 		AccountType type = AccountType.match(session.getKVParamOptional(JiLuParams.TYPE));
-		String account = type == AccountType.MOBILE ? session.getKVParam(JiLuParams.MOBILE) : session.getKVParam(JiLuParams.EMAIL);
+		String account=null;
+		switch (type) {
+		case MOBILE:
+			account = session.getKVParam(JiLuParams.MOBILE);
+			break;
+		case EMAIL:
+			account = session.getKVParam(JiLuParams.EMAIL);
+			break;
+		case WECHAT:
+			account = session.getKVParam(JiLuParams.OPENID);
+			break;
+		default:
+		}
 		return merchantService.bindingPhoneOrMobile(account, type, session.getKVParam(JiLuParams.CAPTCHA), session.getMerchant().getMemMerchant().getMerchantId());
 	}
 

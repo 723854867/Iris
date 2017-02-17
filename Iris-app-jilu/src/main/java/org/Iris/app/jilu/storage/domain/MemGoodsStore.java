@@ -8,20 +8,23 @@ public class MemGoodsStore implements RedisHashBean{
 
 	private long merchantId;
 	private long goodsId;
+	private String goodsCode;
 	private String goodsName;
-	private int count;
+	private long count;
 	private int created;
 	private int updated;
 	
-	public MemGoodsStore(long merchantId, long goodsId,String goodsName ,int count) {
-		this.merchantId = merchantId;
-		this.goodsId = goodsId;
-		this.goodsName = goodsName;
+	public MemGoodsStore(CfgGoods cfgGoods , long count){
+		this.merchantId = Long.valueOf(cfgGoods.getSource());
+		this.goodsId = cfgGoods.getGoodsId();
+		this.goodsCode = cfgGoods.getGoodsCode();
+		this.goodsName = cfgGoods.getZhName();
 		this.count = count;
 		int time = DateUtils.currentTime();
 		this.created = time;
 		this.updated = time;
 	}
+	
 	public MemGoodsStore() {
 	}
 	public long getMerchantId() {
@@ -42,10 +45,10 @@ public class MemGoodsStore implements RedisHashBean{
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 	public int getCreated() {
@@ -60,6 +63,14 @@ public class MemGoodsStore implements RedisHashBean{
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
+	public String getGoodsCode() {
+		return goodsCode;
+	}
+
+	public void setGoodsCode(String goodsCode) {
+		this.goodsCode = goodsCode;
+	}
+
 	@Override
 	public String redisKey() {
 		return MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId);

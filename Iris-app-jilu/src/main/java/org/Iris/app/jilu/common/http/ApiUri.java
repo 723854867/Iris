@@ -21,7 +21,11 @@ public enum ApiUri {
 	/**
 	 * 获取微信第三方登陆token
 	 */
-	GET_WEIXIN_LOGIN_TOKEN("https","api.weixin.qq.com","/sns/oauth2/access_token");
+	GET_WEIXIN_LOGIN_TOKEN("https","api.weixin.qq.com","/sns/oauth2/access_token"),
+	/**
+	 * 刷新token
+	 */
+	WEIXIN_REFRESH_TOKEN("https","api.weixin.qq.com","/sns/oauth2/refresh_token");
 	
 	private String http;
 	private String host;

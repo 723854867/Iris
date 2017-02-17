@@ -37,6 +37,7 @@ public class MemCustomerSQLBuilder {
 				SET("mobile = #{mobile}");
 				SET("address = #{address}");
 				SET("memo = #{memo}");
+				SET("status_mod = #{statusMod}");
 				SET("updated = #{updated}");
 				WHERE("customer_id = #{customerId}");
 			}

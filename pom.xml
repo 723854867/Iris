@@ -445,5 +445,6 @@
 		<module>Iris-app-jilu-common</module>
 		<module>Iris.aliyun</module>
     	<module>Iris-igt</module>
-  </modules>
+    	<module>Iris-app-pay</module>
+	</modules>
 </project>

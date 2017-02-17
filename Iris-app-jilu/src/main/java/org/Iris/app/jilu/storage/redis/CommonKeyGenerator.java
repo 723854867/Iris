@@ -12,8 +12,8 @@ public final class CommonKeyGenerator {
 	
 	private static final String RELATION_MAP						= "hash:cache:relation:map";							//  
 	
-	private static final String WEIXIN_OPENID_ACCESS_TOKEN			= "hash:wenxin:access:token";					        // 微信用户对应access_token
-	private static final String WEIXIN_OPENID_REFRESH_TOKEN			= "hash:wenxin:refresh:token";					        // 微信应用refresh_token 用于刷新access_token
+	private static final String WEIXIN_OPENID_ACCESS_TOKEN			= "string:wenxin:{0}:access:token";					    // 微信用户对应access_token
+	private static final String WEIXIN_OPENID_REFRESH_TOKEN			= "string:wenxin:{0}:refresh:token";					// 微信应用refresh_token 用于刷新access_token
 	
 	public static final String accountCaptchaKey(AccountType type, String account) {
 		return MessageFormat.format(ACCOUNT_CAPTCHA, type.name().toLowerCase(), account);
@@ -33,12 +33,12 @@ public final class CommonKeyGenerator {
 		return RELATION_MAP;
 	}
 	
-	public static final String weiXinAccessTokenKey(){
-		return WEIXIN_OPENID_ACCESS_TOKEN;
+	public static final String weiXinAccessTokenKey(String openId){
+		return MessageFormat.format(WEIXIN_OPENID_ACCESS_TOKEN, openId);
 	}
 	
-	public static final String weiXinRefreshTokenKey(){
-		return WEIXIN_OPENID_REFRESH_TOKEN;
+	public static final String weiXinRefreshTokenKey(String openId){
+		return MessageFormat.format(WEIXIN_OPENID_REFRESH_TOKEN, openId);
 	}
 	
 	private static final String MEM_GOODS							= "hash:db:mem:{0}:goods";					

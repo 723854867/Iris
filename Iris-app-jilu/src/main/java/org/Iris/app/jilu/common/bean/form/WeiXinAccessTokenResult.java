@@ -32,7 +32,7 @@ public class WeiXinAccessTokenResult {
 	/**
 	 * 当接口调用失败时返回的错误码
 	 */
-	private String errcode;
+	private int errcode;
 	/**
 	 * 错误码对应的错误信息
 	 */
@@ -73,10 +73,10 @@ public class WeiXinAccessTokenResult {
 	public void setUnionid(String unionid) {
 		this.unionid = unionid;
 	}
-	public String getErrcode() {
+	public int getErrcode() {
 		return errcode;
 	}
-	public void setErrcode(String errcode) {
+	public void setErrcode(int errcode) {
 		this.errcode = errcode;
 	}
 	public String getErrmsg() {

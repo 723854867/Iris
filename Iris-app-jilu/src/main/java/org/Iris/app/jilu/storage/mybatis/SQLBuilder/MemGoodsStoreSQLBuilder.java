@@ -15,6 +15,7 @@ public class MemGoodsStoreSQLBuilder {
 				INSERT_INTO(Table.MEM_GOODS_STORE.mark());
 				VALUES("merchant_id", 		"#{merchantId}");
 				VALUES("goods_id", 			"#{goodsId}");
+				VALUES("goods_code", 		"#{goodsCode}");
 				VALUES("goods_name", 		"#{goodsName}");
 				VALUES("count", 			"#{count}");
 				VALUES("created", 			"#{created}");

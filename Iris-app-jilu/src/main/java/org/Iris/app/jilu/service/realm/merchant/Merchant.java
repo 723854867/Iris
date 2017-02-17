@@ -423,12 +423,7 @@ public class Merchant implements Beans {
 	 */
 	public void insertGoods(CfgGoods memGoods) {
 		cfgGoodsMapper.insert(memGoods);
-		// 目前在商户添加商品之后自动生成一条该商户商品的产品库信息
-		MemGoodsStore store = new MemGoodsStore(getMemMerchant().getMerchantId(), memGoods.getGoodsId(),
-				memGoods.getZhName(), 100);
-		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
-		redisOperate.hmset(store.redisKey(), store);
 	}
 	/**
 	 * 删除商品
@@ -796,19 +791,33 @@ public class Merchant implements Beans {
 			switch (memAccount.getType()) {
 			case 0:
 				merchantForm.setPhone(memAccount.getAccount());
-				break;
 			case 1:
 				merchantForm.setEmail(memAccount.getAccount());
-				break;
 			case 2:
-				merchantForm.setWeixin(memAccount.getAccount());
-				break;
+				merchantForm.setOpenId(memAccount.getAccount());
 			default:
-				break;
 			}
 		}
 		return Result.jsonSuccess(merchantForm);
 	}
+	/**
+	 * 添加产品仓储
+	 * @param goodsId
+	 * @param count
+	 * @return
+	 */
+	public String addGoodsStore(long goodsId,long count){
+		CfgGoods goods = getGoodsById(goodsId);
+		if(goods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		if(!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		MemGoodsStore store = new MemGoodsStore(goods,count);
+		memGoodsStoreMapper.insert(store);
+		redisOperate.hmset(store.redisKey(), store);
+		return Result.jsonSuccess(store);
+	}
+	
 	/**
 	 * 同步商户对应的个推cid
 	 * @param cid

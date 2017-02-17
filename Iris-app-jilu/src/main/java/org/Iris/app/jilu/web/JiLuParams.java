@@ -86,4 +86,6 @@ public interface JiLuParams {
 	final IrisLongConst GOODS_ID							= new IrisLongConst("goodsId", 149);
 	final IrisStrConst CID								    = new IrisStrConst("cid", 150);
 	final IrisStrConst CODE								    = new IrisStrConst("code", 151);
+	final IrisStrConst OPENID								= new IrisStrConst("openId", 152);
+	final IrisLongConst COUNT							    = new IrisLongConst("count",0, 153);
 }
