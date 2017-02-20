@@ -5,12 +5,12 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
-import org.Iris.app.jilu.common.bean.form.WeiXinAccessTokenResult;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
+import org.Iris.app.jilu.service.realm.weixin.result.WeiXinAccessTokenResult;
 import org.Iris.app.jilu.storage.domain.BgConfig;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;

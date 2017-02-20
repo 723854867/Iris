@@ -16,7 +16,6 @@ public class JiLu extends App {
 	private JmsService jmsService;
 	private AliyunService aliyunService;
 	private WyyxService wyyxService;
-	private WeiXinService weiXinService;
 	
 	public JiLu(String name) {
 		super(name);
@@ -32,8 +31,6 @@ public class JiLu extends App {
 		this.aliyunService.init();
 		// init wyyx service
 		this.wyyxService.init();
-		// init weixin service
-		this.weiXinService.init();
 	}
 
 	@Override
@@ -51,10 +48,6 @@ public class JiLu extends App {
 
 	public void setWyyxService(WyyxService wyyxService) {
 		this.wyyxService = wyyxService;
-	}
-
-	public void setWeiXinService(WeiXinService weiXinService) {
-		this.weiXinService = weiXinService;
 	}
 	
 }

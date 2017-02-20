@@ -33,7 +33,8 @@ public enum JiLuCode implements ICode {
 	GET_WEIXIN_ACCESSTOKEN_FAIL(221, "get weixin access token fail"),
 	WEIXIN_ACCESSTOKEN_EXPAIRED(222, "weixin access_token expired"),
 	ACCESSTOKEN_ERROR(223, "weixin access_token error"),
-	REFRESH_TOKEN_FAIL(224, "weixin refresh token fail");
+	REFRESH_TOKEN_FAIL(224, "weixin refresh token fail"),
+	UNIFORM_ORDER_FAIL(224, "weixin uniform order fail");
 	
 	private int code;
 	private String defaultVaule;

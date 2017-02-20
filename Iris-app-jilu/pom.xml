@@ -32,6 +32,12 @@
 			<artifactId>Iris-igt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.Iris</groupId>
+			<artifactId>Iris-app-pay</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet</groupId>

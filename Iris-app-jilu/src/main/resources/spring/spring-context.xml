@@ -42,7 +42,6 @@
 		<property name="jmsService" ref="jmsService" />
 		<property name="aliyunService" ref="aliyunService" />
 		<property name="wyyxService" ref="wyyxService" />
-		<property name="weiXinService" ref="weiXinService" />
 		<property name="locale" ref="lang" />
 	</bean>
 	

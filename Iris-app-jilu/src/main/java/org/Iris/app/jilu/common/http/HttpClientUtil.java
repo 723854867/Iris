@@ -2,7 +2,9 @@ package org.Iris.app.jilu.common.http;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.slf4j.Logger;
@@ -26,7 +28,25 @@ public class HttpClientUtil {
 		}
 	}
 	
+	public static String getUrl(String url,List<String> params){
+		String str = url;
+		if (params==null || params.size() == 0) {
+			return url;
+		}else{
+			for(int i= 0;i<params.size();i++){
+				if(i==0)
+					str+="?"+params.get(i);
+				str+="&"+params.get(i);
+			}
+			return str;
+		}
+	}
+	
 	public static HttpPost getPost(ApiUri apiUri){
 		return new HttpPost(setUri(apiUri.getHttp(),apiUri.getHost(),apiUri.getPath()));
+	}
+	
+	public static HttpGet getHttpGet(ApiUri apiUri){
+		return new HttpGet(setUri(apiUri.getHttp(),apiUri.getHost(),apiUri.getPath()));
 	}
 }

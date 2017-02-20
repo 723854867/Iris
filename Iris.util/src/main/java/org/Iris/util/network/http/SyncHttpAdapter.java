@@ -12,6 +12,7 @@ import javax.net.ssl.SSLException;
 
 import org.Iris.util.network.http.handler.SyncRespHandler;
 import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -129,6 +130,10 @@ public class SyncHttpAdapter extends HttpAdapter {
 	
 	public <T> T execute(HttpUriRequest request, SyncRespHandler<T> responseHandler) throws ClientProtocolException, IOException {
 		return httpClients.execute(request, responseHandler);
+	}
+	
+	HttpResponse execute(HttpUriRequest request) throws ClientProtocolException, IOException {
+		return httpClients.execute(request);
 	}
 	
 	public void setRetryCount(int retryCount) {

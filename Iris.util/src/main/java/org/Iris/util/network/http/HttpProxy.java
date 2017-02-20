@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.Iris.util.concurrent.DefaultThreadFactory;
 import org.Iris.util.network.http.handler.AsyncRespHandler;
 import org.Iris.util.network.http.handler.SyncRespHandler;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpUriRequest;
 
@@ -44,6 +45,10 @@ public class HttpProxy {
 	public <T> T syncRequest(HttpUriRequest request, SyncRespHandler<T> respHandler)
 			throws ClientProtocolException, IOException {
 		return this.syncHttp.execute(request, respHandler);
+	}
+	
+	public HttpResponse syncRequest(HttpUriRequest request) throws ClientProtocolException, IOException { 
+		return this.syncHttp.execute(request);
 	}
 
 	public void setAsyncHttp(AsyncHttpAdapter asyncHttp) {

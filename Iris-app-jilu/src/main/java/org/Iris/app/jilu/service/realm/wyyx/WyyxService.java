@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.Iris.app.jilu.common.Beans;
-import org.Iris.app.jilu.common.bean.form.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.common.http.ApiUri;
 import org.Iris.app.jilu.common.http.HttpClientUtil;
+import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.util.network.http.handler.SyncJsonRespHandler;

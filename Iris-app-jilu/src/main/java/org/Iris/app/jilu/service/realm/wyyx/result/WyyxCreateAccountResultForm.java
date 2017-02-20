@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.common.bean.form;
+package org.Iris.app.jilu.service.realm.wyyx.result;
 
 public class WyyxCreateAccountResultForm {
 

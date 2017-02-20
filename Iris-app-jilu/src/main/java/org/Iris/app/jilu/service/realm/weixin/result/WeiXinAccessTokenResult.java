@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.common.bean.form;
+package org.Iris.app.jilu.service.realm.weixin.result;
 /**
  * 调用微信access_token返回实体类
  * @author 樊水东

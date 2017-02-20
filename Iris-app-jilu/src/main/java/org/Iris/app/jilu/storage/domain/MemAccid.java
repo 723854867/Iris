@@ -1,6 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.app.jilu.common.bean.form.WyyxCreateAccountResultForm;
+import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 import org.Iris.util.lang.DateUtils;
