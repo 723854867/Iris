@@ -103,7 +103,7 @@ public class MemOrderSQLBuilder {
 	public String getChangeMerchantOrderList(){
 		return new SQL() {
 			{
-				SELECT("order_id,super_merchant_id,super_merchant_name,status");
+				SELECT("order_id,super_merchant_id,super_merchant_name,created");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("merchant_id=#{merchantId}");
 				AND();
@@ -115,7 +115,7 @@ public class MemOrderSQLBuilder {
 	public String getTransferMerchantOrderList(){
 		return new SQL() {
 			{
-				SELECT("order_id,merchant_id,merchant_name,status");
+				SELECT("order_id,merchant_id,merchant_name,created");
 				FROM(Table.MEM_ORDER.mark());
 				WHERE("super_merchant_id=#{superMerchantId}");
 				AND();

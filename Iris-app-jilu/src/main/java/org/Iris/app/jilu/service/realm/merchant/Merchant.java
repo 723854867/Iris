@@ -544,7 +544,7 @@ public class Merchant implements Beans {
 		for (MemOrder order : mList) {
 			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
 			orderChangeModels.add(new OrderChangeModel(order.getOrderId(), order.getSuperMerchantName(),
-					order.getSuperMerchantId(), order.getStatus(), list));
+					order.getSuperMerchantId(), order.getCreated(), list));
 		}
 		return orderChangeModels;
 	}

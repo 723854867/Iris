@@ -14,7 +14,7 @@ public class OrderChangeModel {
 	private String orderId;
 	private String superMerchantName;
 	private long superMerhcantId;
-	private int status;
+	private int created;
 	private List<MemOrderGoods> changeOrderGoodsList;
 
 	public OrderChangeModel() {
@@ -25,7 +25,7 @@ public class OrderChangeModel {
 		this.orderId = orderId;
 		this.superMerchantName = superMerchantName;
 		this.superMerhcantId = superMerhcantId;
-		this.status = status;
+		this.created = status;
 		this.changeOrderGoodsList = changeOrderGoodsList;
 	}
 
@@ -53,12 +53,12 @@ public class OrderChangeModel {
 		this.superMerhcantId = superMerhcantId;
 	}
 
-	public int getStatus() {
-		return status;
+	public int getCreated() {
+		return created;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setCreated(int created) {
+		this.created = created;
 	}
 
 	public List<MemOrderGoods> getChangeOrderGoodsList() {

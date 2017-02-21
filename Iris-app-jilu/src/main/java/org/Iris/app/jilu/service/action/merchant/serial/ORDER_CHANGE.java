@@ -30,9 +30,10 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 		MemOrder superOrder = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
 		if(null == superOrder)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		MemMerchant memMerchant = merchantService.getMerchantById(merchantId).getMemMerchant();
-		if(null == memMerchant)
+		
+		if(merchantService.getMerchantById(merchantId)==null)
 			throw IllegalConstException.errorException(JiLuParams.MERCHANTID);
+		MemMerchant memMerchant = merchantService.getMerchantById(merchantId).getMemMerchant();
 		List<MemOrderGoods> changeOrderGoods = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
 		if(null == changeOrderGoods || changeOrderGoods.size() == 0)
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
