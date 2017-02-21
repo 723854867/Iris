@@ -30,11 +30,10 @@ public class ORDER_EDIT extends SerialMerchantAction {
 		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
 		if(order == null)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		int status = order.getStatus();
-		if (status != 0) {
-			// 订单不能修改
+		if(order.getSuperMerchantId()!=0)
+			return Result.jsonError(JiLuCode.TRANSFORM_ORDER_CONNOT_UPDATED);
+		if (order.getStatus() != 0) 
 			return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
-		}
 		// 对传递的需要变更的产品列表进行验证
 		List<MemOrderGoods> addList = null;
 		List<MemOrderGoods> updateList = null;

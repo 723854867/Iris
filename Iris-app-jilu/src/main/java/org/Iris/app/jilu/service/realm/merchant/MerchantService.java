@@ -359,7 +359,7 @@ public class MerchantService extends RedisCache {
 		// 更新父订单产品状态
 		List<MemOrderGoods> superGoodsList = new ArrayList<MemOrderGoods>();
 		for (MemOrderGoods merchantOrderGoods : list) {
-			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getSuperOrderId(), merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+			MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(order.getSuperOrderId(), merchantOrderGoods.getGoodsId());
 			mOrderGoods.setStatus(0);
 			mOrderGoods.setUpdated(DateUtils.currentTime());
 			superGoodsList.add(mOrderGoods);
@@ -416,7 +416,7 @@ public class MerchantService extends RedisCache {
 		// 更新父订单产品状态
 		List<MemOrderGoods> superRecevieGoodsList = new ArrayList<MemOrderGoods>();
 		for (MemOrderGoods merchantOrderGoods : receiveGoodsList) {
-			MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+			MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(superOrderId, merchantOrderGoods.getGoodsId());
 			mOrderGoods.setStatus(7);
 			mOrderGoods.setUpdated(DateUtils.currentTime());
 			superRecevieGoodsList.add(mOrderGoods);
@@ -424,7 +424,7 @@ public class MerchantService extends RedisCache {
 		List<MemOrderGoods> superRefuseGoodsList = new ArrayList<MemOrderGoods>();
 		if (null != list && list.size() > 0) {
 			for (MemOrderGoods merchantOrderGoods : list) {
-				MemOrderGoods mOrderGoods = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderGoodsDataKey(superOrderId, merchantOrderGoods.getGoodsId()), new MemOrderGoods());
+				MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(superOrderId, merchantOrderGoods.getGoodsId());
 				mOrderGoods.setStatus(0);
 				mOrderGoods.setUpdated(DateUtils.currentTime());
 				superRefuseGoodsList.add(mOrderGoods);
