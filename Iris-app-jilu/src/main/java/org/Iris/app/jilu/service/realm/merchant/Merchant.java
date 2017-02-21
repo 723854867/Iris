@@ -557,7 +557,7 @@ public class Merchant implements Beans {
 			for (MemOrderGoods memOrderGoods : list)
 				orderGoodsForms.add(new OrderGoodsForm(memOrderGoods));
 			orderChangeModels.add(new TransferOrderModel(order.getOrderId(), order.getMerchantName(),
-					order.getMerchantId(), orderGoodsForms));
+					order.getMerchantId(),order.getCreated(), orderGoodsForms));
 		}
 		return orderChangeModels;
 	}

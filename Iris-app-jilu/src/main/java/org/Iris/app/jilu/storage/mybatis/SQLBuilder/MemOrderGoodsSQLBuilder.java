@@ -3,6 +3,7 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import java.util.List;
 
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.mybatis.MybatisUtil;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
@@ -31,10 +32,10 @@ public class MemOrderGoodsSQLBuilder {
 	public String batchInsert(StrictMap<List<MemOrderGoods>> map) {
 		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,packet_id,goods_id,goods_name,goods_image,count,unit_price,status,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,goods_id,goods_name,count,unit_price,status,created,updated) values ");
 		for(MemOrderGoods orderGoods:list){
-			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getPacketId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
-								+ ",'"+orderGoods.getGoodsImage()+"','"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
+			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
+								+ ",'"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
 								+ ",'"+orderGoods.getStatus()+"','"+orderGoods.getCreated()+"','"+orderGoods.getUpdated()+"'),");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
@@ -72,7 +73,7 @@ public class MemOrderGoodsSQLBuilder {
 		}
 		stringBuilder.append(" end, packet_id = case id");
 		for(MemOrderGoods orderGoods:list){
-			stringBuilder.append(" when "+orderGoods.getId()+" then '"+orderGoods.getPacketId()+"'");
+			stringBuilder.append(" when "+orderGoods.getId()+" then '"+MybatisUtil.checkNull(orderGoods.getPacketId())+"'");
 		}
 		stringBuilder.append(" end, status = case id");
 		for(MemOrderGoods orderGoods:list){
