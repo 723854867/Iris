@@ -89,4 +89,34 @@ public class JiLuPushUtil {
 			Beans.igtService.pushToSingle(memCid.getClientId(), IgtPushType.ORDER_STATUS_CHANGE.name(), msg);
 		}
 	}
+	/**
+	 * 好友申请推送
+	 * @param memCid
+	 * @param merchantId
+	 * @param name
+	 */
+	public static void FriendApplyPush(MemCid memCid, long merchantId,String name) {
+		if (memCid != null) {
+			String msg = JsonAppender.newAppender().append("type", IgtPushType.FRIEND_APPLY.mark())
+					.append("merchantId", merchantId).append("name", name)
+					.toString();
+			Beans.igtService.pushToSingle(memCid.getClientId(), IgtPushType.FRIEND_APPLY.name(), msg);
+		}
+	}
+	
+	/**
+	 * 好友申请处理推送
+	 * @param memCid
+	 * @param merchantId
+	 * @param name
+	 * @param type 是否接受申请
+	 */
+	public static void FriendApplyReplyPush(MemCid memCid, long merchantId,String name,int reply) {
+		if (memCid != null) {
+			String msg = JsonAppender.newAppender().append("type", IgtPushType.FRIEND_APPLY_REPLY.mark())
+					.append("merchantId", merchantId).append("name", name).append("reply", reply)
+					.toString();
+			Beans.igtService.pushToSingle(memCid.getClientId(), IgtPushType.FRIEND_APPLY_REPLY.name(), msg);
+		}
+	}
 }

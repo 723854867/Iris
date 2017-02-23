@@ -8,13 +8,16 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
+import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.RelationMod;
 import org.Iris.app.jilu.common.bean.form.FriendApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.FriendApplyModel;
 import org.Iris.app.jilu.common.bean.model.FriendListModel;
+import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.PubRelation;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
@@ -47,6 +50,8 @@ public class RelationService extends RedisCache {
 	private DistributeLock distributeLock;
 	@Resource
 	private RelationManager relationManager;
+	@Resource
+	private IgtService igtService;
 	
 	public Relation getRelation(String relationId) {
 		String key = CommonKeyGenerator.relationMapKey();
@@ -92,6 +97,9 @@ public class RelationService extends RedisCache {
 			if (!distributeLock.unLock(lockKey, lockId))
 				logger.warn("Relation lock {} release failure for lockId {}!", lockKey, lockId);
 		}
+		//推送好友申请  参数：id,名字
+		MemMerchant acceptorMerchant = acceptor.getMemMerchant();
+		JiLuPushUtil.FriendApplyPush(acceptor.getMemCid(acceptorMerchant.getMerchantId()),acceptorMerchant.getMerchantId(),acceptorMerchant.getName());
 		return Result.jsonSuccess();
 	}
 	
@@ -174,6 +182,8 @@ public class RelationService extends RedisCache {
 	}
 	
 	private String _rejectApply(Merchant merchant, FriendApplyModel applyModel) {
+		//推送好友申请处理  参数：id,名字，是否接受
+		JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 1);
 		return Result.jsonSuccess();
 	}
 	
@@ -191,6 +201,8 @@ public class RelationService extends RedisCache {
 			PubRelation pubRelation = BeanCreator.newRelation(id, applyModel.getApplier(), merchant.getMemMerchant().getMerchantId(), RelationMod.FRIEDN.mark());
 			relationManager.insert(pubRelation);
 			redisOperate.hset(CommonKeyGenerator.relationMapKey(), id, SerializeUtil.JsonUtil.GSON.toJson(pubRelation));
+			//推送好友申请处理  参数：id,名字，是否接受
+			JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 0);
 			return Result.jsonSuccess();
 		} finally {
 			if (!distributeLock.unLock(lockKey, lockId))

@@ -25,7 +25,9 @@ public enum IgtPushType {
 	/**
 	 * 订单状态改变
 	 */
-	ORDER_STATUS_CHANGE(4);
+	ORDER_STATUS_CHANGE(4),
+	FRIEND_APPLY(5),
+	FRIEND_APPLY_REPLY(6);
 	
 	private int mark;
 	
