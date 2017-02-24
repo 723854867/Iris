@@ -806,13 +806,13 @@ public class Merchant implements Beans {
 	 * @param count
 	 * @return
 	 */
-	public String addGoodsStore(long goodsId,long count){
+	public String addGoodsStore(long goodsId,long count,float price,String memo){
 		CfgGoods goods = getGoodsById(goodsId);
 		if(goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		if(!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		MemGoodsStore store = new MemGoodsStore(goods,count);
+		MemGoodsStore store = new MemGoodsStore(goods,count,price,memo);
 		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess(store);
