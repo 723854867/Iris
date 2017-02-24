@@ -15,6 +15,7 @@ public class GOODS_STORE_ADD extends ParallelMerchantAction{
 	protected String execute0(MerchantSession session) {
 		long goodsId = session.getKVParam(JiLuParams.GOODS_ID);
 		long count = session.getKVParam(JiLuParams.COUNT);
+		float price = session.getKVParam(JiLuParams.PRICE);
 		return session.getMerchant().addGoodsStore(goodsId, count);
 	}
 

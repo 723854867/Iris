@@ -98,8 +98,8 @@ public class RelationService extends RedisCache {
 				logger.warn("Relation lock {} release failure for lockId {}!", lockKey, lockId);
 		}
 		//推送好友申请  参数：id,名字
-		MemMerchant acceptorMerchant = acceptor.getMemMerchant();
-		JiLuPushUtil.FriendApplyPush(acceptor.getMemCid(acceptorMerchant.getMerchantId()),acceptorMerchant.getMerchantId(),acceptorMerchant.getName());
+		MemMerchant applierMerchant = applier.getMemMerchant();
+		JiLuPushUtil.FriendApplyPush(acceptor.getMemCid(acceptor.getMemMerchant().getMerchantId()),applierMerchant.getMerchantId(),applierMerchant.getName(),memo);
 		return Result.jsonSuccess();
 	}
 	

@@ -7,18 +7,25 @@ import org.Iris.util.lang.DateUtils;
 public class MemGoodsStore implements RedisHashBean{
 
 	private long merchantId;
+	private String merchantName;
 	private long goodsId;
 	private String goodsCode;
 	private String goodsName;
 	private long count;
+	private float price;
+	private String memo;
+	private int sign;//后期用于标记是否已经上传商品图片
 	private int created;
 	private int updated;
 	
-	public MemGoodsStore(CfgGoods cfgGoods , long count){
+	public MemGoodsStore(CfgGoods cfgGoods , long count,float price,String memo){
 		this.merchantId = Long.valueOf(cfgGoods.getSource());
+		this.merchantName = cfgGoods.getMerchantName();
 		this.goodsId = cfgGoods.getGoodsId();
 		this.goodsCode = cfgGoods.getGoodsCode();
 		this.goodsName = cfgGoods.getZhName();
+		this.price = price;
+		this.memo = memo;
 		this.count = count;
 		int time = DateUtils.currentTime();
 		this.created = time;
@@ -69,6 +76,38 @@ public class MemGoodsStore implements RedisHashBean{
 
 	public void setGoodsCode(String goodsCode) {
 		this.goodsCode = goodsCode;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public int getSign() {
+		return sign;
+	}
+
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
 
 	@Override

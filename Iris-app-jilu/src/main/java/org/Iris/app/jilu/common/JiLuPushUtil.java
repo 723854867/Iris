@@ -95,10 +95,10 @@ public class JiLuPushUtil {
 	 * @param merchantId
 	 * @param name
 	 */
-	public static void FriendApplyPush(MemCid memCid, long merchantId,String name) {
+	public static void FriendApplyPush(MemCid memCid, long merchantId,String name,String memo) {
 		if (memCid != null) {
 			String msg = JsonAppender.newAppender().append("type", IgtPushType.FRIEND_APPLY.mark())
-					.append("merchantId", merchantId).append("name", name)
+					.append("merchantId", merchantId).append("name", name).append("memo", memo)
 					.toString();
 			Beans.igtService.pushToSingle(memCid.getClientId(), IgtPushType.FRIEND_APPLY.name(), msg);
 		}

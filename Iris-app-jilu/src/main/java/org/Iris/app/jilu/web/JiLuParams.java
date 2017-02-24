@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.web;
 
+import org.Iris.core.consts.IrisFloatConst;
 import org.Iris.core.consts.IrisIntConst;
 import org.Iris.core.consts.IrisLongConst;
 import org.Iris.core.consts.IrisStrConst;
@@ -89,4 +90,5 @@ public interface JiLuParams {
 	final IrisStrConst OPENID								= new IrisStrConst("openId", 152);
 	final IrisLongConst COUNT							    = new IrisLongConst("count",0, 153);
 	final IrisStrConst KEY							        = new IrisStrConst("key", 154);
+	final IrisFloatConst PRICE							    = new IrisFloatConst("price", 155);
 }
