@@ -23,6 +23,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
@@ -31,6 +32,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
@@ -39,7 +41,6 @@ import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
-import org.Iris.util.common.JsonAppender;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
@@ -71,6 +72,8 @@ public class MerchantService extends RedisCache {
 	private CourierService courierService;
 	@Resource
 	private IgtService igtService;
+	@Resource
+	private StockGoodsStoreLogMapper stockGoodsStoreLogMapper;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -587,6 +590,27 @@ public class MerchantService extends RedisCache {
 		cfgGoodsMapper.insert(memGoods);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
 		return Result.jsonSuccess(memGoods);
+	}
+	
+	/**
+	 * 进货
+	 * @param goodsId
+	 * @param count
+	 * @param memo
+	 * @param merchant
+	 * @return
+	 */
+	public String stockGoodsStore(long goodsId, long count, String memo, Merchant merchant) {
+		MemGoodsStore store = merchant.getMemGoodsStore(goodsId);
+		if(store==null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		store.setCount(store.getCount()+count);
+		int time = DateUtils.currentTime();
+		store.setUpdated(time);
+		memGoodsStoreMapper.update(store);
+		stockGoodsStoreLogMapper.insert(new StockGoodsStoreLog(goodsId, memo, count, time));
+		redisOperate.hmset(store.redisKey(), store);
+		return null;
 	}
 	
 }

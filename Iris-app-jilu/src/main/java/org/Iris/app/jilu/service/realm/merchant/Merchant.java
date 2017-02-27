@@ -20,6 +20,7 @@ import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
+import org.Iris.app.jilu.common.bean.form.GoodsStoreForm;
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
@@ -149,7 +150,7 @@ public class Merchant implements Beans {
 		memMerchant.setStatusMod(MerchantStatusMod.QUALIFIED.mod());
 		_updateMerchant();
 		MerchantForm merchantForm = new MerchantForm(this);
-		//加网易云信账号信息
+		// 加网易云信账号信息
 		MemAccid memAccid = getMemAccid();
 		merchantForm.setAccid(memAccid.getAccid());
 		merchantForm.setAccidToken(memAccid.getToken());
@@ -380,16 +381,18 @@ public class Merchant implements Beans {
 			orderForms.add(new OrderForm(order));
 		return Result.jsonSuccess(orderForms);
 	}
-	
+
 	/**
 	 * 查找自己的所有订单基本信息
+	 * 
 	 * @return
 	 */
-	public String getMyOrderList(int page,int pageSize){
+	public String getMyOrderList(int page, int pageSize) {
 		long count = memOrderMapper.getOrderCountByMerchantId(getMemMerchant().getMerchantId());
 		if (count == 0)
 			return Result.jsonSuccess(Pager.EMPTY);
-		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),(page-1)*pageSize,pageSize);
+		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),
+				(page - 1) * pageSize, pageSize);
 		List<OrderForm> orderForms = new ArrayList<OrderForm>();
 		for (MemOrder order : list)
 			orderForms.add(new OrderForm(order));
@@ -425,17 +428,20 @@ public class Merchant implements Beans {
 		cfgGoodsMapper.insert(memGoods);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
 	}
+
 	/**
 	 * 删除商品
+	 * 
 	 * @param goodsId
 	 * @return
 	 */
-	public String removeGoods(long goodsId){
+	public String removeGoods(long goodsId) {
 		CfgGoods goods = getGoodsById(goodsId);
-		if(goods == null)
+		if (goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		if(!goods.getSource().equals(String.valueOf(getMemMerchant().getMerchantId())))
-			return Result.jsonError(JiLuCode.GOODS_DELETE_LIMIT.constId(), MessageFormat.format(JiLuCode.GOODS_DELETE_LIMIT.defaultValue(), goodsId));
+		if (!goods.getSource().equals(String.valueOf(getMemMerchant().getMerchantId())))
+			return Result.jsonError(JiLuCode.GOODS_DELETE_LIMIT.constId(),
+					MessageFormat.format(JiLuCode.GOODS_DELETE_LIMIT.defaultValue(), goodsId));
 		cfgGoodsMapper.delete(goods);
 		redisOperate.del(goods.redisKey());
 		return Result.jsonSuccess();
@@ -557,7 +563,7 @@ public class Merchant implements Beans {
 			for (MemOrderGoods memOrderGoods : list)
 				orderGoodsForms.add(new OrderGoodsForm(memOrderGoods));
 			orderChangeModels.add(new TransferOrderModel(order.getOrderId(), order.getMerchantName(),
-					order.getMerchantId(),order.getCreated(), orderGoodsForms));
+					order.getMerchantId(), order.getCreated(), orderGoodsForms));
 		}
 		return orderChangeModels;
 	}
@@ -664,12 +670,13 @@ public class Merchant implements Beans {
 		// 获取已打包的信息
 		List<MemOrderPacket> packets = memOrderPacketMapper.getMemOrderPacketByOrderId(orderId);
 		List<OrderPacketForm> packetList = new ArrayList<OrderPacketForm>();
-		for (MemOrderPacket memOrderPacket : packets){
-			List<MemOrderGoods> goodsList = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(memOrderPacket.getPacketId());
+		for (MemOrderPacket memOrderPacket : packets) {
+			List<MemOrderGoods> goodsList = memOrderGoodsMapper
+					.getPacketMerchantOrderGoodsByPacketId(memOrderPacket.getPacketId());
 			List<OrderGoodsForm> packetOrderGoodsList = new ArrayList<OrderGoodsForm>();
 			for (MemOrderGoods memOrderGoods : goodsList)
 				packetOrderGoodsList.add(new OrderGoodsForm(memOrderGoods));
-			packetList.add(new OrderPacketForm(memOrderPacket,packetOrderGoodsList));
+			packetList.add(new OrderPacketForm(memOrderPacket, packetOrderGoodsList));
 		}
 		// 获取子订单信息
 		List<MemOrder> childOrders = memOrderMapper.getChildOrderByOrderId(orderId);
@@ -706,7 +713,7 @@ public class Merchant implements Beans {
 			return Result.jsonSuccess(Pager.EMPTY);
 		List<MemGoodsStore> list = memGoodsStoreMapper.getMemGoodsStoreList((page - 1) * pageSize, pageSize,
 				getMemMerchant().getMerchantId());
-		return Result.jsonSuccess(new Pager<MemGoodsStore>(count, list));
+		return Result.jsonSuccess(new Pager<GoodsStoreForm>(count, GoodsStoreForm.getGoodsStoreFormList(list)));
 	}
 
 	public String getGoodsList(int page, int pageSize, String name, GoodsListType type) {
@@ -767,27 +774,29 @@ public class Merchant implements Beans {
 			forms.add(new CustomerForm(customer));
 		return Result.jsonSuccess(new Pager<CustomerForm>(count, forms));
 	}
-	
+
 	/**
 	 * 查看商品信息
+	 * 
 	 * @param goodsId
 	 * @return
 	 */
-	public String getGoodsInfo(long goodsId){
+	public String getGoodsInfo(long goodsId) {
 		CfgGoods goods = getGoodsById(goodsId);
-		if(goods == null)
+		if (goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		return Result.jsonSuccess(goods);
 	}
-	
+
 	/**
 	 * 获取商户信息
+	 * 
 	 * @return
 	 */
-	public String getMerchantInfo(){
+	public String getMerchantInfo() {
 		MerchantForm merchantForm = new MerchantForm(this);
 		List<MemAccount> list = memAccountMapper.getByMerchantId(getMemMerchant().getMerchantId());
-		for(MemAccount memAccount : list){
+		for (MemAccount memAccount : list) {
 			switch (memAccount.getType()) {
 			case 0:
 				merchantForm.setPhone(memAccount.getAccount());
@@ -800,74 +809,114 @@ public class Merchant implements Beans {
 		}
 		return Result.jsonSuccess(merchantForm);
 	}
+
 	/**
 	 * 添加产品仓储
+	 * 
 	 * @param goodsId
 	 * @param count
 	 * @return
 	 */
-	public String addGoodsStore(long goodsId,long count,float price,String memo){
+	public String addGoodsStore(long goodsId, long count, float price, String memo) {
 		CfgGoods goods = getGoodsById(goodsId);
-		if(goods == null)
+		if (goods == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		if(!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
+		if (!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		MemGoodsStore store = new MemGoodsStore(goods,count,price,memo);
+		MemGoodsStore store = new MemGoodsStore(goods, count, price, memo);
 		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(store.redisKey(), store);
-		return Result.jsonSuccess(store);
+		return Result.jsonSuccess(new GoodsStoreForm(store));
 	}
-	
+
 	/**
 	 * 同步商户对应的个推cid
+	 * 
 	 * @param cid
 	 * @return
 	 */
-	public String sycMerchantToCID(String cid,int type){
+	public String sycMerchantToCID(String cid, int type) {
 		long merchantId = getMemMerchant().getMerchantId();
 		MemCid memCid = new MemCid(merchantId, cid, type);
 		MemCid memCid_ = getMemCid(memMerchant.getMerchantId());
-		if(memCid_ == null){
+		if (memCid_ == null) {
 			memCidMapper.insert(memCid);
-		}else{
+		} else {
 			memCidMapper.update(memCid);
 		}
 		redisOperate.hmset(MerchantKeyGenerator.merchantCIDDataKey(merchantId), memCid);
 		return Result.jsonSuccess(memCid);
 	}
+
 	/**
 	 * 获取商户对应个推clientId
+	 * 
 	 * @return
 	 */
-	public MemCid getMemCid(long merchantId){
+	public MemCid getMemCid(long merchantId) {
 		MemCid memCid = redisOperate.hgetAll(MerchantKeyGenerator.merchantCIDDataKey(merchantId), new MemCid());
-		if(memCid == null)
+		if (memCid == null)
 			memCid = memCidMapper.getMemCid(merchantId);
 		return memCid;
 	}
+
 	/**
 	 * 获取网易云信账号
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	public MemAccid getMemAccid(){
-		MemAccid memAccid = redisOperate.hgetAll(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), new MemAccid());
-		if(memAccid == null)
+	public MemAccid getMemAccid() {
+		MemAccid memAccid = redisOperate
+				.hgetAll(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), new MemAccid());
+		if (memAccid == null)
 			memAccid = memAccidMapper.getMemAccid(getMemMerchant().getMerchantId());
-		if(memAccid == null){
-			//通过网易云信接口获取
-			WyyxCreateAccountResultForm result = wyyxService.createWyyxIdAndToken(getMemMerchant().getMerchantId()+"_");
-			if(result.getCode() != 200){
-				if(result.getDesc().equals("already register"))
-					result = wyyxService.refreshWyyxIdAndToken(getMemMerchant().getMerchantId()+"_");
+		if (memAccid == null) {
+			// 通过网易云信接口获取
+			WyyxCreateAccountResultForm result = wyyxService
+					.createWyyxIdAndToken(getMemMerchant().getMerchantId() + "_");
+			if (result.getCode() != 200) {
+				if (result.getDesc().equals("already register"))
+					result = wyyxService.refreshWyyxIdAndToken(getMemMerchant().getMerchantId() + "_");
 				else
 					throw IllegalConstException.errorException(JiLuCode.WYYX_ACCOUNT_CREATE_FAIL);
 			}
-			memAccid = new MemAccid(getMemMerchant().getMerchantId(),result);
+			memAccid = new MemAccid(getMemMerchant().getMerchantId(), result);
 			memAccidMapper.insert(memAccid);
 			redisOperate.hmset(MerchantKeyGenerator.merchantACCIDDataKey(getMemMerchant().getMerchantId()), memAccid);
 		}
 		return memAccid;
+	}
+
+	/**
+	 * 修改商品仓储
+	 * @param memo
+	 * @param count
+	 * @param price
+	 * @return
+	 */
+	public String updateGoodsStore(long goodsId,String memo, long count, float price) {
+		MemGoodsStore store = getMemGoodsStore(goodsId);
+		if(store == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		store.setMemo(memo);
+		store.setCount(count);
+		store.setPrice(price);
+		store.setUpdated(DateUtils.currentTime());
+		memGoodsStoreMapper.update(store);
+		redisOperate.hmset(store.redisKey(), store);
+		return Result.jsonSuccess();
+	}
+
+	public MemGoodsStore getMemGoodsStore(long goodsId) {
+		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(memMerchant.getMerchantId(), goodsId),
+				new MemGoodsStore());
+		if(store == null){
+			store = memGoodsStoreMapper.getMemGoodsStoreById(memMerchant.getMerchantId(), goodsId);
+			if(store != null)
+				redisOperate.hmset(store.redisKey(), store);
+		}
+		return store;
 	}
 
 	/**
@@ -892,4 +941,5 @@ public class Merchant implements Beans {
 		if (!distributeLock.unLock(lock, lockId))
 			logger.warn("Merchant lock {} release failure for lockId {}!", lock, lockId);
 	}
+
 }

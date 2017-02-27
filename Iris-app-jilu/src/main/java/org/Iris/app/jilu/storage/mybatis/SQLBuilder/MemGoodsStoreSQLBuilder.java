@@ -14,9 +14,12 @@ public class MemGoodsStoreSQLBuilder {
 			{
 				INSERT_INTO(Table.MEM_GOODS_STORE.mark());
 				VALUES("merchant_id", 		"#{merchantId}");
+				VALUES("merchant_name", 	"#{merchantName}");
 				VALUES("goods_id", 			"#{goodsId}");
 				VALUES("goods_code", 		"#{goodsCode}");
 				VALUES("goods_name", 		"#{goodsName}");
+				VALUES("price", 			"#{price}");
+				VALUES("memo", 				"#{memo}");
 				VALUES("count", 			"#{count}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
@@ -39,7 +42,9 @@ public class MemGoodsStoreSQLBuilder {
 		return new SQL(){
 			{
 				UPDATE(Table.MEM_GOODS_STORE.mark());
-				SET("store=#{store}");
+				SET("price=#{price}");
+				SET("memo=#{memo}");
+				SET("count=#{count}");
 				SET("updated=#{updated}");
 				WHERE("merchant_id=#{merchantId}");
 				AND();

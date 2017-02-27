@@ -16,7 +16,8 @@ public enum Table {
 	MEM_CID("mem_cid"),
 	MEM_ACCID("mem_accid"),
 	
-	RELATION("pub_relation");
+	RELATION("pub_relation"),
+	LOG_STOCK_STORE("log_stock_store");
 	
 	private String mark;
 	
