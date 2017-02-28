@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.mybatis.Table;
@@ -75,7 +76,35 @@ public class MemGoodsStoreSQLBuilder {
 		}.toString();
 	}
 	
+	public String getCountByName(Map<String, Object> para){
+		return new SQL(){
+			{
+				SELECT("count(1)");
+				FROM(Table.MEM_GOODS_STORE.mark());
+				WHERE("goods_name like '%"+para.get("goodsName")+"%'");
+			}
+		}.toString();
+	}
+	
+	public String getCountByCode(){
+		return new SQL(){
+			{
+				SELECT("count(1)");
+				FROM(Table.MEM_GOODS_STORE.mark());
+				WHERE("goods_code=#{goodsCode}");
+			}
+		}.toString();
+	}
+	
 	public String getMemGoodsStoreList(){
 		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where merchant_id=#{merchantId} LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getMemGoodsStoreListByName(Map<String, Object> para){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where goods_name like '%"+para.get("goodsName")+"%' LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getMemGoodsStoreListByCode(){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where goods_code = #{goodsCode} LIMIT #{start},#{pageSize}";
 	}
 }

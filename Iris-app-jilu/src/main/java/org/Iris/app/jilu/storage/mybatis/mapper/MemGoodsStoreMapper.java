@@ -28,4 +28,16 @@ public interface MemGoodsStoreMapper {
 	
 	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreList")
 	List<MemGoodsStore> getMemGoodsStoreList(@Param("start")int page,@Param("pageSize")int pageSize,@Param("merchantId")long merhcantId);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getCountByName")
+	long getCountByName(@Param("goodsName")String goodsName);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreListByName")
+	List<MemGoodsStore> getMemGoodsStoreListByName(@Param("start")int page,@Param("pageSize")int pageSize,@Param("goodsName")String goodsName);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getCountByCode")
+	long getCountByCode(String goodsCode);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreListByCode")
+	List<MemGoodsStore> getMemGoodsStoreListByCode(@Param("start")int page,@Param("pageSize")int pageSize,@Param("goodsCode")String goodsCode);
 }

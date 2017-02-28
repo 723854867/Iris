@@ -12,6 +12,7 @@ public class StockGoodsStoreLogSQLBuilder {
 				VALUES("goods_id", 		 "#{goodsId}");
 				VALUES("merchant_id",    "#{merchantId}");
 				VALUES("count",	   		 "#{count}");
+				VALUES("price",	   		 "#{price}");
 				VALUES("memo",    		 "#{memo}");
 				VALUES("created", 		 "#{created}");
 			}

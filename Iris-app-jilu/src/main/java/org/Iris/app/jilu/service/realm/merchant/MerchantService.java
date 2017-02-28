@@ -600,7 +600,7 @@ public class MerchantService extends RedisCache {
 	 * @param merchant
 	 * @return
 	 */
-	public String stockGoodsStore(long goodsId, long count, String memo, Merchant merchant) {
+	public String stockGoodsStore(long goodsId, long count, float price , String memo, Merchant merchant) {
 		MemGoodsStore store = merchant.getMemGoodsStore(goodsId);
 		if(store==null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
@@ -608,9 +608,9 @@ public class MerchantService extends RedisCache {
 		int time = DateUtils.currentTime();
 		store.setUpdated(time);
 		memGoodsStoreMapper.update(store);
-		stockGoodsStoreLogMapper.insert(new StockGoodsStoreLog(goodsId, memo, count, time));
+		stockGoodsStoreLogMapper.insert(new StockGoodsStoreLog(goodsId,merchant.getMemMerchant().getMerchantId(),memo, price,count, time));
 		redisOperate.hmset(store.redisKey(), store);
-		return null;
+		return Result.jsonSuccess();
 	}
 	
 }

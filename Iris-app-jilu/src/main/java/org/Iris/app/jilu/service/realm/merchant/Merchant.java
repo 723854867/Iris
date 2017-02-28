@@ -918,6 +918,29 @@ public class Merchant implements Beans {
 		}
 		return store;
 	}
+	
+	/**
+	 * 搜索商品仓储
+	 * @param type
+	 * @param value
+	 * @return
+	 */
+	public String searchGoodsStore(int type, String value,int page,int pageSize) {
+		long count = 0;
+		List<MemGoodsStore> list = new ArrayList<MemGoodsStore>();
+		switch (type) {
+		case 0:
+			count = memGoodsStoreMapper.getCountByName(value);
+			list = memGoodsStoreMapper.getMemGoodsStoreListByName((page - 1) * pageSize, pageSize, value);
+			break;
+		case 1:
+			count = memGoodsStoreMapper.getCountByCode(value);
+			list = memGoodsStoreMapper.getMemGoodsStoreListByCode((page - 1) * pageSize, pageSize, value);
+		}
+		if (count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		return Result.jsonSuccess(new Pager<GoodsStoreForm>(count, GoodsStoreForm.getGoodsStoreFormList(list)));
+	}
 
 	/**
 	 * 判断商户的客户排序列表是否已经加载
