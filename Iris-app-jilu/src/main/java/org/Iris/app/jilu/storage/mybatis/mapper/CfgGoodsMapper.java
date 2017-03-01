@@ -32,9 +32,16 @@ public interface CfgGoodsMapper {
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getCountByMerchantId")
 	long getCountByMerchantId(long merchantId);
 	
+	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getCountByCode")
+	long getCountByCode(String goodsCode);
+	
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsListByGoodsName")
 	List<CfgGoods> getGoodsListByGoodsName(@Param("start")int page,@Param("pageSize")int pageSize,@Param("zhName")String zhName);
 	
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsListByMerchantId")
 	List<CfgGoods> getGoodsListByMerchantId(@Param("start")int page,@Param("pageSize")int pageSize,@Param("merchantId") long merchantId);
+	
+	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsListByCode")
+	List<CfgGoods> getGoodsListByCode(@Param("start")int page,@Param("pageSize")int pageSize,@Param("goodsCode") String goodsCode);
+
 }

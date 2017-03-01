@@ -6,7 +6,9 @@ package org.Iris.app.jilu.storage.domain;
  */
 public class StockGoodsStoreLog {
 	private long goodsId;
+	private String goodsName;
 	private long merchantId;
+	private String merchantName;
 	private String memo;
 	private float price;
 	private long count;
@@ -15,10 +17,12 @@ public class StockGoodsStoreLog {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public StockGoodsStoreLog(long goodsId, Long merchantId,String memo, Float price,long count, int created) {
+	public StockGoodsStoreLog(long goodsId, String goodsName,Long merchantId,String merchantName,String memo, Float price,long count, int created) {
 		super();
 		this.goodsId = goodsId;
+		this.goodsName = goodsName;
 		this.merchantId = merchantId;
+		this.merchantName = merchantName;
 		this.memo = memo;
 		this.price = price;
 		this.count = count;
@@ -59,6 +63,18 @@ public class StockGoodsStoreLog {
 	}
 	public void setPrice(float price) {
 		this.price = price;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public String getMerchantName() {
+		return merchantName;
+	}
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 	
 	

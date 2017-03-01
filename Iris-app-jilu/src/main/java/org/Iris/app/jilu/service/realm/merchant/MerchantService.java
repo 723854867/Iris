@@ -608,7 +608,8 @@ public class MerchantService extends RedisCache {
 		int time = DateUtils.currentTime();
 		store.setUpdated(time);
 		memGoodsStoreMapper.update(store);
-		stockGoodsStoreLogMapper.insert(new StockGoodsStoreLog(goodsId,merchant.getMemMerchant().getMerchantId(),memo, price,count, time));
+		stockGoodsStoreLogMapper.insert(new StockGoodsStoreLog(goodsId,store.getGoodsName(),
+				merchant.getMemMerchant().getMerchantId(),merchant.getMemMerchant().getName(),memo, price,count, time));
 		redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess();
 	}

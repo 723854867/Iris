@@ -20,7 +20,9 @@ import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
+import org.Iris.app.jilu.common.bean.form.GoodsStoreAndStockForm;
 import org.Iris.app.jilu.common.bean.form.GoodsStoreForm;
+import org.Iris.app.jilu.common.bean.form.GoodsStoreSearchForm;
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
@@ -42,6 +44,8 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
+import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -927,19 +931,42 @@ public class Merchant implements Beans {
 	 */
 	public String searchGoodsStore(int type, String value,int page,int pageSize) {
 		long count = 0;
-		List<MemGoodsStore> list = new ArrayList<MemGoodsStore>();
+		List<CfgGoods> list = new ArrayList<CfgGoods>();
+		List<GoodsStoreSearchForm> forms = new ArrayList<GoodsStoreSearchForm>();
 		switch (type) {
 		case 0:
-			count = memGoodsStoreMapper.getCountByName(value);
-			list = memGoodsStoreMapper.getMemGoodsStoreListByName((page - 1) * pageSize, pageSize, value);
+			count = cfgGoodsMapper.getCountByGoodsName(value);
+			list = cfgGoodsMapper.getGoodsListByGoodsName((page - 1) * pageSize, pageSize, value);
 			break;
 		case 1:
-			count = memGoodsStoreMapper.getCountByCode(value);
-			list = memGoodsStoreMapper.getMemGoodsStoreListByCode((page - 1) * pageSize, pageSize, value);
+			count = cfgGoodsMapper.getCountByCode(value);
+			list = cfgGoodsMapper.getGoodsListByCode((page - 1) * pageSize, pageSize, value);
 		}
 		if (count == 0)
 			return Result.jsonSuccess(Pager.EMPTY);
-		return Result.jsonSuccess(new Pager<GoodsStoreForm>(count, GoodsStoreForm.getGoodsStoreFormList(list)));
+		for(CfgGoods cfgGoods : list){
+			MemGoodsStore goodsStore = getMemGoodsStore(cfgGoods.getGoodsId());
+			if(goodsStore == null){
+				forms.add(new GoodsStoreSearchForm(cfgGoods));
+			}else{
+				forms.add(new GoodsStoreSearchForm(goodsStore));
+			}
+		}
+		
+		return Result.jsonSuccess(new Pager<GoodsStoreSearchForm>(count, forms));
+	}
+	
+	/**
+	 * 获取商品的仓储数据（包括最近进货记录）
+	 * @param goodsId
+	 * @return
+	 */
+	public String getGoodsStoreInfo(long goodsId) {
+		MemGoodsStore goodsStore = getMemGoodsStore(goodsId);
+		if(null== goodsStore)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		List<StockGoodsStoreLog> logs = stockGoodsStoreLogMapper.getLogListByGoodsId(goodsId);
+		return Result.jsonSuccess(new GoodsStoreAndStockForm(goodsStore,logs));
 	}
 
 	/**
@@ -964,5 +991,6 @@ public class Merchant implements Beans {
 		if (!distributeLock.unLock(lock, lockId))
 			logger.warn("Merchant lock {} release failure for lockId {}!", lock, lockId);
 	}
+
 
 }

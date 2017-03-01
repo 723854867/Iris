@@ -7,10 +7,12 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.FriendListModel;
+import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
-import org.Iris.app.jilu.storage.domain.MemAccid;
+import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.PubRelation;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.RelationMapper;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,8 @@ public class RelationManager {
 	private RelationMapper relationMapper;
 	@Resource
 	private MerchantService merchantService;
+	@Resource
+	private MemAccountMapper memAccountMapper;
 	
 	public PubRelation getById(String relationId) { 
 		return relationMapper.getById(relationId);
@@ -47,12 +51,17 @@ public class RelationManager {
 			friendListModel.setFriendId(friendId);
 			friendListModel.setCreated(pubRelation.getCreated());
 			Merchant merchant = merchantService.getMerchantById(friendId);
-			MemAccid memAccid = merchant.getMemAccid();
+			//MemAccid memAccid = merchant.getMemAccid();
 			friendListModel.setFriendName(merchant.getMemMerchant().getName());
-			if(memAccid!=null){
-				friendListModel.setAccid(memAccid.getAccid());	
-				friendListModel.setToken(memAccid.getToken());
-			}
+//			if(memAccid!=null){
+//				friendListModel.setAccid(memAccid.getAccid());	
+//				friendListModel.setToken(memAccid.getToken());
+//			}
+			//加入手机号码和地址
+			friendListModel.setAddress(merchant.getMemMerchant().getAddress());
+			MemAccount account = memAccountMapper.getByMerchantIdAndType(friendId, AccountType.MOBILE.mark());
+			if(account!=null)
+				friendListModel.setMobile(account.getAccount());
 			friendListModels.add(friendListModel);
 		}
 		return new Pager<FriendListModel>(total, friendListModels);

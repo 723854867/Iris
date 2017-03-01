@@ -10,7 +10,9 @@ public class StockGoodsStoreLogSQLBuilder {
 			{
 				INSERT_INTO(Table.LOG_STOCK_STORE.mark());
 				VALUES("goods_id", 		 "#{goodsId}");
+				VALUES("goods_name", 	 "#{goodsName}");
 				VALUES("merchant_id",    "#{merchantId}");
+				VALUES("merchant_name",  "#{merchantName}");
 				VALUES("count",	   		 "#{count}");
 				VALUES("price",	   		 "#{price}");
 				VALUES("memo",    		 "#{memo}");
@@ -29,5 +31,9 @@ public class StockGoodsStoreLogSQLBuilder {
 				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
+	}
+	
+	public String getLogListByGoodsId(){
+		return "select * from "+Table.LOG_STOCK_STORE.mark()+" where goods_id=#{goodsId} order by created desc limit 0,20";
 	}
 }

@@ -14,7 +14,7 @@ public class MemGoodsStore implements RedisHashBean{
 	private long count;
 	private float price;
 	private String memo;
-	private int sign;//后期用于标记是否已经上传商品图片
+	private int statusMod;//后期用于标记是否已经上传商品图片
 	private int created;
 	private int updated;
 	
@@ -94,12 +94,12 @@ public class MemGoodsStore implements RedisHashBean{
 		this.memo = memo;
 	}
 
-	public int getSign() {
-		return sign;
+	public int getStatusMod() {
+		return statusMod;
 	}
 
-	public void setSign(int sign) {
-		this.sign = sign;
+	public void setStatusMod(int statusMod) {
+		this.statusMod = statusMod;
 	}
 
 	public float getPrice() {

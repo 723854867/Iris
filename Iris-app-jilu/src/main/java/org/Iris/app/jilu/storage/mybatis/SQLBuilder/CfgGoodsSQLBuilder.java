@@ -87,6 +87,16 @@ public class CfgGoodsSQLBuilder {
 		}.toString();
 	}
 	
+	public String getCountByCode(){
+		return new SQL(){
+			{
+				SELECT("count(1)");
+				FROM(Table.CFG_GOODS.mark());
+				WHERE("goods_code=#{goodsCode}");
+			}
+		}.toString();
+	}
+	
 	public String getCountByMerchantId(){
 		return new SQL(){
 			{
@@ -96,9 +106,12 @@ public class CfgGoodsSQLBuilder {
 			}
 		}.toString();
 	}
-	
 	public String getGoodsListByGoodsName(Map<String, Object> para){
 		return "select * from "+Table.CFG_GOODS.mark()+" where zh_name like '%"+para.get("zhName")+"%' LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getGoodsListByCode(){
+		return "select * from "+Table.CFG_GOODS.mark()+" where goods_code = #{goodsCode} LIMIT #{start},#{pageSize}";
 	}
 	
 	public String getGoodsListByMerchantId(){

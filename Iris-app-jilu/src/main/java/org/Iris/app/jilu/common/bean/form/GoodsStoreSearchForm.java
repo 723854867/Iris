@@ -1,13 +1,12 @@
 package org.Iris.app.jilu.common.bean.form;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.Iris.app.jilu.common.JiLuResourceUtil;
+import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 
-public class GoodsStoreForm {
-	
+public class GoodsStoreSearchForm {
+
+	private int isCreated;
 	private long merchantId;
 	private String merchantName;
 	private long goodsId;
@@ -18,10 +17,16 @@ public class GoodsStoreForm {
 	private int statusMod;
 	private String goodsImage;
 	
-	public GoodsStoreForm(){
+	public GoodsStoreSearchForm(CfgGoods cfgGoods){
+		this.isCreated = 0;
+		this.merchantId = Long.valueOf(cfgGoods.getSource());
+		this.merchantName = cfgGoods.getMerchantName();
+		this.goodsId = cfgGoods.getGoodsId();
+		this.goodsName = cfgGoods.getZhName();
 	}
 	
-	public GoodsStoreForm(MemGoodsStore store){
+	public GoodsStoreSearchForm(MemGoodsStore store) {
+		this.isCreated = 1;
 		this.merchantId = store.getMerchantId();
 		this.merchantName = store.getMerchantName();
 		this.goodsId = store.getGoodsId();
@@ -32,14 +37,12 @@ public class GoodsStoreForm {
 		this.statusMod = store.getStatusMod();
 		this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
 	}
-	
-	public static List<GoodsStoreForm> getGoodsStoreFormList(List<MemGoodsStore> mList){
-		List<GoodsStoreForm> list = new ArrayList<GoodsStoreForm>();
-		for(MemGoodsStore store : mList)
-			list.add(new GoodsStoreForm(store));
-		return list;
+	public int getIsCreated() {
+		return isCreated;
 	}
-	
+	public void setIsCreated(int isCreated) {
+		this.isCreated = isCreated;
+	}
 	public long getMerchantId() {
 		return merchantId;
 	}
@@ -85,16 +88,15 @@ public class GoodsStoreForm {
 	public int getStatusMod() {
 		return statusMod;
 	}
-
 	public void setStatusMod(int statusMod) {
 		this.statusMod = statusMod;
 	}
-
 	public String getGoodsImage() {
 		return goodsImage;
 	}
 	public void setGoodsImage(String goodsImage) {
 		this.goodsImage = goodsImage;
 	}
+	
 	
 }

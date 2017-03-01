@@ -15,4 +15,7 @@ public interface StockGoodsStoreLogMapper {
 	
 	@SelectProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "getLogList")
 	List<StockGoodsStoreLog> getLogList(@Param("goodsId")long goodsId,@Param("merchantId") long merchantId);
+	
+	@SelectProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "getLogListByGoodsId")
+	List<StockGoodsStoreLog> getLogListByGoodsId(@Param("goodsId")long goodsId);
 }

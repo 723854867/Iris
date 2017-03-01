@@ -5,9 +5,16 @@ import java.util.List;
 
 import org.Iris.app.jilu.common.JiLuResourceUtil;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
+import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 
-public class GoodsStoreForm {
-	
+/**
+ * 商品仓储信息（包括进货记录）
+ * 
+ * @author fansd
+ *
+ */
+public class GoodsStoreAndStockForm {
+
 	private long merchantId;
 	private String merchantName;
 	private long goodsId;
@@ -17,11 +24,13 @@ public class GoodsStoreForm {
 	private String memo;
 	private int statusMod;
 	private String goodsImage;
-	
-	public GoodsStoreForm(){
+	// 进货记录
+	private List<StockGoodsStoreLog> stockGoodsStoreLogs;
+
+	public GoodsStoreAndStockForm() {
 	}
-	
-	public GoodsStoreForm(MemGoodsStore store){
+
+	public GoodsStoreAndStockForm(MemGoodsStore store, List<StockGoodsStoreLog> stockGoodsStoreLogs) {
 		this.merchantId = store.getMerchantId();
 		this.merchantName = store.getMerchantName();
 		this.goodsId = store.getGoodsId();
@@ -31,57 +40,65 @@ public class GoodsStoreForm {
 		this.memo = store.getMemo();
 		this.statusMod = store.getStatusMod();
 		this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
+		this.stockGoodsStoreLogs = stockGoodsStoreLogs;
 	}
-	
-	public static List<GoodsStoreForm> getGoodsStoreFormList(List<MemGoodsStore> mList){
-		List<GoodsStoreForm> list = new ArrayList<GoodsStoreForm>();
-		for(MemGoodsStore store : mList)
-			list.add(new GoodsStoreForm(store));
-		return list;
-	}
-	
+
 	public long getMerchantId() {
 		return merchantId;
 	}
+
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
 	}
+
 	public String getMerchantName() {
 		return merchantName;
 	}
+
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
 	}
+
 	public long getGoodsId() {
 		return goodsId;
 	}
+
 	public void setGoodsId(long goodsId) {
 		this.goodsId = goodsId;
 	}
+
 	public String getGoodsName() {
 		return goodsName;
 	}
+
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
+
 	public long getCount() {
 		return count;
 	}
+
 	public void setCount(long count) {
 		this.count = count;
 	}
+
 	public float getPrice() {
 		return price;
 	}
+
 	public void setPrice(float price) {
 		this.price = price;
 	}
+
 	public String getMemo() {
 		return memo;
 	}
+
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+
 	public int getStatusMod() {
 		return statusMod;
 	}
@@ -90,11 +107,19 @@ public class GoodsStoreForm {
 		this.statusMod = statusMod;
 	}
 
+	public List<StockGoodsStoreLog> getStockGoodsStoreLogs() {
+		return stockGoodsStoreLogs;
+	}
+
+	public void setStockGoodsStoreLogs(List<StockGoodsStoreLog> stockGoodsStoreLogs) {
+		this.stockGoodsStoreLogs = stockGoodsStoreLogs;
+	}
+
 	public String getGoodsImage() {
 		return goodsImage;
 	}
+
 	public void setGoodsImage(String goodsImage) {
 		this.goodsImage = goodsImage;
 	}
-	
 }

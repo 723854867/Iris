@@ -1,7 +1,5 @@
 package org.Iris.app.jilu.common.bean.model;
 
-import org.Iris.app.jilu.storage.domain.PubRelation;
-
 /**
  * 好友列表模板
  * @author 樊水东
@@ -13,6 +11,8 @@ public class FriendListModel {
 	private long friendId;
 	//好友名字
 	private String friendName;
+	private String mobile;
+	private String address;
 	//好友云信账号
 	private String accid;
 	//好友云信密码
@@ -62,6 +62,22 @@ public class FriendListModel {
 
 	public void setCreated(int created) {
 		this.created = created;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 	
