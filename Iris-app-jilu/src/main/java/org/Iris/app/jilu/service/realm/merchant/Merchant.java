@@ -26,6 +26,7 @@ import org.Iris.app.jilu.common.bean.form.GoodsStoreSearchForm;
 import org.Iris.app.jilu.common.bean.form.MerchantForm;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
+import org.Iris.app.jilu.common.bean.form.OrderGoodsStoreInfoForm;
 import org.Iris.app.jilu.common.bean.form.OrderPacketForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
@@ -968,6 +969,29 @@ public class Merchant implements Beans {
 		List<StockGoodsStoreLog> logs = stockGoodsStoreLogMapper.getLogListByGoodsId(goodsId);
 		return Result.jsonSuccess(new GoodsStoreAndStockForm(goodsStore,logs));
 	}
+	/**
+	 * 订单未处理产品以及库存查询
+	 * @param orderId
+	 * @return
+	 */
+	public String orderGoodsStoreInfo(String orderId) {
+		MemOrder memOrder = getMerchantOrderById(memMerchant.getMerchantId(), orderId);
+		if(memOrder == null)
+			throw IllegalConstException.errorException(JiLuParams.ORDERID);
+		List<MemOrderGoods> list = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByOrderId(orderId);
+		List<OrderGoodsStoreInfoForm> orderGoodsStoreInfoForms = new ArrayList<OrderGoodsStoreInfoForm>();
+		for(MemOrderGoods memOrderGoods : list){
+			long goodsId = memOrderGoods.getGoodsId();
+			MemGoodsStore store = getMemGoodsStore(goodsId);
+			if(null == store){
+				orderGoodsStoreInfoForms.add(new OrderGoodsStoreInfoForm(goodsId, memOrderGoods.getGoodsName(), memOrderGoods.getCount(), 0, 0,0));
+			}else{
+				orderGoodsStoreInfoForms.add(new OrderGoodsStoreInfoForm(goodsId, memOrderGoods.getGoodsName(), memOrderGoods.getCount(), 1, store.getCount(), store.getPrice()));
+			}
+		}
+		return Result.jsonSuccess(orderGoodsStoreInfoForms);
+	}
+	
 
 	/**
 	 * 判断商户的客户排序列表是否已经加载
