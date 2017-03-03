@@ -27,7 +27,7 @@ public class HttpProxy {
 		if (null != this.syncHttp)
 			this.syncHttp.init();
 
-		this.executorService = Executors.newSingleThreadScheduledExecutor(new DefaultThreadFactory(HttpProxy.class));
+		this.executorService = Executors.newSingleThreadScheduledExecutor(new DefaultThreadFactory(HttpProxy.class,true));
 		this.future = this.executorService.scheduleWithFixedDelay(new Runnable() {
 			public void run() {
 				if (null != asyncHttp)
