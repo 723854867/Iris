@@ -25,9 +25,9 @@ public class MemOrderPacketSQLBuilder {
 	public String batchInsert(StrictMap<List<MemOrderPacket>> map) {
 		List<MemOrderPacket> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_ORDER_PACKET.mark()+" (packet_id,order_id,merchant_id,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_ORDER_PACKET.mark()+" (packet_id,order_id,merchant_id,`status`,created,updated) values ");
 		for(MemOrderPacket packet:list){
-			stringBuilder.append("('"+packet.getPacketId()+"','"+packet.getOrderId()+"','"+packet.getMerchantId()+"','"+packet.getCreated()+"','"+packet.getUpdated()+"'),");
+			stringBuilder.append("('"+packet.getPacketId()+"','"+packet.getOrderId()+"','"+packet.getMerchantId()+"','"+packet.getStatus()+"','"+packet.getCreated()+"','"+packet.getUpdated()+"'),");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();
