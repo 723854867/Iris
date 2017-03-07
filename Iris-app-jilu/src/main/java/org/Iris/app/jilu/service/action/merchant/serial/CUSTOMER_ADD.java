@@ -18,7 +18,7 @@ public class CUSTOMER_ADD extends SerialMerchantAction {
 	@Override
 	protected String execute0(MerchantSession session) {
 		String name = session.getKVParam(JiLuParams.NAME);
-		String mobile = session.getKVParam(JiLuParams.MOBILE);
+		String mobile = session.getKVParam(JiLuParams.PHONES);
 		String address = session.getKVParam(JiLuParams.ADDRESS);
 		String memo = session.getKVParam(JiLuParams.MEMO);
 		String IDNumber = session.getKVParam(JiLuParams.ID_NUMBER);

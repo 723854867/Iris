@@ -10,8 +10,6 @@ public class MemOrderStatusSQLBuilder {
 			{
 				INSERT_INTO(Table.MEM_ORDER_STATUS.mark());
 				VALUES("order_id", 				  "#{orderId}");
-				VALUES("goods_count",			  "#{goodsCount}");
-				VALUES("transform_success_count", "#{transformSuccessCount}");
 				VALUES("transform_count", 		  "#{transformCount}");
 				VALUES("packet_count", 			  "#{packetCount}");
 				VALUES("transport_count",		  "#{transportCount}");
@@ -24,8 +22,6 @@ public class MemOrderStatusSQLBuilder {
 		return new SQL(){
 			{
 				UPDATE(Table.MEM_ORDER_STATUS.mark());
-				SET("goods_count=#{goodsCount}");
-				SET("transform_success_count=#{transformSuccessCount}");
 				SET("transform_count=#{transformCount}");
 				SET("packet_count=#{packetCount}");
 				SET("transport_count=#{transportCount}");

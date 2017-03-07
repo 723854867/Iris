@@ -91,4 +91,5 @@ public interface JiLuParams {
 	final IrisLongConst COUNT							    = new IrisLongConst("count",0, 153);
 	final IrisStrConst KEY							        = new IrisStrConst("key", 154);
 	final IrisFloatConst PRICE							    = new IrisFloatConst("price", 155);
+	final IrisStrConst PHONES 							    = new IrisStrConst("phones", 156);
 }

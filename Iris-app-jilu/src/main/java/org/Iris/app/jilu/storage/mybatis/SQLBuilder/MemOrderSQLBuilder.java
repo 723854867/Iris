@@ -69,6 +69,7 @@ public class MemOrderSQLBuilder {
 				VALUES("customer_name", 		"#{customerName}");
 				VALUES("customer_mobile", 		"#{customerMobile}");
 				VALUES("customer_address", 		"#{customerAddress}");
+				VALUES("memo", 					"#{memo}");
 				VALUES("status", 				"#{status}");
 				VALUES("created", 				"#{created}");
 				VALUES("updated", 				"#{updated}");
@@ -82,6 +83,7 @@ public class MemOrderSQLBuilder {
 			{
 				UPDATE(Table.MEM_ORDER.mark());
 				SET("status=#{status}");
+				SET("memo=#{memo}");
 				SET("updated=#{updated}");
 				WHERE("order_id=#{orderId}");
 			}
@@ -148,7 +150,7 @@ public class MemOrderSQLBuilder {
 				AND();
 				WHERE("status=2");
 				ORDER_BY("created");
-			}
+			}	
 		}.toString();
 	}
 	

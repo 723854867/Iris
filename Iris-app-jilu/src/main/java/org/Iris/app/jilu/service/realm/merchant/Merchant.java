@@ -494,12 +494,12 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess(new GoodsPagerForm(memGoods));
 	}
 
-	public MemOrderGoods getMerchantOrderGoodsById(String orderId, long goodsId) {
-		String key = MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goodsId);
+	public MemOrderGoods getMerchantOrderGoodsById(long id) {
+		String key = MerchantKeyGenerator.merchantOrderGoodsDataKey(id);
 		MemOrderGoods merchantOrderGoods = redisOperate.hgetAll(key, new MemOrderGoods());
 		if (merchantOrderGoods != null)
 			return merchantOrderGoods;
-		merchantOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsByOrderId(orderId, goodsId);
+		merchantOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsById(id);
 		if (null != merchantOrderGoods)
 			redisOperate.hmset(merchantOrderGoods.redisKey(), merchantOrderGoods);
 		return merchantOrderGoods;

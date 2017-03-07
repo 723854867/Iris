@@ -24,13 +24,19 @@ public class ORDER_ADD extends ParallelMerchantAction {
 	protected String execute0(MerchantSession session) {
 		String goodsList = session.getKVParam(JiLuParams.GOODSLIST);
 		long customerId = session.getKVParam(JiLuParams.CUSTOMER_ID);
+		String memo = session.getKVParamOptional(JiLuParams.MEMO);
 		Merchant merchant = session.getMerchant();
-		List<MemOrderGoods> list = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
-		if(list==null || list.size() == 0)
+		List<MemOrderGoods> list = new ArrayList<MemOrderGoods>();
+		try {
+			list = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
+			if(list.size() == 0)
+				throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
+		} catch (Exception e) {
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
+		}
 		MemCustomer customer = merchant.getCustomer(customerId);
 		if(customer == null)
 			throw IllegalConstException.errorException(JiLuParams.CUSTOMER_ID);
-		return merchantService.createOrder(customer, list,merchant);
+		return merchantService.createOrder(customer, list,memo,merchant);
 	}
 }

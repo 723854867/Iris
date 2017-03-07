@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,25 +29,21 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 		MemOrder superOrder = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
 		if(null == superOrder)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		
-		if(merchantService.getMerchantById(merchantId)==null)
+		if(superOrder.getStatus() > 4)//订单在完成之后不可进行操作
+			return Result.jsonError(JiLuCode.ORDER_CONNOT_OPTION);
+		MemMerchant targetMerchant = merchantService.getMerchantById(merchantId).getMemMerchant();
+		if(targetMerchant==null)
 			throw IllegalConstException.errorException(JiLuParams.MERCHANTID);
-		MemMerchant memMerchant = merchantService.getMerchantById(merchantId).getMemMerchant();
-		List<MemOrderGoods> changeOrderGoods = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
-		if(null == changeOrderGoods || changeOrderGoods.size() == 0)
+		//List<MemOrderGoods> changeOrderGoods = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
+		List<MemOrderGoods> changeOrderGoods = new ArrayList<MemOrderGoods>();
+		try {
+			changeOrderGoods = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(goodsList, MemOrderGoods[].class)));
+			if(changeOrderGoods.size() == 0)
+				throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
+		} catch (Exception e) {
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
-		
-		List<MemOrderGoods> list = new ArrayList<MemOrderGoods>();
-		for (MemOrderGoods ogs : changeOrderGoods) {
-			MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
-			if (mGood == null)
-				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
-			if (mGood.getStatus() != 0)
-				return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), ogs.getGoodsId()));
-			list.add(mGood);
 		}
-		
-		return Result.jsonSuccess(merchantService.orderChange(superOrder,memMerchant,list,merchant));
+		return merchantService.orderChange(superOrder,targetMerchant,changeOrderGoods,merchant);
 	}
 
 	

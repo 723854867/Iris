@@ -6,8 +6,6 @@ import org.Iris.redis.RedisHashBean;
 public class MemOrderStatus implements RedisHashBean{
 
 	private String orderId;
-	private int goodsCount;
-	private int transformSuccessCount;
 	private int transformCount;
 	private int packetCount;
 	private int transportCount;
@@ -18,17 +16,14 @@ public class MemOrderStatus implements RedisHashBean{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public MemOrderStatus(String orderId, int goodsCount) {
+	public MemOrderStatus(String orderId) {
 		this.orderId = orderId;
-		this.goodsCount = goodsCount;
 	}
 	
-	public MemOrderStatus(String orderId, int goodsCount, int transformSuccessCount, int transformCount,
+	public MemOrderStatus(String orderId, int transformCount,
 			int packetCount, int transportCount, int finishedCount) {
 		super();
 		this.orderId = orderId;
-		this.goodsCount = goodsCount;
-		this.transformSuccessCount = transformSuccessCount;
 		this.transformCount = transformCount;
 		this.packetCount = packetCount;
 		this.transportCount = transportCount;
@@ -39,18 +34,6 @@ public class MemOrderStatus implements RedisHashBean{
 	}
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
-	}
-	public int getGoodsCount() {
-		return goodsCount;
-	}
-	public void setGoodsCount(int goodsCount) {
-		this.goodsCount = goodsCount;
-	}
-	public int getTransformSuccessCount() {
-		return transformSuccessCount;
-	}
-	public void setTransformSuccessCount(int transformSuccessCount) {
-		this.transformSuccessCount = transformSuccessCount;
 	}
 	public int getTransformCount() {
 		return transformCount;

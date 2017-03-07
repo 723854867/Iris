@@ -80,7 +80,7 @@ public class BeanCreator {
 	}
 	
 	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName,String memchantAddress, long customerId, String customerName,
-			String customerMobile, String customerAddress, int status){
+			String customerMobile, String customerAddress, String memo,int status){
 		MemOrder memOrder = new MemOrder();
 		memOrder.setOrderId(orderId);
 		memOrder.setMerchantId(merchantId);
@@ -91,6 +91,7 @@ public class BeanCreator {
 		memOrder.setCustomerMobile(customerMobile);
 		memOrder.setCustomerAddress(customerAddress);
 		memOrder.setStatus(status);
+		memOrder.setMemo(memo);
 		memOrder.setRootOrderId(orderId);
 		int time = DateUtils.currentTime();
 		memOrder.setCreated(time);

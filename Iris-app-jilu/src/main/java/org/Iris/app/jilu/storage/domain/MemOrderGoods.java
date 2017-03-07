@@ -114,7 +114,8 @@ public class MemOrderGoods implements RedisHashBean{
 
 	@Override
 	public String redisKey() {
-		return MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goodsId);
+		//return MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goodsId);
+		return MerchantKeyGenerator.merchantOrderGoodsDataKey(id);
 	}
 
 }

@@ -17,6 +17,7 @@ public class MemOrder implements RedisHashBean{
 	private String customerName;
 	private String customerMobile;
 	private String customerAddress;
+	private String memo;
 	private int status;
 	private int created;
 	private int updated;
@@ -132,6 +133,14 @@ public class MemOrder implements RedisHashBean{
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 
 	public int getCreated() {
