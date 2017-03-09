@@ -37,7 +37,8 @@ public enum JiLuCode implements ICode {
 	UNIFORM_ORDER_FAIL(225, "weixin uniform order fail"),
 	TRANSFORM_ORDER_CONNOT_UPDATED(226, "transform order connot updated"),
 	ORDER_CONNOT_OPTION(227, "order connot option"),
-	CHANGE_SUM_BIGGER(228, "change sum bigger");
+	CHANGE_SUM_BIGGER(228, "change sum bigger"),
+	PACKET_COUNT_ERROR(229, "order packet count error");
 	
 	private int code;
 	private String defaultVaule;

@@ -362,37 +362,51 @@ public class MerchantService extends RedisCache {
 	 */
 	@Transactional
 	public void refuseOrder(MemOrder order,Merchant merchant) {
+		int time = DateUtils.currentTime();
 		// 删除转单订单即子订单
 		memOrderMapper.delete(order.getMerchantId(),order.getOrderId());
 		// 删除转单产品列表
 		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
-		memOrderGoodsMapper.batchDelete(list);
 		// 更新父订单产品状态
-		List<MemOrderGoods> superGoodsList = new ArrayList<MemOrderGoods>();
+		List<MemOrderGoods> updateList = new ArrayList<MemOrderGoods>();
+		List<MemOrderGoods> deleteList = new ArrayList<MemOrderGoods>();
 		for (MemOrderGoods merchantOrderGoods : list) {
-			MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(order.getSuperOrderId(), merchantOrderGoods.getGoodsId());
-			mOrderGoods.setStatus(0);
-			mOrderGoods.setUpdated(DateUtils.currentTime());
-			superGoodsList.add(mOrderGoods);
+			//MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(merchantOrderGoods.getId());
+			//获取父订单单个产品的未转单部分
+			MemOrderGoods superNotChange = memOrderGoodsMapper.getSuperNotChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId());
+			MemOrderGoods superChange = memOrderGoodsMapper.getSuperChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId(), merchantOrderGoods.getCount());
+			if(superNotChange == null){
+				//产品的数量已经全部转出去
+				superChange.setStatus(0);
+				superChange.setUpdated(time);
+				updateList.add(superChange);
+			}else{
+				superNotChange.setCount(superNotChange.getCount()+merchantOrderGoods.getCount());
+				superNotChange.setUpdated(time);
+				updateList.add(superNotChange);
+				deleteList.add(superChange);
+			}
 		}
-		memOrderGoodsMapper.batchUpdate(superGoodsList);
+		deleteList.addAll(list);
+		memOrderGoodsMapper.batchDelete(deleteList);
+		memOrderGoodsMapper.batchUpdate(updateList);
 		
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(order.getSuperOrderId());
-		status.setTransformCount(status.getTransformCount()-list.size());
+		status.setTransformCount(status.getTransformCount()-1);
 		setOrderStatus(merchant, order.getSuperOrderId(), order.getSuperMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		// 更新缓存
 		redisOperate.del(order.redisKey());
-		for (MemOrderGoods goods : list) {
-			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(order.getOrderId(), goods.getGoodsId()));
+		for (MemOrderGoods goods : deleteList) {
+			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
 		}
-		redisOperate.batchHmset(superGoodsList);
+		redisOperate.batchHmset(updateList);
 	}
 	
 	/**
-	 * 接收转单
+	 * 接收转单 全部或部分接收
 	 * 
 	 * @param changeOrderList
 	 * @param orderId
@@ -402,65 +416,72 @@ public class MerchantService extends RedisCache {
 	@Transactional
 	public void receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
 			long merchantId,Merchant merchant) {
+		int time= DateUtils.currentTime();
 		// 更新子订单状态
 		MemOrder order = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId), new MemOrder());
 		order.setStatus(0);
 		order.setUpdated(DateUtils.currentTime());
 		memOrderMapper.update(order);
 		//保存新建子订单状态信息
-		memOrderStatusMapper.insert(new MemOrderStatus(orderId,receiveGoodsList.size()));
+		memOrderStatusMapper.insert(new MemOrderStatus(orderId));
 		// 查找本次转单申请的所有产品
 		List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(orderId);
 		List<Long> recevieGoodsIds = new ArrayList<Long>();
 		for (MemOrderGoods goods : receiveGoodsList)
-			recevieGoodsIds.add(goods.getGoodsId());
+			recevieGoodsIds.add(goods.getId());
 
 		Iterator<MemOrderGoods> it = list.iterator();
 		while (it.hasNext()) {
 			MemOrderGoods goods = it.next();
-			if (recevieGoodsIds.contains(goods.getGoodsId()))
+			if (recevieGoodsIds.contains(goods.getId()))
 				it.remove();
 		}
-		if (null != list && list.size() > 0)
-			memOrderGoodsMapper.batchDelete(list);
-		memOrderGoodsMapper.batchUpdate(receiveGoodsList);
-		// 更新父订单产品状态
-		List<MemOrderGoods> superRecevieGoodsList = new ArrayList<MemOrderGoods>();
+		//memOrderGoodsMapper.batchUpdate(receiveGoodsList);
+		List<MemOrderGoods> updateList = new ArrayList<MemOrderGoods>();
+		List<MemOrderGoods> deleteList = new ArrayList<MemOrderGoods>();
+		// 更新父订单产品处理
 		for (MemOrderGoods merchantOrderGoods : receiveGoodsList) {
-			MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(superOrderId, merchantOrderGoods.getGoodsId());
-			mOrderGoods.setStatus(7);
-			mOrderGoods.setUpdated(DateUtils.currentTime());
-			superRecevieGoodsList.add(mOrderGoods);
+			MemOrderGoods superChange = memOrderGoodsMapper.getSuperChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId(), merchantOrderGoods.getCount());
+			superChange.setStatus(7);
+			superChange.setUpdated(time);
+			updateList.add(superChange);
 		}
-		List<MemOrderGoods> superRefuseGoodsList = new ArrayList<MemOrderGoods>();
 		if (null != list && list.size() > 0) {
+			//转单中的产品有未被接收的 需要回收
 			for (MemOrderGoods merchantOrderGoods : list) {
-				MemOrderGoods mOrderGoods = merchant.getMerchantOrderGoodsById(superOrderId, merchantOrderGoods.getGoodsId());
-				mOrderGoods.setStatus(0);
-				mOrderGoods.setUpdated(DateUtils.currentTime());
-				superRefuseGoodsList.add(mOrderGoods);
+				//获取父订单单个产品的未转单部分
+				MemOrderGoods superNotChange = memOrderGoodsMapper.getSuperNotChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId());
+				MemOrderGoods superChange = memOrderGoodsMapper.getSuperChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId(), merchantOrderGoods.getCount());
+				if(superNotChange == null){
+					//产品的数量已经全部转出去
+					superChange.setStatus(0);
+					superChange.setUpdated(time);
+					updateList.add(superChange);
+				}else{
+					superNotChange.setCount(superNotChange.getCount()+merchantOrderGoods.getCount());
+					superNotChange.setUpdated(time);
+					updateList.add(superNotChange);
+					deleteList.add(superChange);
+				}
 			}
-			memOrderGoodsMapper.batchUpdate(superRefuseGoodsList);
 		}
-		memOrderGoodsMapper.batchUpdate(superRecevieGoodsList);
+		deleteList.addAll(list);
+		updateList.addAll(receiveGoodsList);
+		memOrderGoodsMapper.batchUpdate(updateList);
+		memOrderGoodsMapper.batchDelete(deleteList);
 
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(superOrderId);
-		status.setTransformSuccessCount(status.getTransformSuccessCount()+receiveGoodsList.size());
-		status.setTransformCount(status.getTransformCount()-receiveGoodsList.size());
+		status.setTransformCount(status.getTransformCount()-1);
 		setOrderStatus(merchant, superOrderId, order.getSuperMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		// 更新缓存
 		redisOperate.hmset(order.redisKey(), order);
-		if (null != list && list.size() > 0) {
-			for (MemOrderGoods goods : list) {
-				redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(orderId, goods.getGoodsId()));
-			}
-			redisOperate.batchHmset(superRefuseGoodsList);
+		for (MemOrderGoods goods : deleteList) {
+			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
 		}
-		redisOperate.batchHmset(receiveGoodsList);
-		redisOperate.batchHmset(superRecevieGoodsList);
+		redisOperate.batchHmset(updateList);
 		
 		//推送转单接收信息  参数：转单单号，转单父订单号
 		JiLuPushUtil.OrderReceivePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);

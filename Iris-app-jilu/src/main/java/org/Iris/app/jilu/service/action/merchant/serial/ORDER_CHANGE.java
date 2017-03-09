@@ -41,6 +41,7 @@ public class ORDER_CHANGE extends SerialMerchantAction{
 			if(changeOrderGoods.size() == 0)
 				throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
 		}
 		return merchantService.orderChange(superOrder,targetMerchant,changeOrderGoods,merchant);

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
@@ -50,4 +51,10 @@ public interface MemOrderGoodsMapper {
 	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getPacketMerchantOrderGoodsByPacketId")
 	List<MemOrderGoods> getPacketMerchantOrderGoodsByPacketId(String packetId);
+	//找到父订单单个产品未转传出去的部分
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getSuperNotChangeOrderGoods")
+	MemOrderGoods getSuperNotChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId);
+	//找到父订单单个产品转出去的部分
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getSuperChangeOrderGoods")
+	MemOrderGoods getSuperChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId,@Param("count") int count);
 }

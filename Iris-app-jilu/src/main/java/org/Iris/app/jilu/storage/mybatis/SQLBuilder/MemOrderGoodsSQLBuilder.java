@@ -156,6 +156,15 @@ public class MemOrderGoodsSQLBuilder {
 			}
 		}.toString();
 	}
+	////找到父订单单个产品未转传出去的部分
+	public String getSuperNotChangeOrderGoods(){
+		return "select * from "+Table.MEM_ORDER_GOODS.mark()+" where order_id=#{orderId} and goods_id = #{goodsId} and status=0";
+	}
+	
+	//找到父订单单个产品转出去的部分
+	public String getSuperChangeOrderGoods(){
+		return "select * from "+Table.MEM_ORDER_GOODS.mark()+" where order_id=#{orderId} and goods_id = #{goodsId} and count=#{count} and status=1 limit 0,1";
+	}
 	
 	public String getNotFinishMerchantOrderGoodsByOrderId(){
 		return new SQL(){

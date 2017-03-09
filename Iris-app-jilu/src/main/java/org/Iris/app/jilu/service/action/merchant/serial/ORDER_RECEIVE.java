@@ -42,11 +42,11 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 			throw IllegalConstException.errorException(JiLuParams.GOODSLIST);
 		List<MemOrderGoods> receiveGoodsList_ = new ArrayList<MemOrderGoods>();
 		for (MemOrderGoods ogs : receiveGoodsList) {
-			MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(orderId, ogs.getGoodsId());
+			MemOrderGoods mGood = merchant.getMerchantOrderGoodsById(ogs.getId());
 			if (mGood == null)
-				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
+				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getId()));
 			if (mGood.getStatus() != 2)
-				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_CHANGING.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_CHANGING.defaultValue(), ogs.getGoodsId()));
+				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_CHANGING.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_CHANGING.defaultValue(), ogs.getId()));
 			mGood.setUpdated(DateUtils.currentTime());
 			mGood.setStatus(0);
 			receiveGoodsList_.add(mGood);
