@@ -46,6 +46,7 @@ public class MemGoodsStoreSQLBuilder {
 				SET("price=#{price}");
 				SET("memo=#{memo}");
 				SET("count=#{count}");
+				SET("wait_count=#{waitCount}");
 				SET("updated=#{updated}");
 				WHERE("merchant_id=#{merchantId}");
 				AND();

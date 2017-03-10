@@ -12,6 +12,7 @@ public class MemGoodsStore implements RedisHashBean{
 	private String goodsCode;
 	private String goodsName;
 	private long count;
+	private long waitCount;
 	private float price;
 	private String memo;
 	private int statusMod;//后期用于标记是否已经上传商品图片
@@ -57,6 +58,12 @@ public class MemGoodsStore implements RedisHashBean{
 	}
 	public void setCount(long count) {
 		this.count = count;
+	}
+	public long getWaitCount() {
+		return waitCount;
+	}
+	public void setWaitCount(long waitCount) {
+		this.waitCount = waitCount;
 	}
 	public int getCreated() {
 		return created;

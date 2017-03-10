@@ -139,7 +139,11 @@ public class Merchant implements Beans {
 			// 提前 5 分钟失效
 			expire -= 60 * 5;
 			redisOperate.expire(key, (int) (expire / 1000));
+			form.setExpireTime(expire/1000);
 		}
+		long expire = DateUtils.getTimeGap(form.getExpiration(), DateUtils.getUTCDate(), DateUtils.ISO8601_UTC,
+				DateUtils.TIMEZONE_UTC);
+		form.setExpireTime(expire/1000);
 		return form;
 	}
 

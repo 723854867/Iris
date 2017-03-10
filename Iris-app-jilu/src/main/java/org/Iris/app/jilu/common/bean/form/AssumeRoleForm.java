@@ -10,6 +10,7 @@ public class AssumeRoleForm {
 	private String bucket;
 	private String endpoint;
 	private String expiration;
+	private long expireTime;
 	private String accessKeyId;
 	private String securityToken;
 	private String accessKeySecret;
@@ -48,6 +49,14 @@ public class AssumeRoleForm {
 	
 	public void setExpiration(String expiration) {
 		this.expiration = expiration;
+	}
+
+	public long getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(long expireTime) {
+		this.expireTime = expireTime;
 	}
 
 	public String getAccessKeyId() {
