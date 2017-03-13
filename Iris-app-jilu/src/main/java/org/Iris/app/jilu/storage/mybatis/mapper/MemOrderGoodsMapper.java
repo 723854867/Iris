@@ -57,4 +57,6 @@ public interface MemOrderGoodsMapper {
 	//找到父订单单个产品转出去的部分
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getSuperChangeOrderGoods")
 	MemOrderGoods getSuperChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId,@Param("count") int count);
+	
+	
 }

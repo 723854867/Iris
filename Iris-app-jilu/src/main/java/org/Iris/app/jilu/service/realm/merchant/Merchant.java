@@ -859,7 +859,7 @@ public class Merchant implements Beans {
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		if (!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		MemGoodsStore store = new MemGoodsStore(goods, count,(long)0, price, memo);
+		MemGoodsStore store = new MemGoodsStore(goods,memMerchant,count,(long)0, price, memo);
 		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess(new GoodsStoreForm(store));

@@ -222,7 +222,7 @@ public class MerchantService extends RedisCache {
 			//处理仓库
 			MemGoodsStore store = merchant.getMemGoodsStore(merchant.getMemMerchant().getMerchantId(),ogs.getGoodsId());
 			if(null == store)
-				addStoreList.add(new MemGoodsStore(goods, 0-ogs.getCount(),ogs.getCount(), Float.valueOf(ogs.getUnitPrice()), ""));
+				addStoreList.add(new MemGoodsStore(goods,merchant.getMemMerchant(), 0-ogs.getCount(),ogs.getCount(), Float.valueOf(ogs.getUnitPrice()), ""));
 			else {
 				store.setCount(store.getCount()-ogs.getCount());
 				store.setUpdated(time);
@@ -273,7 +273,7 @@ public class MerchantService extends RedisCache {
 				CfgGoods goods = merchant.getGoodsById(ogs.getGoodsId());
 				MemGoodsStore store = merchant.getMemGoodsStore(merchant.getMemMerchant().getMerchantId(),ogs.getGoodsId());
 				if(null == store)
-					addStoreList.add(new MemGoodsStore(goods, 0-ogs.getCount(), ogs.getCount(),Float.valueOf(ogs.getUnitPrice()), ""));
+					addStoreList.add(new MemGoodsStore(goods,merchant.getMemMerchant(), 0-ogs.getCount(), ogs.getCount(),Float.valueOf(ogs.getUnitPrice()), ""));
 				else {
 					store.setCount(store.getCount()-ogs.getCount());
 					store.setUpdated(time);
@@ -505,6 +505,7 @@ public class MerchantService extends RedisCache {
 			MemOrderGoods superChange = memOrderGoodsMapper.getSuperChangeOrderGoods(order.getSuperOrderId(),merchantOrderGoods.getGoodsId(), merchantOrderGoods.getCount());
 			superChange.setStatus(7);
 			superChange.setUpdated(time);
+			superChange.setChangeOrderId(orderId);
 			updateList.add(superChange);
 		}
 		//处理接收转单商户和转单商户的仓库数据
@@ -513,7 +514,7 @@ public class MerchantService extends RedisCache {
 			CfgGoods goods = merchant.getGoodsById(ogs.getChangeId());
 			MemGoodsStore store = merchant.getMemGoodsStore(merchantId,ogs.getChangeId());
 			if(null == store)
-				addStoreList.add(new MemGoodsStore(goods, 0-ogs.getCount(), ogs.getCount(),Float.valueOf(ogs.getUnitPrice()), ""));
+				addStoreList.add(new MemGoodsStore(goods, merchant.getMemMerchant(),0-ogs.getCount(), ogs.getCount(),Float.valueOf(ogs.getUnitPrice()), ""));
 			else {
 				store.setCount(store.getCount()-ogs.getCount());
 				store.setUpdated(time);
@@ -521,11 +522,13 @@ public class MerchantService extends RedisCache {
 				updateStoreList.add(store);
 			}
 			//转单商户仓库数据处理
-			store = merchant.getMemGoodsStore(merchantId,ogs.getId());
+			store = merchant.getMemGoodsStore(order.getSuperMerchantId(),ogs.getGoodsId());
 			store.setCount(store.getCount()+ogs.getCount());
 			store.setUpdated(time);
 			store.setWaitCount(store.getWaitCount()-ogs.getCount());
 			updateStoreList.add(store);
+			
+			ogs.setGoodsId(ogs.getChangeId());
 		}
 		
 		if (null != list && list.size() > 0) {
@@ -550,7 +553,8 @@ public class MerchantService extends RedisCache {
 		deleteList.addAll(list);
 		updateList.addAll(receiveGoodsList);
 		memOrderGoodsMapper.batchUpdate(updateList);
-		memOrderGoodsMapper.batchDelete(deleteList);
+		if(deleteList.size()>0)
+			memOrderGoodsMapper.batchDelete(deleteList);
 		if(addStoreList.size()>0)
 			memGoodsStoreMapper.batchInsert(addStoreList);
 		if(updateStoreList.size()>0)
@@ -594,7 +598,7 @@ public class MerchantService extends RedisCache {
 			builder.append(packetId+";");
 			String[] goods = str.split(":");
 			for(String goodsId : goods){
-				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(orderId, Long.valueOf(goodsId));
+				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(Long.valueOf(goodsId));
 				if (mGoods == null)
 					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
 				if(mGoods.getStatus()!=0)
@@ -718,7 +722,7 @@ public class MerchantService extends RedisCache {
 	 * @return
 	 */
 	public String stockGoodsStore(long goodsId, long count, float price , String memo, Merchant merchant) {
-		MemGoodsStore store = merchant.getMemGoodsStore(goodsId);
+		MemGoodsStore store = merchant.getMemGoodsStore(merchant.getMemMerchant().getMerchantId(),goodsId);
 		if(store==null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		store.setCount(store.getCount()+count);

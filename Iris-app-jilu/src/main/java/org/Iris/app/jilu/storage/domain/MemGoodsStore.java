@@ -20,9 +20,9 @@ public class MemGoodsStore implements RedisHashBean {
 	private int created;
 	private int updated;
 
-	public MemGoodsStore(CfgGoods cfgGoods, long count, long waitCount, float price, String memo) {
-		this.merchantId = Long.valueOf(cfgGoods.getSource());
-		this.merchantName = cfgGoods.getMerchantName();
+	public MemGoodsStore(CfgGoods cfgGoods,MemMerchant merchant, long count, long waitCount, float price, String memo) {
+		this.merchantId = merchant.getMerchantId();
+		this.merchantName = merchant.getName();
 		this.goodsId = cfgGoods.getGoodsId();
 		this.goodsCode = cfgGoods.getGoodsCode();
 		this.goodsName = cfgGoods.getZhName();

@@ -67,6 +67,10 @@ public class MemOrderGoodsSQLBuilder {
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getCount());
 		}
+		stringBuilder.append(" end, change_order_id = case id");
+		for(MemOrderGoods orderGoods:list){
+			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getChangeOrderId());
+		}
 		stringBuilder.append(" end, unit_price = case id");
 		for(MemOrderGoods orderGoods:list){
 			stringBuilder.append(" when "+orderGoods.getId()+" then "+orderGoods.getUnitPrice());

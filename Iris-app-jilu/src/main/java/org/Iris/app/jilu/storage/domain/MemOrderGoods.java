@@ -8,6 +8,7 @@ public class MemOrderGoods implements RedisHashBean{
 	private long id;
 	private long changeId;//该字段不存在于数据表，只是临时用于接收转单时传递的参数所用；
 	private String orderId;
+	private String changeOrderId;//如果产品状态为转单成功时显示转单的订单号
 	private String packetId;
 	private long goodsId;
 	private String goodsName;
@@ -44,6 +45,12 @@ public class MemOrderGoods implements RedisHashBean{
 		this.orderId = orderId;
 	}
 
+	public String getChangeOrderId() {
+		return changeOrderId;
+	}
+	public void setChangeOrderId(String changeOrderId) {
+		this.changeOrderId = changeOrderId;
+	}
 	public String getPacketId() {
 		return packetId;
 	}

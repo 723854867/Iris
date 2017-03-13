@@ -49,6 +49,7 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_CHANGING.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_CHANGING.defaultValue(), ogs.getId()));
 			mGood.setUpdated(DateUtils.currentTime());
 			mGood.setStatus(0);
+			mGood.setChangeId(ogs.getChangeId());
 			receiveGoodsList_.add(mGood);
 		}
 		merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId,merchant);
