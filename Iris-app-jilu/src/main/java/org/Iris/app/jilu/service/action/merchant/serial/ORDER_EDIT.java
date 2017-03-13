@@ -93,8 +93,9 @@ public class ORDER_EDIT extends SerialMerchantAction {
 					return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getId()));
 				if (mGood.getStatus() != 0)
 					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), ogs.getId()));
-				ogs.setId(mGood.getId());
+				ogs.setGoodsId(mGood.getGoodsId());
 				ogs.setOrderId(orderId);
+				ogs.setCount(mGood.getCount());
 				goodsCount -=mGood.getCount();
 			}
 		}

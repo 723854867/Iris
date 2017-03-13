@@ -6,6 +6,7 @@ import org.Iris.redis.RedisHashBean;
 public class MemOrderGoods implements RedisHashBean{
 
 	private long id;
+	private long changeId;//该字段不存在于数据表，只是临时用于接收转单时传递的参数所用；
 	private String orderId;
 	private String packetId;
 	private long goodsId;
@@ -23,15 +24,18 @@ public class MemOrderGoods implements RedisHashBean{
 		this.orderId = orderId;
 		this.goodsId = goodsId;
 	}
-
 	public long getId() {
 		return id;
 	}
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
+	public long getChangeId() {
+		return changeId;
+	}
+	public void setChangeId(long changeId) {
+		this.changeId = changeId;
+	}
 	public String getOrderId() {
 		return orderId;
 	}

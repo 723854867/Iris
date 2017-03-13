@@ -16,6 +16,8 @@ import org.Iris.app.jilu.common.bean.enums.GoodsListType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
+import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
+import org.Iris.app.jilu.common.bean.form.CfgGoodsListForm;
 import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
@@ -725,6 +727,14 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess(new Pager<GoodsStoreForm>(count, GoodsStoreForm.getGoodsStoreFormList(list)));
 	}
 
+	/**
+	 * 通过商品名字或者商户查找商品列表
+	 * @param page
+	 * @param pageSize
+	 * @param name
+	 * @param type
+	 * @return
+	 */
 	public String getGoodsList(int page, int pageSize, String name, GoodsListType type) {
 		long count;
 		List<CfgGoods> list;
@@ -736,18 +746,35 @@ public class Merchant implements Beans {
 			if (count == 0)
 				return Result.jsonSuccess(Pager.EMPTY);
 			list = cfgGoodsMapper.getGoodsListByGoodsName((page - 1) * pageSize, pageSize, name);
-			return Result.jsonSuccess(new Pager<CfgGoods>(count, list));
+			break;
 		case MERCHANT:
 			count = cfgGoodsMapper.getCountByMerchantId(getMemMerchant().getMerchantId());
 			if (count == 0)
 				return Result.jsonSuccess(Pager.EMPTY);
 			list = cfgGoodsMapper.getGoodsListByMerchantId((page - 1) * pageSize, pageSize,
 					getMemMerchant().getMerchantId());
-			return Result.jsonSuccess(new Pager<CfgGoods>(count, list));
+			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
+		return Result.jsonSuccess(new Pager<CfgGoodsForm>(count, CfgGoodsForm.getCfgGoodsFormList(list)));
 	}
+	/**
+	 * 通过商品条形码查找商品列表
+	 * @param code
+	 * @return
+	 */
+	public String getGoodsListByCode(String code) {
+		String[] codes = code.split(";");
+		List<CfgGoodsListForm> cfgGoodsListForms = new ArrayList<CfgGoodsListForm>();
+		for(String goodsCode:codes){
+			List<CfgGoods> list = cfgGoodsMapper.getGoodsListByCode(0, 1000, goodsCode);
+			cfgGoodsListForms.add(new CfgGoodsListForm(goodsCode, CfgGoodsForm.getCfgGoodsFormList(list)));
+		}
+		return Result.jsonSuccess(cfgGoodsListForms);
+	}
+	
+	
 
 	/**
 	 * 删除联系人
@@ -832,7 +859,7 @@ public class Merchant implements Beans {
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		if (!goods.getSource().equals(String.valueOf(memMerchant.getMerchantId())))
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		MemGoodsStore store = new MemGoodsStore(goods, count, price, memo);
+		MemGoodsStore store = new MemGoodsStore(goods, count,(long)0, price, memo);
 		memGoodsStoreMapper.insert(store);
 		redisOperate.hmset(store.redisKey(), store);
 		return Result.jsonSuccess(new GoodsStoreForm(store));
@@ -905,7 +932,7 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String updateGoodsStore(long goodsId,String memo, long count, float price) {
-		MemGoodsStore store = getMemGoodsStore(goodsId);
+		MemGoodsStore store = getMemGoodsStore(memMerchant.getMerchantId(),goodsId);
 		if(store == null)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		store.setMemo(memo);
@@ -917,11 +944,11 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess();
 	}
 
-	public MemGoodsStore getMemGoodsStore(long goodsId) {
-		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(memMerchant.getMerchantId(), goodsId),
+	public MemGoodsStore getMemGoodsStore(long merchantId,long goodsId) {
+		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId),
 				new MemGoodsStore());
 		if(store == null){
-			store = memGoodsStoreMapper.getMemGoodsStoreById(memMerchant.getMerchantId(), goodsId);
+			store = memGoodsStoreMapper.getMemGoodsStoreById(merchantId, goodsId);
 			if(store != null)
 				redisOperate.hmset(store.redisKey(), store);
 		}
@@ -950,7 +977,7 @@ public class Merchant implements Beans {
 		if (count == 0)
 			return Result.jsonSuccess(Pager.EMPTY);
 		for(CfgGoods cfgGoods : list){
-			MemGoodsStore goodsStore = getMemGoodsStore(cfgGoods.getGoodsId());
+			MemGoodsStore goodsStore = getMemGoodsStore(memMerchant.getMerchantId(),cfgGoods.getGoodsId());
 			if(goodsStore == null){
 				forms.add(new GoodsStoreSearchForm(cfgGoods));
 			}else{
@@ -967,12 +994,13 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String getGoodsStoreInfo(long goodsId) {
-		MemGoodsStore goodsStore = getMemGoodsStore(goodsId);
+		MemGoodsStore goodsStore = getMemGoodsStore(memMerchant.getMerchantId(),goodsId);
 		if(null== goodsStore)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
 		List<StockGoodsStoreLog> logs = stockGoodsStoreLogMapper.getLogListByGoodsId(goodsId);
 		return Result.jsonSuccess(new GoodsStoreAndStockForm(goodsStore,logs));
 	}
+	
 	/**
 	 * 订单未处理产品以及库存查询
 	 * @param orderId
@@ -986,7 +1014,7 @@ public class Merchant implements Beans {
 		List<OrderGoodsStoreInfoForm> orderGoodsStoreInfoForms = new ArrayList<OrderGoodsStoreInfoForm>();
 		for(MemOrderGoods memOrderGoods : list){
 			long goodsId = memOrderGoods.getGoodsId();
-			MemGoodsStore store = getMemGoodsStore(goodsId);
+			MemGoodsStore store = getMemGoodsStore(memMerchant.getMerchantId(),goodsId);
 			if(null == store){
 				orderGoodsStoreInfoForms.add(new OrderGoodsStoreInfoForm(goodsId, memOrderGoods.getGoodsName(), memOrderGoods.getCount(), 0, 0,0));
 			}else{

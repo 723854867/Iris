@@ -4,8 +4,9 @@ import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 import org.Iris.util.lang.DateUtils;
 
-public class MemGoodsStore implements RedisHashBean{
+public class MemGoodsStore implements RedisHashBean {
 
+	private long id;
 	private long merchantId;
 	private String merchantName;
 	private long goodsId;
@@ -15,11 +16,11 @@ public class MemGoodsStore implements RedisHashBean{
 	private long waitCount;
 	private float price;
 	private String memo;
-	private int statusMod;//后期用于标记是否已经上传商品图片
+	private int statusMod;// 后期用于标记是否已经上传商品图片
 	private int created;
 	private int updated;
-	
-	public MemGoodsStore(CfgGoods cfgGoods , long count,float price,String memo){
+
+	public MemGoodsStore(CfgGoods cfgGoods, long count, long waitCount, float price, String memo) {
 		this.merchantId = Long.valueOf(cfgGoods.getSource());
 		this.merchantName = cfgGoods.getMerchantName();
 		this.goodsId = cfgGoods.getGoodsId();
@@ -28,55 +29,79 @@ public class MemGoodsStore implements RedisHashBean{
 		this.price = price;
 		this.memo = memo;
 		this.count = count;
+		this.waitCount = waitCount;
 		int time = DateUtils.currentTime();
 		this.created = time;
 		this.updated = time;
 	}
-	
+
 	public MemGoodsStore() {
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public long getMerchantId() {
 		return merchantId;
 	}
+
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
 	}
+
 	public long getGoodsId() {
 		return goodsId;
 	}
+
 	public void setGoodsId(long goodsId) {
 		this.goodsId = goodsId;
 	}
+
 	public String getGoodsName() {
 		return goodsName;
 	}
+
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
+
 	public long getCount() {
 		return count;
 	}
+
 	public void setCount(long count) {
 		this.count = count;
 	}
+
 	public long getWaitCount() {
 		return waitCount;
 	}
+
 	public void setWaitCount(long waitCount) {
 		this.waitCount = waitCount;
 	}
+
 	public int getCreated() {
 		return created;
 	}
+
 	public void setCreated(int created) {
 		this.created = created;
 	}
+
 	public int getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(int updated) {
 		this.updated = updated;
 	}
+
 	public String getGoodsCode() {
 		return goodsCode;
 	}
@@ -121,6 +146,5 @@ public class MemGoodsStore implements RedisHashBean{
 	public String redisKey() {
 		return MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId);
 	}
-	
-	
+
 }

@@ -22,6 +22,7 @@ public class MemGoodsStoreSQLBuilder {
 				VALUES("price", 			"#{price}");
 				VALUES("memo", 				"#{memo}");
 				VALUES("count", 			"#{count}");
+				VALUES("wait_count", 		"#{waitCount}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
 			}
@@ -31,9 +32,10 @@ public class MemGoodsStoreSQLBuilder {
 	public String batchInsert(StrictMap<List<MemGoodsStore>> map) {
 		List<MemGoodsStore> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_GOODS_STORE.mark()+" (merchant_id,goods_id,count,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_GOODS_STORE.mark()+" (merchant_id,merchant_name,goods_id,goods_code,goods_name,count,wait_count,price,memo,created,updated) values ");
 		for(MemGoodsStore store:list){
-			stringBuilder.append("('"+store.getMerchantId()+"','"+store.getGoodsId()+"','"+store.getCount()+"','"+store.getCreated()+"','"+store.getUpdated()+"'),");
+			stringBuilder.append("('"+store.getMerchantId()+"','"+store.getMerchantName()+"','"+store.getGoodsId()+"','"+store.getGoodsCode()+"','"+store.getGoodsName()
+			+"','"+store.getCount()+"','"+store.getWaitCount()+"','"+store.getPrice()+"','"+store.getMemo()+"','"+store.getCreated()+"','"+store.getUpdated()+"'),");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();
@@ -53,6 +55,30 @@ public class MemGoodsStoreSQLBuilder {
 				WHERE("goods_id=#{goodsId}");
 			}
 		}.toString();
+	}
+	
+	public String batchUpdate(StrictMap<List<MemGoodsStore>> map){
+		List<MemGoodsStore> list = map.get("collection");
+		StringBuilder stringBuilder = new StringBuilder(256);
+		StringBuilder stringBuilder2 = new StringBuilder(256);
+		stringBuilder.append("update "+Table.MEM_GOODS_STORE.mark()+" set count = case id ");
+		for(MemGoodsStore store:list){
+			stringBuilder.append(" when "+store.getId()+" then "+store.getCount());
+		}
+		stringBuilder.append(" end, wait_count = case id");
+		for(MemGoodsStore store:list){
+			stringBuilder.append(" when "+store.getId()+" then "+store.getWaitCount());
+		}
+		stringBuilder.append(" end, updated = case id");
+		for(MemGoodsStore store:list){
+			stringBuilder.append(" when "+store.getId()+" then "+store.getUpdated());
+			stringBuilder2.append(store.getId()+",");
+		}
+		stringBuilder.append(" end");
+		stringBuilder.append(" where id in(");
+		stringBuilder.append(stringBuilder2.substring(0, stringBuilder2.length()-1));
+		stringBuilder.append(")");
+		return stringBuilder.toString();
 	}
 	
 	public String getMemGoodsStoreById(){
