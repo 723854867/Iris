@@ -27,7 +27,8 @@ public enum IgtPushType {
 	 */
 	ORDER_STATUS_CHANGE(4),
 	FRIEND_APPLY(5),
-	FRIEND_APPLY_REPLY(6);
+	FRIEND_APPLY_REPLY(6),
+	ORDER_MEMO_EDIT(7);
 	
 	private int mark;
 	

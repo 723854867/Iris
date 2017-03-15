@@ -1,7 +1,11 @@
 package org.Iris.app.jilu.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.storage.domain.MemCid;
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.util.common.JsonAppender;
 
 /**
@@ -117,6 +121,22 @@ public class JiLuPushUtil {
 					.append("merchantId", merchantId).append("name", name).append("reply", reply)
 					.toString();
 			Beans.igtService.pushToSingle(memCid.getClientId(), IgtPushType.FRIEND_APPLY_REPLY.name(), msg);
+		}
+	}
+	
+	/**
+	 * 订单备注修改推送
+	 * @param memOrders
+	 * @param merchantId
+	 * @param name
+	 * @param reply
+	 */
+	public static void orderMemoEditPush(List<String> cids, long merchantId,String name,String memo) {
+		if (cids.size()>0) {
+			String msg = JsonAppender.newAppender().append("type", IgtPushType.ORDER_MEMO_EDIT.mark())
+					.append("merchantId", merchantId).append("name", name).append("memo", memo)
+					.toString();
+			Beans.igtService.pushToList(cids, IgtPushType.ORDER_MEMO_EDIT.name(), msg);
 		}
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Set;
 import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.GoodsListType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
@@ -1023,7 +1024,32 @@ public class Merchant implements Beans {
 		}
 		return Result.jsonSuccess(orderGoodsStoreInfoForms);
 	}
-	
+	/**
+	 * 订单备注信息修改 推送消息
+	 * @param memo
+	 * @return
+	 */
+	public String orderMemoEdit(String orderId,String memo) {
+		MemOrder memOrder = getMerchantOrderById(memMerchant.getMerchantId(), orderId);
+		if(null == memOrder)
+			throw IllegalConstException.errorException(JiLuParams.ORDERID);
+		memOrder.setMemo(memo);
+		memOrderMapper.update(memOrder);
+		redisOperate.hmset(memOrder.redisKey(), memOrder);
+		//推送消息给与该订单相关的商户
+		List<MemOrder> list = memOrderMapper.getAllOrderByRootOrderId(memOrder.getRootOrderId());
+		List<String> cids = new ArrayList<String>();
+		for(MemOrder order : list){
+			if(order.getMerchantId() == memMerchant.getMerchantId() || order.getStatus() > 4)
+				continue;
+			MemCid memCid = getMemCid(order.getMerchantId());
+			if(memCid !=null)
+				cids.add(memCid.getClientId());
+		}
+		//推送
+		JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
+		return Result.jsonSuccess();
+	}
 
 	/**
 	 * 判断商户的客户排序列表是否已经加载

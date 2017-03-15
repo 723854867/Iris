@@ -50,6 +50,7 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 			mGood.setUpdated(DateUtils.currentTime());
 			mGood.setStatus(0);
 			mGood.setChangeId(ogs.getChangeId());
+			mGood.setUnitPrice("0");
 			receiveGoodsList_.add(mGood);
 		}
 		merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId,merchant);
