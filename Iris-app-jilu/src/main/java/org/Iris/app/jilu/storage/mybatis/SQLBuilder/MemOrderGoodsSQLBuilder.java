@@ -32,9 +32,9 @@ public class MemOrderGoodsSQLBuilder {
 	public String batchInsert(StrictMap<List<MemOrderGoods>> map) {
 		List<MemOrderGoods> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,goods_id,goods_name,count,unit_price,status,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_ORDER_GOODS.mark()+" (order_id,goods_id,packet_id,goods_name,count,unit_price,status,created,updated) values ");
 		for(MemOrderGoods orderGoods:list){
-			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getGoodsName()+"'"
+			stringBuilder.append("('"+orderGoods.getOrderId()+"','"+orderGoods.getGoodsId()+"','"+orderGoods.getPacketId()+"','"+orderGoods.getGoodsName()+"'"
 								+ ",'"+orderGoods.getCount()+"','"+orderGoods.getUnitPrice()+"'"
 								+ ",'"+orderGoods.getStatus()+"','"+orderGoods.getCreated()+"','"+orderGoods.getUpdated()+"'),");
 		}

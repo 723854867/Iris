@@ -12,8 +12,8 @@ import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 public class TransferOrderModel {
 
 	private String orderId;
-	private String changeMerhcantName;
-	private long changeMerhcantId;
+	private String changeMerchantName;
+	private long changeMerchantId;
 	private int created;
 	private List<OrderGoodsForm> transferOrderGoodsList;
 
@@ -21,12 +21,12 @@ public class TransferOrderModel {
 		super();
 	}
 
-	public TransferOrderModel(String orderId, String changeMerhcantName, long changeMerhcantId,int created,
+	public TransferOrderModel(String orderId, String changeMerchantName, long changeMerchantId,int created,
 			List<OrderGoodsForm> transferOrderGoodsList) {
 		super();
 		this.orderId = orderId;
-		this.changeMerhcantName = changeMerhcantName;
-		this.changeMerhcantId = changeMerhcantId;
+		this.changeMerchantName = changeMerchantName;
+		this.changeMerchantId = changeMerchantId;
 		this.created = created;
 		this.transferOrderGoodsList = transferOrderGoodsList;
 	}
@@ -39,20 +39,20 @@ public class TransferOrderModel {
 		this.orderId = orderId;
 	}
 
-	public String getChangeMerhcantName() {
-		return changeMerhcantName;
+	public String getChangeMerchantName() {
+		return changeMerchantName;
 	}
 
-	public void setChangeMerhcantName(String changeMerhcantName) {
-		this.changeMerhcantName = changeMerhcantName;
+	public void setChangeMerchantName(String changeMerchantName) {
+		this.changeMerchantName = changeMerchantName;
 	}
 
-	public long getChangeMerhcantId() {
-		return changeMerhcantId;
+	public long getChangeMerchantId() {
+		return changeMerchantId;
 	}
 
-	public void setChangeMerhcantId(long changeMerhcantId) {
-		this.changeMerhcantId = changeMerhcantId;
+	public void setChangeMerchantId(long changeMerchantId) {
+		this.changeMerchantId = changeMerchantId;
 	}
 
 	public List<OrderGoodsForm> getTransferOrderGoodsList() {

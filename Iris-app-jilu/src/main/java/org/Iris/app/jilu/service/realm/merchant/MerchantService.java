@@ -2,8 +2,10 @@ package org.Iris.app.jilu.service.realm.merchant;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Resource;
@@ -458,9 +460,10 @@ public class MerchantService extends RedisCache {
 		
 		// 更新缓存
 		redisOperate.del(order.redisKey());
-		for (MemOrderGoods goods : deleteList) {
-			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
-		}
+		redisOperate.batchDelete(deleteList);
+//		for (MemOrderGoods goods : deleteList) {
+//			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
+//		}
 		redisOperate.batchHmset(updateList);
 	}
 	
@@ -568,9 +571,10 @@ public class MerchantService extends RedisCache {
 		
 		// 更新缓存
 		redisOperate.hmset(order.redisKey(), order);
-		for (MemOrderGoods goods : deleteList) {
-			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
-		}
+		redisOperate.batchDelete(deleteList);
+//		for (MemOrderGoods goods : deleteList) {
+//			redisOperate.del(MerchantKeyGenerator.merchantOrderGoodsDataKey(goods.getId()));
+//		}
 		redisOperate.batchHmset(updateList);
 		redisOperate.batchHmset(addStoreList);
 		redisOperate.batchHmset(updateStoreList);
@@ -585,42 +589,96 @@ public class MerchantService extends RedisCache {
 	 * @param goodsList 1:2;3:4
 	 * @return
 	 */
+//	@Transactional
+//	public String orderPacket(String orderId,String packetGoodsList,Merchant merchant){
+//		String[] packetGoods = packetGoodsList.split(";");
+//		StringBuilder builder = new StringBuilder();
+//		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
+//		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
+//		for(String str : packetGoods){
+//			String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
+//			MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
+//			packetList.add(packet);
+//			builder.append(packetId+";");
+//			String[] goods = str.split(":");
+//			for(String goodsId : goods){
+//				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(Long.valueOf(goodsId));
+//				if (mGoods == null)
+//					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
+//				if(mGoods.getStatus()!=0)
+//					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
+//				mGoods.setStatus(3);
+//				int time = DateUtils.currentTime();
+//				mGoods.setUpdated(time);
+//				mGoods.setPacketId(packetId);
+//				orderGoodsList.add(mGoods);
+//			}
+//		}
+//		memOrderPacketMapper.batchInsert(packetList);
+//		memOrderGoodsMapper.batchUpdate(orderGoodsList);
+//		
+//		/*更新父订单状态 和 订单状态表 开始*/
+//		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(orderId);
+//		status.setPacketCount(status.getPacketCount()+packetGoods.length);
+//		setOrderStatus(merchant, orderId, merchant.getMemMerchant().getMerchantId(), status);
+//		/*更新父订单状态 和 订单状态表 结束*/
+//		
+//		redisOperate.batchHmset(packetList);
+//		redisOperate.batchHmset(orderGoodsList);
+//		
+//		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
+//	}
+	
+	/**
+	 * 分包
+	 * 处理逻辑：删除原被分包产品，根据分包规则重新生成分包产品数据
+	 * @param orderId
+	 * @param packets 里面的一个对象对应一个包
+	 * @return
+	 */
 	@Transactional
-	public String orderPacket(String orderId,String packetGoodsList,Merchant merchant){
-		String[] packetGoods = packetGoodsList.split(";");
-		StringBuilder builder = new StringBuilder();
+	public String orderPacket(String orderId,List<List<MemOrderGoods>> packets,Merchant merchant){
+		int time = DateUtils.currentTime();
+		List<Long> ids = new ArrayList<Long>();
+		List<MemOrderGoods> addList = new ArrayList<MemOrderGoods>();
+		List<MemOrderGoods> delList = new ArrayList<MemOrderGoods>();
 		List<MemOrderPacket> packetList = new ArrayList<MemOrderPacket>();
-		List<MemOrderGoods> orderGoodsList = new ArrayList<MemOrderGoods>();
-		for(String str : packetGoods){
-			String packetId = "p_"+System.currentTimeMillis() + "" + new Random().nextInt(10);
-			MemOrderPacket packet = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
-			packetList.add(packet);
+		StringBuilder builder = new StringBuilder();
+		for(List<MemOrderGoods> packet : packets){
+			//packet 代表一个分包中的所有产品
+			String packetId = "p_"+OrderNumberUtil.getRandomOrderId(2);
+			MemOrderPacket memOrderPacket = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
+			packetList.add(memOrderPacket);
 			builder.append(packetId+";");
-			String[] goods = str.split(":");
-			for(String goodsId : goods){
-				MemOrderGoods mGoods = merchant.getMerchantOrderGoodsById(Long.valueOf(goodsId));
-				if (mGoods == null)
-					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
-				if(mGoods.getStatus()!=0)
-					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), goodsId));
-				mGoods.setStatus(3);
-				int time = DateUtils.currentTime();
-				mGoods.setUpdated(time);
-				mGoods.setPacketId(packetId);
-				orderGoodsList.add(mGoods);
+			for(MemOrderGoods mog : packet){
+				if(!ids.contains(mog.getId())){
+					delList.add(mog);
+					ids.add(mog.getId());
+				}
+				MemOrderGoods memOrderGoods = merchant.getMerchantOrderGoodsById(mog.getId());
+				if (memOrderGoods == null)
+					return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), mog.getId()));
+				if(memOrderGoods.getStatus()!=0)
+					return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), mog.getId()));
+				memOrderGoods.setPacketId(packetId);
+				memOrderGoods.setUpdated(time);
+				memOrderGoods.setCount(mog.getCount());
+				memOrderGoods.setStatus(3);
+				addList.add(memOrderGoods);
 			}
 		}
 		memOrderPacketMapper.batchInsert(packetList);
-		memOrderGoodsMapper.batchUpdate(orderGoodsList);
-		
+		memOrderGoodsMapper.batchInsert(addList);
+		memOrderGoodsMapper.batchDelete(delList);
 		/*更新父订单状态 和 订单状态表 开始*/
 		MemOrderStatus status = merchant.getMemOrderStatusByOrderId(orderId);
-		status.setPacketCount(status.getPacketCount()+packetGoods.length);
+		status.setPacketCount(status.getPacketCount()+packets.size());
 		setOrderStatus(merchant, orderId, merchant.getMemMerchant().getMerchantId(), status);
 		/*更新父订单状态 和 订单状态表 结束*/
 		
 		redisOperate.batchHmset(packetList);
-		redisOperate.batchHmset(orderGoodsList);
+		redisOperate.batchHmset(addList);
+		redisOperate.batchDelete(delList);
 		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
 	}
 	

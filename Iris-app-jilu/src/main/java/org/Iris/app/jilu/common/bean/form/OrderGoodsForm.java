@@ -4,6 +4,7 @@ import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 
 public class OrderGoodsForm {
 
+	private long id;
 	private long goodsId;
 	private String orderId;
 	private String goodsName;
@@ -11,6 +12,7 @@ public class OrderGoodsForm {
 	private String unitPrice;
 	
 	public OrderGoodsForm(MemOrderGoods memOrderGoods){
+		this.id = memOrderGoods.getId();
 		this.goodsId = memOrderGoods.getGoodsId();
 		this.orderId = memOrderGoods.getOrderId();
 		this.goodsName = memOrderGoods.getGoodsName();
@@ -18,6 +20,14 @@ public class OrderGoodsForm {
 		this.unitPrice = memOrderGoods.getUnitPrice();
 	}
 	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public long getGoodsId() {
 		return goodsId;
 	}

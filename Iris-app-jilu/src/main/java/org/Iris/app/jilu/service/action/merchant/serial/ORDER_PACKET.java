@@ -62,7 +62,7 @@ public class ORDER_PACKET extends SerialMerchantAction{
 		}
 		/**对传递过来的打包参数 进行解析判断 end*/
 		
-		return merchantService.orderPacket(orderId, packetGoodsList,merchant);
+		return merchantService.orderPacket(orderId, packets,merchant);
 	}
 	
 }
