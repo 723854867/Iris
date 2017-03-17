@@ -106,7 +106,8 @@ public final class MerchantKeyGenerator {
 	//private static final String MERCHANT_ORDER_GOODS_DATA				= "hash:db:merchant:order:{0}:goods:{1}";
 	private static final String MERCHANT_ORDER_GOODS_DATA				= "hash:db:merchant:order:goods:{0}";
 	private static final String MERCHANT_ORDER_PACKET_DATA				= "hash:db:merchant:{0}:order:packet:{1}";
-	private static final String MERCHANT_GOODS_STORE_DATA				= "hash:db:merchant:{0}:goods:store:{1}";
+	private static final String MERCHANT_GOODS_STORE_DATA				= "hash:db:merchant:{0}:goods:store:{1}";//商户库存表缓存
+	private static final String MERCHANT_WAIT_STORE_DATA				= "hash:db:waitstore:order:{0}:merchant:{1}:goods:{2}";//商户待出库表缓存
 	
 	private static final String MERCHANT_ORDER_STATUS_DATA				= "hash:db:merchant:order:{0}:status";//记录订单的各种状态数量
 	
@@ -135,6 +136,10 @@ public final class MerchantKeyGenerator {
 	
 	public static final String merchantOrderStatusDataKey(String orderId) { 
 		return MessageFormat.format(MERCHANT_ORDER_STATUS_DATA, orderId);
+	}
+	
+	public static final String merchantWaitStoreDataKey(String orderId,long merchantId, long goodsId) { 
+		return MessageFormat.format(MERCHANT_WAIT_STORE_DATA, orderId,merchantId,goodsId);
 	}
 	
 }

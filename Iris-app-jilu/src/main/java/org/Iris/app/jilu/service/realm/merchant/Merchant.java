@@ -48,6 +48,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.MemWaitStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
@@ -318,18 +319,6 @@ public class Merchant implements Beans {
 		redisOperate.hset(key, String.valueOf(customer.getCustomerId()), customer.toString());
 	}
 
-	public MemCustomer getCustomer(long customerId) {
-		String key = MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId());
-		String val = redisOperate.hget(key, String.valueOf(customerId));
-		if (null != val)
-			return SerializeUtil.JsonUtil.GSON.fromJson(val, MemCustomer.class);
-		MemCustomer customer = memCustomerMapper.getMerchantCustomerById(memMerchant.getMerchantId(), customerId);
-		if (null != customer)
-			redisOperate.hset(key, String.valueOf(customer.getCustomerId()),
-					SerializeUtil.JsonUtil.GSON.toJson(customer));
-		return customer;
-	}
-
 	private void _updateCustomer(MemCustomer customer, boolean nameSort) {
 		customer.setUpdated(DateUtils.currentTime());
 		memCustomerMapper.update(customer);
@@ -339,23 +328,6 @@ public class Merchant implements Beans {
 			redisOperate.zadd(CustomerListType.NAME.redisCustomerListKey(customer.getMerchantId()),
 					Double.valueOf((int) customer.getNamePrefixLetter().charAt(0)),
 					String.valueOf(customer.getCustomerId()));
-	}
-
-	/**
-	 * 根据商户号和订单号获取订单基本信息
-	 * 
-	 * @param orderId
-	 * @return
-	 */
-	public MemOrder getMerchantOrderById(long merchantId, String orderId) {
-		String key = MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId);
-		MemOrder order = redisOperate.hgetAll(key, new MemOrder());
-		if (null != order)
-			return order;
-		order = memOrderMapper.getOrderById(merchantId, orderId);
-		if (null != order)
-			redisOperate.hmset(key, order);
-		return order;
 	}
 
 	/**
@@ -499,28 +471,6 @@ public class Merchant implements Beans {
 		cfgGoodsMapper.update(memGoods);
 		redisOperate.hmset(memGoods.redisKey(), memGoods);
 		return Result.jsonSuccess(new GoodsPagerForm(memGoods));
-	}
-
-	public MemOrderGoods getMerchantOrderGoodsById(long id) {
-		String key = MerchantKeyGenerator.merchantOrderGoodsDataKey(id);
-		MemOrderGoods merchantOrderGoods = redisOperate.hgetAll(key, new MemOrderGoods());
-		if (merchantOrderGoods != null)
-			return merchantOrderGoods;
-		merchantOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsById(id);
-		if (null != merchantOrderGoods)
-			redisOperate.hmset(merchantOrderGoods.redisKey(), merchantOrderGoods);
-		return merchantOrderGoods;
-	}
-
-	public CfgGoods getGoodsById(long goodsId) {
-		String key = CommonKeyGenerator.getMemGoodsKey(goodsId);
-		CfgGoods goods = redisOperate.hgetAll(key, new CfgGoods(goodsId));
-		if (goods != null)
-			return goods;
-		goods = cfgGoodsMapper.getGoodsById(goodsId);
-		if (null != goods)
-			redisOperate.hmset(key, goods);
-		return goods;
 	}
 
 	/**
@@ -945,17 +895,6 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess();
 	}
 
-	public MemGoodsStore getMemGoodsStore(long merchantId,long goodsId) {
-		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId),
-				new MemGoodsStore());
-		if(store == null){
-			store = memGoodsStoreMapper.getMemGoodsStoreById(merchantId, goodsId);
-			if(store != null)
-				redisOperate.hmset(store.redisKey(), store);
-		}
-		return store;
-	}
-	
 	/**
 	 * 搜索商品仓储
 	 * @param type
@@ -1050,7 +989,7 @@ public class Merchant implements Beans {
 		JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
 		return Result.jsonSuccess();
 	}
-
+	
 	/**
 	 * 判断商户的客户排序列表是否已经加载
 	 * 
@@ -1074,5 +1013,103 @@ public class Merchant implements Beans {
 			logger.warn("Merchant lock {} release failure for lockId {}!", lock, lockId);
 	}
 
+	/**
+	 * 获取客户
+	 * @param customerId
+	 * @return
+	 */
+	public MemCustomer getCustomer(long customerId) {
+		String key = MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId());
+		String val = redisOperate.hget(key, String.valueOf(customerId));
+		if (null != val)
+			return SerializeUtil.JsonUtil.GSON.fromJson(val, MemCustomer.class);
+		MemCustomer customer = memCustomerMapper.getMerchantCustomerById(memMerchant.getMerchantId(), customerId);
+		if (null != customer)
+			redisOperate.hset(key, String.valueOf(customer.getCustomerId()),
+					SerializeUtil.JsonUtil.GSON.toJson(customer));
+		return customer;
+	}
+	
+	/**
+	 * 根据商户号和订单号获取订单基本信息
+	 * 
+	 * @param orderId
+	 * @return
+	 */
+	public MemOrder getMerchantOrderById(long merchantId, String orderId) {
+		String key = MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId);
+		MemOrder order = redisOperate.hgetAll(key, new MemOrder());
+		if (null != order)
+			return order;
+		order = memOrderMapper.getOrderById(merchantId, orderId);
+		if (null != order)
+			redisOperate.hmset(key, order);
+		return order;
+	}
 
+	/**
+	 * 获取订单产品
+	 * @param id
+	 * @return
+	 */
+	public MemOrderGoods getMerchantOrderGoodsById(long id) {
+		String key = MerchantKeyGenerator.merchantOrderGoodsDataKey(id);
+		MemOrderGoods merchantOrderGoods = redisOperate.hgetAll(key, new MemOrderGoods());
+		if (merchantOrderGoods != null)
+			return merchantOrderGoods;
+		merchantOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsById(id);
+		if (null != merchantOrderGoods)
+			redisOperate.hmset(merchantOrderGoods.redisKey(), merchantOrderGoods);
+		return merchantOrderGoods;
+	}
+
+	/**
+	 * 获取商品
+	 * @param goodsId
+	 * @return
+	 */
+	public CfgGoods getGoodsById(long goodsId) {
+		String key = CommonKeyGenerator.getMemGoodsKey(goodsId);
+		CfgGoods goods = redisOperate.hgetAll(key, new CfgGoods(goodsId));
+		if (goods != null)
+			return goods;
+		goods = cfgGoodsMapper.getGoodsById(goodsId);
+		if (null != goods)
+			redisOperate.hmset(key, goods);
+		return goods;
+	}
+	
+	/**
+	 * 获取商户库存
+	 * @param merchantId
+	 * @param goodsId
+	 * @return
+	 */
+	public MemGoodsStore getMemGoodsStore(long merchantId,long goodsId) {
+		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId),
+				new MemGoodsStore());
+		if(store == null){
+			store = memGoodsStoreMapper.getMemGoodsStoreById(merchantId, goodsId);
+			if(store != null)
+				redisOperate.hmset(store.redisKey(), store);
+		}
+		return store;
+	}
+	
+	/**
+	 * 获取商户订单对应的产品待出库信息
+	 * @param merchantId
+	 * @param goodsId
+	 * @param orderId
+	 * @return
+	 */
+	public MemWaitStore getMemWaitStore(long merchantId,long goodsId,String orderId){
+		MemWaitStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantWaitStoreDataKey(orderId, merchantId, goodsId),new MemWaitStore());
+		if(store == null){
+			store = memWaitStoreMapper.find(orderId, merchantId, goodsId);
+			if(store != null)
+				redisOperate.hmset(store.redisKey(), store);
+		}
+		return store;
+	}
 }

@@ -2,10 +2,13 @@ package org.Iris.app.jilu.service.realm.merchant;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.print.attribute.HashAttributeSet;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.JiLuPushUtil;
@@ -22,6 +25,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.MemWaitStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
@@ -738,6 +742,46 @@ public class MerchantService extends RedisCache {
 		setOrderStatus(merchant, packet.getOrderId(), packet.getMerchantId(), status);
 		/*更新订单状态 和 订单状态表 结束*/
 		return Result.jsonSuccess(packet);
+	}
+	
+	/**
+	 * 删除订单（订单作废）
+	 * @param packetId
+	 * @param merchant
+	 * @return
+	 */
+	@Transactional
+	public String deleteOrder(String orderId,Merchant merchant){
+		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
+		if(null == order)
+			throw IllegalConstException.errorException(JiLuParams.ORDERID);
+		if(order.getStatus()!=0 && order.getStatus()!=3)
+			return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
+		order.setStatus(9);
+		List<MemOrderGoods> list = memOrderGoodsMapper.getDelMerchantOrderGoodsByOrderId(orderId);
+		//List<MemWaitStore> updateWaitStore = new ArrayList<>();
+		List<MemGoodsStore> updateGoodsStore = new ArrayList<>();
+		for(MemOrderGoods mog : list){
+			MemGoodsStore goodsStore = merchant.getMemGoodsStore(merchant.getMemMerchant().getMerchantId(), mog.getGoodsId());
+			switch (mog.getStatus()) {
+			case 0:
+				goodsStore.setWaitCount(goodsStore.getWaitCount()-mog.getCount());
+			case 3:
+				goodsStore.setCount(goodsStore.getCount()+mog.getCount());
+				updateGoodsStore.add(goodsStore);
+				mog.setStatus(9);
+				break;
+			default:
+				return Result.jsonError(JiLuCode.ORDER_IS_LOCK);
+			}
+		}
+		memOrderMapper.update(order);
+		memGoodsStoreMapper.batchUpdate(updateGoodsStore);
+		memOrderGoodsMapper.batchUpdate(list);
+		redisOperate.batchHmset(updateGoodsStore);
+		redisOperate.batchHmset(list);
+		redisOperate.hmset(order.redisKey(), order);
+		return Result.jsonSuccess();
 	}
 	
 	protected void setOrderStatus(Merchant merchant,String orderId,long merchantId,MemOrderStatus status){

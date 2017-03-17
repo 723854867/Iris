@@ -49,6 +49,9 @@ public interface MemOrderGoodsMapper {
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getNotFinishMerchantOrderGoodsByOrderId")
 	List<MemOrderGoods> getNotFinishMerchantOrderGoodsByOrderId(String orderId);
 	
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getDelMerchantOrderGoodsByOrderId")
+	List<MemOrderGoods> getDelMerchantOrderGoodsByOrderId(String orderId);
+	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getPacketMerchantOrderGoodsByPacketId")
 	List<MemOrderGoods> getPacketMerchantOrderGoodsByPacketId(String packetId);
 	//找到父订单单个产品未转传出去的部分

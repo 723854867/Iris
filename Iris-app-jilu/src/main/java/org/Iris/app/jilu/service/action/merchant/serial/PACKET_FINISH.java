@@ -16,7 +16,7 @@ public class PACKET_FINISH extends SerialMerchantAction{
 	protected String execute0(MerchantSession session) {
 		String packetId = session.getKVParam(JiLuParams.PACKETID);
 		Merchant merchant = session.getMerchant();
-		return null;
+		return merchantService.packetFinished(packetId,merchant);
 	}
 
 	
