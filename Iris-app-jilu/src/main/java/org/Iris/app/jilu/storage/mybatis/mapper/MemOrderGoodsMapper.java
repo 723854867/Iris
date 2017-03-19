@@ -2,13 +2,13 @@ package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
 
+import org.Iris.app.jilu.common.bean.form.AllOrderGoodsSumForm;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderGoodsSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
@@ -48,6 +48,9 @@ public interface MemOrderGoodsMapper {
 	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getNotFinishMerchantOrderGoodsByOrderId")
 	List<MemOrderGoods> getNotFinishMerchantOrderGoodsByOrderId(String orderId);
+	
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getNotFinishMerchantOrderGoodsByMerchantId")
+	List<AllOrderGoodsSumForm> getNotFinishMerchantOrderGoodsByMerchantId(@Param("merchantId") long merchantId,@Param("start") int start,@Param("end") int end);
 	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getDelMerchantOrderGoodsByOrderId")
 	List<MemOrderGoods> getDelMerchantOrderGoodsByOrderId(String orderId);

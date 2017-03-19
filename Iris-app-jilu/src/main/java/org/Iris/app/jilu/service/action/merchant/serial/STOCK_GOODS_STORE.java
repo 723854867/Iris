@@ -17,7 +17,8 @@ public class STOCK_GOODS_STORE extends SerialMerchantAction{
 		long count = session.getKVParam(JiLuParams.COUNT);
 		float price = session.getKVParam(JiLuParams.PRICE);
 		String memo = session.getKVParamOptional(JiLuParams.MEMO);
-		return merchantService.stockGoodsStore(goodsId,count,price,memo,session.getMerchant());
+		int stockTime = session.getKVParam(JiLuParams.STOCKTIME);
+		return merchantService.stockGoodsStore(goodsId,count,price,memo,stockTime,session.getMerchant());
 	}
 
 }

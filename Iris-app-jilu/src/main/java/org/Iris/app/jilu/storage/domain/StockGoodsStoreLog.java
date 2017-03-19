@@ -13,11 +13,12 @@ public class StockGoodsStoreLog {
 	private float price;
 	private long count;
 	private int created;
+	private int stockTime;
 	public StockGoodsStoreLog() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public StockGoodsStoreLog(long goodsId, String goodsName,Long merchantId,String merchantName,String memo, Float price,long count, int created) {
+	public StockGoodsStoreLog(long goodsId, String goodsName,Long merchantId,String merchantName,String memo, Float price,long count, int created,int stockTime) {
 		super();
 		this.goodsId = goodsId;
 		this.goodsName = goodsName;
@@ -27,6 +28,7 @@ public class StockGoodsStoreLog {
 		this.price = price;
 		this.count = count;
 		this.created = created;
+		this.stockTime = stockTime;
 	}
 	public long getGoodsId() {
 		return goodsId;
@@ -75,6 +77,12 @@ public class StockGoodsStoreLog {
 	}
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+	public int getStockTime() {
+		return stockTime;
+	}
+	public void setStockTime(int stockTime) {
+		this.stockTime = stockTime;
 	}
 	
 	

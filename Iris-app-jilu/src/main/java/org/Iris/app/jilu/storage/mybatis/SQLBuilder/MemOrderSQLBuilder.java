@@ -1,7 +1,11 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.List;
+
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 public class MemOrderSQLBuilder {
 
@@ -84,6 +88,9 @@ public class MemOrderSQLBuilder {
 				UPDATE(Table.MEM_ORDER.mark());
 				SET("status=#{status}");
 				SET("memo=#{memo}");
+				SET("sh_memo=#{shMemo}");
+				SET("sh_info=#{shInfo}");
+				SET("sh_time=#{shTime}");
 				SET("updated=#{updated}");
 				WHERE("order_id=#{orderId}");
 			}
@@ -163,5 +170,25 @@ public class MemOrderSQLBuilder {
 				WHERE("order_id=#{orderId}");
 			}
 		}.toString();
+	}
+	
+	public String batchUpdate(StrictMap<List<MemOrder>> map) {
+		List<MemOrder> list = map.get("collection");
+		StringBuilder stringBuilder = new StringBuilder(256);
+		StringBuilder stringBuilder2 = new StringBuilder(256);
+		stringBuilder.append("update " + Table.MEM_ORDER.mark() + " set memo = case id ");
+		for (MemOrder order : list) {
+			stringBuilder.append(" when " + order.getOrderId() + " then " + order.getMemo());
+		}
+		stringBuilder.append(" end, updated = case id");
+		for (MemOrder order : list) {
+			stringBuilder.append(" when " + order.getOrderId() + " then " + order.getUpdated());
+			stringBuilder2.append(order.getOrderId() + ",");
+		}
+		stringBuilder.append(" end");
+		stringBuilder.append(" where id in(");
+		stringBuilder.append(stringBuilder2.substring(0, stringBuilder2.length() - 1));
+		stringBuilder.append(")");
+		return stringBuilder.toString();
 	}
 }

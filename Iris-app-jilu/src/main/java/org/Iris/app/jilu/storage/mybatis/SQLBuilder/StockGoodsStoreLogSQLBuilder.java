@@ -15,6 +15,7 @@ public class StockGoodsStoreLogSQLBuilder {
 				VALUES("merchant_name",  "#{merchantName}");
 				VALUES("count",	   		 "#{count}");
 				VALUES("price",	   		 "#{price}");
+				VALUES("stock_time",	 "#{stockTime}");
 				VALUES("memo",    		 "#{memo}");
 				VALUES("created", 		 "#{created}");
 			}
@@ -22,18 +23,7 @@ public class StockGoodsStoreLogSQLBuilder {
 	}
 	
 	public String getLogList(){
-		return new SQL(){
-			{
-				SELECT("*");
-				FROM(Table.LOG_STOCK_STORE.mark());
-				WHERE("goods_id=#{goodsId}");
-				AND();
-				WHERE("merchant_id=#{merchantId}");
-			}
-		}.toString();
+		return "select * from "+Table.LOG_STOCK_STORE.mark()+" where goods_id=#{goodsId} and merchant_id =#{merchantId}  order by created desc limit #{start},#{pageSize}";
 	}
 	
-	public String getLogListByGoodsId(){
-		return "select * from "+Table.LOG_STOCK_STORE.mark()+" where goods_id=#{goodsId} order by created desc limit 0,20";
-	}
 }

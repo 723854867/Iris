@@ -9,7 +9,6 @@ public class UpdateStoreLogSQLBuilder {
 		return new SQL() {
 			{
 				INSERT_INTO(Table.LOG_UPDATE_STORE.mark());
-				VALUES("order_id", 			"#{orderId}"); 
 				VALUES("merchant_id", 		"#{merchantId}"); 
 				VALUES("merchant_name", 	"#{merchantName}");
 				VALUES("goods_id", 			"#{goodsId}");

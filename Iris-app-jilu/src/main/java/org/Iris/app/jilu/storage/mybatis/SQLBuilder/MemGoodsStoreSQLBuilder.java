@@ -22,6 +22,7 @@ public class MemGoodsStoreSQLBuilder {
 				VALUES("price", 			"#{price}");
 				VALUES("memo", 				"#{memo}");
 				VALUES("count", 			"#{count}");
+				VALUES("name_prefix_letter","#{namePrefixLetter}");
 				VALUES("wait_count", 		"#{waitCount}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");
@@ -49,6 +50,8 @@ public class MemGoodsStoreSQLBuilder {
 				SET("memo=#{memo}");
 				SET("count=#{count}");
 				SET("wait_count=#{waitCount}");
+				SET("sell_count=#{sellCount}");
+				SET("last_stock_time=#{lastStockTime}");
 				SET("updated=#{updated}");
 				WHERE("merchant_id=#{merchantId}");
 				AND();
@@ -68,6 +71,10 @@ public class MemGoodsStoreSQLBuilder {
 		stringBuilder.append(" end, wait_count = case id");
 		for(MemGoodsStore store:list){
 			stringBuilder.append(" when "+store.getId()+" then "+store.getWaitCount());
+		}
+		stringBuilder.append(" end, sell_count = case id");
+		for(MemGoodsStore store:list){
+			stringBuilder.append(" when "+store.getId()+" then "+store.getSellCount());
 		}
 		stringBuilder.append(" end, updated = case id");
 		for(MemGoodsStore store:list){
@@ -123,8 +130,9 @@ public class MemGoodsStoreSQLBuilder {
 		}.toString();
 	}
 	
-	public String getMemGoodsStoreList(){
-		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where merchant_id=#{merchantId} LIMIT #{start},#{pageSize}";
+	public String getMemGoodsStoreList(Map<String, Object> para){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" "
+				+ "where merchant_id=#{merchantId} order by "+para.get("orderByColumn")+" "+para.get("sort")+" LIMIT #{start},#{pageSize}";
 	}
 	
 	public String getMemGoodsStoreListByName(Map<String, Object> para){

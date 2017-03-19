@@ -13,9 +13,8 @@ public interface StockGoodsStoreLogMapper {
 	@InsertProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "insert")
 	void insert(StockGoodsStoreLog log);
 	
-	@SelectProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "getLogList")
-	List<StockGoodsStoreLog> getLogList(@Param("goodsId")long goodsId,@Param("merchantId") long merchantId);
 	
-	@SelectProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "getLogListByGoodsId")
-	List<StockGoodsStoreLog> getLogListByGoodsId(@Param("goodsId")long goodsId);
+	@SelectProvider(type = StockGoodsStoreLogSQLBuilder.class , method = "getLogList")
+	List<StockGoodsStoreLog> getLogList(@Param("merchantId") long merchantId,@Param("goodsId")long goodsId,
+			@Param("start") int start,@Param("pageSize") int pageSize);
 }

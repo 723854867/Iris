@@ -33,7 +33,8 @@ public interface MemGoodsStoreMapper {
 	long getCountBymerchantId(long merchantId);
 	
 	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreList")
-	List<MemGoodsStore> getMemGoodsStoreList(@Param("start")int page,@Param("pageSize")int pageSize,@Param("merchantId")long merhcantId);
+	List<MemGoodsStore> getMemGoodsStoreList(@Param("start")int page,
+			@Param("pageSize")int pageSize,@Param("merchantId")long merhcantId,@Param("orderByColumn")String orderByColumn,@Param("sort")String sort);
 	
 	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getCountByName")
 	long getCountByName(@Param("goodsName")String goodsName);

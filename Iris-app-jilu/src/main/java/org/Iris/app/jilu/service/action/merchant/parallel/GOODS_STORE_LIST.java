@@ -14,10 +14,11 @@ public class GOODS_STORE_LIST extends ParallelMerchantAction{
 
 	@Override
 	protected String execute0(MerchantSession session) {
+		int type = session.getKVParam(JiLuParams.TYPE);
 		int page = session.getKVParam(JiLuParams.PAGE);
 		int pageSize = session.getKVParam(JiLuParams.PAGE_SIZE);
 		Merchant merchant = session.getMerchant();
-		return merchant.getGoodsStoreList(page, pageSize);
+		return merchant.getGoodsStoreList(page, pageSize,type);
 	}
 
 	

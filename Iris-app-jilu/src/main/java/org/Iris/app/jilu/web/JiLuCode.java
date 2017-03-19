@@ -38,7 +38,8 @@ public enum JiLuCode implements ICode {
 	TRANSFORM_ORDER_CONNOT_UPDATED(226, "transform order connot updated"),
 	ORDER_CONNOT_OPTION(227, "order connot option"),
 	CHANGE_SUM_BIGGER(228, "change sum bigger"),
-	PACKET_COUNT_ERROR(229, "order packet count error");
+	PACKET_COUNT_ERROR(229, "order packet count error"),
+	ORDER_MEMO_CANNOT_EDIT(230, "this order memo can't edit");
 	
 	private int code;
 	private String defaultVaule;

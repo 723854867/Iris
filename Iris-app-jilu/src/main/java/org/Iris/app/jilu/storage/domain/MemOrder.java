@@ -18,6 +18,9 @@ public class MemOrder implements RedisHashBean{
 	private String customerMobile;
 	private String customerAddress;
 	private String memo;
+	private String shMemo;//售后完成的备注
+	private String shInfo;//售后的要求说明
+	private int shTime;//售后的预计处理时间
 	private int status;
 	private int created;
 	private int updated;
@@ -133,6 +136,30 @@ public class MemOrder implements RedisHashBean{
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getShMemo() {
+		return shMemo;
+	}
+
+	public void setShMemo(String shMemo) {
+		this.shMemo = shMemo;
+	}
+
+	public String getShInfo() {
+		return shInfo;
+	}
+
+	public void setShInfo(String shInfo) {
+		this.shInfo = shInfo;
+	}
+
+	public int getShTime() {
+		return shTime;
+	}
+
+	public void setShTime(int shTime) {
+		this.shTime = shTime;
 	}
 
 	public String getMemo() {

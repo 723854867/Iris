@@ -92,4 +92,10 @@ public interface JiLuParams {
 	final IrisStrConst KEY							        = new IrisStrConst("key", 154);
 	final IrisFloatConst PRICE							    = new IrisFloatConst("price", 155);
 	final IrisStrConst PHONES 							    = new IrisStrConst("phones", 156);
+	final IrisIntConst START 								= new IrisIntConst("start", 157);
+	final IrisIntConst END 									= new IrisIntConst("end", 158);
+	final IrisStrConst OPERATION 							= new IrisStrConst("operation", 159);
+	final IrisIntConst STOCKTIME 							= new IrisIntConst("stockTime", 160);
+	final IrisStrConst INFO 								= new IrisStrConst("info", 161);
+	final IrisIntConst TIME 								= new IrisIntConst("time", 162);
 }

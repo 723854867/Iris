@@ -24,7 +24,7 @@ public class UpdateStoreLog {
 	private int created;
 	private int updated;
 	
-	public UpdateStoreLog(MemGoodsStore store,float newPrice,int newCount,String newMemo,String operation){
+	public UpdateStoreLog(MemGoodsStore store,float newPrice,long newCount,String newMemo,String operation){
 		this.goodsId = store.getGoodsId();
 		this.goodsName = store.getGoodsName();
 		this.merchantId = store.getMerchantId();

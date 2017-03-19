@@ -2,6 +2,7 @@ package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
+import org.Iris.util.common.CnToSpell;
 import org.Iris.util.lang.DateUtils;
 
 public class MemGoodsStore implements RedisHashBean {
@@ -16,7 +17,10 @@ public class MemGoodsStore implements RedisHashBean {
 	private long waitCount;
 	private float price;
 	private String memo;
-	private int statusMod;// 后期用于标记是否已经上传商品图片
+	private int sign;// 后期用于标记是否已经上传商品图片
+	private int sellCount;//产品销售总量
+	private int lastStockTime;//最后进货时间
+	private String namePrefixLetter;//产品名字的第一个之母
 	private int created;
 	private int updated;
 
@@ -30,6 +34,7 @@ public class MemGoodsStore implements RedisHashBean {
 		this.memo = memo;
 		this.count = count;
 		this.waitCount = waitCount;
+		this.namePrefixLetter = CnToSpell.getFirstChar(merchantName);
 		int time = DateUtils.currentTime();
 		this.created = time;
 		this.updated = time;
@@ -86,6 +91,38 @@ public class MemGoodsStore implements RedisHashBean {
 		this.waitCount = waitCount;
 	}
 
+	public int getSign() {
+		return sign;
+	}
+
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+	public int getSellCount() {
+		return sellCount;
+	}
+
+	public void setSellCount(int sellCount) {
+		this.sellCount = sellCount;
+	}
+
+	public int getLastStockTime() {
+		return lastStockTime;
+	}
+
+	public void setLastStockTime(int lastStockTime) {
+		this.lastStockTime = lastStockTime;
+	}
+
+	public String getNamePrefixLetter() {
+		return namePrefixLetter;
+	}
+
+	public void setNamePrefixLetter(String namePrefixLetter) {
+		this.namePrefixLetter = namePrefixLetter;
+	}
+
 	public int getCreated() {
 		return created;
 	}
@@ -126,13 +163,7 @@ public class MemGoodsStore implements RedisHashBean {
 		this.memo = memo;
 	}
 
-	public int getStatusMod() {
-		return statusMod;
-	}
-
-	public void setStatusMod(int statusMod) {
-		this.statusMod = statusMod;
-	}
+	
 
 	public float getPrice() {
 		return price;

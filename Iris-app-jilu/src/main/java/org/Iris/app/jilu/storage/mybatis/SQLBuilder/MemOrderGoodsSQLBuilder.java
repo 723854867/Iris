@@ -68,6 +68,10 @@ public class MemOrderGoodsSQLBuilder {
 		for (MemOrderGoods orderGoods : list) {
 			stringBuilder.append(" when " + orderGoods.getId() + " then " + orderGoods.getCount());
 		}
+		stringBuilder.append(" end, goods_id = case id");
+		for (MemOrderGoods orderGoods : list) {
+			stringBuilder.append(" when " + orderGoods.getId() + " then " + orderGoods.getGoodsId());
+		}
 		stringBuilder.append(" end, change_order_id = case id");
 		for (MemOrderGoods orderGoods : list) {
 			stringBuilder.append(" when " + orderGoods.getId() + " then " + orderGoods.getChangeOrderId());
@@ -186,10 +190,15 @@ public class MemOrderGoodsSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String getNotFinishMerchantOrderGoodsByMerchantId(){
+		return "SELECT mog.`goods_id`,SUM(COUNT) count FROM "+Table.MEM_ORDER.mark()+" mo JOIN "+Table.MEM_ORDER_GOODS.mark()+" mog ON mo.order_id = mog.order_id  "
+				+ "WHERE mo.merchant_id = #{merchantId} AND mog.`status` =0 and mog.created BETWEEN #{start} AND #{end} GROUP BY mog.`goods_id`";
+	}
 
 	public String getDelMerchantOrderGoodsByOrderId() {
-		return "select order_id,goods_id,sum(count) count,status from " + Table.MEM_ORDER_GOODS.mark()
-				+ " where order_id = #{orderId} and status != 7 group by goods_id,status";
+		return "select * from " + Table.MEM_ORDER_GOODS.mark()
+				+ " where order_id = #{orderId} and status != 7 ";
 	}
 
 	public String getPacketMerchantOrderGoodsByPacketId() {

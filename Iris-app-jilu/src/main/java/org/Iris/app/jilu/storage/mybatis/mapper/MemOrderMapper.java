@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.storage.domain.MemOrder;
+import org.Iris.app.jilu.storage.domain.MemOrderGoods;
+import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderGoodsSQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -95,4 +97,11 @@ public interface MemOrderMapper {
 	
 	@DeleteProvider(type = MemOrderSQLBuilder.class, method="delete")
 	void delete(@Param("merchantId") long merchantId,@Param("orderId") String orderId);
+	
+	/**
+	 * 批量更新订单备注
+	 * @param list
+	 */
+	@UpdateProvider(type = MemOrderSQLBuilder.class, method = "batchUpdate")
+	void batchUpdate(List<MemOrder> list);
 }

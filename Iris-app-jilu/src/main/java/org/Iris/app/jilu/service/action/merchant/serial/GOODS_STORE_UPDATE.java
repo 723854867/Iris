@@ -13,8 +13,9 @@ public class GOODS_STORE_UPDATE extends SerialMerchantAction{
 		String memo = session.getKVParamOptional(JiLuParams.MEMO);
 		long count = session.getKVParam(JiLuParams.COUNT);
 		float price = session.getKVParam(JiLuParams.PRICE);
+		String operation = session.getKVParam(JiLuParams.OPERATION);
 		Merchant merchant = session.getMerchant();
-		return merchant.updateGoodsStore(goodsId,memo,count,price);
+		return merchantService.updateGoodsStore(goodsId,memo,count,price,operation,merchant);
 	}
 
 }

@@ -1,9 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.Iris.app.jilu.common.JiLuResourceUtil;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 
@@ -15,6 +13,7 @@ import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
  */
 public class GoodsStoreAndStockForm {
 
+	private long id;
 	private long merchantId;
 	private String merchantName;
 	private long goodsId;
@@ -22,15 +21,19 @@ public class GoodsStoreAndStockForm {
 	private long count;
 	private float price;
 	private String memo;
-	private int statusMod;
-	private String goodsImage;
+	private int sign;
+	//待出库数量
+	private long waitCount;
+	//产品平均成本
+	private float averagePrice;
 	// 进货记录
 	private List<StockGoodsStoreLog> stockGoodsStoreLogs;
 
 	public GoodsStoreAndStockForm() {
 	}
 
-	public GoodsStoreAndStockForm(MemGoodsStore store, List<StockGoodsStoreLog> stockGoodsStoreLogs) {
+	public GoodsStoreAndStockForm(MemGoodsStore store, List<StockGoodsStoreLog> stockGoodsStoreLogs,float averagePrice) {
+		this.id = store.getId();
 		this.merchantId = store.getMerchantId();
 		this.merchantName = store.getMerchantName();
 		this.goodsId = store.getGoodsId();
@@ -38,9 +41,19 @@ public class GoodsStoreAndStockForm {
 		this.count = store.getCount();
 		this.price = store.getPrice();
 		this.memo = store.getMemo();
-		this.statusMod = store.getStatusMod();
-		this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
+		this.sign = store.getSign();
+		this.waitCount = store.getWaitCount();
+		this.averagePrice = averagePrice;
+		//this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
 		this.stockGoodsStoreLogs = stockGoodsStoreLogs;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public long getMerchantId() {
@@ -98,13 +111,28 @@ public class GoodsStoreAndStockForm {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-
-	public int getStatusMod() {
-		return statusMod;
+	public int getSign() {
+		return sign;
 	}
 
-	public void setStatusMod(int statusMod) {
-		this.statusMod = statusMod;
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+	public long getWaitCount() {
+		return waitCount;
+	}
+
+	public void setWaitCount(long waitCount) {
+		this.waitCount = waitCount;
+	}
+
+	public float getAveragePrice() {
+		return averagePrice;
+	}
+
+	public void setAveragePrice(float averagePrice) {
+		this.averagePrice = averagePrice;
 	}
 
 	public List<StockGoodsStoreLog> getStockGoodsStoreLogs() {
@@ -113,13 +141,5 @@ public class GoodsStoreAndStockForm {
 
 	public void setStockGoodsStoreLogs(List<StockGoodsStoreLog> stockGoodsStoreLogs) {
 		this.stockGoodsStoreLogs = stockGoodsStoreLogs;
-	}
-
-	public String getGoodsImage() {
-		return goodsImage;
-	}
-
-	public void setGoodsImage(String goodsImage) {
-		this.goodsImage = goodsImage;
 	}
 }

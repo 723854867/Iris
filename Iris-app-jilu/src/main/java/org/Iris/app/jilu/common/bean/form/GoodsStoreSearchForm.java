@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.common.bean.form;
 
-import org.Iris.app.jilu.common.JiLuResourceUtil;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 
@@ -11,10 +10,11 @@ public class GoodsStoreSearchForm {
 	private String merchantName;
 	private long goodsId;
 	private String goodsName;
+	private long id;
 	private long count;
 	private float price;
 	private String memo;
-	private int statusMod;
+	private int sign;
 	private String goodsImage;
 	
 	public GoodsStoreSearchForm(CfgGoods cfgGoods){
@@ -26,6 +26,7 @@ public class GoodsStoreSearchForm {
 	}
 	
 	public GoodsStoreSearchForm(MemGoodsStore store) {
+		this.id = store.getId();
 		this.isCreated = 1;
 		this.merchantId = store.getMerchantId();
 		this.merchantName = store.getMerchantName();
@@ -34,8 +35,8 @@ public class GoodsStoreSearchForm {
 		this.count = store.getCount();
 		this.price = store.getPrice();
 		this.memo = store.getMemo();
-		this.statusMod = store.getStatusMod();
-		this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
+		this.sign = store.getSign();
+		//this.goodsImage = JiLuResourceUtil.goodsImageUri(store);
 	}
 	public int getIsCreated() {
 		return isCreated;
@@ -67,6 +68,13 @@ public class GoodsStoreSearchForm {
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public long getCount() {
 		return count;
 	}
@@ -85,12 +93,14 @@ public class GoodsStoreSearchForm {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-	public int getStatusMod() {
-		return statusMod;
+	public int getSign() {
+		return sign;
 	}
-	public void setStatusMod(int statusMod) {
-		this.statusMod = statusMod;
+
+	public void setSign(int sign) {
+		this.sign = sign;
 	}
+
 	public String getGoodsImage() {
 		return goodsImage;
 	}

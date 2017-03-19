@@ -16,6 +16,8 @@ import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.GoodsListType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
+import org.Iris.app.jilu.common.bean.enums.OrderByType;
+import org.Iris.app.jilu.common.bean.form.AllOrderGoodsSumForm;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsListForm;
@@ -50,7 +52,6 @@ import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
 import org.Iris.app.jilu.storage.domain.MemWaitStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
-import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
@@ -669,12 +670,30 @@ public class Merchant implements Beans {
 	 * 
 	 * @return
 	 */
-	public String getGoodsStoreList(int page, int pageSize) {
+	public String getGoodsStoreList(int page, int pageSize,int type) {
 		long count = memGoodsStoreMapper.getCountBymerchantId(getMemMerchant().getMerchantId());
 		if (count == 0)
 			return Result.jsonSuccess(Pager.EMPTY);
+		String sort = "";//表示以type递增或递减
+		String orderByColumn = "";
+		switch (type) {
+		case 0:
+			sort = OrderByType.ASC.name();
+			orderByColumn = "name_prefix_letter";
+			break;
+		case 1:
+			sort = OrderByType.DESC.name();
+			orderByColumn = "last_stock_time";
+			break;
+		case 2:
+			sort = OrderByType.DESC.name();
+			orderByColumn = "sell_count";
+			break;
+		default:
+			throw IllegalConstException.errorException(JiLuParams.TYPE);
+		}
 		List<MemGoodsStore> list = memGoodsStoreMapper.getMemGoodsStoreList((page - 1) * pageSize, pageSize,
-				getMemMerchant().getMerchantId());
+				getMemMerchant().getMerchantId(),orderByColumn,sort);
 		return Result.jsonSuccess(new Pager<GoodsStoreForm>(count, GoodsStoreForm.getGoodsStoreFormList(list)));
 	}
 
@@ -875,25 +894,6 @@ public class Merchant implements Beans {
 		return memAccid;
 	}
 
-	/**
-	 * 修改商品仓储
-	 * @param memo
-	 * @param count
-	 * @param price
-	 * @return
-	 */
-	public String updateGoodsStore(long goodsId,String memo, long count, float price) {
-		MemGoodsStore store = getMemGoodsStore(memMerchant.getMerchantId(),goodsId);
-		if(store == null)
-			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		store.setMemo(memo);
-		store.setCount(count);
-		store.setPrice(price);
-		store.setUpdated(DateUtils.currentTime());
-		memGoodsStoreMapper.update(store);
-		redisOperate.hmset(store.redisKey(), store);
-		return Result.jsonSuccess();
-	}
 
 	/**
 	 * 搜索商品仓储
@@ -929,7 +929,7 @@ public class Merchant implements Beans {
 	}
 	
 	/**
-	 * 获取商品的仓储数据（包括最近进货记录）
+	 * 获取商品的仓储数据（包括最近进货记录,商户该产品的待出库数据）
 	 * @param goodsId
 	 * @return
 	 */
@@ -937,8 +937,22 @@ public class Merchant implements Beans {
 		MemGoodsStore goodsStore = getMemGoodsStore(memMerchant.getMerchantId(),goodsId);
 		if(null== goodsStore)
 			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
-		List<StockGoodsStoreLog> logs = stockGoodsStoreLogMapper.getLogListByGoodsId(goodsId);
-		return Result.jsonSuccess(new GoodsStoreAndStockForm(goodsStore,logs));
+		List<StockGoodsStoreLog> logs = stockGoodsStoreLogMapper.getLogList(memMerchant.getMerchantId(),goodsId,0,5);
+		//计算平均成本
+		long count = 0;
+		float averagePrice=0;
+		if(logs!=null && logs.size()>0 && goodsStore.getCount()>0){
+			for(StockGoodsStoreLog log : logs){
+				if(goodsStore.getCount() < count)
+					break;
+				averagePrice+=log.getPrice()*log.getCount();
+				count +=log.getCount();
+			}
+			averagePrice = averagePrice/count;
+		}else{
+			averagePrice = goodsStore.getPrice();
+		}
+		return Result.jsonSuccess(new GoodsStoreAndStockForm(goodsStore,logs,averagePrice));
 	}
 	
 	/**
@@ -972,22 +986,35 @@ public class Merchant implements Beans {
 		MemOrder memOrder = getMerchantOrderById(memMerchant.getMerchantId(), orderId);
 		if(null == memOrder)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
-		memOrder.setMemo(memo);
-		memOrderMapper.update(memOrder);
-		redisOperate.hmset(memOrder.redisKey(), memOrder);
+		if(!memOrder.getRootOrderId().equals(orderId))
+			return Result.jsonError(JiLuCode.ORDER_MEMO_CANNOT_EDIT);
 		//推送消息给与该订单相关的商户
 		List<MemOrder> list = memOrderMapper.getAllOrderByRootOrderId(memOrder.getRootOrderId());
 		List<String> cids = new ArrayList<String>();
 		for(MemOrder order : list){
+			order.setMemo(memo);
+			order.setUpdated(DateUtils.currentTime());
 			if(order.getMerchantId() == memMerchant.getMerchantId() || order.getStatus() > 4)
 				continue;
 			MemCid memCid = getMemCid(order.getMerchantId());
 			if(memCid !=null)
 				cids.add(memCid.getClientId());
 		}
+		memOrderMapper.batchUpdate(list);
+		redisOperate.batchHmset(list);
 		//推送
 		JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
 		return Result.jsonSuccess();
+	}
+	/**
+	 * 根据时间段查询所有订单待采购清单总和
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public String allOrderGoodsSum(int start, int end) {
+		List<AllOrderGoodsSumForm> list = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByMerchantId(memMerchant.getMerchantId(),start,end);
+		return Result.jsonSuccess(list);
 	}
 	
 	/**
@@ -1112,4 +1139,5 @@ public class Merchant implements Beans {
 		}
 		return store;
 	}
+
 }
