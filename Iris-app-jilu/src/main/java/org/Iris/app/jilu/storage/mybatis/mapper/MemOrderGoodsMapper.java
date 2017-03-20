@@ -57,12 +57,19 @@ public interface MemOrderGoodsMapper {
 	
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getPacketMerchantOrderGoodsByPacketId")
 	List<MemOrderGoods> getPacketMerchantOrderGoodsByPacketId(String packetId);
+	
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getPacketMerchantOrderGoodsCountByPacketId")
+	long getPacketMerchantOrderGoodsCountByPacketId(String packetId);
+	
+	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getMerchantOrderGoodsByPacketId")
+	MemOrderGoods getMerchantOrderGoodsByPacketId(@Param("packetId") String packetId,@Param("goodsId") long goodsId);
+	
 	//找到父订单单个产品未转传出去的部分
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getSuperNotChangeOrderGoods")
 	MemOrderGoods getSuperNotChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId);
 	//找到父订单单个产品转出去的部分
 	@SelectProvider(type = MemOrderGoodsSQLBuilder.class, method = "getSuperChangeOrderGoods")
-	MemOrderGoods getSuperChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId,@Param("count") int count);
+	MemOrderGoods getSuperChangeOrderGoods(@Param("orderId") String orderId,@Param("goodsId") long goodsId,@Param("count") long count);
 	
 	
 }

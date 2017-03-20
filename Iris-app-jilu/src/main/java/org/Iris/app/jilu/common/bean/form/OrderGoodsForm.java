@@ -8,7 +8,7 @@ public class OrderGoodsForm {
 	private long goodsId;
 	private String orderId;
 	private String goodsName;
-	private int count;
+	private long count;
 	private String unitPrice;
 	
 	public OrderGoodsForm(MemOrderGoods memOrderGoods){
@@ -46,10 +46,10 @@ public class OrderGoodsForm {
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 

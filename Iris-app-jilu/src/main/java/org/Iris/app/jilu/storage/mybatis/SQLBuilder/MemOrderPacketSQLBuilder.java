@@ -51,6 +51,15 @@ public class MemOrderPacketSQLBuilder {
 		}.toString();
 	}
 	
+	public String delete(){
+		return new SQL(){
+			{
+				DELETE_FROM(Table.MEM_ORDER_PACKET.mark());
+				WHERE("packet_id=#{packetId}");
+			}
+		}.toString();
+	}
+	
 	public String getMemOrderPacketById(){
 		return new SQL(){
 			{

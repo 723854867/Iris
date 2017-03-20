@@ -37,7 +37,7 @@ public class ORDER_PACKET extends SerialMerchantAction{
 		String[] strings = packetGoodsList.split(";");
 		if(strings.length<1)
 			throw IllegalConstException.errorException(JiLuParams.PACKETGOODSLIST);
-		Map<Long, Integer> goodsCount = new HashMap<Long, Integer>();
+		Map<Long, Long> goodsCount = new HashMap<Long, Long>();
 		List<List<MemOrderGoods>> packets = new ArrayList<List<MemOrderGoods>>();
 		for(String packet:strings){
 			List<MemOrderGoods>	list = new ArrayList<MemOrderGoods>(Arrays.asList(SerializeUtil.JsonUtil.GSON.fromJson(packet, MemOrderGoods[].class)));
@@ -53,7 +53,7 @@ public class ORDER_PACKET extends SerialMerchantAction{
 			}
 			packets.add(list);
 		}
-		for(Entry<Long, Integer> entry:goodsCount.entrySet()){
+		for(Entry<Long, Long> entry:goodsCount.entrySet()){
 			MemOrderGoods mog = memOrderGoodsMapper.getMerchantOrderGoodsById(entry.getKey());
 			if(mog==null)
 				throw IllegalConstException.errorException(JiLuParams.PACKETGOODSLIST);

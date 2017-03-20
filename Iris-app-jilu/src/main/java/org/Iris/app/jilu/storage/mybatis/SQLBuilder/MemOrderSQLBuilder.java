@@ -176,17 +176,17 @@ public class MemOrderSQLBuilder {
 		List<MemOrder> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
 		StringBuilder stringBuilder2 = new StringBuilder(256);
-		stringBuilder.append("update " + Table.MEM_ORDER.mark() + " set memo = case id ");
+		stringBuilder.append("update " + Table.MEM_ORDER.mark() + " set memo = case order_id ");
 		for (MemOrder order : list) {
-			stringBuilder.append(" when " + order.getOrderId() + " then " + order.getMemo());
+			stringBuilder.append(" when " + order.getOrderId() + " then '" + order.getMemo()+"'");
 		}
-		stringBuilder.append(" end, updated = case id");
+		stringBuilder.append(" end, updated = case order_id");
 		for (MemOrder order : list) {
 			stringBuilder.append(" when " + order.getOrderId() + " then " + order.getUpdated());
 			stringBuilder2.append(order.getOrderId() + ",");
 		}
 		stringBuilder.append(" end");
-		stringBuilder.append(" where id in(");
+		stringBuilder.append(" where order_id in(");
 		stringBuilder.append(stringBuilder2.substring(0, stringBuilder2.length() - 1));
 		stringBuilder.append(")");
 		return stringBuilder.toString();

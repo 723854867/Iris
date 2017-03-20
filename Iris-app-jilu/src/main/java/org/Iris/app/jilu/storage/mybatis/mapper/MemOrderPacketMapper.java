@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderPacketSQLBuilder;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -16,6 +17,9 @@ public interface MemOrderPacketMapper {
 	
 	@UpdateProvider(type = MemOrderPacketSQLBuilder.class, method = "update")
 	void update(MemOrderPacket packet);
+	
+	@DeleteProvider(type = MemOrderPacketSQLBuilder.class, method = "delete")
+	void delete(MemOrderPacket packet);
 	
 	@InsertProvider(type = MemOrderPacketSQLBuilder.class, method = "batchInsert")
 	void batchInsert(List<MemOrderPacket> list);

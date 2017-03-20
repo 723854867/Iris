@@ -2,6 +2,7 @@ package org.Iris.app.jilu.storage.domain;
 
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
+import org.Iris.util.lang.DateUtils;
 
 public class MemOrderGoods implements RedisHashBean{
 
@@ -13,7 +14,7 @@ public class MemOrderGoods implements RedisHashBean{
 	private long goodsId;
 	private String goodsName;
 	private int goodsImage;
-	private int count;
+	private long count;
 	private String unitPrice;
 	private int status;
 	private int created;
@@ -25,6 +26,21 @@ public class MemOrderGoods implements RedisHashBean{
 		this.orderId = orderId;
 		this.goodsId = goodsId;
 	}
+	
+	public MemOrderGoods(MemOrderGoods memOrderGoods){
+		this.orderId = memOrderGoods.getOrderId();
+		this.packetId = memOrderGoods.getPacketId();
+		this.goodsId = memOrderGoods.getGoodsId();
+		this.goodsName = memOrderGoods.getGoodsName();
+		this.goodsImage = memOrderGoods.getGoodsImage();
+		this.count = memOrderGoods.getCount();
+		this.unitPrice = memOrderGoods.getUnitPrice();
+		this.status = memOrderGoods.getStatus();
+		int time = DateUtils.currentTime();
+		this.created = time;
+		this.updated = time;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -83,11 +99,11 @@ public class MemOrderGoods implements RedisHashBean{
 		this.goodsImage = goodsImage;
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 

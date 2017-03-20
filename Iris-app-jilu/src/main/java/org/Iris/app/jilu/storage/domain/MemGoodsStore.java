@@ -18,7 +18,7 @@ public class MemGoodsStore implements RedisHashBean {
 	private float price;
 	private String memo;
 	private int sign;// 后期用于标记是否已经上传商品图片
-	private int sellCount;//产品销售总量
+	private long sellCount;//产品销售总量
 	private int lastStockTime;//最后进货时间
 	private String namePrefixLetter;//产品名字的第一个之母
 	private int created;
@@ -99,11 +99,11 @@ public class MemGoodsStore implements RedisHashBean {
 		this.sign = sign;
 	}
 
-	public int getSellCount() {
+	public long getSellCount() {
 		return sellCount;
 	}
 
-	public void setSellCount(int sellCount) {
+	public void setSellCount(long sellCount) {
 		this.sellCount = sellCount;
 	}
 

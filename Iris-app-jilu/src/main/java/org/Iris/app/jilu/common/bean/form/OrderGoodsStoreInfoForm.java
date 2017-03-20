@@ -20,7 +20,7 @@ public class OrderGoodsStoreInfoForm {
 	public OrderGoodsStoreInfoForm() {
 		// TODO Auto-generated constructor stub
 	}
-	public OrderGoodsStoreInfoForm(long goodsId, String goodsName, int needCount,int isCreated, long storeCount, float price) {
+	public OrderGoodsStoreInfoForm(long goodsId, String goodsName, long needCount,int isCreated, long storeCount, float price) {
 		super();
 		this.goodsId = goodsId;
 		this.goodsName = goodsName;

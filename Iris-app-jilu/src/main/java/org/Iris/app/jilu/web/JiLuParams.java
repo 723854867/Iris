@@ -98,4 +98,7 @@ public interface JiLuParams {
 	final IrisIntConst STOCKTIME 							= new IrisIntConst("stockTime", 160);
 	final IrisStrConst INFO 								= new IrisStrConst("info", 161);
 	final IrisIntConst TIME 								= new IrisIntConst("time", 162);
+	final IrisStrConst FROMPACKETID							= new IrisStrConst("fromPacketId", 163);
+	final IrisStrConst TOPACKETID							= new IrisStrConst("toPacketId", 164);
+	final IrisLongConst ID									= new IrisLongConst("id", 165);
 }

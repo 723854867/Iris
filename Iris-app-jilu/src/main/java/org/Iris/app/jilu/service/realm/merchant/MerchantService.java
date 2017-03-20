@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.print.attribute.HashAttributeSet;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
@@ -27,7 +26,6 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
-import org.Iris.app.jilu.storage.domain.MemWaitStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.domain.UpdateStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
@@ -363,7 +361,7 @@ public class MerchantService extends RedisCache {
 				return Result.jsonError(JiLuCode.ORDER_GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_NOT_EXIST.defaultValue(), ogs.getId()));
 			if (mGood.getStatus() != 0)
 				return Result.jsonError(JiLuCode.ORDER_GOODS_IS_LOCK.constId(), MessageFormat.format(JiLuCode.ORDER_GOODS_IS_LOCK.defaultValue(), ogs.getId()));
-			int count  = mGood.getCount() - ogs.getCount();
+			long count  = mGood.getCount() - ogs.getCount();
 			if(count > 0){//原产品数量大于转出去的产品数量
 				mGood.setCount(count);
 				mGood.setUpdated(time);
@@ -696,6 +694,72 @@ public class MerchantService extends RedisCache {
 		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
 	}
 	
+	
+	/**
+	 * 移包
+	 * @param fromPacketId
+	 * @param toPacketId
+	 * @param id
+	 * @param count
+	 * @return
+	 */
+	@Transactional
+	public String packetMove(String fromPacketId, String toPacketId, long id, long count,Merchant merchant) {
+		int time = DateUtils.currentTime();
+		MemOrderPacket fromPacket = merchant.getMemOrderPacket(fromPacketId);
+		MemOrderPacket toPacket = merchant.getMemOrderPacket(toPacketId);
+		if(null == fromPacket)
+			throw IllegalConstException.errorException(JiLuParams.FROMPACKETID);
+		if(null == toPacket)
+			throw IllegalConstException.errorException(JiLuParams.TOPACKETID);
+		if(fromPacket.getStatus()!=OrderStatus.PACKET.status() || toPacket.getStatus()!=OrderStatus.PACKET.status() || !fromPacket.getOrderId().equals(toPacket.getOrderId()))
+			return Result.jsonError(JiLuCode.PACKET_CANNOT_MOVE);
+		long fromPacketCount = memOrderGoodsMapper.getPacketMerchantOrderGoodsCountByPacketId(fromPacketId);
+		MemOrderGoods fromMemOrderGoods = merchant.getMerchantOrderGoodsById(id);
+		if(null == fromMemOrderGoods) 
+			throw IllegalConstException.errorException(JiLuParams.ID);
+		if(fromMemOrderGoods.getCount() < count)
+			throw IllegalConstException.errorException(JiLuParams.COUNT);
+		MemOrderGoods toMemOrderGoods = memOrderGoodsMapper.getMerchantOrderGoodsByPacketId(toPacketId, fromMemOrderGoods.getGoodsId());
+		//处理转入的包裹
+		if(toMemOrderGoods == null){//移入的包中没有该产品
+			toMemOrderGoods = new MemOrderGoods(fromMemOrderGoods);
+			toMemOrderGoods.setPacketId(toPacketId);
+			memOrderGoodsMapper.insert(toMemOrderGoods);
+		}else{
+			toMemOrderGoods.setCount(toMemOrderGoods.getCount()+count);
+			toMemOrderGoods.setUpdated(time);
+			memOrderGoodsMapper.update(toMemOrderGoods);
+		}
+		//处理转出的包裹
+		if(fromPacketCount == 1 && fromMemOrderGoods.getCount() == count){
+			//转出的包裹产品全转没了 此时要删除包裹
+			memOrderPacketMapper.delete(fromPacket);
+			memOrderGoodsMapper.delete(fromMemOrderGoods.getId());
+			/*更新父订单状态 和 订单状态表 开始*/
+			MemOrderStatus status = merchant.getMemOrderStatusByOrderId(fromPacket.getOrderId());
+			status.setPacketCount(status.getPacketCount()-1);
+			setOrderStatus(merchant, fromPacket.getOrderId(), merchant.getMemMerchant().getMerchantId(), status);
+			/*更新父订单状态 和 订单状态表 结束*/
+			redisOperate.del(fromPacket.redisKey());
+			redisOperate.del(fromMemOrderGoods.redisKey());
+			
+		}else if(fromPacketCount >1 && fromMemOrderGoods.getCount() == count){
+			//转出的包裹还有别的产品且转出的产品数量全转完
+			memOrderGoodsMapper.delete(fromMemOrderGoods.getId());
+			redisOperate.del(fromMemOrderGoods.redisKey());
+		}else{
+			//转出的产品没有全转完
+			fromMemOrderGoods.setCount(fromMemOrderGoods.getCount()-count);
+			fromMemOrderGoods.setUpdated(time);
+			memOrderGoodsMapper.update(fromMemOrderGoods);
+			redisOperate.hmset(fromMemOrderGoods.redisKey(), fromMemOrderGoods);
+		}
+		redisOperate.hmset(toMemOrderGoods.redisKey(), toMemOrderGoods);
+		
+		return Result.jsonSuccess();
+	}
+	
 	/**
 	 * 添加快递单
 	 * @param packetId
@@ -806,6 +870,7 @@ public class MerchantService extends RedisCache {
 		return Result.jsonSuccess();
 	}
 	
+	@Transactional
 	protected void setOrderStatus(Merchant merchant,String orderId,long merchantId,MemOrderStatus status){
 		MemOrder order = merchant.getMerchantOrderById(merchantId, orderId);
 		memOrderStatusMapper.update(status);
@@ -923,5 +988,6 @@ public class MerchantService extends RedisCache {
 		redisOperate.hmset(order.redisKey(), order);
 		return Result.jsonSuccess();
 	}
+
 	
 }

@@ -48,11 +48,11 @@ public class MemOrderGoodsSQLBuilder {
 			{
 				UPDATE(Table.MEM_ORDER_GOODS.mark());
 				SET("packet_id=#{packetId}");
-				SET("goods_id=#{goods_id}");
-				SET("goods_name=#{goods_name}");
-				SET("goods_image=#{goods_image}");
+				SET("goods_id=#{goodsId}");
+				SET("goods_name=#{goodsName}");
+				SET("goods_image=#{goodsImage}");
 				SET("count=#{count}");
-				SET("unit_price=#{unit_price}");
+				SET("unit_price=#{unitPrice}");
 				SET("status=#{status}");
 				SET("updated=#{updated}");
 				WHERE("id=#{id}");
@@ -209,6 +209,30 @@ public class MemOrderGoodsSQLBuilder {
 				WHERE("packet_id=#{packetId}");
 				AND();
 				WHERE("status=3");
+			}
+		}.toString();
+	}
+	
+	public String getPacketMerchantOrderGoodsCountByPacketId(){
+		return new SQL() {
+			{
+				SELECT("count(1)");
+				FROM(Table.MEM_ORDER_GOODS.mark());
+				WHERE("packet_id=#{packetId}");
+				AND();
+				WHERE("status=3");
+			}
+		}.toString();
+	}
+	
+	public String getMerchantOrderGoodsByPacketId(){
+		return new SQL() {
+			{
+				SELECT("*");
+				FROM(Table.MEM_ORDER_GOODS.mark());
+				WHERE("packet_id=#{packetId}");
+				AND();
+				WHERE("goods_id=#{goodsId}");
 			}
 		}.toString();
 	}
