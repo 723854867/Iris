@@ -100,7 +100,6 @@ public class ORDER_EDIT extends SerialMerchantAction {
 			}
 		}
 
-		merchantService.updateOrder(order, addList, tempUpdateList, deleteList,goodsCount,merchant);
-		return Result.jsonSuccess();
+		return merchantService.updateOrder(order, addList, tempUpdateList, deleteList,goodsCount,merchant);
 	}
 }

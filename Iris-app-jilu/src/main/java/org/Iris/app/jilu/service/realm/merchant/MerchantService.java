@@ -14,6 +14,9 @@ import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.OrderStatus;
+import org.Iris.app.jilu.common.bean.form.OrderForm;
+import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
+import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
@@ -213,6 +216,7 @@ public class MerchantService extends RedisCache {
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
 		String orderId = OrderNumberUtil.getRandomOrderId(4);
+		List<OrderGoodsForm> orderGoodsForms = new ArrayList<OrderGoodsForm>();
 		for(MemOrderGoods ogs: list){
 			CfgGoods goods = merchant.getGoodsById(ogs.getGoodsId());
 			if(goods == null)
@@ -233,7 +237,8 @@ public class MerchantService extends RedisCache {
 				store.setWaitCount(store.getWaitCount()+ogs.getCount());
 				updateStoreList.add(store);
 			}
-				
+			
+			orderGoodsForms.add(new OrderGoodsForm(ogs));
 		}
 		MemMerchant memMerchant = merchant.getMemMerchant();
 		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(),memMerchant.getAddress(),
@@ -255,7 +260,10 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(addStoreList);
 		redisOperate.batchHmset(updateStoreList);
 		
-		return Result.jsonSuccess(order);
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(order));
+		model.setNotFinishGoodsList(OrderGoodsForm.getList(list));
+		return Result.jsonSuccess(model);
 	}
 	
 	/**
@@ -267,7 +275,7 @@ public class MerchantService extends RedisCache {
 	 * @param deleteGoodsList
 	 */
 	@Transactional
-	public void updateOrder(MemOrder order,List<MemOrderGoods> addGoodsList,List<MemOrderGoods> updateGoodsList,List<MemOrderGoods> deleteGoodsList,int goodsCount,Merchant merchant){
+	public String updateOrder(MemOrder order,List<MemOrderGoods> addGoodsList,List<MemOrderGoods> updateGoodsList,List<MemOrderGoods> deleteGoodsList,int goodsCount,Merchant merchant){
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
 		int time = DateUtils.currentTime();
@@ -325,6 +333,11 @@ public class MerchantService extends RedisCache {
 		if (deleteGoodsList != null) {
 			redisOperate.batchDelete(deleteGoodsList);
 		}
+		
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(order));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(order.getOrderId()));
+		return Result.jsonSuccess(model);
 		
 	}
 	
@@ -415,7 +428,15 @@ public class MerchantService extends RedisCache {
 		//推送转单信息  参数：转单方名字，转单订单号，转单时间
 		JiLuPushUtil.OrderTransformPush(merchant.getMemCid(order.getMerchantId()),
 				merchant.getMemMerchant().getName(), order.getOrderId(), time);
-		return Result.jsonSuccess(order);
+		
+		//获取转单后订单信息返回给客户端
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(superOrder));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrder.getOrderId()));
+		List<MemOrder> transferList = new ArrayList<>();
+		transferList.add(order);
+		model.setTransferOrderList(merchant.getTransferOrderListModelList(transferList));
+		return Result.jsonSuccess(model);
 	}
 	
 	/**
@@ -478,7 +499,7 @@ public class MerchantService extends RedisCache {
 	 * @param merchantId
 	 */
 	@Transactional
-	public void receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
+	public String receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
 			long merchantId,Merchant merchant) {
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
@@ -582,8 +603,17 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(addStoreList);
 		redisOperate.batchHmset(updateStoreList);
 		
+		
+		//获取接收转单后订单信息返回给客户端
+		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), superOrderId);
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(superOrder));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrderId));
+		
 		//推送转单接收信息  参数：转单单号，转单父订单号
 		JiLuPushUtil.OrderReceivePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
+		
+		return Result.jsonSuccess(model);
 	}
 	
 	/**
@@ -691,7 +721,14 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(addList);
 		redisOperate.batchDelete(delList);
 		redisOperate.batchHmset(updateStoreList);
-		return Result.jsonSuccess(builder.toString().substring(0, builder.length()-1));
+		
+		//获取分包后订单信息返回给客户端
+		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), orderId);
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(order));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(orderId));
+		model.setPacketList(merchant.getPacketList(orderId));
+		return Result.jsonSuccess(model);
 	}
 	
 	
@@ -757,7 +794,12 @@ public class MerchantService extends RedisCache {
 		}
 		redisOperate.hmset(toMemOrderGoods.redisKey(), toMemOrderGoods);
 		
-		return Result.jsonSuccess();
+		//获取移包后订单信息返回给客户端
+		MemOrder order = merchant.getMerchantOrderById(merchant.getMemMerchant().getMerchantId(), fromPacket.getOrderId());
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(order));
+		model.setPacketList(merchant.getPacketList(order.getOrderId()));
+		return Result.jsonSuccess(model);
 	}
 	
 	/**

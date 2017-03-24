@@ -53,8 +53,7 @@ public class ORDER_RECEIVE extends SerialMerchantAction{
 			mGood.setUnitPrice("0");
 			receiveGoodsList_.add(mGood);
 		}
-		merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId,merchant);
-		return Result.jsonSuccess();
+		return merchantService.receiveOrder(receiveGoodsList_, orderId, superOrderId, merchantId,merchant);
 	}
 
 }

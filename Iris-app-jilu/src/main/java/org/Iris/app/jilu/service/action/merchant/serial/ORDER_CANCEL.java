@@ -1,6 +1,8 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
 import org.Iris.app.jilu.common.JiLuPushUtil;
+import org.Iris.app.jilu.common.bean.form.OrderForm;
+import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -8,7 +10,6 @@ import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.MerchantSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
-import org.Iris.util.common.JsonAppender;
 
 /**
  * 商户取消转单
@@ -29,10 +30,16 @@ public class ORDER_CANCEL extends SerialMerchantAction{
 		if(null == superOrderId)
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		merchantService.refuseOrder(order,merchant);
+		
+		//获取取消转单后订单信息返回给客户端
+		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), superOrderId);
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(superOrder));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrderId));
 		//推送转单取消信息  参数：转单单号，转单父订单号
 		JiLuPushUtil.OrderCancelPush(merchant.getMemCid(merchantId), orderId, superOrderId);
+		return Result.jsonSuccess(model);
 		
-		return Result.jsonSuccess();
 	}
 
 }

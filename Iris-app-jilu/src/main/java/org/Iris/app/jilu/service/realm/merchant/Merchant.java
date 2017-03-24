@@ -518,19 +518,6 @@ public class Merchant implements Beans {
 		return orderChangeModels;
 	}
 
-	public List<TransferOrderModel> getTransferOrderListModelList(List<MemOrder> mList) {
-		List<TransferOrderModel> orderChangeModels = new ArrayList<>();
-		for (MemOrder order : mList) {
-			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
-			List<OrderGoodsForm> orderGoodsForms = new ArrayList<OrderGoodsForm>();
-			for (MemOrderGoods memOrderGoods : list)
-				orderGoodsForms.add(new OrderGoodsForm(memOrderGoods));
-			orderChangeModels.add(new TransferOrderModel(order.getOrderId(), order.getMerchantName(),
-					order.getMerchantId(), order.getCreated(), orderGoodsForms));
-		}
-		return orderChangeModels;
-	}
-
 	/**
 	 * 添加邮费
 	 * 
@@ -622,15 +609,26 @@ public class Merchant implements Beans {
 		// 获取本订单基本信息
 		MemOrder order = getOrderByOrderId(orderId);
 		OrderForm orderInfo = new OrderForm(order);
-		// 获取未完成产品
-		List<MemOrderGoods> notFinishOrderGoods = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByOrderId(orderId);
-		List<OrderGoodsForm> notFinishGoodsList = new ArrayList<OrderGoodsForm>();
-		for (MemOrderGoods memOrderGoods : notFinishOrderGoods)
-			notFinishGoodsList.add(new OrderGoodsForm(memOrderGoods));
-		// 获取正在转单中的订单信息
+		List<OrderGoodsForm> notFinishGoodsList = getNotFinishGoodsList(orderId);
 		List<MemOrder> mList = memOrderMapper.getTransferMerchantOrderListByOrderId(orderId);
 		List<TransferOrderModel> transferOrderModel = getTransferOrderListModelList(mList);
-		// 获取已打包的信息
+		List<OrderPacketForm> packetList = getPacketList(orderId);
+		// 获取子订单信息
+		List<MemOrder> childOrders = memOrderMapper.getChildOrderByOrderId(orderId);
+		List<OrderForm> childOrderList = new ArrayList<OrderForm>();
+		for (MemOrder memOrder : childOrders)
+			childOrderList.add(new OrderForm(memOrder));
+
+		return Result.jsonSuccess(
+				new OrderDetailedModel(orderInfo, notFinishGoodsList, transferOrderModel, packetList, childOrderList));
+	}
+
+	/**
+	 * 获取订单包裹
+	 * @param orderId
+	 * @return
+	 */
+	protected List<OrderPacketForm> getPacketList(String orderId) {
 		List<MemOrderPacket> packets = memOrderPacketMapper.getMemOrderPacketByOrderId(orderId);
 		List<OrderPacketForm> packetList = new ArrayList<OrderPacketForm>();
 		for (MemOrderPacket memOrderPacket : packets) {
@@ -641,14 +639,38 @@ public class Merchant implements Beans {
 				packetOrderGoodsList.add(new OrderGoodsForm(memOrderGoods));
 			packetList.add(new OrderPacketForm(memOrderPacket, packetOrderGoodsList));
 		}
-		// 获取子订单信息
-		List<MemOrder> childOrders = memOrderMapper.getChildOrderByOrderId(orderId);
-		List<OrderForm> childOrderList = new ArrayList<OrderForm>();
-		for (MemOrder memOrder : childOrders)
-			childOrderList.add(new OrderForm(memOrder));
-
-		return Result.jsonSuccess(
-				new OrderDetailedModel(orderInfo, notFinishGoodsList, transferOrderModel, packetList, childOrderList));
+		return packetList;
+	}
+	/**
+	 * 获取订单未分配订单产品信息
+	 * @param orderId
+	 * @return
+	 */
+	public List<OrderGoodsForm> getNotFinishGoodsList(String orderId) {
+		// 获取未完成产品
+		List<MemOrderGoods> notFinishOrderGoods = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByOrderId(orderId);
+		List<OrderGoodsForm> notFinishGoodsList = new ArrayList<OrderGoodsForm>();
+		for (MemOrderGoods memOrderGoods : notFinishOrderGoods)
+			notFinishGoodsList.add(new OrderGoodsForm(memOrderGoods));
+		return notFinishGoodsList;
+	}
+	
+	/**
+	 * 获取正在转单中的订单信息
+	 * @param mList
+	 * @return
+	 */
+	public List<TransferOrderModel> getTransferOrderListModelList(List<MemOrder> mList) {
+		List<TransferOrderModel> orderChangeModels = new ArrayList<>();
+		for (MemOrder order : mList) {
+			List<MemOrderGoods> list = memOrderGoodsMapper.getChangeMerchantOrderGoodsByOrderId(order.getOrderId());
+			List<OrderGoodsForm> orderGoodsForms = new ArrayList<OrderGoodsForm>();
+			for (MemOrderGoods memOrderGoods : list)
+				orderGoodsForms.add(new OrderGoodsForm(memOrderGoods));
+			orderChangeModels.add(new TransferOrderModel(order.getOrderId(), order.getMerchantName(),
+					order.getMerchantId(), order.getCreated(), orderGoodsForms));
+		}
+		return orderChangeModels;
 	}
 
 	/**

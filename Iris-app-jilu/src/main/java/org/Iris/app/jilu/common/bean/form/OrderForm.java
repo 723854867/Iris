@@ -10,6 +10,7 @@ public class OrderForm {
 	private long customerId;
 	private String customerName;
 	private int status;
+	private String memo;
 	private int created;
 	private int updated;
 	
@@ -20,6 +21,7 @@ public class OrderForm {
 		this.customerId = order.getCustomerId();
 		this.customerName = order.getCustomerName();
 		this.status = order.getStatus();
+		this.memo = order.getMemo();
 		this.created = order.getCreated();
 		this.updated = order.getUpdated();
 	}
@@ -70,6 +72,14 @@ public class OrderForm {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
 	}
 
 	public int getCreated() {

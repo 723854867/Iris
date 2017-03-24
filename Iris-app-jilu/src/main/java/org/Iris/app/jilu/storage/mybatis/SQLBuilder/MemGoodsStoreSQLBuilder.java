@@ -33,10 +33,10 @@ public class MemGoodsStoreSQLBuilder {
 	public String batchInsert(StrictMap<List<MemGoodsStore>> map) {
 		List<MemGoodsStore> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder(256);
-		stringBuilder.append("insert into "+Table.MEM_GOODS_STORE.mark()+" (merchant_id,merchant_name,goods_id,goods_code,goods_name,count,wait_count,price,memo,created,updated) values ");
+		stringBuilder.append("insert into "+Table.MEM_GOODS_STORE.mark()+" (merchant_id,merchant_name,goods_id,goods_code,goods_name,count,name_prefix_letter,wait_count,price,memo,created,updated) values ");
 		for(MemGoodsStore store:list){
 			stringBuilder.append("('"+store.getMerchantId()+"','"+store.getMerchantName()+"','"+store.getGoodsId()+"','"+store.getGoodsCode()+"','"+store.getGoodsName()
-			+"','"+store.getCount()+"','"+store.getWaitCount()+"','"+store.getPrice()+"','"+store.getMemo()+"','"+store.getCreated()+"','"+store.getUpdated()+"'),");
+			+"','"+store.getCount()+"','"+store.getNamePrefixLetter()+"','"+store.getWaitCount()+"','"+store.getPrice()+"','"+store.getMemo()+"','"+store.getCreated()+"','"+store.getUpdated()+"'),");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();

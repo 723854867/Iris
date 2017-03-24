@@ -1,5 +1,8 @@
 package org.Iris.app.jilu.common.bean.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 
 public class OrderGoodsForm {
@@ -18,6 +21,13 @@ public class OrderGoodsForm {
 		this.goodsName = memOrderGoods.getGoodsName();
 		this.count = memOrderGoods.getCount();
 		this.unitPrice = memOrderGoods.getUnitPrice();
+	}
+	
+	public static List<OrderGoodsForm> getList(List<MemOrderGoods> list){
+		List<OrderGoodsForm> forms = new ArrayList<OrderGoodsForm>();
+		for(MemOrderGoods memOrderGoods : list)
+			forms.add(new OrderGoodsForm(memOrderGoods));
+		return forms;
 	}
 	
 	public long getId() {

@@ -1,6 +1,11 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.Iris.app.jilu.common.JiLuPushUtil;
+import org.Iris.app.jilu.common.bean.form.OrderForm;
+import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -29,9 +34,16 @@ public class ORDER_REFUSE extends SerialMerchantAction{
 			throw IllegalConstException.errorException(JiLuParams.ORDERID);
 		merchantService.refuseOrder(order, merchant);
 		
+		
+		//获取取消转单后订单信息返回给客户端
+		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), superOrderId);
+		OrderDetailedModel model = new OrderDetailedModel();
+		model.setOrderInfo(new OrderForm(superOrder));
+		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrderId));
+		
 		//推送转单拒绝信息  参数：转单单号，转单父订单号
 		JiLuPushUtil.OrderRefusePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
-		return Result.jsonSuccess();
+		return Result.jsonSuccess(model);
 	}
 
 }
