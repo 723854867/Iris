@@ -101,4 +101,5 @@ public interface JiLuParams {
 	final IrisStrConst FROMPACKETID							= new IrisStrConst("fromPacketId", 163);
 	final IrisStrConst TOPACKETID							= new IrisStrConst("toPacketId", 164);
 	final IrisLongConst ID									= new IrisLongConst("id", 165);
+	final IrisStrConst IDS									= new IrisStrConst("ids", 166);
 }

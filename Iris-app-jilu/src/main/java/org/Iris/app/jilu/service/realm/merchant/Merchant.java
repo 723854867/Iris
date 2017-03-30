@@ -771,12 +771,17 @@ public class Merchant implements Beans {
 	 * @param code
 	 * @return
 	 */
-	public String getGoodsListByGoodsId(long goodsId) {
-		CfgGoods cfgGoods = getGoodsById(goodsId);
-		if(null == cfgGoods)
-			return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(),MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
-		List<CfgGoods> list = cfgGoodsMapper.getGoodsListByCode(0, 1000, cfgGoods.getGoodsCode());
-		return Result.jsonSuccess(CfgGoodsForm.getCfgGoodsFormList(list));
+	public String getGoodsListByGoodsId(String ids) {
+		String[] goodsIds = ids.split(";");
+		List<CfgGoodsListForm> cfgGoodsListForms = new ArrayList<CfgGoodsListForm>();
+		for(String goodsId:goodsIds){
+			CfgGoods cfgGoods = getGoodsById(Long.valueOf(goodsId));
+			if(null == cfgGoods)
+				return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(),MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
+			List<CfgGoods> list = cfgGoodsMapper.getGoodsListByCode(0, 1000, cfgGoods.getGoodsCode());
+			cfgGoodsListForms.add(new CfgGoodsListForm(cfgGoods.getGoodsCode(), CfgGoodsForm.getCfgGoodsFormList(list)));
+		}
+		return Result.jsonSuccess(cfgGoodsListForms);
 	}
 	
 	

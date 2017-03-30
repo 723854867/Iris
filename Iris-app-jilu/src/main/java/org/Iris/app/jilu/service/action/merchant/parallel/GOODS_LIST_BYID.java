@@ -12,8 +12,8 @@ import org.Iris.app.jilu.web.session.MerchantSession;
 public class GOODS_LIST_BYID extends ParallelMerchantAction{
 	@Override
 	protected String execute0(MerchantSession session) {
-		long goodsId = session.getKVParam(JiLuParams.GOODS_ID);//code可以是多个格式如下 code1;code2;code3
-		return session.getMerchant().getGoodsListByGoodsId(goodsId);
+		String ids = session.getKVParam(JiLuParams.IDS);//code可以是多个格式如下 id;id;id
+		return session.getMerchant().getGoodsListByGoodsId(ids);
 	}
 
 	
