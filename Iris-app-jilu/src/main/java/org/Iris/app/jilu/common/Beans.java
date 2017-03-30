@@ -5,6 +5,7 @@ import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
+import org.Iris.app.jilu.service.realm.pay.PayService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
 import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
@@ -59,4 +60,5 @@ public interface Beans {
 	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
 	final WyyxService wyyxService = SpringContextUtil.getBean("wyyxService", WyyxService.class);
 	final WeiXinService weiXinService = SpringContextUtil.getBean("weiXinService", WeiXinService.class);
+	final PayService payService = SpringContextUtil.getBean("payService", PayService.class);
 }

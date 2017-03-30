@@ -53,4 +53,5 @@
 	<import resource="spring-activemq.xml"/>
 	<import resource="spring-aliyun.xml"/>
 	<import resource="spring-igt.xml"/>
+	<import resource="spring-pay.xml"/>
 </beans>

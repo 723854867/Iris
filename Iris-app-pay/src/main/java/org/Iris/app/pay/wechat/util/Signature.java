@@ -101,7 +101,11 @@ public class Signature {
     public static boolean checkIsSignValidFromResponseString(String responseString) throws ParserConfigurationException, IOException, SAXException {
 
         Map<String,Object> map = XMLParser.getMapFromXML(responseString);
-        logger.info(map.toString());
+        
+        return checkIsSignValidFromResponseString(map);
+    }
+    
+    public static boolean checkIsSignValidFromResponseString(Map<String,Object> map) throws ParserConfigurationException, IOException, SAXException {
 
         String signFromAPIResponse = map.get("sign").toString();
         if(signFromAPIResponse=="" || signFromAPIResponse == null){

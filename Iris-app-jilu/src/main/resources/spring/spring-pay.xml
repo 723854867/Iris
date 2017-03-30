@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    			 
+    			 
+    <bean id="alipayService" class="org.Iris.app.pay.service.AlipayService">
+   		<property name="appId" value="${alipay.app.id}" />
+   		<property name="appPrivateKey" value="${alipay.app.private.key}" />
+   		<property name="alipayPublicKey" value="${alipay.public.key}" />
+   		<property name="charset" value="${alipay.charset}" />
+   		<property name="notifyUrl" value="${alipay.notify.url}" />
+   		<property name="timeOutExpress" value="${alipay.time.out.express}" />
+   		<property name="productCode" value="${alipay.product.code}" />
+   	</bean>
+   	
+   	 <bean id="wechatPayService" class="org.Iris.app.pay.service.WechatPayService">
+   		<property name="APPID" value="${wechat.app.id}" />
+   		<property name="MCH_ID" value="${wechat.mch.id}" />
+   		<property name="charset" value="${wechat.charset}" />
+   		<property name="TRADETYPE" value="${wechat.tradetype}" />
+   		<property name="NOTIFY_URL" value="${wechat.notify.url}" />
+   	</bean>
+</beans>

@@ -19,14 +19,14 @@ import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 
 public class WechatPayService {
 
-	private String APPID = "wxb1701cd6054b0318";
-	private String MCH_ID = "1348978001";
-	private String KEY = "";
-	private String DEVICEINFO = "";
-	private String charset = "UTF-8";
-	private String FEETYPE = "CNY";
-	private String NOTIFY_URL = "";
-	private String TRADETYPE = "APP";
+	private String APPID;
+	private String MCH_ID;
+//	private String KEY;
+//	private String DEVICEINFO = "";
+	private String charset;
+//	private String FEETYPE;
+	private String NOTIFY_URL;
+	private String TRADETYPE;
 	
 	/**
 	 * 统一下单
@@ -35,7 +35,7 @@ public class WechatPayService {
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 */
-	public void unifiedOrder(String outTradeNo, double price, String ipAddress, String body,HttpProxy proxy) throws Exception{
+	public UnifiedOrderResponse unifiedOrder(String outTradeNo, double price, String ipAddress, String body,HttpProxy proxy) throws Exception{
 		UnifiedOrderReqeust reqeust = new UnifiedOrderReqeust();
 		reqeust.setAppid(APPID);
 		reqeust.setMch_id(MCH_ID);
@@ -48,7 +48,7 @@ public class WechatPayService {
 		reqeust.setTrade_type(TRADETYPE);
 		reqeust.setSign(Signature.getSign(reqeust));
 		HttpPost post = getXmlTypePost(reqeust,Configure.PAY_API);
-        proxy.syncRequest(post, SyncXmlRespHandler.build(UnifiedOrderResponse.class));
+        return proxy.syncRequest(post, SyncXmlRespHandler.build(UnifiedOrderResponse.class));
 	}
 
 	private HttpPost getXmlTypePost(Object reqeust,String url) {
@@ -60,4 +60,26 @@ public class WechatPayService {
         post.setEntity(postEntity);
 		return post;
 	}
+
+	public void setAPPID(String aPPID) {
+		APPID = aPPID;
+	}
+
+	public void setMCH_ID(String mCH_ID) {
+		MCH_ID = mCH_ID;
+	}
+
+	public void setCharset(String charset) {
+		this.charset = charset;
+	}
+
+	public void setNOTIFY_URL(String nOTIFY_URL) {
+		NOTIFY_URL = nOTIFY_URL;
+	}
+
+	public void setTRADETYPE(String tRADETYPE) {
+		TRADETYPE = tRADETYPE;
+	}
+	
+	
 }

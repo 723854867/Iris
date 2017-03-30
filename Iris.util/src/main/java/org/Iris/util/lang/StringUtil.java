@@ -79,4 +79,8 @@ public class StringUtil {
 		}
 		return false;
 	}
+	
+	public static String checkNull(String string){
+		return string==null?"":string;
+	}
 }
