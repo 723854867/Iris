@@ -1,4 +1,4 @@
-package org.Iris.app.pay.util;
+package org.Iris.app.pay.wechat.util;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package org.Iris.app.pay.util;
+package org.Iris.app.pay.wechat.util;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

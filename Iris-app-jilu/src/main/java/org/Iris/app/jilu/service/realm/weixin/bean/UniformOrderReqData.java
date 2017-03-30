@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.Iris.app.pay.util.Configure;
-import org.Iris.app.pay.util.RandomStringGenerator;
-import org.Iris.app.pay.util.Signature;
+import org.Iris.app.pay.wechat.util.Configure;
+import org.Iris.app.pay.wechat.util.RandomStringGenerator;
+import org.Iris.app.pay.wechat.util.Signature;
 public class UniformOrderReqData {
 
     //每个字段具体的意思请查看API文档

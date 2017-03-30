@@ -11,7 +11,7 @@ import org.Iris.app.jilu.service.realm.weixin.bean.UniformOrderReqData;
 import org.Iris.app.jilu.service.realm.weixin.bean.UniformOrderResData;
 import org.Iris.app.jilu.service.realm.weixin.result.WeiXinAccessTokenResult;
 import org.Iris.app.jilu.web.JiLuCode;
-import org.Iris.app.pay.util.Configure;
+import org.Iris.app.pay.wechat.util.Configure;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.util.network.http.handler.SyncJsonRespHandler;
 import org.apache.http.HttpEntity;

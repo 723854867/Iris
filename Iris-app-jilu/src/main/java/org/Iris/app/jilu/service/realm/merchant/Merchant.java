@@ -766,6 +766,19 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess(cfgGoodsListForms);
 	}
 	
+	/**
+	 * 通过商品id查找商品列表
+	 * @param code
+	 * @return
+	 */
+	public String getGoodsListByGoodsId(long goodsId) {
+		CfgGoods cfgGoods = getGoodsById(goodsId);
+		if(null == cfgGoods)
+			return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(),MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), goodsId));
+		List<CfgGoods> list = cfgGoodsMapper.getGoodsListByCode(0, 1000, cfgGoods.getGoodsCode());
+		return Result.jsonSuccess(CfgGoodsForm.getCfgGoodsFormList(list));
+	}
+	
 	
 
 	/**
@@ -1161,5 +1174,6 @@ public class Merchant implements Beans {
 		}
 		return store;
 	}
+
 
 }
