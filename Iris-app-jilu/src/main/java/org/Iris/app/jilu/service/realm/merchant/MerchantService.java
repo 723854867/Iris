@@ -895,7 +895,7 @@ public class MerchantService extends RedisCache {
 			case 3:
 				goodsStore.setCount(goodsStore.getCount()+mog.getCount());
 				//updateGoodsStore.add(goodsStore);
-				mog.setStatus(9);
+				//mog.setStatus(9);
 				map.put(mog.getGoodsId(), goodsStore);
 				break;
 			default:
@@ -905,9 +905,9 @@ public class MerchantService extends RedisCache {
 		updateGoodsStore.addAll(map.values());
 		memOrderMapper.update(order);
 		memGoodsStoreMapper.batchUpdate(updateGoodsStore);
-		memOrderGoodsMapper.batchUpdate(list);
+		//memOrderGoodsMapper.batchUpdate(list);
 		redisOperate.batchHmset(updateGoodsStore);
-		redisOperate.batchHmset(list);
+		//redisOperate.batchHmset(list);
 		redisOperate.hmset(order.redisKey(), order);
 		return Result.jsonSuccess();
 	}
