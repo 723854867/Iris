@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
-import org.Iris.app.jilu.common.JiLuPushUtil;
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.RelationMod;
 import org.Iris.app.jilu.common.bean.form.FriendApplyForm;
@@ -16,6 +16,9 @@ import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.bean.model.FriendApplyModel;
 import org.Iris.app.jilu.common.bean.model.FriendListModel;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
+import org.Iris.app.jilu.service.realm.igt.domain.PushFriendApplyParam;
+import org.Iris.app.jilu.service.realm.igt.domain.PushFriendApplyReplyParam;
+import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.PubRelation;
@@ -99,7 +102,9 @@ public class RelationService extends RedisCache {
 		}
 		//推送好友申请  参数：id,名字
 		MemMerchant applierMerchant = applier.getMemMerchant();
-		JiLuPushUtil.FriendApplyPush(acceptor.getMemCid(acceptor.getMemMerchant().getMerchantId()),applierMerchant.getMerchantId(),applierMerchant.getName(),memo);
+		//JiLuPushUtil.FriendApplyPush(acceptor.getMemCid(acceptor.getMemMerchant().getMerchantId()),applierMerchant.getMerchantId(),applierMerchant.getName(),memo);
+		igtService.pushToSingle(acceptor.getMemCid(acceptor.getMemMerchant().getMerchantId()), 
+				new TransmissionInfo(new PushFriendApplyParam(applierMerchant.getMerchantId(), applierMerchant.getName(), memo), IgtPushType.FRIEND_APPLY));
 		return Result.jsonSuccess();
 	}
 	
@@ -183,7 +188,10 @@ public class RelationService extends RedisCache {
 	
 	private String _rejectApply(Merchant merchant, FriendApplyModel applyModel) {
 		//推送好友申请处理  参数：id,名字，是否接受
-		JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 1);
+		//JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 1);
+		igtService.pushToSingle(merchant.getMemCid(applyModel.getApplier()), 
+				new TransmissionInfo(new PushFriendApplyReplyParam(merchant.getMemMerchant().getMerchantId(),  merchant.getMemMerchant().getName(), 1), IgtPushType.FRIEND_APPLY_REPLY));
+
 		return Result.jsonSuccess();
 	}
 	
@@ -202,7 +210,9 @@ public class RelationService extends RedisCache {
 			relationManager.insert(pubRelation);
 			redisOperate.hset(CommonKeyGenerator.relationMapKey(), id, SerializeUtil.JsonUtil.GSON.toJson(pubRelation));
 			//推送好友申请处理  参数：id,名字，是否接受
-			JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 0);
+			//JiLuPushUtil.FriendApplyReplyPush(merchant.getMemCid(applyModel.getApplier()), merchant.getMemMerchant().getMerchantId(), merchant.getMemMerchant().getName(), 0);
+			igtService.pushToSingle(merchant.getMemCid(applyModel.getApplier()), 
+					new TransmissionInfo(new PushFriendApplyReplyParam(merchant.getMemMerchant().getMerchantId(),  merchant.getMemMerchant().getName(), 0), IgtPushType.FRIEND_APPLY_REPLY));
 			return Result.jsonSuccess();
 		} finally {
 			if (!distributeLock.unLock(lockKey, lockId))

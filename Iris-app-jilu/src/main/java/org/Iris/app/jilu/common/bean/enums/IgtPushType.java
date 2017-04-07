@@ -26,17 +26,26 @@ public enum IgtPushType {
 	 * 订单状态改变
 	 */
 	ORDER_STATUS_CHANGE(4),
+	/**
+	 * 好友申请
+	 */
 	FRIEND_APPLY(5),
+	/**
+	 * 好友申请处理
+	 */
 	FRIEND_APPLY_REPLY(6),
+	/**
+	 * 订单备注修改
+	 */
 	ORDER_MEMO_EDIT(7);
 	
-	private int mark;
+	private int type;
 	
-	private IgtPushType(int mark){
-		this.mark = mark;
+	private IgtPushType(int type){
+		this.type = type;
 	}
 	
-	public int mark(){
-		return this.mark;
+	public int type(){
+		return this.type;
 	}
 }

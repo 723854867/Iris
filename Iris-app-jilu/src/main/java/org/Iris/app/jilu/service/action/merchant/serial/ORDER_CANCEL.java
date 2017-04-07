@@ -1,9 +1,11 @@
 package org.Iris.app.jilu.service.action.merchant.serial;
 
-import org.Iris.app.jilu.common.JiLuPushUtil;
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.service.action.merchant.SerialMerchantAction;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderCancelParam;
+import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.web.JiLuParams;
@@ -37,7 +39,8 @@ public class ORDER_CANCEL extends SerialMerchantAction{
 		model.setOrderInfo(new OrderForm(superOrder));
 		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrderId));
 		//推送转单取消信息  参数：转单单号，转单父订单号
-		JiLuPushUtil.OrderCancelPush(merchant.getMemCid(merchantId), orderId, superOrderId);
+		//JiLuPushUtil.OrderCancelPush(merchant.getMemCid(merchantId), orderId, superOrderId);
+		igtService.pushToSingle(merchant.getMemCid(merchantId), new TransmissionInfo(new PushOrderCancelParam(orderId, superOrderId),IgtPushType.ORDER_CANCEL));
 		return Result.jsonSuccess(model);
 		
 	}

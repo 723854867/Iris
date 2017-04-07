@@ -36,6 +36,7 @@ public class MemGoodsStore implements RedisHashBean {
 		this.waitCount = waitCount;
 		this.namePrefixLetter = CnToSpell.getFirstChar(merchantName);
 		int time = DateUtils.currentTime();
+		this.lastStockTime = time;
 		this.created = time;
 		this.updated = time;
 	}

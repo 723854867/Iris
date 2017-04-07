@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
-import org.Iris.app.jilu.common.JiLuPushUtil;
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.OrderStatus;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
@@ -20,6 +20,10 @@ import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderReceiveParam;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderStatusChangeParam;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderTransformParam;
+import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
@@ -40,7 +44,6 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
-import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.storage.redis.RedisCache;
@@ -152,7 +155,7 @@ public class MerchantService extends RedisCache {
 	 * @param account
 	 */
 	public String bindingPhoneOrMobile(String account,AccountType type,String captch,long merchantId){
-		String accessToken = null;
+//		String accessToken = null;
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
@@ -160,13 +163,13 @@ public class MerchantService extends RedisCache {
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
 			break;
 		case WECHAT:
-			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
-			if(accessToken == null){
-				return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
-			}else{
-				if(!accessToken.equals(captch))
-					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
-			}
+//			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
+//			if(accessToken == null){
+//				return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
+//			}else{
+//				if(!accessToken.equals(captch))
+//					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
+//			}
 			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
@@ -414,9 +417,13 @@ public class MerchantService extends RedisCache {
 			memOrderMapper.update(superOrder);
 			redisOperate.hmset(superOrder.redisKey(), superOrder);
 			//推送订单状态改变消息
-			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getMerchantId()), superOrder.getOrderId(), "", 1);
-			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getSuperMerchantId()), 
-					superOrder.getSuperOrderId(),superOrder.getOrderId(),1);
+//			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getMerchantId()), superOrder.getOrderId(), "", 1);
+//			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(superOrder.getSuperMerchantId()), 
+//					superOrder.getSuperOrderId(),superOrder.getOrderId(),1);
+			igtService.pushToSingle(merchant.getMemCid(superOrder.getMerchantId()), 
+					new TransmissionInfo(new PushOrderStatusChangeParam(superOrder.getOrderId(), "", 1), IgtPushType.ORDER_STATUS_CHANGE));
+			igtService.pushToSingle(merchant.getMemCid(superOrder.getMerchantId()), 
+					new TransmissionInfo(new PushOrderStatusChangeParam(superOrder.getSuperOrderId(), superOrder.getOrderId(), 1), IgtPushType.ORDER_STATUS_CHANGE));
 		}
 		redisOperate.hmset(status.redisKey(),status);
 		/*更新父订单状态表mem_order_status end*/
@@ -426,8 +433,11 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(changeList);
 		
 		//推送转单信息  参数：转单方名字，转单订单号，转单时间
-		JiLuPushUtil.OrderTransformPush(merchant.getMemCid(order.getMerchantId()),
-				merchant.getMemMerchant().getName(), order.getOrderId(), time);
+//		JiLuPushUtil.OrderTransformPush(merchant.getMemCid(order.getMerchantId()),
+//				merchant.getMemMerchant().getName(), order.getOrderId(), time);
+		
+		igtService.pushToSingle(merchant.getMemCid(order.getMerchantId()), 
+				new TransmissionInfo(new PushOrderTransformParam(merchant.getMemMerchant().getName(), order.getOrderId(), time),IgtPushType.ORDER_TRANSFORM));
 		
 		//获取转单后订单信息返回给客户端
 		OrderDetailedModel model = new OrderDetailedModel();
@@ -611,8 +621,8 @@ public class MerchantService extends RedisCache {
 		model.setNotFinishGoodsList(merchant.getNotFinishGoodsList(superOrderId));
 		
 		//推送转单接收信息  参数：转单单号，转单父订单号
-		JiLuPushUtil.OrderReceivePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
-		
+		//JiLuPushUtil.OrderReceivePush(merchant.getMemCid(order.getSuperMerchantId()), orderId, superOrderId);
+		igtService.pushToSingle(merchant.getMemCid(order.getSuperMerchantId()), new TransmissionInfo(new PushOrderReceiveParam(orderId, superOrderId), IgtPushType.ORDER_RECEIVE));
 		return Result.jsonSuccess(model);
 	}
 	
@@ -923,9 +933,13 @@ public class MerchantService extends RedisCache {
 			memOrderMapper.update(order);
 			redisOperate.hmset(order.redisKey(), order);
 			//推送订单状态改变信息
-			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(merchantId), orderId, "", order.getStatus());
-			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(order.getSuperMerchantId()), 
-					order.getSuperOrderId(), orderId, order.getStatus());
+//			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(merchantId), orderId, "", order.getStatus());
+//			JiLuPushUtil.OrderStatusChangePush(merchant.getMemCid(order.getSuperMerchantId()), 
+//					order.getSuperOrderId(), orderId, order.getStatus());
+			igtService.pushToSingle(merchant.getMemCid(merchantId), 
+					new TransmissionInfo(new PushOrderStatusChangeParam(orderId, "", order.getStatus()), IgtPushType.ORDER_STATUS_CHANGE));
+			igtService.pushToSingle(merchant.getMemCid(merchantId), 
+					new TransmissionInfo(new PushOrderStatusChangeParam(order.getSuperOrderId(), orderId, order.getStatus()), IgtPushType.ORDER_STATUS_CHANGE));
 		}
 	}
 	

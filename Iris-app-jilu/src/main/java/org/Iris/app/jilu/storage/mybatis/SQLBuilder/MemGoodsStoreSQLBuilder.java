@@ -23,6 +23,7 @@ public class MemGoodsStoreSQLBuilder {
 				VALUES("memo", 				"#{memo}");
 				VALUES("count", 			"#{count}");
 				VALUES("name_prefix_letter","#{namePrefixLetter}");
+				VALUES("last_stock_time",	"#{lastStockTime}");
 				VALUES("wait_count", 		"#{waitCount}");
 				VALUES("created", 			"#{created}");
 				VALUES("updated", 			"#{updated}");

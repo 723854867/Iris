@@ -52,7 +52,7 @@ public class CommonService extends RedisCache {
 	 * @throws Exception 
 	 */
 	public String login(AccountType type, String account, String captch){ 
-		String accessToken = null;
+//		String accessToken = null;
 		switch (type) {
 		case MOBILE:
 		case EMAIL:
@@ -60,16 +60,16 @@ public class CommonService extends RedisCache {
 				return Result.jsonError(JiLuCode.CAPTCHA_ERROR);
 			break;
 		case WECHAT:
-			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
-			if(accessToken == null){
-				String freshToken = redisOperate.get(CommonKeyGenerator.weiXinRefreshTokenKey(account));
-				if(freshToken == null)
-					return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
-				accessToken = refreshAccessToken(freshToken);
-			}else{
-				if(!accessToken.equals(captch))
-					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
-			}
+//			accessToken = redisOperate.get(CommonKeyGenerator.weiXinAccessTokenKey(account));
+//			if(accessToken == null){
+//				String freshToken = redisOperate.get(CommonKeyGenerator.weiXinRefreshTokenKey(account));
+//				if(freshToken == null)
+//					return Result.jsonError(JiLuCode.WEIXIN_ACCESSTOKEN_EXPAIRED);
+//				accessToken = refreshAccessToken(freshToken);
+//			}else{
+//				if(!accessToken.equals(captch))
+//					return Result.jsonError(JiLuCode.ACCESSTOKEN_ERROR);
+//			}
 			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
@@ -80,8 +80,8 @@ public class CommonService extends RedisCache {
 			merchant = merchantService.createMerchant(account, type);
 		if (!merchant.login(account, false))
 			return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
-		MerchantForm merchantForm = getMerchantForm(merchant);
-		merchantForm.setAccessToken(accessToken);
+		//MerchantForm merchantForm = getMerchantForm(merchant);
+		//merchantForm.setAccessToken(accessToken);
 		return Result.jsonSuccess(getMerchantForm(merchant));
 		
 	}

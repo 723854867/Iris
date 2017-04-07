@@ -13,9 +13,9 @@ public class Configure {
 
 	// 微信分配的公众号ID（开通公众号之后可以获取到）
 
-	private static String appID = "wx9284bb4b7b29a9e2";
+	private static String appID = "wxcf17dba078f6ca41";
 
-	private static String secret = "eb00b2ed6bd58969dafc9e655f399e08";
+	private static String secret = "6909c1b92ad557856b3aaecdd2611fc8";
 
 	// 微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
 	private static String mchID = "1341767001";

@@ -11,9 +11,9 @@ import java.util.Set;
 import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
-import org.Iris.app.jilu.common.JiLuPushUtil;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.GoodsListType;
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.enums.OrderByType;
@@ -38,6 +38,8 @@ import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.common.bean.model.OrderChangeModel;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderMemoEditParam;
+import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccid;
@@ -1041,7 +1043,8 @@ public class Merchant implements Beans {
 		memOrderMapper.batchUpdate(list);
 		redisOperate.batchHmset(list);
 		//推送
-		JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
+		//JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
+		igtService.pushToList(cids, new TransmissionInfo(new PushOrderMemoEditParam(memMerchant.getMerchantId(), memMerchant.getName(), memo), IgtPushType.ORDER_MEMO_EDIT));
 		return Result.jsonSuccess();
 	}
 	/**

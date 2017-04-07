@@ -38,12 +38,12 @@ public class AppPushManager {
 		//iosTemplateDemo = new IOSTemplateDemo(appId, appKey);
 	}
 	
-	public IPushResult pushToSingle(String cid, String title, String text){
+	public IPushResult pushToSingle(String cid, String title,String content, String text){
 		SingleMessage message = new SingleMessage();
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选
 		message.setOfflineExpireTime(24 * 3600 * 1000);
-		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title,content, text));
 		// 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
 		message.setPushNetWorkType(0);
 
@@ -61,9 +61,9 @@ public class AppPushManager {
 	 * @param title
 	 * @param text
 	 */
-	public IPushResult pushToList(List<String> cids, String title, String text) {
+	public IPushResult pushToList(List<String> cids, String title,String content, String text) {
 		ListMessage message = new ListMessage();
-		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title,content, text));
 		// 设置消息离线，并设置离线时间
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选
@@ -86,9 +86,9 @@ public class AppPushManager {
 	 * @param text
 	 * @return
 	 */
-	public IPushResult pushToApp(String title, String text) {
+	public IPushResult pushToApp(String title,String content, String text) {
 		AppMessage message = new AppMessage();
-		message.setData(transmissionTemplateDemo.getTemplateDemo(title, text));
+		message.setData(transmissionTemplateDemo.getTemplateDemo(title,content, text));
 
 		message.setOffline(true);
 		// 离线有效时间，单位为毫秒，可选

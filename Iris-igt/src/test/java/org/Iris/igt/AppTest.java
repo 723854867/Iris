@@ -25,6 +25,6 @@ public class AppTest extends TestCase {
 		appPush.init();
 		
 		//appPush.pushToApp("", "服务端test");
-		appPush.pushToSingle("25e75e1ee094be59c32cb3fe066f046e","", "服务端单推");
+		appPush.pushToSingle("25e75e1ee094be59c32cb3fe066f046e","","", "服务端单推");
 	}
 }
