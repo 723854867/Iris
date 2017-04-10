@@ -58,6 +58,7 @@ import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.app.pay.wechat.response.UnifiedOrderResponse;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.CnToSpell;
@@ -1067,6 +1068,41 @@ public class Merchant implements Beans {
 	private boolean _isCustomerListLoaded(long merchantId) {
 		return 1 == redisOperate.exist(MerchantKeyGenerator.customerListLoadTimeKey(merchantId));
 	}
+	
+	/**
+	 * 创建支付宝支付订单信息
+	 * 
+	 * @param body
+	 * @param subject
+	 * @param outtradeno
+	 * @param totalAmount
+	 * @return
+	 */
+	public String createAlipayOrder(String body, String subject, String outtradeno, float totalAmount) {
+		return payService.getAlipayOrderInfo(body, subject, outtradeno, totalAmount);
+	}
+	/**
+	 * 微信统一下单
+	 * @param outtradeno
+	 * @param price
+	 * @param ipAddress
+	 * @param body
+	 * @return
+	 */
+	public String orderPay(String outtradeno, float price,String ipAddress ,String body) {
+		try {
+			UnifiedOrderResponse respones = payService.uniformOrder(outtradeno, price, ipAddress, body, Beans.httpProxy);
+			
+			if (!"SUCCESS".equals(respones.getResult_code()))
+				return Result.jsonError(JiLuCode.UNIFIED_ORDER_ERROR.constId(), MessageFormat.format(JiLuCode.UNIFIED_ORDER_ERROR.defaultValue(), respones.getReturn_msg()));
+			if (!"SUCCESS".equals(respones.getErr_code()))
+				return Result.jsonError(JiLuCode.UNIFIED_ORDER_ERROR.constId(), MessageFormat.format(JiLuCode.UNIFIED_ORDER_ERROR.defaultValue(), respones.getErr_code_des()));
+			return Result.jsonSuccess(respones);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.jsonError(JiLuCode.UNIFORM_ORDER_FAIL);
+		}
+	}
 
 	public MemMerchant getMemMerchant() {
 		return memMerchant;
@@ -1181,5 +1217,13 @@ public class Merchant implements Beans {
 		return store;
 	}
 
+	/**
+	 * ios apple pay 验证
+	 * @param receipt
+	 * @return
+	 */
+	public String iapCertificate(String receipt) {
+		return null;
+	}
 
 }

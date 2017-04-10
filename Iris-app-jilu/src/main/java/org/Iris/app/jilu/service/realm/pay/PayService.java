@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.pay.service.AlipayService;
+import org.Iris.app.pay.service.ApplePayService;
 import org.Iris.app.pay.service.WechatPayService;
 import org.Iris.app.pay.wechat.response.UnifiedOrderResponse;
 import org.Iris.core.service.bean.Result;
@@ -22,20 +23,20 @@ public class PayService {
 	AlipayService alipayService;
 	@Resource
 	WechatPayService wechatPayService;
+	@Resource
+	ApplePayService applePayService;
+	
+	public void init(){
+		alipayService.init();
+	}
 	
 	/**
 	 * 微信统一下单
 	 * @return
+	 * @throws Exception 
 	 */
-	public String uniformOrder(String outTradeNo,double price,String ipAddress,String body,HttpProxy proxy){
-		UnifiedOrderResponse response;
-		try {
-			response =  wechatPayService.unifiedOrder(outTradeNo, price, ipAddress, body, proxy);
-			return Result.jsonSuccess(response);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return Result.jsonError(JiLuCode.UNIFORM_ORDER_FAIL);
-		}
+	public UnifiedOrderResponse uniformOrder(String outTradeNo,double price,String ipAddress,String body,HttpProxy proxy) throws Exception{
+			return wechatPayService.unifiedOrder(outTradeNo, price, ipAddress, body, proxy);
 	}
 	
 	/**

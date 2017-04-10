@@ -108,4 +108,14 @@ public class IrisSession {
 		}
 		return this;
 	}
+
+	public HttpServletRequest getRequest() {
+		return request;
+	}
+
+	public HttpServletResponse getResponse() {
+		return response;
+	}
+	
+	
 }

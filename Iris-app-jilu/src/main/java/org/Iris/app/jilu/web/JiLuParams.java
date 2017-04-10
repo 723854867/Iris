@@ -102,4 +102,9 @@ public interface JiLuParams {
 	final IrisStrConst TOPACKETID							= new IrisStrConst("toPacketId", 164);
 	final IrisLongConst ID									= new IrisLongConst("id", 165);
 	final IrisStrConst IDS									= new IrisStrConst("ids", 166);
+	final IrisStrConst BODY									= new IrisStrConst("body", 167);
+	final IrisStrConst SUBJECT								= new IrisStrConst("subject", 168);
+	final IrisStrConst OUTTRADENO							= new IrisStrConst("outtradeno", 169);
+	final IrisFloatConst TOTALAMOUNT						= new IrisFloatConst("totalMount", 170);
+	final IrisStrConst RECEIPT								= new IrisStrConst("receipt", 171);
 }
