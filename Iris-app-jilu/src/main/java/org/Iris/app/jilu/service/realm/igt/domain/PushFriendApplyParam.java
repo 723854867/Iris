@@ -1,5 +1,9 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import java.text.MessageFormat;
+
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushFriendApplyParam extends PushCommonParam{
 
 	private long merchantId;
@@ -7,8 +11,8 @@ public class PushFriendApplyParam extends PushCommonParam{
 	private String memo;
 	
 	public PushFriendApplyParam(long merchantId, String name, String memo) {
-		title = "好友申请";
-		content = name+"申请加你为好友";
+		title = IgtPushType.FRIEND_APPLY.getTitle();
+		content = MessageFormat.format(IgtPushType.FRIEND_APPLY.getContent(), name);
 		this.merchantId = merchantId;
 		this.name = name;
 		this.memo = memo;

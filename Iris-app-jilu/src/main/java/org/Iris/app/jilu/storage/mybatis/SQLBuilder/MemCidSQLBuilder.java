@@ -40,4 +40,13 @@ public class MemCidSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String delete(){
+		return new SQL(){
+			{
+				DELETE_FROM(Table.MEM_CID.mark());
+				WHERE("merchant_id=#{merchantId}");
+			}
+		}.toString();
+	}
 }

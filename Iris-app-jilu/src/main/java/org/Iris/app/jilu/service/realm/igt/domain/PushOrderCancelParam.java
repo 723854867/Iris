@@ -1,12 +1,14 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushOrderCancelParam extends PushCommonParam{
 
 	private String orderId;
 	private String superOrderId;
 	public PushOrderCancelParam(String orderId, String superOrderId) {
-		title = "订单取消";
-		content = "订单取消";
+		title = IgtPushType.ORDER_CANCEL.getTitle();
+		content = IgtPushType.ORDER_CANCEL.getContent();
 		this.orderId = orderId;
 		this.superOrderId = superOrderId;
 	}

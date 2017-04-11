@@ -1,29 +1,38 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import java.text.MessageFormat;
+
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushOrderMemoEditParam extends PushCommonParam{
-	private long merchantId;
-	private String name;
+	private String fromOrderId;
+	private String toOrderId;
 	private String memo;
 	
-	public PushOrderMemoEditParam(long merchantId, String name, String memo) {
-		title = "订单备注修改";
-		content = "订单备注修改";
-		this.merchantId = merchantId;
-		this.name = name;
+	public PushOrderMemoEditParam(String fromOrderId, String toOrderId, String memo) {
+		title = IgtPushType.ORDER_MEMO_EDIT.getTitle();
+		content = MessageFormat.format(IgtPushType.ORDER_MEMO_EDIT.getContent(), toOrderId);
+		this.fromOrderId = fromOrderId;
+		this.toOrderId = toOrderId;
 		this.memo = memo;
 	}
-	public long getMerchantId() {
-		return merchantId;
+	
+	public String getFromOrderId() {
+		return fromOrderId;
 	}
-	public void setMerchantId(long merchantId) {
-		this.merchantId = merchantId;
+
+	public void setFromOrderId(String fromOrderId) {
+		this.fromOrderId = fromOrderId;
 	}
-	public String getName() {
-		return name;
+
+	public String getToOrderId() {
+		return toOrderId;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setToOrderId(String toOrderId) {
+		this.toOrderId = toOrderId;
 	}
+
 	public String getMemo() {
 		return memo;
 	}

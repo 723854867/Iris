@@ -1,12 +1,14 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushOrderRefuseParam extends PushCommonParam{
 
 	private String orderId;
 	private String superOrderId;
 	public PushOrderRefuseParam(String orderId, String superOrderId) {
-		title = "订单拒绝";
-		content = "订单拒绝";
+		title = IgtPushType.ORDER_REFUSE.getTitle();
+		content = IgtPushType.ORDER_REFUSE.getContent();
 		this.orderId = orderId;
 		this.superOrderId = superOrderId;
 	}

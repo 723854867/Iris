@@ -1,12 +1,14 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushOrderTransformParam extends PushCommonParam{
 	private String name;
 	private String orderId;
 	private int created;
 	public PushOrderTransformParam(String name, String orderId, int created) {
-		title = "转单";
-		content = "订单被转单";
+		title = IgtPushType.ORDER_TRANSFORM.getTitle();
+		content = IgtPushType.ORDER_TRANSFORM.getContent();
 		this.name = name;
 		this.orderId = orderId;
 		this.created = created;

@@ -70,4 +70,5 @@ public class IgtService {
 	public void pushToApp(TransmissionInfo info){
 		appPushManager.pushToApp(info.getParam().getTitle(),info.getParam().getContent(), JsonAppender.toJson(info));
 	}
+	
 }

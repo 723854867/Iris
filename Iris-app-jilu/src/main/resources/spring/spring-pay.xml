@@ -21,4 +21,5 @@
    		<property name="TRADETYPE" value="${wechat.tradetype}" />
    		<property name="NOTIFY_URL" value="${wechat.notify.url}" />
    	</bean>
+   	<bean id="applePayService" class="org.Iris.app.pay.service.ApplePayService"></bean>
 </beans>

@@ -1,13 +1,15 @@
 package org.Iris.app.jilu.service.realm.igt.domain;
 
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+
 public class PushOrderReceiveParam extends PushCommonParam{
 
 	private String orderId;
 	private String superOrderId;
 	
 	public PushOrderReceiveParam(String orderId, String superOrderId) {
-		title = "订单接收";
-		content = "订单接收";
+		title = IgtPushType.ORDER_RECEIVE.getTitle();
+		content = IgtPushType.ORDER_RECEIVE.getContent();
 		this.orderId = orderId;
 		this.superOrderId = superOrderId;
 	}

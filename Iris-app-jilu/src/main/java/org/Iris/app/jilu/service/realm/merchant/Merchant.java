@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.Iris.app.jilu.common.AppConfig;
@@ -129,6 +130,9 @@ public class Merchant implements Beans {
 	public void logout() {
 		redisOperate.hdel(MerchantKeyGenerator.tokenMerchantMapKey(), memMerchant.getToken());
 		redisOperate.hdel(MerchantKeyGenerator.merchantDataKey(memMerchant.getMerchantId()), "token");
+		//解除个推
+		memCidMapper.delete(memMerchant.getMerchantId());
+		redisOperate.hdel(MerchantKeyGenerator.merchantCIDDataKey(memMerchant.getMerchantId()));
 	}
 
 	/**
@@ -1031,21 +1035,22 @@ public class Merchant implements Beans {
 			return Result.jsonError(JiLuCode.ORDER_MEMO_CANNOT_EDIT);
 		//推送消息给与该订单相关的商户
 		List<MemOrder> list = memOrderMapper.getAllOrderByRootOrderId(memOrder.getRootOrderId());
-		List<String> cids = new ArrayList<String>();
+		Map<MemCid, TransmissionInfo> pushMap = new HashMap<MemCid, TransmissionInfo>();
 		for(MemOrder order : list){
 			order.setMemo(memo);
 			order.setUpdated(DateUtils.currentTime());
-			if(order.getMerchantId() == memMerchant.getMerchantId() || order.getStatus() > 4)
+			if(order.getOrderId().equals(orderId) || order.getStatus() > 4)
 				continue;
 			MemCid memCid = getMemCid(order.getMerchantId());
 			if(memCid !=null)
-				cids.add(memCid.getClientId());
+				pushMap.put(memCid, new TransmissionInfo(new PushOrderMemoEditParam(orderId, order.getOrderId(), memo), IgtPushType.ORDER_MEMO_EDIT));
 		}
 		memOrderMapper.batchUpdate(list);
 		redisOperate.batchHmset(list);
 		//推送
-		//JiLuPushUtil.orderMemoEditPush(cids, memMerchant.getMerchantId(), memMerchant.getName(), memo);
-		igtService.pushToList(cids, new TransmissionInfo(new PushOrderMemoEditParam(memMerchant.getMerchantId(), memMerchant.getName(), memo), IgtPushType.ORDER_MEMO_EDIT));
+		if(!pushMap.isEmpty())
+			for(Entry<MemCid, TransmissionInfo> entry : pushMap.entrySet())
+				igtService.pushToSingle(entry.getKey(), entry.getValue());
 		return Result.jsonSuccess();
 	}
 	/**
