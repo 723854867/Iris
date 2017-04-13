@@ -132,7 +132,7 @@ public class Merchant implements Beans {
 		redisOperate.hdel(MerchantKeyGenerator.merchantDataKey(memMerchant.getMerchantId()), "token");
 		//解除个推
 		memCidMapper.delete(memMerchant.getMerchantId());
-		redisOperate.hdel(MerchantKeyGenerator.merchantCIDDataKey(memMerchant.getMerchantId()));
+		redisOperate.del(MerchantKeyGenerator.merchantCIDDataKey(memMerchant.getMerchantId()));
 	}
 
 	/**
