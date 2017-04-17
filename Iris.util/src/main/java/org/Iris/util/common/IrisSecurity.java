@@ -37,4 +37,8 @@ public class IrisSecurity {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(IrisSecurity.toMd5("123"));
+	}
 }

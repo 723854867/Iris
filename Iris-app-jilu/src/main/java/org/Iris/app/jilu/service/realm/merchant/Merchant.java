@@ -18,6 +18,7 @@ import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.enums.OrderByType;
+import org.Iris.app.jilu.common.bean.enums.PayType;
 import org.Iris.app.jilu.common.bean.form.AllOrderGoodsSumForm;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
@@ -53,6 +54,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.MemWaitStore;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
@@ -1084,6 +1086,9 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String createAlipayOrder(String body, String subject, String outtradeno, float totalAmount) {
+		MemPayInfo payInfo = new MemPayInfo(memMerchant.getMerchantId(), outtradeno, PayType.ALIPAY.type(), subject, body, totalAmount);
+		memPayInfoMapper.insert(payInfo);
+		redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), outtradeno, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
 		return payService.getAlipayOrderInfo(body, subject, outtradeno, totalAmount);
 	}
 	/**

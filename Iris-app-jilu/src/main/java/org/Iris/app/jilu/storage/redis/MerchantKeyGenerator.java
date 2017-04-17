@@ -33,6 +33,8 @@ public final class MerchantKeyGenerator {
 	
 	private static final String MERCHANT_CID_DATA						= "hash:db:merchant:{0}:cid";									// 商户对应的个推客户端cid
 	private static final String MERCHANT_ACCID_DATA						= "hash:db:merchant:{0}:accid";									// 商户对应的云信im账号
+	
+	private static final String MERCHANT_PAY_DATA						= "hash:db:merchant:pay";										// 商户对应充值记录
 
 	public static final String merchantLockKey(long merchantId) {
 		return MessageFormat.format(MERCHANT_LOCK, String.valueOf(merchantId));
@@ -142,4 +144,7 @@ public final class MerchantKeyGenerator {
 		return MessageFormat.format(MERCHANT_WAIT_STORE_DATA, orderId,merchantId,goodsId);
 	}
 	
+	public static final String merchantPayDataKey() { 
+		return MERCHANT_PAY_DATA;
+	}
 }

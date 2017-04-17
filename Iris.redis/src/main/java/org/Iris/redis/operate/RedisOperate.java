@@ -7,6 +7,7 @@ import java.util.Set;
 import org.Iris.redis.RedisHashBean;
 import org.Iris.redis.model.EXPX;
 import org.Iris.redis.model.NXXX;
+import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.reflect.BeanUtils;
 
 import redis.clients.jedis.Jedis;
@@ -129,6 +130,17 @@ public class RedisOperate {
 		});
 	}
 	
+	public <T> T hgetBean(String key, String field,Class<T> c) {
+		String json = invoke(new RedisInvocation<String>() {
+			@Override
+			public String invok(Jedis jedis) {
+				return jedis.hget(key, field);
+			}
+		});
+		
+		return SerializeUtil.JsonUtil.GSON.fromJson(json, c);
+	}
+	
 	public long hdel(String key, String... fields) {
 		return invoke(new RedisInvocation<Long>() {
 			@Override
@@ -174,6 +186,15 @@ public class RedisOperate {
 			@Override
 			public Long invok(Jedis jedis) {
 				return jedis.hset(key, field, value);
+			}
+		});
+	}
+	
+	public long hsetByJson(String key, String field, Object object) {
+		return invoke(new RedisInvocation<Long>(){
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.hset(key, field, SerializeUtil.JsonUtil.GSON.toJson(object));
 			}
 		});
 	}

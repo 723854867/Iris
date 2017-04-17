@@ -105,6 +105,9 @@ public interface JiLuParams {
 	final IrisStrConst BODY									= new IrisStrConst("body", 167);
 	final IrisStrConst SUBJECT								= new IrisStrConst("subject", 168);
 	final IrisStrConst OUTTRADENO							= new IrisStrConst("outtradeno", 169);
-	final IrisFloatConst TOTALAMOUNT						= new IrisFloatConst("totalMount", 170);
+	final IrisFloatConst TOTALAMOUNT						= new IrisFloatConst("totalAmount", 170);
 	final IrisStrConst RECEIPT								= new IrisStrConst("receipt", 171);
+	final IrisStrConst PASSWORD								= new IrisStrConst("password", 172);
+	final IrisStrConst OLDPWD								= new IrisStrConst("oldPwd", 173);
+	final IrisStrConst NEWPWD								= new IrisStrConst("newPwd", 174);
 }

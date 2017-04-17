@@ -47,9 +47,9 @@ public class AliPayServlet extends HttpServlet{
 			boolean flag = Beans.payService.rsaCheckV1(params);
 			if(flag){
 				String out_trade_no = req.getParameter("out_trade_no");
-				String total_amount = req.getParameter("total_amount");
-				String seller_id = req.getParameter("seller_id");
-				String app_id = req.getParameter("app_id");
+				//String total_amount = req.getParameter("total_amount");
+				//String seller_id = req.getParameter("seller_id");
+				//String app_id = req.getParameter("app_id");
 				//对上面上个参数进行验证 目前暂不进行。。。
 				String trade_status = StringUtil.checkNull(req.getParameter("trade_status"));
 				if(trade_status.equals("WAIT_BUYER_PAY")){
@@ -57,7 +57,8 @@ public class AliPayServlet extends HttpServlet{
 				}else if(trade_status.equals("TRADE_CLOSED")){
 					//未付款交易超时关闭，或支付完成后全额退款
 				}else if(trade_status.equals("TRADE_SUCCESS")){
-					//交易支付成功
+					//交易支付成功 更新用户余额 已经插入日志
+					Beans.merchantService.alipayAsyncHandle(out_trade_no);
 				}else if(trade_status.equals("TRADE_FINISHED")){
 					//交易结束，不可退款
 				}

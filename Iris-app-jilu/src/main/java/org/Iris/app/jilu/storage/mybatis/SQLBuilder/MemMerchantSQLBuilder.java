@@ -37,6 +37,7 @@ public class MemMerchantSQLBuilder {
 				SET("status_mod = #{statusMod}");
 				SET("last_login_time = #{lastLoginTime}");
 				SET("last_purchase_time = #{lastPurchaseTime}");
+				SET("`money` = #{money}");
 				WHERE("merchant_id = #{merchantId}");
 			}
 		}.toString();

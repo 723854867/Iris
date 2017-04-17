@@ -25,7 +25,15 @@ public enum ApiUri {
 	/**
 	 * 刷新token
 	 */
-	WEIXIN_REFRESH_TOKEN("https","api.weixin.qq.com","/sns/oauth2/refresh_token");
+	WEIXIN_REFRESH_TOKEN("https","api.weixin.qq.com","/sns/oauth2/refresh_token"),
+	/**
+	 * 云信短信发送地址
+	 */
+	SEND_SMS("https","api.netease.im","/sms/sendcode.action"),
+	/**
+	 * 云信短信验证
+	 */
+	SMS_VALIDATE("https","api.netease.im","/sms/verifycode.action");
 	
 	private String http;
 	private String host;

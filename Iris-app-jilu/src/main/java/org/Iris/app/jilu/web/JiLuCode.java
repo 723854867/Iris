@@ -41,6 +41,7 @@ public enum JiLuCode implements ICode {
 	PACKET_COUNT_ERROR(229, "order packet count error"),
 	ORDER_MEMO_CANNOT_EDIT(230, "this order memo can't edit"),
 	PACKET_CANNOT_MOVE(231, "packet cannot be moved"),
+	API_INVOKE_ERROR(232,"api invoke error"),
 	
 	//第三方接口调用失败返回的code以及信息
 	UNIFIED_ORDER_ERROR(601,"{0}");

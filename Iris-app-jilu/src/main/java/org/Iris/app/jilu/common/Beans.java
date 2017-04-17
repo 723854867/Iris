@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.common;
 
+import org.Iris.app.jilu.service.realm.BackstageService;
 import org.Iris.app.jilu.service.realm.CommonService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
@@ -8,7 +9,9 @@ import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.pay.PayService;
 import org.Iris.app.jilu.service.realm.relation.RelationService;
 import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
+import org.Iris.app.jilu.service.realm.wyyx.SmsService;
 import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
+import org.Iris.app.jilu.storage.mybatis.mapper.BgUserMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
@@ -20,6 +23,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemPayInfoMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemWaitStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.UpdateStoreLogMapper;
@@ -37,6 +41,7 @@ public interface Beans {
 	
 	final JiLuLuaOperate luaOperate = SpringContextUtil.getBean("luaOperate", JiLuLuaOperate.class); 
 	final CommonService commonService = SpringContextUtil.getBean("commonService", CommonService.class);
+	final BackstageService backstageService = SpringContextUtil.getBean("backstageService", BackstageService.class);
 	final DistributeLock distributeLock = SpringContextUtil.getBean("distributeLock", DistributeLock.class);
 	final CourierService courierService = SpringContextUtil.getBean("courierService", CourierService.class);
 	final MerchantService merchantService = SpringContextUtil.getBean("merchantService", MerchantService.class);
@@ -56,9 +61,13 @@ public interface Beans {
 	final MemWaitStoreMapper memWaitStoreMapper = SpringContextUtil.getBean("memWaitStoreMapper", MemWaitStoreMapper.class);
 	final UpdateStoreLogMapper updateStoreLogMapper = SpringContextUtil.getBean("updateStoreLogMapper", UpdateStoreLogMapper.class);
 	final HttpProxy httpProxy = SpringContextUtil.getBean("httpProxy", HttpProxy.class);
+	final MemPayInfoMapper memPayInfoMapper = SpringContextUtil.getBean("memPayInfoMapper", MemPayInfoMapper.class);
 	
 	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
 	final WyyxService wyyxService = SpringContextUtil.getBean("wyyxService", WyyxService.class);
 	final WeiXinService weiXinService = SpringContextUtil.getBean("weiXinService", WeiXinService.class);
 	final PayService payService = SpringContextUtil.getBean("payService", PayService.class);
+	final SmsService smsService = SpringContextUtil.getBean("smsService", SmsService.class);
+	
+	final BgUserMapper bgUserMapper = SpringContextUtil.getBean("bgUserMapper", BgUserMapper.class);
 }

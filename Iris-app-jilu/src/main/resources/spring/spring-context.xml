@@ -42,6 +42,8 @@
 		<property name="jmsService" ref="jmsService" />
 		<property name="aliyunService" ref="aliyunService" />
 		<property name="wyyxService" ref="wyyxService" />
+		<property name="payService" ref="payService" />
+		<property name="smsService" ref="smsService" />
 		<property name="locale" ref="lang" />
 	</bean>
 	

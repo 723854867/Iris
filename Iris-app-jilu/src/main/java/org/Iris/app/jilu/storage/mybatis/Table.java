@@ -3,6 +3,7 @@ package org.Iris.app.jilu.storage.mybatis;
 public enum Table {
 	
 	BG_CONFIG("bg_config"),
+	BG_USER("bg_user"),
 	CFG_GOODS("cfg_goods"),
 
 	MEM_MERCHANT("mem_merchant"),
@@ -20,7 +21,8 @@ public enum Table {
 	LOG_STOCK_STORE("log_stock_store"),
 	
 	LOG_UPDATE_STORE("log_update_store"),
-	MEM_WAIT_STORE("mem_wait_store");
+	MEM_WAIT_STORE("mem_wait_store"),
+	MEM_PAY_INFO("mem_pay_info");
 	
 	private String mark;
 	

@@ -3,6 +3,8 @@ package org.Iris.app.jilu.storage.domain;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 
+import com.mysql.cj.api.io.PacketReceivedTimeHolder;
+
 public class MemMerchant implements RedisHashBean {
 
 	private long merchantId;
@@ -12,6 +14,7 @@ public class MemMerchant implements RedisHashBean {
 	private String QRCode;
 	private int lastLoginTime;
 	private int lastPurchaseTime;
+	private int money;
 	private int created;
 	private int updated;
 	
@@ -83,6 +86,14 @@ public class MemMerchant implements RedisHashBean {
 
 	public void setLastPurchaseTime(int lastPurchaseTime) {
 		this.lastPurchaseTime = lastPurchaseTime;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
 	}
 
 	public int getCreated() {

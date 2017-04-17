@@ -3,9 +3,11 @@ package org.Iris.app.jilu.service.realm.courier;
 import javax.annotation.Resource;
 
 import org.Iris.app.jilu.common.AppConfig;
+import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.common.model.Env;
 import org.Iris.app.jilu.service.realm.jms.JmsService;
+import org.Iris.app.jilu.service.realm.wyyx.result.SendSmsResult;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.core.service.bean.Result;
@@ -45,7 +47,10 @@ public class CourierService {
 		switch (env) {
 		case LOCAL:											// 测试环境下直接返回验证码
 		case TEST:
-			return Result.jsonSuccess(captcha);				
+			SendSmsResult result = Beans.smsService.sendSms(account.substring(3), 3060303, 4);
+			if(result.getCode() == 200)
+				result.setCode(0);
+			return Result.jsonSuccess(result);				
 		case ONLINE:										// 线上环境需要发送短信
 			jmsService.sendCaptchaMessage(type, account, captcha);
 			return Result.jsonSuccess();					
@@ -62,6 +67,14 @@ public class CourierService {
 	 * @return
 	 */
 	public boolean verifyCaptch(AccountType type, String account, String captch) {
-		return luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), captch);
+		switch (type) {
+		case MOBILE:
+			SendSmsResult result = Beans.smsService.validateSms(account, captch);
+			return result.getCode()==200;
+		case EMAIL:
+			return luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), captch);
+		default:
+			return false;
+		}
 	}
 }

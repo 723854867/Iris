@@ -14,6 +14,7 @@ import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.OrderStatus;
+import org.Iris.app.jilu.common.bean.enums.PayOrderStatus;
 import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
@@ -33,6 +34,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 import org.Iris.app.jilu.storage.domain.MemOrderPacket;
 import org.Iris.app.jilu.storage.domain.MemOrderStatus;
+import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.domain.UpdateStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
@@ -43,6 +45,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemPayInfoMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
@@ -57,6 +60,8 @@ import org.Iris.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.mysql.cj.api.io.PacketReceivedTimeHolder;
 
 @Service
 public class MerchantService extends RedisCache {
@@ -85,6 +90,8 @@ public class MerchantService extends RedisCache {
 	private IgtService igtService;
 	@Resource
 	private StockGoodsStoreLogMapper stockGoodsStoreLogMapper;
+	@Resource
+	private MemPayInfoMapper memPayInfoMapper;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -1045,5 +1052,38 @@ public class MerchantService extends RedisCache {
 		return Result.jsonSuccess();
 	}
 
-	
+	/**
+	 * 支付宝支付成功异步处理
+	 * @param out_trade_no
+	 * @param total_amount
+	 */
+	@Transactional
+	public void alipayAsyncHandle(String outTradeNo) {
+		MemPayInfo memPayInfo = getMemPayInfo(outTradeNo);
+		if(memPayInfo != null){
+			int time = DateUtils.currentTime();
+			memPayInfo.setStatus(PayOrderStatus.PAY_SUCCESS.status());
+			memPayInfo.setUpdated(time);
+			
+			MemMerchant memMerchant = getMerchantById(memPayInfo.getMerchantId()).getMemMerchant();
+			memMerchant.setMoney(memMerchant.getMoney() + (int)(memPayInfo.getTotalAmount()*100));
+			memMerchant.setUpdated(time);
+			
+			memPayInfoMapper.update(memPayInfo);
+			memMerchantMapper.update(memMerchant);
+			redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), outTradeNo, SerializeUtil.JsonUtil.GSON.toJson(memPayInfo));
+			redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+			
+		}
+	}
+
+	public MemPayInfo getMemPayInfo(String outTradeNo){
+		MemPayInfo payInfo = redisOperate.hgetBean(MerchantKeyGenerator.merchantPayDataKey(), outTradeNo, MemPayInfo.class);
+		if(payInfo == null){
+			payInfo = memPayInfoMapper.findByOutRradeNo(outTradeNo);
+			if(payInfo!=null)
+				redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), outTradeNo, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
+		}
+		return payInfo;
+	}
 }
