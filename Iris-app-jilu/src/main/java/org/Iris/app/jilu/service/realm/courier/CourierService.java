@@ -47,10 +47,11 @@ public class CourierService {
 		switch (env) {
 		case LOCAL:											// 测试环境下直接返回验证码
 		case TEST:
-			SendSmsResult result = Beans.smsService.sendSms(account.substring(3), 3060303, 4);
-			if(result.getCode() == 200)
-				result.setCode(0);
-			return Result.jsonSuccess(result);				
+//			SendSmsResult result = Beans.smsService.sendSms(account.substring(3), 3060303, 4);
+//			if(result.getCode() == 200)
+//				result.setCode(0);
+			jmsService.sendCaptchaMessage(type, account, captcha);
+			return Result.jsonSuccess(captcha);				
 		case ONLINE:										// 线上环境需要发送短信
 			jmsService.sendCaptchaMessage(type, account, captcha);
 			return Result.jsonSuccess();					
@@ -67,14 +68,15 @@ public class CourierService {
 	 * @return
 	 */
 	public boolean verifyCaptch(AccountType type, String account, String captch) {
-		switch (type) {
-		case MOBILE:
-			SendSmsResult result = Beans.smsService.validateSms(account, captch);
-			return result.getCode()==200;
-		case EMAIL:
-			return luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), captch);
-		default:
-			return false;
-		}
+		return luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), captch);
+//		switch (type) {
+//		case MOBILE:
+//			SendSmsResult result = Beans.smsService.validateSms(account, captch);
+//			return result.getCode()==200;
+//		case EMAIL:
+//			return luaOperate.delIfEquals(CommonKeyGenerator.accountCaptchaKey(type, account), captch);
+//		default:
+//			return false;
+//		}
 	}
 }

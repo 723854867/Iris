@@ -27,11 +27,9 @@ public class CaptchaMessageListener extends JiLuMessageListener<CaptchaMessage> 
 	public void handleMessage(Message message) throws Throwable {
 		CaptchaMessage cm = getObject(message);
 		AccountType type = cm.getType();
-		
 		try {
 			switch (type) {
 			case MOBILE:
-				
 				break;
 			case EMAIL:
 				emailSender.sendTo("吉鹿验证码", cm.getAccount(), cm.getCaptcha());
