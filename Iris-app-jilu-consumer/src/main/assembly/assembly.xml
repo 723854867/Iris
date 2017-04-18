@@ -14,7 +14,7 @@
 	<fileSets>
 		<fileSet>
 			<directory>src/main/resources/spring</directory>
-			<outputDirectory>spring</outputDirectory>
+			<outputDirectory>spring</outputDirectory>	
 			<fileMode>0755</fileMode>
 		</fileSet>
 	</fileSets>
