@@ -61,6 +61,7 @@ import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.app.pay.apply.IosVerify;
 import org.Iris.app.pay.wechat.response.UnifiedOrderResponse;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
@@ -1233,7 +1234,7 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String iapCertificate(String receipt) {
-		return null;
+		return Result.jsonSuccess(IosVerify.buyAppVerify(receipt));
 	}
 
 }
