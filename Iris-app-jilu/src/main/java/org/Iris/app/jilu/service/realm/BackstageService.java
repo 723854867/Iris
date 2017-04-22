@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.storage.domain.BgUser;
+import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
@@ -67,6 +68,33 @@ public class BackstageService implements Beans{
 		bgUserMapper.update(user);
 		redisOperate.hsetByJson(BgkeyGenerator.bgUserDataKey(), account, user);
 		return Result.jsonSuccess(user);
+	}
+
+	/**
+	 * 获取菜单列表 sam
+	 * 
+	 * @return
+	 */
+	public String GetMenuList() {
+		return Result.jsonSuccess(sysMenuMapper.getSysMenuList());
+	}
+	
+	/**
+	 * 获取当前页面父页面路径 sam
+	 * 
+	 * @return
+	 */
+	public String GetParentPagePath(String curPagePath) {
+		String parentPagePath = "";
+		SysPage page = sysMenuMapper.getPageByPagePath(curPagePath);
+		if (page.getParentpageid() > 0) {
+			page = sysMenuMapper.getPageByPageId(page.getParentpageid());
+			parentPagePath = page.getUrl();
+		} else {
+			parentPagePath = page.getUrl();
+		}
+
+		return Result.jsonSuccess(parentPagePath);
 	}
 
 }

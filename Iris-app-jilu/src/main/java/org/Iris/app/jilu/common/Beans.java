@@ -26,6 +26,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemPayInfoMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemWaitStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysMenuMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.UpdateStoreLogMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.core.util.SpringContextUtil;
@@ -70,4 +71,7 @@ public interface Beans {
 	final SmsService smsService = SpringContextUtil.getBean("smsService", SmsService.class);
 	
 	final BgUserMapper bgUserMapper = SpringContextUtil.getBean("bgUserMapper", BgUserMapper.class);
+	final SysMenuMapper sysMenuMapper = SpringContextUtil.getBean("sysMenuMapper", SysMenuMapper.class);
+	
+	
 }

@@ -382,12 +382,22 @@ public class Merchant implements Beans {
 	 * 
 	 * @return
 	 */
-	public String getMyOrderList(int page, int pageSize) {
-		long count = memOrderMapper.getOrderCountByMerchantId(getMemMerchant().getMerchantId());
-		if (count == 0)
-			return Result.jsonSuccess(Pager.EMPTY);
-		List<MemOrder> list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),
-				(page - 1) * pageSize, pageSize);
+	public String getMyOrderList(int page, int pageSize,int type) {
+		long count=0;
+		List<MemOrder> list = new ArrayList<>();
+		if(type == 0){
+			count = memOrderMapper.getOrderCountByMerchantId(getMemMerchant().getMerchantId());
+			if (count == 0)
+				return Result.jsonSuccess(Pager.EMPTY);
+			list = memOrderMapper.getOrderListByMerchantId(getMemMerchant().getMerchantId(),
+					(page - 1) * pageSize, pageSize);
+		}else{
+			count = memOrderMapper.getWaitOrderCountByMerchantId(getMemMerchant().getMerchantId());
+			if (count == 0)
+				return Result.jsonSuccess(Pager.EMPTY);
+			list = memOrderMapper.getWaitOrderListByMerchantId(getMemMerchant().getMerchantId(),
+					(page - 1) * pageSize, pageSize);
+		}
 		List<OrderForm> orderForms = new ArrayList<OrderForm>();
 		for (MemOrder order : list)
 			orderForms.add(new OrderForm(order));

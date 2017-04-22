@@ -138,6 +138,15 @@ public class MemOrderSQLBuilder {
 		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} order by created LIMIT #{start},#{pageSize}";
 	}
 	
+	/**
+	 * 获取待处理订单（status = 0 或 3）
+	 * @return
+	 */
+	public String getWaitOrderListByMerchantId(){
+		
+		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} and status < 4 order by created LIMIT #{start},#{pageSize}";
+	}
+	
 	public String getOrderCountByMerchantId(){
 		return new SQL(){
 			{
@@ -146,6 +155,10 @@ public class MemOrderSQLBuilder {
 				WHERE("merchant_id=#{merchantId}");
 			}
 		}.toString();
+	}
+	
+	public String getWaitOrderCountByMerchantId(){
+		return "select count(1) from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} and status < 4";
 	}
 	
 	public String getTransferMerchantOrderListByOrderId(){
