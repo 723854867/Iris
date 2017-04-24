@@ -22,7 +22,7 @@ $.ajax({
 				{ 
 					if(content2.parentmenuid==content1.menuid)
 					{
-						htmlMenu=htmlMenu+"<li><a href='../"+content2.url+"'><i class='glyphicon glyphicon-list'></i>&nbsp;"+content2.cname+"</a></li>";
+						htmlMenu=htmlMenu+"<li><a href='/jilu/"+content2.url+"'><i class='glyphicon glyphicon-list'></i>&nbsp;"+content2.cname+"</a></li>";
 					}
 				});
 				

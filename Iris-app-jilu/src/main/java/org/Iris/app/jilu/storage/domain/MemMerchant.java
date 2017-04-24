@@ -17,6 +17,11 @@ public class MemMerchant implements RedisHashBean {
 	private int money;
 	private int created;
 	private int updated;
+	//寄件人信息
+	private String sendName;
+	private String sendAddress;
+	private String sendMobile;
+	
 	
 	// 只存在 redis 的字段
 	private String token;
@@ -120,6 +125,30 @@ public class MemMerchant implements RedisHashBean {
 	
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getSendName() {
+		return sendName;
+	}
+
+	public void setSendName(String sendName) {
+		this.sendName = sendName;
+	}
+
+	public String getSendAddress() {
+		return sendAddress;
+	}
+
+	public void setSendAddress(String sendAddress) {
+		this.sendAddress = sendAddress;
+	}
+
+	public String getSendMobile() {
+		return sendMobile;
+	}
+
+	public void setSendMobile(String sendMobile) {
+		this.sendMobile = sendMobile;
 	}
 
 	@Override

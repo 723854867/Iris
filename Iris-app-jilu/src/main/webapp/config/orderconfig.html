@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" src="../scripts/public.js"></script>
+<script type="text/javascript" src="../scripts/mydate.js"></script>
+<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/islogin.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-switch.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+</head>
+<body>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="main-nav nav nav-tabs nav-stacked" style="">
+				</ul>
+			</div>
+			<div class="col-md-10">
+			<h2 class="sub-header">收费配置</h2>
+				<h4><label>创建订单时收费</label>
+				<span><input id="switch-order-create" type="checkbox"></span></h4>
+				<h4><label>转单时收费</label>
+				<span><input id="switch-order-transform" type="checkbox"></span></h4>		
+				<h4><label>标签收费</label>
+				<span><input id="switch-label-buy" type="checkbox"></span></h4>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../scripts/menu.js"></script>
+	<script type="text/javascript">
+	$('#switch-order-create').bootstrapSwitch({  
+        onText:"开启",  
+        offText:"关闭",  
+        onColor:"success",  
+        offColor:"warning",  
+        handleWidth:"80",
+        onSwitchChange:function(event,state){  
+           configUpdate(event, state, 'orderCreatedPay');
+        }  
+    })  
+    $('#switch-label-buy').bootstrapSwitch({  
+        onText:"开启",  
+        offText:"关闭",  
+        onColor:"success",  
+        offColor:"warning",  
+        handleWidth:"80",
+        onSwitchChange:function(event,state){  
+           configUpdate(event, state, 'labelAddPay');
+        } 
+    })
+    $('#switch-order-transform').bootstrapSwitch({  
+        onText:"开启",  
+        offText:"关闭",  
+        onColor:"success",  
+        offColor:"warning",  
+        handleWidth:"80",
+        onSwitchChange:function(event,state){  
+           configUpdate(event, state, 'orderTransformPay');
+        }
+    })
+    $(document).ready(function() {
+    	$.ajax({
+ 			type:"post",
+ 			url: '/jilu/backstage',
+ 			data:{'action':"config_list"},
+ 			dataTyp:'json',
+			 success: function (json) {
+				 var list = json.data;
+				 $.each(list, function (index, array) { //遍历json数据列
+					 if(array.key == 'orderCreatedPay'){
+						 if(array.value == 0)
+						 	$('#switch-order-create').bootstrapSwitch('state', true);
+						 else
+							$('#switch-order-create').bootstrapSwitch('state', false);
+					 }
+					 else if(array.key == 'labelAddPay'){
+						 if(array.value == 0)
+						 	$('#switch-label-buy').bootstrapSwitch('state', true);
+						 else
+							$('#switch-label-buy').bootstrapSwitch('state', false);
+					 }
+					 else if(array.key == 'orderTransformPay'){
+						 if(array.value == 0)
+						 	$('#switch-order-transform').bootstrapSwitch('state', true);
+						 else
+							$('#switch-order-transform').bootstrapSwitch('state', false);
+					 }
+	             });
+	         }
+ 		});
+	});
+    
+    var configUpdate = function(event,state,key){
+    	var value;
+		 if(state==true){  
+             value = 0;
+         }else{  
+             value = 1;
+         }  
+         $.ajax({
+ 			type:"post",
+ 			url: '/jilu/backstage',
+ 			data:{'action':"config_update",'key':key,'value':value},
+ 			dataTyp:'json',
+			 success: function (json) {
+	            	if(json.code=="0"){
+	            	}
+	            	else{
+	            		alert(json.desc);
+	            		window.location.reload();
+	            	}
+	          }
+ 		});
+	}
+	
+	
+	
+</script>
+</body>
+</html>

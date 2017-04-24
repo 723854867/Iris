@@ -149,7 +149,7 @@
 					<webResources>
 						<resource>
 							<directory>src/main/webapp</directory>
-							<filtering>true</filtering>
+							<filtering>false</filtering>
 						</resource>
 					</webResources>
 					<warName>jilu</warName>

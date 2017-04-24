@@ -4,6 +4,7 @@ public enum Table {
 	
 	BG_CONFIG("bg_config"),
 	BG_USER("bg_user"),
+	BG_VERSION("bg_version"),
 	CFG_GOODS("cfg_goods"),
 
 	MEM_MERCHANT("mem_merchant"),
@@ -23,6 +24,7 @@ public enum Table {
 	LOG_UPDATE_STORE("log_update_store"),
 	MEM_WAIT_STORE("mem_wait_store"),
 	MEM_PAY_INFO("mem_pay_info");
+
 	
 	private String mark;
 	

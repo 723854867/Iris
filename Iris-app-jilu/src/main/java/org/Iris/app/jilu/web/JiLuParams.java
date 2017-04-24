@@ -111,4 +111,6 @@ public interface JiLuParams {
 	final IrisStrConst OLDPWD								= new IrisStrConst("oldPwd", 173);
 	final IrisStrConst NEWPWD								= new IrisStrConst("newPwd", 174);
 	final IrisStrConst PAGEPATH								= new IrisStrConst("pagePath", 175);
+	final IrisStrConst VERSION_NUM							= new IrisStrConst("versionNum", 176);
+	final IrisIntConst STATUS								= new IrisIntConst("status", 177);
 }

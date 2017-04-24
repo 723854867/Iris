@@ -24,4 +24,13 @@ public class BgConfigSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String list(){
+		return new SQL(){
+			{
+				SELECT("*");
+				FROM(Table.BG_CONFIG.mark());
+			}
+		}.toString();
+	}
 }

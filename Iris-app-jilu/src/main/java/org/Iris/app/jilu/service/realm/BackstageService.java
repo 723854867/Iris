@@ -5,8 +5,11 @@ import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.storage.domain.BgUser;
+import org.Iris.app.jilu.storage.domain.BgVersion;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
@@ -95,6 +98,56 @@ public class BackstageService implements Beans{
 		}
 
 		return Result.jsonSuccess(parentPagePath);
+	}
+
+	/**
+	 * 修改配置
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	public String updateConfig(String key, String value) {
+		bgConfigMapper.update(key,value);
+		return Result.jsonSuccess();
+	}
+	
+	/**
+	 * 获取所有版本
+	 */
+	public String versionGet() {
+		return Result.jsonSuccess(bgVersionMapper.getVersions());
+	}
+
+	/**
+	 * 添加版本
+	 */
+	public String addVersion(String versionNum, int status) {
+		BgVersion bgVersion = new BgVersion(versionNum, status);
+		bgVersionMapper.insert(bgVersion);
+		redisOperate.del(bgVersion.redisKey());
+		return Result.jsonSuccess();
+	}
+
+	/**
+	 * 版本修改
+	 */
+	public String updateVersion(long versionId, String versionNum, int status){
+		BgVersion bgVersion = new BgVersion(versionId, versionNum, status);
+		if(versionId==redisOperate.hgetAll(CommonKeyGenerator.getVersion(),new BgVersion()).getVersionId())
+			redisOperate.del(bgVersion.redisKey());
+		bgVersionMapper.update(bgVersion);
+		return Result.jsonSuccess();
+	}
+	/**
+	 * 版本删除
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 */
+	public String delVersion(long versionId){
+		if(versionId==redisOperate.hgetAll(CommonKeyGenerator.getVersion(), new BgVersion()).getVersionId())
+			redisOperate.del(CommonKeyGenerator.getVersion());
+		bgVersionMapper.delete(DateUtils.currentTime(), versionId);
+		return Result.jsonSuccess();
 	}
 
 }
