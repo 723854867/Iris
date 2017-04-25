@@ -12,6 +12,7 @@ import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
 import org.Iris.app.jilu.service.realm.wyyx.SmsService;
 import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgConfigMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.BgLabelMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgUserMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgVersionMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
@@ -76,6 +77,7 @@ public interface Beans {
 	final SysMenuMapper sysMenuMapper = SpringContextUtil.getBean("sysMenuMapper", SysMenuMapper.class);
 	final BgConfigMapper bgConfigMapper = SpringContextUtil.getBean("bgConfigMapper", BgConfigMapper.class);
 	final BgVersionMapper bgVersionMapper = SpringContextUtil.getBean("bgVersionMapper", BgVersionMapper.class);
+	final BgLabelMapper bgLabelMapper = SpringContextUtil.getBean("bgLabelMapper", BgLabelMapper.class);
 	
 	
 }

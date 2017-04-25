@@ -15,6 +15,9 @@ public class MerchantForm {
 	private int statusMod;
 	private String phone;
 	private String email;
+	private String sendName;
+	private String sendAddress;
+	private String sendMobile;
 	private String openId;
 	private String accessToken;
 	private String accid;
@@ -27,6 +30,9 @@ public class MerchantForm {
 		this.statusMod = memMerchant.getStatusMod();
 		this.name = memMerchant.getName();
 		this.address = memMerchant.getAddress();
+		this.sendName = memMerchant.getSendName();
+		this.sendAddress = memMerchant.getSendAddress();
+		this.sendMobile = memMerchant.getSendMobile();
 		if (MerchantStatusMod.isQualified(memMerchant))
 			this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
 	}
@@ -69,6 +75,30 @@ public class MerchantForm {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getSendName() {
+		return sendName;
+	}
+
+	public void setSendName(String sendName) {
+		this.sendName = sendName;
+	}
+
+	public String getSendAddress() {
+		return sendAddress;
+	}
+
+	public void setSendAddress(String sendAddress) {
+		this.sendAddress = sendAddress;
+	}
+
+	public String getSendMobile() {
+		return sendMobile;
+	}
+
+	public void setSendMobile(String sendMobile) {
+		this.sendMobile = sendMobile;
 	}
 
 	public int getStatusMod() {

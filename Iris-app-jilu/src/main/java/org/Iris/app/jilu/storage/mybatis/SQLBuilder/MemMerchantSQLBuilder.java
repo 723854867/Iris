@@ -34,6 +34,9 @@ public class MemMerchantSQLBuilder {
 				SET("QR_code = #{QRCode}");
 				SET("updated = #{updated}");
 				SET("address = #{address}");
+				SET("send_name = #{sendName}");
+				SET("send_address = #{sendAddress}");
+				SET("send_mobile = #{sendMobile}");
 				SET("status_mod = #{statusMod}");
 				SET("last_login_time = #{lastLoginTime}");
 				SET("last_purchase_time = #{lastPurchaseTime}");

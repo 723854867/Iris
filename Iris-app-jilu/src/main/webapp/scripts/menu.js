@@ -77,7 +77,7 @@ function SelectParentPage()
 	    	$(".secondmenu li").each(function (index) {
 	    		
 	            var href = $(this).find("a").attr("href");
-	            href=href.replace("../","");
+	            href=href.replace("/jilu/","");
 	            var url = parentpage;
 	            //console.log("href:"+href.split('/').pop());
 	            //console.log("url:"+url.split('/').pop().split('?')[0]);

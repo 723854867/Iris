@@ -16,6 +16,7 @@ public final class CommonKeyGenerator {
 	private static final String WEIXIN_OPENID_REFRESH_TOKEN			= "string:wenxin:{0}:refresh:token";					// 微信应用refresh_token 用于刷新access_token
 	private static final String BG_CONFIG_DATE						= "hash:db:bg:config";									// 后台配置数据
 	private static final String BG_VERSION_ACCOUNT					= "hash:cache:version";									// 版本控制
+	private static final String BG_LABEL_INFO						= "hash:cache:label";									// 版本控制
 	
 	public static final String accountCaptchaKey(AccountType type, String account) {
 		return MessageFormat.format(ACCOUNT_CAPTCHA, type.name().toLowerCase(), account);
@@ -55,5 +56,9 @@ public final class CommonKeyGenerator {
 	
 	public static final String getVersion(){
 		return BG_VERSION_ACCOUNT;
+	}
+	
+	public static final String getLabel(){
+		return BG_LABEL_INFO;
 	}
 }

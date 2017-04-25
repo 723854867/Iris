@@ -2,10 +2,9 @@ package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
 
+import org.Iris.app.jilu.common.bean.form.CustomerGoodsPool;
 import org.Iris.app.jilu.common.bean.model.CustomerListPurchaseFrequencyModel;
 import org.Iris.app.jilu.storage.domain.MemOrder;
-import org.Iris.app.jilu.storage.domain.MemOrderGoods;
-import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderGoodsSQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemOrderSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -87,6 +86,39 @@ public interface MemOrderMapper {
 	 */
 	@SelectProvider(type = MemOrderSQLBuilder.class, method="getWaitOrderListByMerchantId")
 	List<MemOrder> getWaitOrderListByMerchantId(@Param("merchantId") long merchantId, @Param("start") int start, @Param("pageSize") int pageSize);
+	
+	
+	/**
+	 * 商家与此联系人所有订单基本信息列表
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getCustomerOrderList")
+	List<MemOrder> getCustomerOrderList(@Param("merchantId") long merchantId,@Param("customerId") long customerId, @Param("start") int start, @Param("pageSize") int pageSize);
+	
+	/**
+	 * 商家与此联系人所有订单总数
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getCustomerOrderCount")
+	long getCustomerOrderCount(@Param("merchantId") long merchantId,@Param("customerId") long customerId);
+	
+	/**
+	 * 此联系人在商家里购买的商品汇总记录
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getCustomerGoodsPool")
+	List<CustomerGoodsPool> getCustomerGoodsPool(@Param("merchantId") long merchantId,@Param("customerId") long customerId, @Param("start") int start, @Param("pageSize") int pageSize);
+	
+	/**
+	 * 此联系人在商家里购买的商品汇总记录
+	 * @param merchantId
+	 * @return
+	 */
+	@SelectProvider(type = MemOrderSQLBuilder.class, method="getCustomerGoodsPoolCount")
+	long getCustomerGoodsPoolCount(@Param("merchantId") long merchantId,@Param("customerId") long customerId);
 	
 	
 	/**

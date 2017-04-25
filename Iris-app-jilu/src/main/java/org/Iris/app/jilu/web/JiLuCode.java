@@ -42,6 +42,10 @@ public enum JiLuCode implements ICode {
 	ORDER_MEMO_CANNOT_EDIT(230, "this order memo can't edit"),
 	PACKET_CANNOT_MOVE(231, "packet cannot be moved"),
 	API_INVOKE_ERROR(232,"api invoke error"),
+	BALANCE_IS_NOT_ENOUGH(233," balance is not enough"),
+	
+	//后台
+	LABEL_NUM_EXIST(501,"label num is exist"),
 	
 	//第三方接口调用失败返回的code以及信息
 	UNIFIED_ORDER_ERROR(601,"{0}");

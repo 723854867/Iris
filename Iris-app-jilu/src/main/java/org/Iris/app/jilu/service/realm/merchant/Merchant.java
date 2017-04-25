@@ -25,6 +25,7 @@ import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsListForm;
 import org.Iris.app.jilu.common.bean.form.CustomerForm;
 import org.Iris.app.jilu.common.bean.form.CustomerFrequencyPagerForm;
+import org.Iris.app.jilu.common.bean.form.CustomerGoodsPool;
 import org.Iris.app.jilu.common.bean.form.CustomerPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.GoodsStoreAndStockForm;
@@ -43,6 +44,7 @@ import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderMemoEditParam;
 import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
+import org.Iris.app.jilu.storage.domain.BgLabel;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
@@ -866,11 +868,15 @@ public class Merchant implements Beans {
 			switch (memAccount.getType()) {
 			case 0:
 				merchantForm.setPhone(memAccount.getAccount());
+				break;
 			case 1:
 				merchantForm.setEmail(memAccount.getAccount());
+				break;
 			case 2:
 				merchantForm.setOpenId(memAccount.getAccount());
+				break;
 			default:
+				break;
 			}
 		}
 		return Result.jsonSuccess(merchantForm);
@@ -1074,6 +1080,12 @@ public class Merchant implements Beans {
 	 */
 	public String allOrderGoodsSum(int start, int end) {
 		List<AllOrderGoodsSumForm> list = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByMerchantId(memMerchant.getMerchantId(),start,end);
+		for(AllOrderGoodsSumForm form : list){
+			CfgGoods goods = getGoodsById(form.getGoodsId());
+			form.setGoodsName(goods.getZhName());
+			form.setMerchantName(goods.getMerchantName());
+			form.setUnitPrice(goods.getUnitPrice());
+		}
 		return Result.jsonSuccess(list);
 	}
 	
@@ -1245,6 +1257,69 @@ public class Merchant implements Beans {
 	 */
 	public String iapCertificate(String receipt) {
 		return Result.jsonSuccess(IosVerify.buyAppVerify(receipt));
+	}
+	/**
+	 * 添加收件人信息
+	 * @param sendName
+	 * @param sendAddress
+	 * @param sendAddress2
+	 * @return
+	 */
+	public String addMerchantSendInfo(String sendName, String sendAddress, String sendMobile) {
+		memMerchant.setSendName(sendName);
+		memMerchant.setSendAddress(sendAddress);
+		memMerchant.setSendMobile(sendMobile);
+		memMerchant.setUpdated(DateUtils.currentTime());
+	    memMerchantMapper.update(memMerchant);
+	    redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+	    return Result.jsonSuccess();
+	}
+
+	/**
+	 * 商家与此联系人所有订单基本信息列表
+	 * @param page
+	 * @param pageSize
+	 * @param customerId
+	 * @return
+	 */
+	public String getCustomerOrderList(int page, int pageSize, long customerId) {
+		long count = memOrderMapper.getCustomerOrderCount(getMemMerchant().getMerchantId(),customerId);
+		if (count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemOrder> list = memOrderMapper.getCustomerOrderList(getMemMerchant().getMerchantId(),customerId,
+				(page - 1) * pageSize, pageSize);
+		List<OrderForm> orderForms = new ArrayList<OrderForm>();
+		for (MemOrder order : list)
+			orderForms.add(new OrderForm(order));
+		return Result.jsonSuccess(new Pager<OrderForm>(count, orderForms));
+	}
+	/**
+	 * 此联系人在商家里购买的商品汇总记录
+	 * @param page
+	 * @param pageSize
+	 * @param customerId
+	 * @return
+	 */
+	public String getCustomerGoodsPool(int page, int pageSize, long customerId) {
+		long count = memOrderMapper.getCustomerGoodsPoolCount(getMemMerchant().getMerchantId(),customerId);
+		if (count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<CustomerGoodsPool> list = memOrderMapper.getCustomerGoodsPool(getMemMerchant().getMerchantId(),customerId,
+				(page - 1) * pageSize, pageSize);
+		return Result.jsonSuccess(new Pager<CustomerGoodsPool>(count, list));
+	}
+
+	/**
+	 * 购买标签
+	 * @param labelNum
+	 * @param count
+	 * @return
+	 */
+	public String buyLabel(String labelNum, long count) {
+		BgLabel bgLabel = bgLabelMapper.findByNum(labelNum);
+		if(getMemMerchant().getMoney() < bgLabel.getPrice()*count)
+			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
+		return Result.jsonSuccess(getMemMerchant().getMoney() - bgLabel.getPrice()*count);
 	}
 
 }

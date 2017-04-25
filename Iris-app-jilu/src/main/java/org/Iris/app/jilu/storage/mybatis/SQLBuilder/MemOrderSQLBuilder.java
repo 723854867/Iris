@@ -135,7 +135,40 @@ public class MemOrderSQLBuilder {
 	
 	public String getOrderListByMerchantId(){
 		
-		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} order by created LIMIT #{start},#{pageSize}";
+		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} order by created desc LIMIT #{start},#{pageSize}";
+	}
+	
+	public String getCustomerOrderList(){
+		
+		return "select * from "+Table.MEM_ORDER.mark()+" where merchant_id=#{merchantId} and customer_id=#{customerId} "
+				+ "order by created desc LIMIT #{start},#{pageSize}";
+	}
+	public String getCustomerOrderCount(){
+		return new SQL(){
+			{
+				SELECT("count(1)");
+				FROM(Table.MEM_ORDER.mark());
+				WHERE("merchant_id=#{merchantId}");
+				AND();
+				WHERE("customer_id=#{customerId}");
+			}
+		}.toString();
+	}
+	
+	/**
+	 * 此联系人在商家里购买的商品汇总记录
+	 * @return
+	 */
+	public String getCustomerGoodsPool(){
+		return "select mog.goods_id,mog.goods_name,count(mog.goods_id) count from mem_order mo join "
+				+"mem_order_goods mog on mo.order_id = mog.order_id where mo.merchant_id=#{merchantId} and mo.customer_id = #{customerId} "
+				+ " group by mog.goods_id,mog.goods_name LIMIT #{start},#{pageSize} ";
+	}
+	
+	public String getCustomerGoodsPoolCount(){
+		return "select count(1) from (select mog.goods_id,mog.goods_name,count(mog.goods_id) count from mem_order mo join "
+				+"mem_order_goods mog on mo.order_id = mog.order_id where mo.merchant_id=#{merchantId} and mo.customer_id = #{customerId} "
+				+ " group by mog.goods_id,mog.goods_name) a";
 	}
 	
 	/**

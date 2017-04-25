@@ -5,6 +5,7 @@ public enum Table {
 	BG_CONFIG("bg_config"),
 	BG_USER("bg_user"),
 	BG_VERSION("bg_version"),
+	BG_LABEL("bg_label"),
 	CFG_GOODS("cfg_goods"),
 
 	MEM_MERCHANT("mem_merchant"),
