@@ -33,4 +33,14 @@ public class BgConfigSQLBuilder {
 			}
 		}.toString();
 	}
+	
+	public String findByKey(){
+		return new SQL(){
+			{
+				SELECT("`value`");
+				FROM(Table.BG_CONFIG.mark());
+				WHERE("`key`=#{key}");
+			}
+		}.toString();
+	}
 }

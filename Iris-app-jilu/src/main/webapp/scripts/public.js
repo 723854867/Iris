@@ -66,3 +66,50 @@ centerModals=function() {
 		$(this).find('.modal-content').css("margin-top", top);
 	});
 };
+
+/********页面js公共元素**********/
+$(document).ready(function() {
+	$("#checkAll").click(function() {
+		//实现反选功能  
+		$('[name=checkItem]:checkbox').each(function() {
+			this.checked = !this.checked;
+		});
+	});
+});
+
+$(document).on("click", "#pagecount li a", function() {
+	var rel = $(this).attr("rel");
+	if (rel) {
+		getData(rel);
+	}
+});
+var total, totalPage; //总记录数，每页显示数，总页数
+var pageSize = 15;
+//分页条
+getPageBar=function() {
+    //页码大于最大页数
+    if (curPage > totalPage) curPage = totalPage;
+    //页码小于1
+    if (curPage < 1) curPage = 1;
+    pageStr = "<li class='disabled'><a href='javascript:void(0)'>共" + total + "条</a></li><li class='disabled'><a href='javascript:void(0)'>" + curPage + "/" + totalPage + "</a></li>";
+    //如果是第一页
+    if (curPage == 1) {
+        pageStr += "<li class='disabled'><a href='javascript:void(0)'>首页</a></li><li class='disabled'><a href='javascript:void(0)'>上一页</a></li>";
+    }
+    else {
+        pageStr += "<li><a href='javascript:void(0)' rel='1'>首页</a></li><li><a href='javascript:void(0)' rel='" + (curPage - 1) + "'>上一页</a></li>";
+    }
+    //如果是最后页
+    if (curPage >= totalPage) {
+        pageStr += "<li class='disabled'><a href='javascript:void(0)'>下一页</a></li><li class='disabled'><a href='javascript:void(0)'>尾页</a></li>";
+    }
+    else {
+        pageStr += "<li><a href='javascript:void(0)' rel='" + (parseInt(curPage) + 1) + "'>下一页</a></li><li><a href='javascript:void(0)' rel='" + totalPage + "'>尾页</a></li>";
+    }
+    $("#pagecount").html(pageStr);
+}
+//查询
+search = function(){
+	getData(1);
+}
+/********页面js公共元素**********/

@@ -19,4 +19,7 @@ public interface BgConfigMapper {
 	
 	@SelectProvider(type = BgConfigSQLBuilder.class, method = "list")
 	List<BgConfig> list();
+	
+	@SelectProvider(type = BgConfigSQLBuilder.class, method = "findByKey")
+	String findByKey(String key);
 }

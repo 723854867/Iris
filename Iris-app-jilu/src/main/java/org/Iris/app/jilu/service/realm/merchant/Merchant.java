@@ -44,7 +44,7 @@ import org.Iris.app.jilu.common.bean.model.TransferOrderModel;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderMemoEditParam;
 import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
-import org.Iris.app.jilu.storage.domain.BgLabel;
+import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
@@ -1315,11 +1315,17 @@ public class Merchant implements Beans {
 	 * @param count
 	 * @return
 	 */
-	public String buyLabel(String labelNum, long count) {
-		BgLabel bgLabel = bgLabelMapper.findByNum(labelNum);
-		if(getMemMerchant().getMoney() < bgLabel.getPrice()*count)
+	public String buyLabel(int count) {
+		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count);
+		String labelBuyPrice = backstageService.getConfigValue("labelBuyPrice");
+		MemMerchant memMerchant = getMemMerchant();
+		if(memMerchant.getMoney() < Integer.valueOf(labelBuyPrice)*count)
 			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
-		return Result.jsonSuccess(getMemMerchant().getMoney() - bgLabel.getPrice()*count);
+		memMerchant.setMoney(memMerchant.getMoney() - Integer.valueOf(labelBuyPrice)*count);
+		memMerchantMapper.update(memMerchant);
+		buyLabelLogMapper.insert(labelLog);
+		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+		return Result.jsonSuccess(getMemMerchant().getMoney());
 	}
 
 }

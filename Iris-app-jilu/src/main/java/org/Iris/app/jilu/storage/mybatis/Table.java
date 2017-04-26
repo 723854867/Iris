@@ -18,9 +18,11 @@ public enum Table {
 	MEM_ORDER_STATUS("mem_order_status"),
 	MEM_CID("mem_cid"),
 	MEM_ACCID("mem_accid"),
+	MEM_LABEL_BIND("mem_label_bind"),
 	
 	RELATION("pub_relation"),
 	LOG_STOCK_STORE("log_stock_store"),
+	LOG_BUY_LABEL("log_buy_label"),
 	
 	LOG_UPDATE_STORE("log_update_store"),
 	MEM_WAIT_STORE("mem_wait_store"),

@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../scripts/public.js"></script>
 <script type="text/javascript" src="../scripts/mydate.js"></script>
-<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../scripts/islogin.js"></script>
 <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-switch.min.js"></script>
@@ -31,12 +31,22 @@
 			</div>
 			<div class="col-md-10">
 			<h2 class="sub-header">收费配置</h2>
+			<!-- 
 				<h4><label>创建订单时收费</label>
 				<span><input id="switch-order-create" type="checkbox"></span></h4>
 				<h4><label>转单时收费</label>
 				<span><input id="switch-order-transform" type="checkbox"></span></h4>		
 				<h4><label>标签收费</label>
 				<span><input id="switch-label-buy" type="checkbox"></span></h4>
+			 -->
+				<h4><label>创建订单价格(吉币)</label>
+				<span><input id="orderCreatePrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  value="0" /></span>
+				<button type="button" class="btn btn-primary" onclick="save('orderCreatePrice')">保存</button>
+				</h4>
+				<h4><label>购买标签价格(吉币)</label>
+				<span><input id="labelBuyPrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" value="0" /></span>
+				<button type="button" class="btn btn-primary" onclick="save('labelBuyPrice') ">保存</button>
+				</h4>
 			</div>
 		</div>
 	</div>
@@ -98,6 +108,10 @@
 						 	$('#switch-order-transform').bootstrapSwitch('state', true);
 						 else
 							$('#switch-order-transform').bootstrapSwitch('state', false);
+					 }else if(array.key == 'orderCreatePrice'){
+						 $('#orderCreatePrice').val(array.value);
+					 }else if(array.key == 'labelBuyPrice'){
+						 $('#labelBuyPrice').val(array.value);
 					 }
 	             });
 	         }
@@ -118,6 +132,26 @@
  			dataTyp:'json',
 			 success: function (json) {
 	            	if(json.code=="0"){
+	            	}
+	            	else{
+	            		alert(json.desc);
+	            		window.location.reload();
+	            	}
+	          }
+ 		});
+	}
+    
+    var save = function(key){
+    	var value = $("#"+key).val()
+    	value = value == ""?0:value
+         $.ajax({
+ 			type:"post",
+ 			url: '/jilu/backstage',
+ 			data:{'action':"config_update",'key':key,'value':value},
+ 			dataTyp:'json',
+			 success: function (json) {
+	            	if(json.code=="0"){
+	            		window.location.reload();
 	            	}
 	            	else{
 	            		alert(json.desc);
