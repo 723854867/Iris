@@ -6,11 +6,13 @@ import java.util.Map;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.BuyLabelLogSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 public interface BuyLabelLogMapper {
 
+	@Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
 	@InsertProvider(type = BuyLabelLogSQLBuilder.class , method = "insert")
 	void insert(BuyLabelLog buyLabelLog);
 	

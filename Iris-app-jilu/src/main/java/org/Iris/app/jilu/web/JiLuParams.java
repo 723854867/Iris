@@ -113,5 +113,6 @@ public interface JiLuParams {
 	final IrisStrConst PAGEPATH								= new IrisStrConst("pagePath", 175);
 	final IrisStrConst VERSION_NUM							= new IrisStrConst("versionNum", 176);
 	final IrisIntConst STATUS								= new IrisIntConst("status", 177);
-	final IrisStrConst LABELNUM								= new IrisStrConst("labelNum", 178);
+	final IrisStrConst LABELID								= new IrisStrConst("labelId", 178);
+	final IrisStrConst BINDID								= new IrisStrConst("bindId", 179);
 }

@@ -40,11 +40,11 @@ public class BuyLabelLogSQLBuilder {
 	}
 	
 	public String list(Map<String, Object> map){
-		return "select * from "+Table.LOG_BUY_LABEL.mark()+" where 1=1 order by created desc limit "+map.get("start")+","+map.get("pageSize")+"";
+		return "select * from "+Table.LOG_BUY_LABEL.mark()+" where status = "+map.get("status")+" order by created desc limit "+map.get("start")+","+map.get("pageSize")+"";
 	}
 	
 	public String count(Map<String, Object> map){
-		return "select count(1) from "+Table.LOG_BUY_LABEL.mark()+" where 1=1";
+		return "select count(1) from "+Table.LOG_BUY_LABEL.mark()+" where status = "+map.get("status");
 	}
 }
 

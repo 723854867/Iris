@@ -65,7 +65,7 @@
         $.ajax({
             type: 'POST',
             url: '/jilu/backstage',
-            data: { 'page': page, 'pageSize': pageSize, 'action': 'label_apply_list' },
+            data: { 'page': page, 'pageSize': pageSize, 'action': 'label_list',"status":0},
             dataType: 'json',
             beforeSend: function () {
             	initLoading();
@@ -83,7 +83,7 @@
                 $.each(list, function (index, array) { //遍历json数据列
                		tr +="<tr><td><input type='checkbox' name='checkItem' /></td><td>" + array['merchantName'] + 
                		"</td><td>" + array['count'] + "</td><td>" + array['sendName'] + "</td><td>" + array['sendAddress'] + "</td><td>" + array['sendMobile'] + "</td><td>" + array['created'] + "</td>"+
-               		"<td><a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='info("+array['id']+")'>发货</a>"+
+               		"<td><a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='sendLabel("+array['id']+")'>发货</a>"+
                		"</td></tr>";
                 });
                 
@@ -100,18 +100,11 @@
             }
         });
     }
-	save = function(){
-		var id = $('#id').val()
-		var price = $('#price').val();
-		var labelNum = $('#labelNum').val();
-		if(price == '' || labelNum == ''){
-			alert("请完善信息")
-			return;
-		}
+	sendLabel = function(id){
 		$.ajax({
 			type:"post",
 			url: '/jilu/backstage',
-			data:{'action': id==''?'label_add':'label_edit','id':id,'price':price,'labelNum':labelNum},
+			data:{'action':'send_label','id':id},
 			dataTyp:'json',
 			 success: function (json) {
 	            	if(json.code=="0"){

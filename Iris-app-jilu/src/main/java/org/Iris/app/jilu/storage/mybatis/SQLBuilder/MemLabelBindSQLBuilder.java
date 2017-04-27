@@ -1,7 +1,11 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.List;
+
+import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 public class MemLabelBindSQLBuilder {
 
@@ -16,6 +20,20 @@ public class MemLabelBindSQLBuilder {
 				VALUES("updated", "#{updated}");
 			}
 		}.toString();
+	}
+	
+	public String batchInsert(StrictMap<List<MemLabelBind>> map) {
+		List<MemLabelBind> list = map.get("collection");
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("insert into " + Table.MEM_LABEL_BIND.mark()
+				+ " (label_id,merchant_id,buy_id,created,updated) values ");
+		for (MemLabelBind memLabelBind : list) {
+			stringBuilder.append("('" + memLabelBind.getLabelId() + "','" + memLabelBind.getMerchantId() + "','"
+					+ memLabelBind.getBuyId() + "','" 
+					+ memLabelBind.getCreated() + "','" + memLabelBind.getUpdated() + "'),");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		return stringBuilder.toString();
 	}
 	
 	public String update(){

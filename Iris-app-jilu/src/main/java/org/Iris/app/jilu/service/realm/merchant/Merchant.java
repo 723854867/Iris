@@ -51,6 +51,7 @@ import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
+import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
@@ -1326,6 +1327,36 @@ public class Merchant implements Beans {
 		buyLabelLogMapper.insert(labelLog);
 		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
 		return Result.jsonSuccess(getMemMerchant().getMoney());
+	}
+	/**
+	 * 绑定标签
+	 * @param labelId
+	 * @param type
+	 * @param bindId
+	 * @return
+	 */
+	public String bindingLabel(String labelId, int type, String bindId) {
+		MemLabelBind memLabelBind = memLabelBindMapper.findById(labelId);
+		if(memLabelBind == null || memLabelBind.getStatus() == 1)
+			return Result.jsonError(JiLuCode.LABEL_IS_NOT_AVALIABEL);
+		memLabelBind.setBindId(bindId);
+		switch (type) {
+		case 0://绑定邮包
+			if(getMemOrderPacket(bindId) == null)
+				throw IllegalConstException.errorException(JiLuParams.BINDID);
+			break;
+		case 1://绑定订单产品
+			if(getMerchantOrderGoodsById(Long.valueOf(bindId)) == null)
+				throw IllegalConstException.errorException(JiLuParams.BINDID);
+			break;
+		default:
+			throw IllegalConstException.errorException(JiLuParams.TYPE);
+		}
+		memLabelBind.setBindType(type);
+		memLabelBind.setStatus(1);
+		memLabelBind.setUpdated(DateUtils.currentTime());
+		memLabelBindMapper.update(memLabelBind);
+		return Result.jsonSuccess(memLabelBind);
 	}
 
 }

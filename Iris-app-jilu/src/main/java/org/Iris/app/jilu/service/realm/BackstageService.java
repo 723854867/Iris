@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.storage.domain.BgUser;
 import org.Iris.app.jilu.storage.domain.BgVersion;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
+import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
@@ -98,7 +100,8 @@ public class BackstageService implements Beans{
 	public String GetParentPagePath(String curPagePath) {
 		String parentPagePath = "";
 		SysPage page = sysMenuMapper.getPageByPagePath(curPagePath);
-		if (page.getParentpageid() > 0) {
+		
+		if (page !=null && page.getParentpageid() > 0) {
 			page = sysMenuMapper.getPageByPageId(page.getParentpageid());
 			parentPagePath = page.getUrl();
 		} else {
@@ -169,10 +172,11 @@ public class BackstageService implements Beans{
 		return value;
 	}
 
-	public String labelApplyList(int page, int pageSize) {
+	public String labelApplyList(int page, int pageSize,int status) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("start", (page-1)*pageSize);
 		map.put("pageSize", pageSize);
+		map.put("status", status);
 		long count = buyLabelLogMapper.count(map);
 		if(count ==0)
 			return Result.jsonSuccess(Pager.EMPTY);
@@ -187,10 +191,39 @@ public class BackstageService implements Beans{
 			form.setSendName(memMerchant.getSendName());
 			form.setSendAddress(memMerchant.getSendAddress());
 			form.setSendMobile(memMerchant.getSendMobile());
-			form.setCreated(labelLog.getCreated());
+			form.setCreated(DateUtils.getUTCDate((long)labelLog.getCreated()*1000));
+			if(status == 1)
+				form.setSendTime(DateUtils.getUTCDate((long)labelLog.getSendTime()*1000));
 			forms.add(form);
 		}
 		return Result.jsonSuccess(new Pager<LabelApplyForm>(count, forms));
 	}
-	
+
+	/**
+	 * 发货（标签）
+	 * @param id
+	 * @return
+	 */
+	public String sendLabel(long id) {
+		BuyLabelLog labelLog = buyLabelLogMapper.findById(id);
+		if(null == labelLog)
+			throw IllegalConstException.errorException(JiLuParams.ID);
+		List<MemLabelBind> memLabelBinds = new ArrayList<>();
+		long count = labelLog.getCount();
+		int time = DateUtils.currentTime();
+		for(int i = 0 ; i < count ; i++){
+			MemLabelBind memLabelBind = new MemLabelBind();
+			memLabelBind.setLabelId(UUID.randomUUID().toString().replace("-", ""));
+			memLabelBind.setMerchantId(labelLog.getMerchantId());
+			memLabelBind.setBuyId(labelLog.getId());
+			memLabelBind.setCreated(time);
+			memLabelBind.setUpdated(time);
+			memLabelBinds.add(memLabelBind);
+		}
+		labelLog.setStatus(1);
+		labelLog.setSendTime(DateUtils.currentTime());
+		buyLabelLogMapper.update(labelLog);
+		memLabelBindMapper.batchInsert(memLabelBinds);
+		return Result.jsonSuccess();
+	}
 }

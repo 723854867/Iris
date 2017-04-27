@@ -3,14 +3,17 @@ package org.Iris.app.jilu.service.action.backstage;
 import org.Iris.app.jilu.service.action.BackstageAction;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
-
-public class LABEL_APPLY_LIST extends BackstageAction{
+/**
+ * 后台操作发货（标签）
+ * @author 樊水东
+ * 2017年4月27日
+ */
+public class SEND_LABEL extends BackstageAction{
 
 	@Override
 	protected String execute0(IrisSession session) {
-		int page = session.getKVParam(JiLuParams.PAGE);
-		int pageSize = session.getKVParam(JiLuParams.PAGE_SIZE);
-		return backstageService.labelApplyList(page, pageSize);
+		long id = session.getKVParam(JiLuParams.ID);
+		return backstageService.sendLabel(id);
 	}
 
 }

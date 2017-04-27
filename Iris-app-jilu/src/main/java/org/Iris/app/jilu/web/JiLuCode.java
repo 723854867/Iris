@@ -43,6 +43,7 @@ public enum JiLuCode implements ICode {
 	PACKET_CANNOT_MOVE(231, "packet cannot be moved"),
 	API_INVOKE_ERROR(232,"api invoke error"),
 	BALANCE_IS_NOT_ENOUGH(233," balance is not enough"),
+	LABEL_IS_NOT_AVALIABEL(234," label is not avaliabel"),
 	
 	//后台
 	LABEL_NUM_EXIST(501,"label num is exist"),
