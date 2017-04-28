@@ -16,7 +16,10 @@ public class BINDING_LABEL extends SerialMerchantAction{
 		String labelId = session.getKVParam(JiLuParams.LABELID);
 		int type = session.getKVParam(JiLuParams.TYPE);
 		String bindId = session.getKVParam(JiLuParams.BINDID);
-		return session.getMerchant().bindingLabel(labelId,type,bindId);
+		String latitude = session.getKVParam(JiLuParams.LATITUDE);
+		String longitude = session.getKVParam(JiLuParams.LONGITUDE);
+		String memo = session.getKVParamOptional(JiLuParams.MEMO);
+		return session.getMerchant().bindingLabel(labelId,type,bindId,latitude,longitude,memo);
 	}
 
 }

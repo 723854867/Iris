@@ -115,4 +115,9 @@ public interface JiLuParams {
 	final IrisIntConst STATUS								= new IrisIntConst("status", 177);
 	final IrisStrConst LABELID								= new IrisStrConst("labelId", 178);
 	final IrisStrConst BINDID								= new IrisStrConst("bindId", 179);
+	final IrisIntConst MONEY								= new IrisIntConst("money", 180);
+	final IrisStrConst CONTENT								= new IrisStrConst("content", 181);
+	final IrisStrConst DOWNLOADURL							= new IrisStrConst("downloadUrl", 182);
+	final IrisIntConst OPERATSYS							= new IrisIntConst("operatSys", 183);
+	final IrisIntConst DELFLAG								= new IrisIntConst("delFlag", 184);
 }

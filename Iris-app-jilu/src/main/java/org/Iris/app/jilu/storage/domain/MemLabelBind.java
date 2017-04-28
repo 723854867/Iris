@@ -10,6 +10,10 @@ public class MemLabelBind {
 	private int bindType;
 	private String bindId;
 	private long buyId;//用户购买的日志id 
+	private String latitude;
+	private String longitude;
+	private String memo;
+	private int bindTime;
 	private int created;
 	private int updated;
 	
@@ -59,6 +63,31 @@ public class MemLabelBind {
 	}
 	public void setBuyId(long buyId) {
 		this.buyId = buyId;
+	}
+	
+	public String getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+	public String getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+	public int getBindTime() {
+		return bindTime;
+	}
+	public void setBindTime(int bindTime) {
+		this.bindTime = bindTime;
 	}
 	public int getCreated() {
 		return created;

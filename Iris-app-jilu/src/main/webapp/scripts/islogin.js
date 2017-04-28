@@ -6,7 +6,7 @@ exit=function(){
 	    dataType: 'json',
 	    success: function (json) {
 	    	if(json["code"]==0)
-	    		window.location.href='login.html';
+	    		window.location.href=path+'/login.html';
 	    },
 	    error: function () {
 	        alert("数据加载失败");
@@ -36,7 +36,24 @@ showPasswordModal=function(){
     $("#passwordModal").modal();
 }
 passwordEdit=function(){
-	
+	var oldPwd = $("#oldPwd").val();
+	var newPwd = $("#newPwd").val();
+	if(oldPwd == "" || newPwd == "")
+		return;
+	$.ajax({
+	    type: 'POST',
+	    url: path+'/backstage',
+	    data: {'action':'pwd_edit',"account":localStorage.getItem("account"),"oldPwd":oldPwd,"newPwd":newPwd},
+	    dataType: 'json',
+	    success: function (json) {
+	    	if(json["code"]==0){
+	    		alert(json.desc)
+	    		$("#passwordModal").remove();
+	    	}else{
+	    		alert(json.desc)
+	    	}
+	    },
+	});
 }
 removePasswordModal=function(){
 	$("#passwordModal").remove();

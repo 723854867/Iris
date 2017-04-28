@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.service.action.common;
 
 import org.Iris.app.jilu.service.action.CommonAction;
+import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
 /**
  * 获取最新版本
@@ -11,7 +12,8 @@ public class VERSION_GET extends CommonAction{
 
 	@Override
 	protected String execute0(IrisSession session) {
-		return commonService.versionGet();
+		int operatSys = session.getKVParam(JiLuParams.OPERATSYS);
+		return commonService.versionGet(operatSys);
 	}
 
 }

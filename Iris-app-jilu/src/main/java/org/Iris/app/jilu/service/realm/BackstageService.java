@@ -13,8 +13,8 @@ import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.storage.domain.BgUser;
-import org.Iris.app.jilu.storage.domain.BgVersion;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
+import org.Iris.app.jilu.storage.domain.CmsVersion;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.SysPage;
@@ -126,28 +126,30 @@ public class BackstageService implements Beans{
 	/**
 	 * 获取所有版本
 	 */
-	public String versionGet() {
-		return Result.jsonSuccess(bgVersionMapper.getVersions());
+	public String versionGet(int pageIndex, int pageSize) {
+		return Result.jsonSuccess(cmsVersionMapper.getVersions((pageIndex-1)*pageSize,pageSize));
 	}
 
 	/**
 	 * 添加版本
 	 */
-	public String addVersion(String versionNum, int status) {
-		BgVersion bgVersion = new BgVersion(versionNum, status);
-		bgVersionMapper.insert(bgVersion);
-		redisOperate.del(bgVersion.redisKey());
+	public String addVersion(String versionNum, int status,String content,String downloadUrl,int operatSys) {
+		CmsVersion cmsVersion = new CmsVersion(versionNum, status, content, downloadUrl, operatSys);
+		cmsVersionMapper.insert(cmsVersion);
+		redisOperate.del(cmsVersion.redisKey());
 		return Result.jsonSuccess();
 	}
 
 	/**
 	 * 版本修改
 	 */
-	public String updateVersion(long versionId, String versionNum, int status){
-		BgVersion bgVersion = new BgVersion(versionId, versionNum, status);
-		if(versionId==redisOperate.hgetAll(CommonKeyGenerator.getVersion(),new BgVersion()).getVersionId())
-			redisOperate.del(bgVersion.redisKey());
-		bgVersionMapper.update(bgVersion);
+	public String updateVersion(long versionId, String versionNum, int status, int delFlag, String content, String downloadUrl, int operatSys){
+		CmsVersion cmsVersion = new CmsVersion(versionId, versionNum, status, delFlag, content, downloadUrl, operatSys);
+		CmsVersion cmsVer = redisOperate.hgetAll(cmsVersion.redisKey(), new CmsVersion());
+		if(cmsVer!=null)
+			if(versionId==cmsVer.getVersionId())
+				redisOperate.del(cmsVersion.redisKey());
+		cmsVersionMapper.update(cmsVersion);
 		return Result.jsonSuccess();
 	}
 	/**
@@ -155,14 +157,13 @@ public class BackstageService implements Beans{
 	 * @throws IllegalAccessException 
 	 * @throws InstantiationException 
 	 */
-	public String delVersion(long versionId){
-		if(versionId==redisOperate.hgetAll(CommonKeyGenerator.getVersion(), new BgVersion()).getVersionId())
-			redisOperate.del(CommonKeyGenerator.getVersion());
-		bgVersionMapper.delete(DateUtils.currentTime(), versionId);
+	public String delVersion(long versionId, int operatSys){
+		if(versionId==redisOperate.hgetAll(CommonKeyGenerator.getVersion(operatSys), new CmsVersion()).getVersionId())
+			redisOperate.del(CommonKeyGenerator.getVersion(operatSys));
+		cmsVersionMapper.delete(DateUtils.currentTime(), versionId);
 		return Result.jsonSuccess();
 	}
 
-	
 	public String getConfigValue(String key){
 		String value = redisOperate.hget(CommonKeyGenerator.bgConfigDataKey(), key);
 		if(null == value)

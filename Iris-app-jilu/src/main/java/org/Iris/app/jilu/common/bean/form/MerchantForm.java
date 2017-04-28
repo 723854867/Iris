@@ -1,5 +1,7 @@
 package org.Iris.app.jilu.common.bean.form;
 
+import java.util.UUID;
+
 import org.Iris.app.jilu.common.JiLuResourceUtil;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.service.realm.merchant.Merchant;
@@ -12,6 +14,7 @@ public class MerchantForm {
 	private String avatar;
 	private String name;
 	private String address;
+	private int money;
 	private int statusMod;
 	private String phone;
 	private String email;
@@ -33,6 +36,7 @@ public class MerchantForm {
 		this.sendName = memMerchant.getSendName();
 		this.sendAddress = memMerchant.getSendAddress();
 		this.sendMobile = memMerchant.getSendMobile();
+		this.money = memMerchant.getMoney();
 		if (MerchantStatusMod.isQualified(memMerchant))
 			this.avatar = JiLuResourceUtil.merchantAvatarUri(memMerchant);
 	}
@@ -156,5 +160,12 @@ public class MerchantForm {
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
-	
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
 }

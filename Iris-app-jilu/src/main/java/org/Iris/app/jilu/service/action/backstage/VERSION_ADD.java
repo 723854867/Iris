@@ -14,7 +14,10 @@ public class VERSION_ADD extends BackstageAction{
 	protected String execute0(IrisSession session) {
 		String versionNum = session.getKVParam(JiLuParams.VERSION_NUM);
 		int status = session.getKVParam(JiLuParams.STATUS);
-		return backstageService.addVersion(versionNum,status);
+		String content = session.getKVParamOptional(JiLuParams.CONTENT);
+		String downloadUrl = session.getKVParam(JiLuParams.DOWNLOADURL);
+		int operatSys = session.getKVParam(JiLuParams.OPERATSYS);
+		return backstageService.addVersion(versionNum,status,content,downloadUrl,operatSys);
 	}
 
 }

@@ -13,7 +13,7 @@ import org.Iris.app.jilu.service.realm.wyyx.SmsService;
 import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgConfigMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgUserMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.BgVersionMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.CmsVersionMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BuyLabelLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
@@ -77,7 +77,7 @@ public interface Beans {
 	final BgUserMapper bgUserMapper = SpringContextUtil.getBean("bgUserMapper", BgUserMapper.class);
 	final SysMenuMapper sysMenuMapper = SpringContextUtil.getBean("sysMenuMapper", SysMenuMapper.class);
 	final BgConfigMapper bgConfigMapper = SpringContextUtil.getBean("bgConfigMapper", BgConfigMapper.class);
-	final BgVersionMapper bgVersionMapper = SpringContextUtil.getBean("bgVersionMapper", BgVersionMapper.class);
+	final CmsVersionMapper cmsVersionMapper = SpringContextUtil.getBean("cmsVersionMapper", CmsVersionMapper.class);
 	
 	final BuyLabelLogMapper buyLabelLogMapper = SpringContextUtil.getBean("buyLabelLogMapper", BuyLabelLogMapper.class);
 	final MemLabelBindMapper memLabelBindMapper = SpringContextUtil.getBean("memLabelBindMapper", MemLabelBindMapper.class);

@@ -11,11 +11,11 @@ import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.service.realm.merchant.MerchantService;
 import org.Iris.app.jilu.service.realm.weixin.WeiXinService;
 import org.Iris.app.jilu.service.realm.weixin.result.WeiXinAccessTokenResult;
-import org.Iris.app.jilu.storage.domain.BgVersion;
+import org.Iris.app.jilu.storage.domain.CmsVersion;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgConfigMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.BgVersionMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.CmsVersionMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
@@ -44,7 +44,7 @@ public class CommonService extends RedisCache {
 	@Resource
 	private BgConfigMapper bgConfigMapper;
 	@Resource
-	private BgVersionMapper bgVersionMapper;
+	private CmsVersionMapper cmsVersionMapper;
 	/**
 	 * 登陆
 	 * 
@@ -143,10 +143,10 @@ public class CommonService extends RedisCache {
 	/**
 	 * 获取最新版本
 	 */
-	public String versionGet(){
-		BgVersion cmsVersion = getHashBean(new BgVersion());
+	public String versionGet(int operatSys){
+		CmsVersion cmsVersion = getHashBean(new CmsVersion());
 		if(cmsVersion==null){
-			cmsVersion = bgVersionMapper.recentVersion();
+			cmsVersion = cmsVersionMapper.recentVersion(operatSys);
 			if(cmsVersion!=null)
 			flushHashBean(cmsVersion);
 		}

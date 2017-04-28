@@ -13,7 +13,8 @@ public class LABEL_BUY extends ParallelMerchantAction{
 	@Override
 	protected String execute0(MerchantSession session) {
 		long count = session.getKVParam(JiLuParams.COUNT);
-		return session.getMerchant().buyLabel((int)count);
+		int money = session.getKVParam(JiLuParams.MONEY);
+		return session.getMerchant().buyLabel((int)count,money);
 	}
 
 }

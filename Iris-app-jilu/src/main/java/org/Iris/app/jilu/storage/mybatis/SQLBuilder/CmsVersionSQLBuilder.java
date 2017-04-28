@@ -3,7 +3,7 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.apache.ibatis.jdbc.SQL;
 
-public class BgVersionSQLBuilder {
+public class CmsVersionSQLBuilder {
 	/**
 	 * 新增
 	 * @return
@@ -11,11 +11,14 @@ public class BgVersionSQLBuilder {
 	public String insert() {
 		return new SQL() {
 			{
-				INSERT_INTO(Table.BG_VERSION.mark());
+				INSERT_INTO(Table.CMS_VERSION.mark());
 				VALUES("version_num", "#{versionNum}");
 				VALUES("status", "#{status}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
+				VALUES("content", "#{content}");
+				VALUES("download_url", "#{downloadUrl}");
+				VALUES("operat_sys", "#{operatSys}");
 			}
 		}.toString();
 	}
@@ -25,10 +28,13 @@ public class BgVersionSQLBuilder {
 	public String update(){
 		return new SQL(){
 			{
-				UPDATE(Table.BG_VERSION.mark());
+				UPDATE(Table.CMS_VERSION.mark());
 				SET("version_num=#{versionNum}");
 				SET("status=#{status}");
 				SET("updated=#{updated}");
+				SET("del_flag=#{delFlag}");
+				SET("content=#{content}");
+				SET("download_url=#{downloadUrl}");
 				WHERE("version_id=#{versionId}");
 			}
 		}.toString();
@@ -40,7 +46,7 @@ public class BgVersionSQLBuilder {
 	public String delete(){
 		return new SQL(){
 			{
-				UPDATE(Table.BG_VERSION.mark());
+				UPDATE(Table.CMS_VERSION.mark());
 				SET("del_flag=1");
 				SET("updated=#{updated}");
 				WHERE("version_id=#{versionId}");
@@ -55,10 +61,10 @@ public class BgVersionSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.BG_VERSION.mark());
-				WHERE("del_flag=0");
+				FROM(Table.CMS_VERSION.mark());
+				WHERE("del_flag=0 ");
 			}
-		}.toString();
+		}.toString()+" order by created desc limit #{pageIndex},#{pageSize}";
 	}
 	/**
 	 * 获取最新版本
@@ -67,8 +73,9 @@ public class BgVersionSQLBuilder {
 		return new SQL(){
 			{
 				SELECT("*");
-				FROM(Table.BG_VERSION.mark());
-				WHERE("created=(SELECT MAX(created) from cms_version where del_flag=0)");
+				FROM(Table.CMS_VERSION.mark());
+				WHERE("created=(SELECT MAX(created) from cms_version where del_flag=0 and operat_sys=#{operatSys})");
+				WHERE("operat_sys=#{operatSys}");
 				WHERE("del_flag=0");
 			}
 		}.toString();

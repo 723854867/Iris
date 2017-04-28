@@ -15,7 +15,11 @@ public class VERSION_UPDATE extends BackstageAction{
 		long versionId = session.getKVParam(JiLuParams.ID);
 		String versionNum = session.getKVParam(JiLuParams.VERSION_NUM);
 		int status = session.getKVParam(JiLuParams.STATUS);
-		return backstageService.updateVersion(versionId, versionNum, status);
+		int delFlag = session.getKVParam(JiLuParams.DELFLAG);
+		String content = session.getKVParam(JiLuParams.CONTENT);
+		String downloadUrl = session.getKVParam(JiLuParams.DOWNLOADURL);
+		int operatSys = session.getKVParam(JiLuParams.OPERATSYS);
+		return backstageService.updateVersion(versionId, versionNum, status, delFlag, content, downloadUrl, operatSys);
 	}
 
 }

@@ -9,7 +9,7 @@ import org.Iris.util.lang.DateUtils;
  * @author liusiyuan
  * 2017年4月7日
  */
-public class BgVersion implements RedisHashBean{
+public class CmsVersion implements RedisHashBean{
 	/**
 	 * 版本id
 	 */
@@ -34,24 +34,56 @@ public class BgVersion implements RedisHashBean{
 	 * 更新时间
 	 */
 	private int updated;
-	public BgVersion( String versionNum, int status) {
+	/**
+	 * 版本更新内容
+	 */
+	private String content;
+	/**
+	 * 下载地址
+	 */
+	private String downloadUrl;
+	/**
+	 * 操作系统，0-安卓 1-ios
+	 */
+	private int operatSys;
+	public CmsVersion( String versionNum, int status, String content, String downloadUrl, int operatSys) {
 		super();
 		int time = DateUtils.currentTime();
 		this.versionNum = versionNum;
 		this.status = status;
 		this.created = time;
 		this.updated = time;
+		this.content = content;
+		this.downloadUrl = downloadUrl;
+		this.operatSys = operatSys;
 	}
-	public BgVersion(long versionId, String versionNum, int status) {
+	public CmsVersion(long versionId, String versionNum, int status, int delFlag, String content, String downloadUrl, int operatSys) {
 		super();
 		this.versionId = versionId;
 		this.versionNum = versionNum;
 		this.status = status;
 		this.updated = DateUtils.currentTime();
+		this.delFlag = delFlag;
+		this.content = content;
+		this.downloadUrl = downloadUrl;
+		this.operatSys = operatSys;
 	}
 	
-	public BgVersion() {
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
+	public CmsVersion() {
 		super();
+	}
+	
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 	public long getVersionId() {
 		return versionId;
@@ -66,6 +98,12 @@ public class BgVersion implements RedisHashBean{
 		this.versionNum = versionNum;
 	}
 
+	public int getOperatSys() {
+		return operatSys;
+	}
+	public void setOperatSys(int operatSys) {
+		this.operatSys = operatSys;
+	}
 	public int getStatus() {
 		return status;
 	}
@@ -92,7 +130,7 @@ public class BgVersion implements RedisHashBean{
 	}
 	@Override
 	public String redisKey() {
-		return CommonKeyGenerator.getVersion();
+		return CommonKeyGenerator.getVersion(operatSys);
 	}
 	
 }

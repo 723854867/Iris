@@ -1314,14 +1314,17 @@ public class Merchant implements Beans {
 	 * 购买标签
 	 * @param labelNum
 	 * @param count
+	 * @param money 吉币数量
 	 * @return
 	 */
-	public String buyLabel(int count) {
-		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count);
+	public String buyLabel(int count,int money) {
 		String labelBuyPrice = backstageService.getConfigValue("labelBuyPrice");
 		MemMerchant memMerchant = getMemMerchant();
 		if(memMerchant.getMoney() < Integer.valueOf(labelBuyPrice)*count)
 			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
+		if(memMerchant.getMoney() != money)
+			return Result.jsonError(JiLuCode.BALANCE_IS_ERROR);
+		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count);
 		memMerchant.setMoney(memMerchant.getMoney() - Integer.valueOf(labelBuyPrice)*count);
 		memMerchantMapper.update(memMerchant);
 		buyLabelLogMapper.insert(labelLog);
@@ -1335,7 +1338,7 @@ public class Merchant implements Beans {
 	 * @param bindId
 	 * @return
 	 */
-	public String bindingLabel(String labelId, int type, String bindId) {
+	public String bindingLabel(String labelId, int type, String bindId,String latitude,String longitude,String memo) {
 		MemLabelBind memLabelBind = memLabelBindMapper.findById(labelId);
 		if(memLabelBind == null || memLabelBind.getStatus() == 1)
 			return Result.jsonError(JiLuCode.LABEL_IS_NOT_AVALIABEL);
@@ -1346,15 +1349,20 @@ public class Merchant implements Beans {
 				throw IllegalConstException.errorException(JiLuParams.BINDID);
 			break;
 		case 1://绑定订单产品
-			if(getMerchantOrderGoodsById(Long.valueOf(bindId)) == null)
+			if(getGoodsById(Long.valueOf(bindId)) == null)
 				throw IllegalConstException.errorException(JiLuParams.BINDID);
 			break;
 		default:
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
+		int time = DateUtils.currentTime();
 		memLabelBind.setBindType(type);
 		memLabelBind.setStatus(1);
-		memLabelBind.setUpdated(DateUtils.currentTime());
+		memLabelBind.setUpdated(time);
+		memLabelBind.setLatitude(latitude);
+		memLabelBind.setLongitude(longitude);
+		memLabelBind.setMemo(memo);
+		memLabelBind.setBindTime(time);
 		memLabelBindMapper.update(memLabelBind);
 		return Result.jsonSuccess(memLabelBind);
 	}

@@ -13,7 +13,8 @@ public class VERSION_DEL extends BackstageAction{
 	@Override
 	protected String execute0(IrisSession session) {
 		long id = session.getKVParam(JiLuParams.ID);
-		return backstageService.delVersion(id);
+		int operatSys = session.getKVParam(JiLuParams.OPERATSYS);
+		return backstageService.delVersion(id,operatSys);
 	}
 
 }
