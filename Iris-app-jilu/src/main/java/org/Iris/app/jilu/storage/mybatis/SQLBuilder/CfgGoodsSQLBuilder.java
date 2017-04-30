@@ -117,4 +117,34 @@ public class CfgGoodsSQLBuilder {
 	public String getGoodsListByMerchantId(){
 		return "select * from "+Table.CFG_GOODS.mark()+" where source=#{merchantId} LIMIT #{start},#{pageSize}";
 	}
+	/**
+	 * 条件搜索 后台使用
+	 * @param map
+	 * @return
+	 */
+	public String getGoodsList(Map<String, Object> map){
+		StringBuilder builder = new StringBuilder();
+		builder.append("select * from "+Table.CFG_GOODS.mark()+" where 1=1 ");
+		if(!map.get("zhName").equals(""))
+			builder.append("and zh_name like '%"+map.get("zhName")+"%' ");
+		if(!map.get("alias").equals(""))
+			builder.append("and alias like '%"+map.get("alias")+"%' ");
+		if(!map.get("goodsCode").equals(""))
+			builder.append("and goods_code like '%"+map.get("goodsCode")+"%' ");
+		builder.append("order by updated desc LIMIT "+map.get("start")+","+map.get("pageSize")+"");
+		return builder.toString();
+	}
+	
+	public String getCount(Map<String, Object> map){
+		StringBuilder builder = new StringBuilder();
+		builder.append("select count(1) from "+Table.CFG_GOODS.mark()+" where 1=1 ");
+		if(!map.get("zhName").equals(""))
+			builder.append("and zh_name like '%"+map.get("zhName")+"%' ");
+		if(!map.get("alias").equals(""))
+			builder.append("and alias like '%"+map.get("alias")+"%' ");
+		if(!map.get("goodsCode").equals(""))
+			builder.append("and goods_code like '%"+map.get("goodsCode")+"%' ");
+		return builder.toString();
+	}
+	
 }

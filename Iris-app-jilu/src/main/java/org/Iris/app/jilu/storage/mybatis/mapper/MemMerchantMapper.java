@@ -1,5 +1,8 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemMerchantSQLBuilder;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -18,4 +21,10 @@ public interface MemMerchantMapper {
 	
 	@UpdateProvider(type = MemMerchantSQLBuilder.class, method = "update")
 	void update(MemMerchant merchant);
+	
+	@SelectProvider(type = MemMerchantSQLBuilder.class, method = "list")
+	List<MemMerchant> list(Map<String, Object> map);
+	
+	@SelectProvider(type = MemMerchantSQLBuilder.class, method = "count")
+	long count(Map<String, Object> map);
 }

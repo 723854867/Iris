@@ -45,6 +45,7 @@ public enum JiLuCode implements ICode {
 	BALANCE_IS_NOT_ENOUGH(233," balance is not enough"),
 	LABEL_IS_NOT_AVALIABEL(234," label is not avaliabel"),
 	BALANCE_IS_ERROR(235," balance is error"),
+	ACCOUNT_IS_CLOSE(236," account is close"),
 	
 	//后台
 	LABEL_NUM_EXIST(501,"label num is exist"),

@@ -123,4 +123,16 @@ public class DateUtils {
 		df.setTimeZone(timeZone);
 		return df.format(new Date(timestamp));
 	}
+	
+	/**
+	 * 
+	 * @param timestamp 秒 当地时间戳
+	 * @return
+	 */
+	public static int getUTCTime(int timestamp){
+		return (int)(DateUtils.getTime(DateUtils.getUTCDate((long)timestamp*1000), ISO8601_UTC, TimeZone.getDefault())/1000);
+	}
+	public static void main(String[] args) {
+		System.out.println(getUTCTime(1493246598));
+	}
 }

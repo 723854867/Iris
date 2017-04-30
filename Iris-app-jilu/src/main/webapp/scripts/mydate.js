@@ -18,6 +18,7 @@ DateFormat.prototype = {
 	DEFAULT_YEAR_FORMAT : 'yyyy',
 	DEFAULT_TIME_FORMAT : 'HH:mm:ss',
 	DEFAULT_DATETIME_FORMAT : 'yyyy-MM-dd HH:mm:ss',
+	UTC_FORMAT : "yyyy-MM-dd T HH:mm:ss Z",
 	DEFAULT_YEAR : 'YEAR',
 	DEFAULT_MONTH : 'MONTH',
 	DEFAULT_DATE : 'DATE',

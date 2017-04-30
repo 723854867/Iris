@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.CfgGoodsSQLBuilder;
@@ -44,4 +45,9 @@ public interface CfgGoodsMapper {
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsListByCode")
 	List<CfgGoods> getGoodsListByCode(@Param("start")int page,@Param("pageSize")int pageSize,@Param("goodsCode") String goodsCode);
 
+	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getGoodsList")
+	List<CfgGoods> getGoodsList(Map<String, Object> map);
+	
+	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getCount")
+	long getCount(Map<String, Object> map);
 }

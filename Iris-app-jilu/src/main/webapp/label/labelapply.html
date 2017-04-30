@@ -83,7 +83,7 @@
                 $.each(list, function (index, array) { //遍历json数据列
                		tr +="<tr><td><input type='checkbox' name='checkItem' /></td><td>" + array['merchantName'] + 
                		"</td><td>" + array['count'] + "</td><td>" + array['sendName'] + "</td><td>" + array['sendAddress'] + "</td><td>" + array['sendMobile'] + "</td><td>" + array['created'] + "</td>"+
-               		"<td><a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='sendLabel("+array['id']+")'>发货</a>"+
+               		"<td><a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='sendLabel("+array['goodsId']+")'>发货</a>"+
                		"</td></tr>";
                 });
                 
@@ -92,7 +92,9 @@
             complete: function () { //生成分页条
             	if(totalPage>1)
         		{
-            		//getPageBar();
+            		getPageBar();
+        		}else{
+        			$("#pagecount").empty();
         		}
             },
             error: function () {

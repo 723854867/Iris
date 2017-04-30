@@ -23,6 +23,8 @@ public class CfgGoods implements RedisHashBean {
 	private String merchantName;
 	private int created;
 	private int updated;
+	//供后台时间转换
+	private String updateTime;
 
 	public CfgGoods() {
 	}
@@ -167,6 +169,12 @@ public class CfgGoods implements RedisHashBean {
 		this.updated = updated;
 	}
 
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
 	@Override
 	public String redisKey() {
 		return CommonKeyGenerator.getMemGoodsKey(goodsId);

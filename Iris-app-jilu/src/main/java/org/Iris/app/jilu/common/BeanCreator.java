@@ -79,6 +79,30 @@ public class BeanCreator {
 		return memGoods;
 	}
 	
+	public static CfgGoods newMemGoods(String goodsCode, String zhName, String usName, String goodsFormat, String classification, String zhBrand,
+			String usBrand, String unit, float weight, String alias, String barcode, String sku,float unitPrice){
+		CfgGoods memGoods = new CfgGoods();
+		memGoods.setGoodsCode(goodsCode);
+		memGoods.setZhName(zhName);
+		memGoods.setUsName(usName);
+		memGoods.setGoodsFormat(goodsFormat);
+		memGoods.setClassification(classification);
+		memGoods.setZhBrand(zhBrand);
+		memGoods.setUsBrand(usBrand);
+		memGoods.setUnit(unit);
+		memGoods.setWeight(weight);
+		memGoods.setAlias(alias);
+		memGoods.setBarcode(barcode);
+		memGoods.setSku(sku);
+		int time = DateUtils.currentTime();
+		memGoods.setCreated(time);
+		memGoods.setUpdated(time);
+		memGoods.setUnitPrice(unitPrice==0 ?1:unitPrice);
+		memGoods.setSource("0");
+		memGoods.setMerchantName("公共库");
+		return memGoods;
+	}
+	
 	public static MemOrder newMemOrder(String orderId, long merchantId, String merchantName,String memchantAddress, long customerId, String customerName,
 			String customerMobile, String customerAddress, String memo,int status){
 		MemOrder memOrder = new MemOrder();

@@ -81,6 +81,8 @@ public class CommonService extends RedisCache {
 		Merchant merchant = merchantService.getMerchantByAccount(type, account);
 		if (null == merchant)
 			merchant = merchantService.createMerchant(account, type);
+		else if(merchant.getMemMerchant().getDelFlag() == 1)
+			return Result.jsonError(JiLuCode.ACCOUNT_IS_CLOSE);
 		if (!merchant.login(account, false))
 			return Result.jsonError(ICode.Code.REQUEST_FREQUENTLY);
 		//MerchantForm merchantForm = getMerchantForm(merchant);

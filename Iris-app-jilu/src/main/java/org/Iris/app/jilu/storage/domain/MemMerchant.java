@@ -22,6 +22,8 @@ public class MemMerchant implements RedisHashBean {
 	private String sendAddress;
 	private String sendMobile;
 	
+	private int delFlag;
+	
 	
 	// 只存在 redis 的字段
 	private String token;
@@ -149,6 +151,14 @@ public class MemMerchant implements RedisHashBean {
 
 	public void setSendMobile(String sendMobile) {
 		this.sendMobile = sendMobile;
+	}
+
+	public int getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(int delFlag) {
+		this.delFlag = delFlag;
 	}
 
 	@Override

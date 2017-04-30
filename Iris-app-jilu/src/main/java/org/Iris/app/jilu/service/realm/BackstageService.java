@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.storage.domain.BgUser;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
+import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.CmsVersion;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
+import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
@@ -225,6 +229,167 @@ public class BackstageService implements Beans{
 		labelLog.setSendTime(DateUtils.currentTime());
 		buyLabelLogMapper.update(labelLog);
 		memLabelBindMapper.batchInsert(memLabelBinds);
+		return Result.jsonSuccess();
+	}
+
+	/**
+	 * 产品列表
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	public String getGoodsList(int page, int pageSize,String zhName,String alias,String goodsCode) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("start", (page-1)*pageSize);
+		map.put("pageSize", pageSize);
+		map.put("zhName", zhName);
+		map.put("alias", alias);
+		map.put("goodsCode", goodsCode);
+		long count = cfgGoodsMapper.getCount(map);
+		if(count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<CfgGoods> list = cfgGoodsMapper.getGoodsList(map);
+		for(CfgGoods cfgGoods :list)
+			cfgGoods.setUpdateTime(DateUtils.getUTCDate((long)cfgGoods.getUpdated()*1000));
+		return Result.jsonSuccess(new Pager<CfgGoods>(count, list));
+	}
+
+	/**
+	 * 插入商品
+	 * 
+	 * @param memGoods
+	 */
+	public String insertGoods(CfgGoods memGoods) {
+		cfgGoodsMapper.insert(memGoods);
+		redisOperate.hmset(memGoods.redisKey(), memGoods);
+		return Result.jsonSuccess(memGoods);
+	}
+
+	/**
+	 * 查看商品信息
+	 * 
+	 * @param goodsId
+	 * @return
+	 */
+	public String getGoodsInfo(long goodsId) {
+		CfgGoods goods = getGoodsById(goodsId);
+		if (goods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		return Result.jsonSuccess(goods);
+	}
+	
+	/**
+	 * 更新商品
+	 * 
+	 * @param memGoods
+	 */
+	public String updateGoods(long goodsId, String zhName, String usName, String goodsFormat, String classification,
+			String zhBrand, String usBrand, String unit, float weight, String alias, String barcode, String sku,
+			float unitPrice) {
+		CfgGoods memGoods = getGoodsById(goodsId);
+		if (memGoods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		if (zhName != null)
+			memGoods.setZhName(zhName);
+		if (usName != null)
+			memGoods.setUsName(usName);
+		if (goodsFormat != null)
+			memGoods.setGoodsFormat(goodsFormat);
+		if (classification != null)
+			memGoods.setClassification(classification);
+		if (zhBrand != null)
+			memGoods.setZhBrand(zhBrand);
+		if (usBrand != null)
+			memGoods.setUsBrand(usBrand);
+		if (unit != null)
+			memGoods.setUnit(unit);
+		if (weight != 0)
+			memGoods.setWeight(weight);
+		if (alias != null)
+			memGoods.setAlias(alias);
+		if (barcode != null)
+			memGoods.setBarcode(barcode);
+		if (sku != null)
+			memGoods.setSku(sku);
+		if (unitPrice != 0)
+			memGoods.setUnitPrice(unitPrice);
+		int time = DateUtils.currentTime();
+		memGoods.setUpdated(time);
+		cfgGoodsMapper.update(memGoods);
+		redisOperate.hmset(memGoods.redisKey(), memGoods);
+		return Result.jsonSuccess(new GoodsPagerForm(memGoods));
+	}
+	
+	/**
+	 * 删除商品
+	 * 
+	 * @param goodsId
+	 * @return
+	 */
+	public String removeGoods(long goodsId) {
+		CfgGoods goods = getGoodsById(goodsId);
+		if (goods == null)
+			throw IllegalConstException.errorException(JiLuParams.GOODS_ID);
+		cfgGoodsMapper.delete(goods);
+		redisOperate.del(goods.redisKey());
+		return Result.jsonSuccess();
+	}
+	
+	/**
+	 * 获取商品
+	 * @param goodsId
+	 * @return
+	 */
+	public CfgGoods getGoodsById(long goodsId) {
+		String key = CommonKeyGenerator.getMemGoodsKey(goodsId);
+		CfgGoods goods = redisOperate.hgetAll(key, new CfgGoods(goodsId));
+		if (goods != null)
+			return goods;
+		goods = cfgGoodsMapper.getGoodsById(goodsId);
+		if (null != goods)
+			redisOperate.hmset(key, goods);
+		return goods;
+	}
+
+	/**
+	 * 商户列表
+	 * @param page
+	 * @param pageSize
+	 * @param name
+	 * @return
+	 */
+	public String getMerchantList(int page, int pageSize, String name) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("start", (page-1)*pageSize);
+		map.put("pageSize", pageSize);
+		map.put("name", name);
+		long count = memMerchantMapper.count(map);
+		if(count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemMerchant> list = memMerchantMapper.list(map);
+		for(MemMerchant memMerchant :list)
+			memMerchant.setLastLoginTime(DateUtils.getUTCTime(memMerchant.getLastLoginTime()));
+		return Result.jsonSuccess(new Pager<MemMerchant>(count, list));
+	}
+
+	/**
+	 * 黑名单操作
+	 * @param type
+	 * @param merchantId
+	 * @return
+	 */
+	public String merchantOperation(int type, long merchantId) {
+		MemMerchant memMerchant = merchantService.getMerchantById(merchantId).getMemMerchant();
+		if(type == 0){
+			//加黑名单
+			memMerchant.setDelFlag(1);
+		}else {
+			//解除黑名单
+			memMerchant.setDelFlag(0);
+		}
+		memMerchant.setUpdated(DateUtils.currentTime());
+		memMerchantMapper.update(memMerchant);
+		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
 		return Result.jsonSuccess();
 	}
 }
