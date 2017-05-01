@@ -44,6 +44,11 @@ public class MemLabelBindSQLBuilder {
 				SET("bind_id=#{bindId}");
 				SET("bind_type=#{bindType}");
 				SET("updated=#{updated}");
+				SET("memo=#{memo}");
+				SET("longitude=#{longitude}");
+				SET("latitude=#{latitude}");
+				SET("bind_time=#{bindTime}");
+				SET("updated=#{updated}");
 				WHERE("label_id=#{labelId}");
 			}
 		}.toString();
