@@ -120,4 +120,7 @@ public interface JiLuParams {
 	final IrisStrConst DOWNLOADURL							= new IrisStrConst("downloadUrl", 182);
 	final IrisIntConst OPERATSYS							= new IrisIntConst("operatSys", 183);
 	final IrisIntConst DELFLAG								= new IrisIntConst("delFlag", 184);
+	final IrisStrConst TITLE								= new IrisStrConst("title", 185);
+	final IrisStrConst AUTHOR								= new IrisStrConst("author", 185);
+	final IrisStrConst SOURCE								= new IrisStrConst("source", 185);
 }

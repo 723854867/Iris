@@ -30,7 +30,7 @@
 				</ul>
 			</div>
 			<div class="col-md-10">
-			<h2 class="sub-header">收费配置</h2>
+			<h2 class="sub-header">系统配置</h2>
 			<!-- 
 				<h4><label>创建订单时收费</label>
 				<span><input id="switch-order-create" type="checkbox"></span></h4>
@@ -46,6 +46,14 @@
 				<h4><label>购买标签价格(吉币)</label>
 				<span><input id="labelBuyPrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" value="0" /></span>
 				<button type="button" class="btn btn-primary" onclick="save('labelBuyPrice') ">保存</button>
+				</h4>
+				<h4><label>充值比例（1比多少吉币）</label>
+				<select id="czbl">
+					<option value=10>10</option>
+					<option value=100>100</option>
+					<option value=1000>1000</option>
+				</select>
+				<button type="button" class="btn btn-primary" onclick="save('czbl') ">保存</button>
 				</h4>
 			</div>
 		</div>
@@ -83,7 +91,11 @@
         }
     })
     $(document).ready(function() {
-    	$.ajax({
+    	init();
+	});
+	
+	var init = function(){
+		$.ajax({
  			type:"post",
  			url: '/jilu/backstage',
  			data:{'action':"config_list"},
@@ -112,11 +124,14 @@
 						 $('#orderCreatePrice').val(array.value);
 					 }else if(array.key == 'labelBuyPrice'){
 						 $('#labelBuyPrice').val(array.value);
+					 }else if(array.key == 'czbl'){
+						 $('#czbl').val(array.value);
 					 }
+				 
 	             });
 	         }
  		});
-	});
+	}
     
     var configUpdate = function(event,state,key){
     	var value;
@@ -142,7 +157,7 @@
 	}
     
     var save = function(key){
-    	var value = $("#"+key).val()
+    	var value = $("#"+key).val();
     	value = value == ""?0:value
          $.ajax({
  			type:"post",
@@ -150,13 +165,8 @@
  			data:{'action':"config_update",'key':key,'value':value},
  			dataTyp:'json',
 			 success: function (json) {
-	            	if(json.code=="0"){
-	            		window.location.reload();
-	            	}
-	            	else{
-	            		alert(json.desc);
-	            		window.location.reload();
-	            	}
+				 alert(json.desc);
+				 init();
 	          }
  		});
 	}

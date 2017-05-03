@@ -46,7 +46,7 @@ public class IosVerify {
 	}
 	// 线上/开发环境用不同的请求链接
 	private static final String url_sandbox = "https://sandbox.itunes.apple.com/verifyReceipt";
-	//private static final String url_verify = "https://buy.itunes.apple.com/verifyReceipt";
+	private static final String url_verify = "https://buy.itunes.apple.com/verifyReceipt";
 
 	/**
 	 * 苹果服务器验证
@@ -57,12 +57,11 @@ public class IosVerify {
 	 * @return null 或返回结果 沙盒 https://sandbox.itunes.apple.com/verifyReceipt
 	 * 
 	 */
-	public static String buyAppVerify(String receipt) {
-		String url =url_sandbox;
+	public static String buyAppVerify(String receipt,String env) {
 		try {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
-			URL console = new URL(url);
+			URL console = new URL(env.equals("ONLINE")?url_verify:url_sandbox);
 			HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
 			conn.setSSLSocketFactory(sc.getSocketFactory());
 			conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
@@ -72,7 +71,9 @@ public class IosVerify {
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
             BufferedOutputStream buffOutStr = new BufferedOutputStream(conn.getOutputStream());  
-            buffOutStr.write(JsonAppender.newAppender().append("receipt", Base64Helper.encode(receipt, "UTF-8")).toString().getBytes());  
+            //buffOutStr.write(JsonAppender.newAppender().append("receipt", Base64Helper.encode(receipt, "UTF-8")).toString().getBytes("UTF-8")); 
+            //String str = String.format(Locale.CHINA, "{\"receipt-data\":\"" + receipt + "\"}");  
+            buffOutStr.write(receipt.getBytes("UTF-8")); 
             buffOutStr.flush();  
             buffOutStr.close();  
 
@@ -89,6 +90,11 @@ public class IosVerify {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void main(String[] args) {
+		String receipt = "QEEAgwAMAsCAQECAQEEAwIBADALAgEDAgEBBAMMATIwCwIBCwIBAQQDAgEAMAsCAQ4CAQEEAwIBWjALAgEPAgEBBAMCAQAwCwIBEAIBAQQDAgEAMAsCARkCAQEEAwIBAzAMAgEKAgEBBAQWAjQrMA0CAQ0CAQEEBQIDAYfNMA0CARMCAQEEBQwDMS4wMA4CAQkCAQEEBgIEUDI0NzAYAgEEAgECBBDQCset0SWWg";
+		System.out.println(buyAppVerify("{\"receipt-data\":\"" + receipt + "\"}","dsf"));
 	}
 
 }

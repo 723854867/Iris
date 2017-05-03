@@ -14,6 +14,7 @@ import org.Iris.app.jilu.service.realm.wyyx.WyyxService;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgConfigMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BgUserMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CmsVersionMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.CzLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BuyLabelLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
@@ -81,6 +82,8 @@ public interface Beans {
 	
 	final BuyLabelLogMapper buyLabelLogMapper = SpringContextUtil.getBean("buyLabelLogMapper", BuyLabelLogMapper.class);
 	final MemLabelBindMapper memLabelBindMapper = SpringContextUtil.getBean("memLabelBindMapper", MemLabelBindMapper.class);
+	
+	final CzLogMapper czLogMapper = SpringContextUtil.getBean("czLogMapper", CzLogMapper.class);
 	
 	
 }

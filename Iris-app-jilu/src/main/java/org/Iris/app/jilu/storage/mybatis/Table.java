@@ -7,6 +7,8 @@ public enum Table {
 	CMS_VERSION("cms_version"),
 	BG_LABEL("bg_label"),
 	CFG_GOODS("cfg_goods"),
+	CMS_ANNO("cms_anno"),
+	CMS_BANNER("cms_banner"),
 
 	MEM_MERCHANT("mem_merchant"),
 	MEM_ACCOUNT("mem_account"),
@@ -23,6 +25,7 @@ public enum Table {
 	RELATION("pub_relation"),
 	LOG_STOCK_STORE("log_stock_store"),
 	LOG_BUY_LABEL("log_buy_label"),
+	LOG_CZ("log_cz"),
 	
 	LOG_UPDATE_STORE("log_update_store"),
 	MEM_WAIT_STORE("mem_wait_store"),

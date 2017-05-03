@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" charset="UTF-8" src="../scripts/public.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/islogin.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-fileinput-4.3.2/js/fileinput.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.all.min.js"></script>
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="../bootstrap-fileinput-4.3.2/css/fileinput.min.css" rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+</head>
+<body>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="main-nav nav nav-tabs nav-stacked" style="">
+				</ul>
+			</div>
+			<div class="col-md-10">
+				<h2 class="sub-header">新增发布</h2>
+				<form role="form" onsubmit="save();return false;">
+					<div class="table-responsive">
+						<label for="txtTitle">标题</label> <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="必填项,请输入标题" required="required" />
+						<label for="txtSummary">简介</label> <input type="text" class="form-control" id="txtSummary" name="txtSummary" placeholder="必填项,请输入简介" required="required" />
+						<label class="control-label">选择图片</label>
+							<input id="imgurl" type="file" class="file"/>
+						<label for="txtUrl">链接URL</label> <input type="text" class="form-control" id="txtUrl" name="txtUrl" placeholder="请输入链接URL"/>
+						<div class="span7 text-center">
+							<button type="submit" class="btn btn-primary" >保存</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../scripts/menu.js"></script>
+	<script type="text/javascript">
+	var ue = UE.getEditor('editor');
+	UE.getEditor('editor').ready(function() {
+	    //this是当前创建的编辑器实例
+	    this.setContent(content)
+	})
+	$(document).ready(function(){
+		
+		var id = getUrlParam("id");
+		
+		if(id!=null&&id!=""){
+			$.ajax({
+	            type: 'GET',
+	            url: '/qydj/backstage',
+	            data: { 'id': id,'action': 'banner_get' },
+	            dataType: 'json',
+	            async: false,
+	            beforeSend: function () {
+	                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
+	            },
+	            success: function (json) {
+	            	//alert(json.toString());
+	            	var data = json.data;
+	            	$("#txtTitle").val(data["title"]);
+	            	$("#txtSummary").val(data["summary"]);
+            		$("#txtImgUrl").val(data["imgurl"]);
+            		$("#txtUrl").val(data["href"]);
+	            	
+	            },
+	            error: function () {
+	                alert("数据加载失败");
+	            }
+	        });
+		}
+	});
+	
+		save = function()
+		{
+			var id=getUrlParam("id");
+			var title = $("#txtTitle").val();
+			var summary = $("#txtSummary").val();
+			var imgUrl = $("#txtImgUrl").val();
+			var url = $("#txtUrl").val();
+			if(title!=""&&summary!=""&&imgUrl!=""){
+				$.ajax({
+		            type: 'POST',
+		            url: '/qydj/backstage',
+		            data: {'id':id,'title': title, 'url': url,'summary':summary,'imgurl':imgUrl, 'action': 'banner_save' },
+		            dataType: 'json',
+		            beforeSend: function () {
+		                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
+		            },
+		            success: function (json) {
+		            	if(json.code=="0")
+		            		window.location.href="bannerlist.html";
+		            },
+		            error: function () {
+		                alert("数据加载失败");
+		            }
+		        });
+			}
+			
+		}
+		
+		$("#imgurl").fileinput({
+			language: 'zh', //设置语言
+	        uploadUrl: '/qydj/backstage', // you must set a valid URL here else you will get an error
+	        allowedFileExtensions : ['jpg', 'png','gif'],
+	        showUpload: false, //是否显示上传按钮
+	        showCaption: false,//是否显示标题
+	        browseClass: "btn btn-primary", //按钮样式    
+	        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>", 
+	        overwriteInitial: false,
+	        maxFileSize: 2000,
+	        maxFilesNum: 1,
+	        //allowedFileTypes: ['image', 'video', 'flash'],
+	        slugCallback: function(filename) {
+	            return filename.replace('(', '_').replace(']', '_');
+	        }
+		});
+	</script>
+</body>
+</html>

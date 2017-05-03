@@ -46,6 +46,7 @@ import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.CzLog;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
@@ -78,6 +79,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.gexin.fastjson.JSONArray;
+import com.gexin.fastjson.JSONObject;
 
 import redis.clients.jedis.Tuple;
 
@@ -1257,7 +1260,43 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String iapCertificate(String receipt) {
-		return Result.jsonSuccess(IosVerify.buyAppVerify(receipt));
+		String verifyResult = IosVerify.buyAppVerify(receipt,AppConfig.getEnv().name());
+		if (verifyResult == null) {
+			return Result.jsonError(JiLuCode.APPLE_PAY_NOT_EXIST);
+	    } else {  
+	        // 苹果验证有返回结果------------------  
+	        JSONObject job = JSONObject.parseObject(verifyResult);  
+	        String states = job.getString("status");  
+	        if (states.equals("0")) // 验证成功  
+	        {  
+	            String r_receipt = job.getString("receipt");  
+	            JSONObject returnJson = JSONObject.parseObject(r_receipt);  
+	            JSONArray array = returnJson.getJSONArray("in_app");
+	            JSONObject item = array.getJSONObject(0);
+	            // 产品ID  
+	            String product_id = item.getString("product_id");  
+	            // 订单号  
+	            String transaction_id = item.getString("transaction_id");  
+	            // 交易日期  
+	            String purchase_date = item.getString("purchase_date_ms");  
+	            // 保存到数据库  
+	            CzLog czLog = czLogMapper.findByCzId(transaction_id);
+	            if(null == czLog){
+	            	czLog = new CzLog(transaction_id, memMerchant.getMerchantId(), (int)(Long.valueOf(purchase_date)/1000), product_id);
+	            	memMerchant.setMoney(memMerchant.getMoney()+czLog.getJb());
+	            	memMerchant.setUpdated(DateUtils.currentTime());
+	            	memMerchantMapper.update(memMerchant);
+	 	            czLogMapper.insert(czLog);
+	 	            redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+	            }else{
+	            	return Result.jsonError(JiLuCode.APPLE_PAY_NOT_EXIST);
+	            }
+	        } else {  
+	        	return Result.jsonError(JiLuCode.APPLE_PAY_NOT_EXIST);
+	        }  
+	    }  
+		 
+		 return Result.jsonSuccess();
 	}
 	/**
 	 * 添加收件人信息

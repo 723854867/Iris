@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" charset="UTF-8" src="../scripts/public.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/islogin.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.all.min.js"></script>
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+</head>
+<body>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="main-nav nav nav-tabs nav-stacked" style="">
+				</ul>
+			</div>
+			<div class="col-md-10">
+				<h2 class="sub-header">公告编辑</h2>
+				<form role="form" onsubmit="save();return false;">
+					<div class="table-responsive">
+						<label for="txtTitle">标题</label> <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="必填项,请输入标题"  required="required" />
+						<label for="txtAuthor">作者</label> <input type="text" class="form-control" id="txtAuthor" name="txtAuthor" placeholder="必填项,请输入作者"  required="required" />
+						<label for="txtSource">来源</label> <input type="text" class="form-control" id="txtSource" name="txtSource" placeholder="必填项,请输入来源"  required="required" />
+						<label for="editor">内容</label>
+						<textarea name="editor" id="editor" rows="8"
+							style="width: 100%; height: 440px;"></textarea>
+						<div class="span7 text-center">
+							<button type="submit" class="btn btn-primary">保存</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../scripts/menu.js"></script>
+	<script type="text/javascript">
+		var content;
+		var ue = UE.getEditor('editor');
+		$('.form_date').datetimepicker({
+			language : 'zh-CN',
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+		$(document).ready(function(){
+			
+			var annoId = getUrlParam("id");
+			
+			if(annoId!=null&&annoId!=""){
+				$.ajax({
+		            type: 'POST',
+		            url: '/qydj/backstage',
+		            data: { 'annoId': annoId,'action': 'anno_get' },
+		            dataType: 'json',
+		            async: false,
+		            beforeSend: function () {
+		                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
+		            },
+		            success: function (json) {
+		            	//alert(json.toString());
+		            	var list = json.data;
+		            	$.each(list, function (index, array) {
+		            		$("#txtTitle").val(array["title"]);
+		            		$("#txtAuthor").val(array["author"]);
+		            		$("#txtSource").val(array["source"]);
+		            		content = array["content"];
+		            	});
+		            	
+		            },
+		            error: function () {
+		                alert("数据加载失败");
+		            }
+		        });
+			}
+		});
+		
+		UE.getEditor('editor').ready(function() {
+		    //this是当前创建的编辑器实例
+		    this.setContent(content)
+		})
+
+		save = function()
+		{
+			var annoId = getUrlParam("id");
+			var title = $("#txtTitle").val();
+			var content = UE.getEditor('editor').getContent();
+			var author = $("#txtAuthor").val();
+			var source = $("#txtSource").val();
+			if(title!=""&&content!=""&&author!=""&&source!=""){
+				$.ajax({
+		            type: 'POST',
+		            url: '/qydj/backstage',
+		            data: { 'annoId':annoId,'title': title, 'author': author,'source': source,'content': UE.getEditor('editor').getContent(), 'action': 'anno_update' },
+		            dataType: 'json',
+		            beforeSend: function () {
+		                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
+		            },
+		            success: function (json) {
+		            	if(json.code=="0");
+		            		window.location.href="announcement.html";
+		            },
+		            error: function () {
+		                alert("数据加载失败");
+		            }
+		        });
+			}
+		}
+	</script>
+</body>
+</html>
