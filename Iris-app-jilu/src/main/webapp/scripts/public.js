@@ -83,7 +83,7 @@ $(document).on("click", "#pagecount li a", function() {
 		getData(rel);
 	}
 });
-var total, totalPage; //总记录数，每页显示数，总页数
+var total, totalPage,curPage; //总记录数，每页显示数，总页数
 var pageSize = 15;
 //分页条
 getPageBar=function() {

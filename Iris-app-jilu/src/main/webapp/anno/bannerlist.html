@@ -6,8 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<script type="text/javascript" src="../scripts/public.js"></script>
 <script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/public.js"></script>
 <script type="text/javascript" src="../scripts/islogin.js"></script>
 <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
@@ -50,7 +50,6 @@
 									<th>图片</th>
 									<th>url</th>
 									<th>发布</th>
-									<th>推送次数</th>
 									<th width="240px">操作</th>
 								</tr>
 							</thead>
@@ -68,30 +67,10 @@
 	</div>
 	<script type="text/javascript" src="../scripts/menu.js"></script>
 	<script type="text/javascript">
-
-	$('.form_date').datetimepicker({
-	    language: 'zh-CN',
-	    weekStart: 1,
-	    todayBtn: 1,
-	    autoclose: 1,
-	    todayHighlight: 1,
-	    startView: 2,
-	    minView: 2,
-	    forceParse: 0
-	});
 	$(function() {
 		getData(1);
-		
-		$(document).on("click", "#pagecount li a", function() {
-            var rel = $(this).attr("rel");
-            if (rel) {
-                getData(rel);
-            }
-		});
 	});
 	
-	var total,totalPage,curPage; //总记录数，每页显示数，总页数
-	var pageSize=10;
 	var title='';
 	var publishtxt='';
 	var publishbutton='';
@@ -99,7 +78,7 @@
 		title=$("#txtTitle").val();
         $.ajax({
             type: 'POST',
-            url: '/qydj/backstage',
+            url: '/jilu/backstage',
             data: { 'page': page, 'pageSize': pageSize,'title':title,'action': 'banner_list_get' },
             dataType: 'json',
             beforeSend: function () {
