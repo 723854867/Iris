@@ -9,8 +9,8 @@
 <script type="text/javascript" charset="UTF-8" src="../scripts/public.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../scripts/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../scripts/islogin.js"></script>
-<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-fileinput-4.3.2/js/fileinput.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.config.js"></script>
@@ -72,10 +72,10 @@
 	            success: function (json) {
 	            	//alert(json.toString());
 	            	var data = json.data;
-	            	$("#txtTitle").val(data["title"]);
-	            	$("#txtSummary").val(data["summary"]);
-            		$("#txtImgUrl").val(data["imgurl"]);
-            		$("#txtUrl").val(data["href"]);
+	            	$("#title").val(data["title"]);
+	            	$("#summary").val(data["summary"]);
+            		$("#imgurl").val(data["imgurl"]);
+            		$("#href").val(data["href"]);
 	            	
 	            },
 	            error: function () {
