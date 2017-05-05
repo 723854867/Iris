@@ -12,7 +12,7 @@
 		<File>${logback.path}/root.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/%d{yyyy-MM-dd}/root-%d{yyyy-MM-dd}-%i.log.gz
+			<fileNamePattern>${logback.path}/%d{yyyy-MM-dd}/root-%d{yyyy-MM-dd}-%i.log.gz
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -33,7 +33,7 @@
 		<File>${logback.path}/Iris.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>${log.path}/%d{yyyy-MM-dd}/biz-%d{yyyy-MM-dd}-%i.log.gz
+			<fileNamePattern>${logback.path}/%d{yyyy-MM-dd}/biz-%d{yyyy-MM-dd}-%i.log.gz
 			</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
