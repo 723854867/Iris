@@ -2,6 +2,7 @@ package org.Iris.app.jilu.common;
 
 import org.Iris.app.jilu.service.realm.BackstageService;
 import org.Iris.app.jilu.service.realm.CommonService;
+import org.Iris.app.jilu.service.realm.FileuploadService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
@@ -45,6 +46,7 @@ public interface Beans {
 	final RedisOperate redisOperate = SpringContextUtil.getBean("redisOperate", RedisOperate.class);
 	final AliyunService aliyunService = SpringContextUtil.getBean("aliyunService", AliyunService.class); 
 	final RelationService relationService = SpringContextUtil.getBean("relationService", RelationService.class);
+	final FileuploadService fileuploadService = SpringContextUtil.getBean("fileuploadService", FileuploadService.class);
 	
 	final JiLuLuaOperate luaOperate = SpringContextUtil.getBean("luaOperate", JiLuLuaOperate.class); 
 	final CommonService commonService = SpringContextUtil.getBean("commonService", CommonService.class);

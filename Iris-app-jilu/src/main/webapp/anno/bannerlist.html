@@ -37,18 +37,16 @@
 				<form role="form">
 					<div class="form-inline">
 						<label for="organ">标题：</label> <input class="form-control" type="text"
-							id="txtTitle" placeholder="标题">
-						<button type="submit" class="btn btn-default" onclick="getData(1);return false;"><span class="glyphicon glyphicon-search"></span> 查询</button>
+							id="title" placeholder="标题">
+						<button type="button" class="btn btn-default" onclick="search()"><span class="glyphicon glyphicon-search"></span> 查询</button>
 					</div>
 					
 					<div class="table-responsive">
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>序号</th>
 									<th>标题</th>
-									<th>图片</th>
-									<th>url</th>
+									<th>文章地址</th>
 									<th>发布</th>
 									<th width="240px">操作</th>
 								</tr>
@@ -75,7 +73,7 @@
 	var publishtxt='';
 	var publishbutton='';
 	getData=function(page) {
-		title=$("#txtTitle").val();
+		title=$("#title").val();
         $.ajax({
             type: 'POST',
             url: '/jilu/backstage',
@@ -94,17 +92,12 @@
                 $.each(list, function (index, array) { //遍历json数据列
 
                 	tr+="<tr>";
-                	tr+="<td>" + array['bannerId'] + "</td>";
                 	tr+="<td>" + array['title'] + "</td>";
-                	
-                	tr+="<td>";
-                	tr+="<a href='"+array['imgurl']+"' target='_blank'>查看</a>";
-                	tr +="</td>";
+          
                 	
                 	tr+="<td>";
                 	tr+="<a href='"+array['href']+"' target='_blank'>查看</a>";
                 	tr +="</td>";
-                	
                 	
                 	if(array['ispublished']==1)
                		{
@@ -117,13 +110,9 @@
                 		publishbutton="发布";
                		}
                 	tr+="<td>" + publishtxt + "</td>";
-                	
-                	tr+="<td>" + array['pushcount'] + "</td>";
-                	
                 	tr+="<td>";
                 	tr+="<a href='banneredit.html?id="+array['bannerId']+"' class='btn btn-info btn-xs'>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr+="<a "+" class='btn btn-info btn-xs' onclick='publish("+array['bannerId']+")'>"+publishbutton+"</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-                	tr+="<a "+" class='btn btn-info btn-xs' onclick='push("+array['bannerId']+")'>推送</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr+="<a "+" class='btn btn-danger btn-xs' onclick='deleteData("+array['bannerId']+")'>删除</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr +="</td>";
                 	
@@ -135,43 +124,23 @@
             	
             },
             complete: function () { //生成分页条
-                getPageBar();
+            	if(totalPage>1)
+        		{
+            		getPageBar();
+        		}else{
+        			$("#pagecount").empty();
+        		}
             },
             error: function () {
                 alert("数据加载失败");
             }
         });
     }
-	getPageBar=function() {
-		if(totalPage>1)
-		{
-	        //页码大于最大页数
-	        if (curPage > totalPage) curPage = totalPage;
-	        //页码小于1
-	        if (curPage < 1) curPage = 1;
-	        pageStr = "<li class='disabled'><a href='javascript:void(0)'>共" + total + "条</a></li><li class='disabled'><a href='javascript:void(0)'>" + curPage + "/" + totalPage + "</a></li>";
-	        //如果是第一页
-	        if (curPage == 1) {
-	            pageStr += "<li class='disabled'><a href='javascript:void(0)'>首页</a></li><li class='disabled'><a href='javascript:void(0)'>上一页</a></li>";
-	        }
-	        else {
-	            pageStr += "<li><a href='javascript:void(0)' rel='1'>首页</a></li><li><a href='javascript:void(0)' rel='" + (curPage - 1) + "'>上一页</a></li>";
-	        }
-	        //如果是最后页
-	        if (curPage >= totalPage) {
-	            pageStr += "<li class='disabled'><a href='javascript:void(0)'>下一页</a></li><li class='disabled'><a href='javascript:void(0)'>尾页</a></li>";
-	        }
-	        else {
-	            pageStr += "<li><a href='javascript:void(0)' rel='" + (parseInt(curPage) + 1) + "'>下一页</a></li><li><a href='javascript:void(0)' rel='" + totalPage + "'>尾页</a></li>";
-	        }
-	        $("#pagecount").html(pageStr);
-		}
-    }
 	deleteData = function(id){
 		if(confirm("确定要删除这条数据吗？")){
 			$.ajax({
 	            type: 'POST',
-	            url: '/qydj/backstage',
+	            url: '/jilu/backstage',
 	            data: { 'id': id , 'action': 'banner_del' },
 	            dataType: 'json',
 	            beforeSend: function () {
@@ -191,7 +160,7 @@
 		if(confirm("确定要发布这条数据吗？")){
 			$.ajax({
 	            type: 'POST',
-	            url: '/qydj/backstage',
+	            url: '/jilu/backstage',
 	            data: { 'id': id , 'action': 'banner_publish' },
 	            dataType: 'json',
 	            beforeSend: function () {
@@ -207,26 +176,6 @@
 		}
 	}
 	
-	push = function(id){
-		if(confirm("确定要推送这条数据吗？")){
-			$.ajax({
-	            type: 'POST',
-	            url: '/qydj/backstage',
-	            data: { 'id': id , 'action': 'banner_push' },
-	            dataType: 'json',
-	            beforeSend: function () {
-	                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
-	            },
-	            success: function (json) {
-	            	getData(curPage);
-	            	alert("推送成功");
-	            },
-	            error: function () {
-	                alert("推送失败");
-	            }
-	        });
-		}
-	}
 </script>
 </body>
 </html>

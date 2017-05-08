@@ -20,9 +20,14 @@ import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 @Service
 public class FileuploadService implements Beans {
 
-	public String getUrl(long id,FileItem fileItem){
+	public String getUrl(long id,FileItem fileItem,int type){
 		String[] d = fileItem.getName().split("\\.");
-		return AppConfig.getAliyunOssFolderPrefix()+"/common/0/banner/"+id+"."+d[1];
+		if(type == 0){
+			return AppConfig.getAliyunOssFolderPrefix()+"/common/banner/fm/"+id+"/fm."+d[1];
+		}else{
+			return AppConfig.getAliyunOssFolderPrefix()+"/common/banner/gd/"+id+"/gd."+d[1];
+		}
+		
 	}
 	
 	public AssumeRoleForm assumeRole(long id) {
@@ -55,17 +60,23 @@ public class FileuploadService implements Beans {
 	 * @throws OSSException 
 	 */
 	@Transactional
-	public String SaveBanner(String id, String title, String summary, FileItem fileItem, String url){
-		String fileName = fileItem.getName();
+	public String SaveBanner(long id, String title, String summary, FileItem fmItem,FileItem gdItem, String url){
+		String fmfileName = fmItem.getName();
+		String gdfileName = gdItem.getName();
 		CmsBanner banner;
-		if (!id.trim().equals("")) {
+		if (id!=0) {
 			banner = cmsBannerMapper.getBannerById(id);
 			if (banner != null) {
 				banner.setTitle(title);
 				banner.setSummary(summary);
-				if(fileName != null && !fileName.equals(""))
-					banner.setImgurl(getUrl(banner.getBannerId(),fileItem));
+				if(fmfileName != null && !fmfileName.equals(""))
+					banner.setFmUrl(getUrl(banner.getBannerId(),fmItem,0));
+				if(gdfileName != null && !gdfileName.equals("")){
+					banner.setGdUrl(getUrl(banner.getBannerId(),gdItem,1));
+					banner.setGdType(1);
+				}
 				banner.setHref(url);
+				banner.setUpdated(DateUtils.currentTime());
 				cmsBannerMapper.update(banner);
 			}
 		} else {
@@ -80,13 +91,19 @@ public class FileuploadService implements Beans {
 			banner.setUpdated(curtime);
 			//banner.setIspublished(YES_OR_NO.NO);
 			cmsBannerMapper.insert(banner);
-			banner.setImgurl(getUrl(banner.getBannerId(),fileItem));
+			banner.setFmUrl(getUrl(banner.getBannerId(),fmItem,0));
+			if(gdfileName != null && !gdfileName.equals("")){
+				banner.setGdUrl(getUrl(banner.getBannerId(),gdItem,1));
+				banner.setGdType(1);
+			}
 			cmsBannerMapper.update(banner);
 		}
 		
 		try {
-			if(fileItem.getInputStream().available()>0)
-				aliyunService.upload(assumeRole(0), fileItem.getInputStream(), "common/0/banner/"+banner.getBannerId()+"."+fileItem.getName().split("\\.")[1]);
+			if(fmItem.getInputStream().available()>0)
+				aliyunService.upload(assumeRole(0), fmItem.getInputStream(), "common/banner/fm/"+banner.getBannerId()+"/fm."+fmItem.getName().split("\\.")[1]);
+			if(gdItem.getInputStream().available()>0)
+				aliyunService.upload(assumeRole(0), gdItem.getInputStream(), "common/banner/gd/"+banner.getBannerId()+"/gd."+gdItem.getName().split("\\.")[1]);
 		} catch (Exception e) {
 		}
 		

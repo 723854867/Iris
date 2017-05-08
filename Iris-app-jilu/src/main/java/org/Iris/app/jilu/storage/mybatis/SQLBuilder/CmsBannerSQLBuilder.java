@@ -12,9 +12,14 @@ public class CmsBannerSQLBuilder {
 			{
 				SELECT("*");
 				FROM(Table.CMS_BANNER.mark());
-				WHERE("ispublished=#{ispublished}");
+				WHERE("ispublished=1");
+				ORDER_BY("updated desc");
 			}
 		}.toString();
+	}
+	
+	public String getGdBannerList(){
+		return "select * from "+Table.CMS_BANNER.mark()+" where ispublished=1 and gd_type=1 order by updated desc limit 0,#{count}";
 	}
 	
 	public String getAllBannerList(Map<String,String> map){
@@ -65,14 +70,12 @@ public class CmsBannerSQLBuilder {
 				INSERT_INTO(Table.CMS_BANNER.mark());
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");
-				VALUES("bannertype", "#{bannertype}");
 				VALUES("title", "#{title}");
 				VALUES("summary", "#{summary}");
-				VALUES("imgurl", "#{imgurl}");
-				VALUES("href", "#{href}");
-				VALUES("ispublished", "#{ispublished}");
-				VALUES("pushcount", "#{pushcount}");
-				VALUES("ispush", "#{ispush}");
+				VALUES("fm_url", "#{fmUrl}");
+				VALUES("gd_url", "#{gdUrl}");
+				VALUES("href", 	"#{href}");
+				VALUES("gd_type", "#{gdType}");
 			}
 		}.toString();
 	}
@@ -81,16 +84,14 @@ public class CmsBannerSQLBuilder {
 		return new SQL() {
 			{
 				UPDATE(Table.CMS_BANNER.mark());
-				SET("created=#{created}");
 				SET("updated=#{updated}");
-				SET("bannertype=#{bannertype}");
 				SET("title=#{title}");
 				SET("summary=#{summary}");
-				SET("imgurl=#{imgurl}");
+				SET("fm_url=#{fmUrl}");
+				SET("gd_url=#{gdUrl}");
+				SET("gd_type=#{gdType}");
 				SET("href=#{href}");
 				SET("ispublished=#{ispublished}");
-				SET("ispush=#{ispush}");
-				SET("pushcount=#{pushcount}");
 				WHERE("banner_id=#{bannerId}");
 			}
 		}.toString();
@@ -104,5 +105,13 @@ public class CmsBannerSQLBuilder {
 				WHERE("banner_id=#{bannerId}");
 			}
 		}.toString();
+	}
+	
+	public String getPublishBannerList(){
+		return "select * from "+Table.CMS_BANNER.mark()+" where ispublished=1 order by updated desc limit #{start},#{pageSize}";
+	}
+	
+	public String getPublishBannerCount(){
+		return "select count(1) from "+Table.CMS_BANNER.mark()+" where ispublished=1";
 	}
 }

@@ -15,7 +15,7 @@ public class FileUploadServlet extends IrisDispatcher<FileUploadSession, FileUpl
 	private static final long serialVersionUID = -1307957341692151832L;
 
 	public FileUploadServlet() {
-		super("org.zimo.app.qydj.service.action.fileupload");
+		super("org.Iris.app.jilu.service.action.fileupload");
 	}
 	@Override
 	protected FileUploadSession buildSession(HttpServletRequest req, HttpServletResponse resp) {
