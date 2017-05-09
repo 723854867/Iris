@@ -30,16 +30,15 @@
    	
    	<bean id="httpProxy" class="org.Iris.util.network.http.HttpProxy" init-method="init">
 		<property name="asyncHttp">
-			<bean class="org.rapid.util.net.http.AsyncHttpAdapter">
+			<bean class="org.Iris.util.network.http.AsyncHttpAdapter">
 				<property name="workerCount" value="${http.async.workerCount}"/>
-				<property name="connectTimeout" value="${http.async.connectTimeout}"/>
 				<property name="soTimeout" value="${http.async.soTimeout}"/>
 				<property name="tcpNoDelay" value="${http.async.tcpNoDelay}"/>
 				<property name="keepAlive" value="${http.async.keepAlive}"/>
 				<property name="keepAliveTime" value="${http.async.keepAliveTime}"/>
 				<property name="maxConn" value="${http.async.maxConn}"/>
-				<property name="sslEnabled" value="${http.async.sslEnabled}"/>
 				<property name="maxConnPerRoute" value="${http.async.maxConnPerRoute}"/>
+				<property name="sslEnabled" value="true" />
 			</bean>
 		</property>
 	</bean>

@@ -20,6 +20,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -33,23 +34,27 @@ public class CaptchaMessageListener extends JiLuMessageListener<CaptchaMessage> 
 	
 	private static final Logger logger = LoggerFactory.getLogger(CaptchaMessageListener.class);
 	
-	private String PARAM_TPL_VALUE		= "tpl_value";
+	//private String PARAM_TPL_VALUE		= "tpl_value";
 	private String PARAM_MOBILE			= "mobile";
 	
-	@Value("${yunPian.apiKey}")
-	private String yunPianKey;
-	@Value("${yunpian.captcha.tplId}")
-	private int captchaTplId;
-	@Value("${yunpian.captcha.tplSendUrl}")
+	//@Value("${yunPian.apiKey}")
+	private String yunPianKey = "622ea6cbe4a4d254c22b9a17e3051d75";
+	@Value("${yunPian.captcha.tplId}")
+	private String captchaTplId;
+	@Value("${yunPian.captcha.tplSendUrl}")
 	private static String tplSendUrl;
+	//@Value("${yunpian.captcha.sendUrl}")
+	private static String sendUrl = "https://sms.yunpian.com/v2/sms/single_send.json";
+	//@Value("${yunPian.captcha.text}")
+	private String text = "【江西吉鹿】您的验证码是#code#。如非本人操作，请忽略本短信";
 	@Resource
 	private HttpProxy httpProxy;
 	@Resource
 	private SmtpEmailSender emailSender;
 	
-	private NameValuePair API_KEY;
-	private NameValuePair TPL_ID;
-	private CaptchaSendHandler handler;
+	//private NameValuePair API_KEY;
+	//private NameValuePair TPL_ID;
+	//private CaptchaSendHandler handler;
 	
 	public CaptchaMessageListener() {
 		super(QueueName.CAPTCHA);
@@ -76,20 +81,27 @@ public class CaptchaMessageListener extends JiLuMessageListener<CaptchaMessage> 
 	}
 	
 	private void _sendCaptcha(String mobile, String captcha) {
-		String tplValue = null;
+		//String tplValue = null;
 		try {
-			tplValue = URLEncoder.encode("#code#", "UTF-8") + "=" + URLEncoder.encode(captcha, "UTF-8");
+			text = text.replace("#code#", captcha);
+			text = URLEncoder.encode(text, "UTF-8");
+			//tplValue = URLEncoder.encode("#code#", "UTF-8") + "=" + URLEncoder.encode(captcha, "UTF-8");
+			mobile = URLEncoder.encode(mobile,"UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.error("captcha url encode failure!", e);
+			logger.error("mobile url encode failure!", e);
 			return;
 		}
 		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
-		params.add(API_KEY);
-		params.add(TPL_ID);
-		params.add(new BasicNameValuePair(PARAM_TPL_VALUE, tplValue));
+		params.add(new BasicNameValuePair("apikey", yunPianKey));
+		params.add(new BasicNameValuePair("text", text));
 		params.add(new BasicNameValuePair(PARAM_MOBILE, mobile));
-		HttpPost method = new HttpPost(tplSendUrl);
-		httpProxy.asyncRequest(method, handler);
+		HttpPost method = new HttpPost(sendUrl);
+		try {
+			method.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		httpProxy.asyncRequest(method, new CaptchaSendHandler());
 	}
 	
 	private class CaptchaSendHandler implements AsyncRespHandler {
