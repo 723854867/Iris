@@ -2,6 +2,7 @@ package org.Iris.app.jilu.common;
 
 import org.Iris.app.jilu.service.realm.BackstageService;
 import org.Iris.app.jilu.service.realm.CommonService;
+import org.Iris.app.jilu.service.realm.FileuploadService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
@@ -17,6 +18,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.CmsVersionMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CzLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.BuyLabelLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.CmsBannerMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCidMapper;
@@ -44,6 +46,7 @@ public interface Beans {
 	final RedisOperate redisOperate = SpringContextUtil.getBean("redisOperate", RedisOperate.class);
 	final AliyunService aliyunService = SpringContextUtil.getBean("aliyunService", AliyunService.class); 
 	final RelationService relationService = SpringContextUtil.getBean("relationService", RelationService.class);
+	final FileuploadService fileuploadService = SpringContextUtil.getBean("fileuploadService", FileuploadService.class);
 	
 	final JiLuLuaOperate luaOperate = SpringContextUtil.getBean("luaOperate", JiLuLuaOperate.class); 
 	final CommonService commonService = SpringContextUtil.getBean("commonService", CommonService.class);
@@ -84,6 +87,7 @@ public interface Beans {
 	final MemLabelBindMapper memLabelBindMapper = SpringContextUtil.getBean("memLabelBindMapper", MemLabelBindMapper.class);
 	
 	final CzLogMapper czLogMapper = SpringContextUtil.getBean("czLogMapper", CzLogMapper.class);
+	final CmsBannerMapper cmsBannerMapper = SpringContextUtil.getBean("cmsBannerMapper", CmsBannerMapper.class);
 	
 	
 }

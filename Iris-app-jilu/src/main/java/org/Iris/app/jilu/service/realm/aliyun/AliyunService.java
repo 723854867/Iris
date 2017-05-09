@@ -1,5 +1,10 @@
 package org.Iris.app.jilu.service.realm.aliyun;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.Iris.aliyun.policy.Action;
@@ -9,9 +14,14 @@ import org.Iris.aliyun.policy.Statement;
 import org.Iris.aliyun.service.OssService;
 import org.Iris.aliyun.service.StsService;
 import org.Iris.app.jilu.common.AppConfig;
+import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.springframework.stereotype.Service;
 
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.OSSObject;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 
 @Service
@@ -53,6 +63,22 @@ public class AliyunService {
 	 */
 	public void createMerchantFolder(MemMerchant merchant) {
 		ossService.createFolder(AppConfig.getAliyunOssBucket(), "common/merchant/" + merchant.getMerchantId() + "/");
+	}
+	
+	public void upload(AssumeRoleForm form,InputStream stream,String key) throws OSSException, ClientException, FileNotFoundException{
+		OSSClient ossClient = new OSSClient(form.getEndpoint(), form.getAccessKeyId(),form.getAccessKeySecret(), form.getSecurityToken());
+		ossClient.putObject(AppConfig.getAliyunOssBucket(), key, stream);
+	}
+	
+	public OSSObject get(AssumeRoleForm form,String key) throws OSSException, ClientException, FileNotFoundException{
+		OSSClient ossClient = new OSSClient(form.getEndpoint(), form.getAccessKeyId(),form.getAccessKeySecret(), form.getSecurityToken());
+		return ossClient.getObject(AppConfig.getAliyunOssBucket(), key);
+	}
+	
+	public String getUrl(AssumeRoleForm form,String key){
+		OSSClient ossClient = new OSSClient(form.getEndpoint(), form.getAccessKeyId(),form.getAccessKeySecret(), form.getSecurityToken());
+		URL url = ossClient.generatePresignedUrl(AppConfig.getAliyunOssBucket(), key,new Date(new Date().getTime() + 3600 * 1000));
+		return url.toString();
 	}
 	
 	public void dispose() {

@@ -6,11 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<script type="text/javascript" charset="UTF-8" src="../scripts/public.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../scripts/public.js"></script>
 <script type="text/javascript" src="../scripts/islogin.js"></script>
-<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" charset="UTF-8" src="../bootstrap-fileinput-4.3.2/js/fileinput.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="../ueditor/ueditor.config.js"></script>
@@ -33,13 +33,15 @@
 			</div>
 			<div class="col-md-10">
 				<h2 class="sub-header">新增发布</h2>
-				<form role="form" onsubmit="save();return false;">
+				<form role="form" onsubmit="save();return false;" enctype="mutipart/form-data" id="form">
 					<div class="table-responsive">
-						<label for="txtTitle">标题</label> <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="必填项,请输入标题" required="required" />
-						<label for="txtSummary">简介</label> <input type="text" class="form-control" id="txtSummary" name="txtSummary" placeholder="必填项,请输入简介" required="required" />
-						<label class="control-label">选择图片</label>
-							<input id="imgurl" type="file" class="file"/>
-						<label for="txtUrl">链接URL</label> <input type="text" class="form-control" id="txtUrl" name="txtUrl" placeholder="请输入链接URL"/>
+						<label for="title">标题</label> <input type="text" class="form-control" id="title" name="title" placeholder="必填项,请输入标题" required="required" />
+						<label for="summary">简介</label> <input type="text" class="form-control" id="summary" name="summary" placeholder="必填项,请输入简介" required="required" />
+						<label class="control-label">选择封面图片<font color='red'>（*必填）</font></label>
+							<input id="fmUrl" name="fmUrl" type="file" class="file"/>
+						<label class="control-label">APP首页滚动图片<font color='red'>（如果要把该文章放入首页滚动，则该图片必传）</font></label>
+							<input id="gdUrl" name="gdUrl" type="file" class="file"/>
+						<label for="href">链接URL</label> <input type="text" class="form-control" id="href" name="href" placeholder="请输入链接URL" required="required"/>
 						<div class="span7 text-center">
 							<button type="submit" class="btn btn-primary" >保存</button>
 						</div>
@@ -50,32 +52,29 @@
 	</div>
 	<script type="text/javascript" src="../scripts/menu.js"></script>
 	<script type="text/javascript">
-	var ue = UE.getEditor('editor');
-	UE.getEditor('editor').ready(function() {
-	    //this是当前创建的编辑器实例
-	    this.setContent(content)
-	})
 	$(document).ready(function(){
-		
+		var fmUrl,gdUrl;
+		var myLayoutTemplates = {
+		        actions: '',
+		};
 		var id = getUrlParam("id");
-		
 		if(id!=null&&id!=""){
 			$.ajax({
 	            type: 'GET',
-	            url: '/qydj/backstage',
+	            url: '/jilu/backstage',
 	            data: { 'id': id,'action': 'banner_get' },
 	            dataType: 'json',
 	            async: false,
 	            beforeSend: function () {
-	                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
 	            },
 	            success: function (json) {
 	            	//alert(json.toString());
 	            	var data = json.data;
-	            	$("#txtTitle").val(data["title"]);
-	            	$("#txtSummary").val(data["summary"]);
-            		$("#txtImgUrl").val(data["imgurl"]);
-            		$("#txtUrl").val(data["href"]);
+	            	$("#title").val(data["title"]);
+	            	$("#summary").val(data["summary"]);
+            		$("#href").val(data["href"]);
+            		fmUrl = data['fmUrl'];
+            		gdUrl = data['gdUrl'];
 	            	
 	            },
 	            error: function () {
@@ -83,64 +82,99 @@
 	            }
 	        });
 		}
-	});
-	
-		save = function()
-		{
-			var id=getUrlParam("id");
-			var title = $("#txtTitle").val();
-			var summary = $("#txtSummary").val();
-			var imgUrl = $("#txtImgUrl").val();
-			var url = $("#txtUrl").val();
-			if(title!=""&&summary!=""&&imgUrl!=""){
-				$.ajax({
-		            type: 'POST',
-		            url: '/qydj/backstage',
-		            data: {'id':id,'title': title, 'url': url,'summary':summary,'imgurl':imgUrl, 'action': 'banner_save' },
-		            dataType: 'json',
-		            beforeSend: function () {
-		                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
-		            },
-		            success: function (json) {
-		            	if(json.code=="0")
-		            		window.location.href="bannerlist.html";
-		            },
-		            error: function () {
-		                alert("数据加载失败");
-		            }
-		        });
-			}
-			
-		}
-		
-		var myLayoutTemplates = {
-	        actions: '',
-	    };
-		
-		$("#imgurl").fileinput({
+		$("#fmUrl").fileinput('destroy');
+		$("#fmUrl").fileinput({
 			language: 'zh', //设置语言
-	        uploadUrl: '/qydj/backstage', // you must set a valid URL here else you will get an error
+	        uploadUrl: '/jilu/backstage', // you must set a valid URL here else you will get an error
 	        allowedFileExtensions : ['jpg', 'png','gif'],
 	        showUpload: false, //是否显示上传按钮
-	        //showCaption: false,//是否显示标题
-	        //browseClass: "btn btn-primary", //按钮样式    
-	        //previewFileIcon: "<i class='glyphicon glyphicon-king'></i>", 
-	        //overwriteInitial: false,
-	        //resizeImage: true,
-	        //resizePreference: 'width',
-	        //resizeQuality: 0.6,
-	        //resizeDefaultImageType: 'image/png',
 	        maxFileSize: 2000,
 	        maxFileCount: 5,
 	        layoutTemplates: myLayoutTemplates,//显示的图片布局模版
 	        msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
-	        //dropZoneEnabled: false,显示图片推拽区域
-	        //allowedFileTypes: ['image', 'video', 'flash'],
-	        slugCallback: function(filename) {
-	            return filename.replace('(', '_').replace(']', '_');
-	        }
+	        initialPreviewAsData: true,  
+            initialPreviewFileType: 'image',  
+	        initialPreview: [fmUrl]
 		});
-	            
+		
+		 tActions = '<div class="file-actions">\n' +
+	        '    <div class="file-footer-buttons">\n' +
+	        '        {delete} {zoom} {other}' +
+	        '    </div>\n' +
+	        '    {drag}\n' +
+	        '    <div class="file-upload-indicator" title="{indicatorTitle}">{indicator}</div>\n' +
+	        '    <div class="clearfix"></div>\n' +
+	        '</div>';
+		
+		var templates = {
+				actions: tActions
+		}
+		$("#gdUrl").fileinput('destroy');
+		$("#gdUrl").fileinput({
+			language: 'zh', //设置语言
+	        uploadUrl: '/jilu/backstage', // you must set a valid URL here else you will get an error
+	        allowedFileExtensions : ['jpg', 'png','gif'],
+	        showUpload: false, //是否显示上传按钮
+	        maxFileSize: 2000,
+	        maxFileCount: 5,
+	        layoutTemplates: templates,//显示的图片布局模版
+	        msgFilesTooMany: "选择上传的文件数量 超过允许的最大数值！",
+	        initialPreviewAsData: true,  
+            initialPreviewFileType: 'image',   
+	        initialPreview: [gdUrl],
+			initialPreviewConfig: [
+		                       {
+		                           url: '/jilu/backstage', // server delete action 
+		                           extra: {id: id,action:'remove_gdimg'}
+		                       }
+		                   ]
+		});
+	});
+	
+		save = function()
+		{
+			var form = new FormData($("#form")[0]);
+			var id = getUrlParam("id") == null?"":getUrlParam("id");
+			if(id == "" || id == undefined || id == null){
+				id = 0;
+				var file_ = $("#fmUrl").val();
+				if(file_ == "" || file_ == undefined || file_ == null){
+					alert("请选择封面图片");
+					return;
+				}
+			}
+			form.append("id",id);
+			form.append("action","banner_save");
+			/* var title = $("#txtTitle").val();
+			var summary = $("#txtSummary").val();
+			var imgUrl = $("#txtImgUrl").val();
+			var url = $("#txtUrl").val(); */
+			$.ajax({
+	            type: 'POST',
+	            url: '/jilu/fileupload',
+	            data: form,
+	            dataType: 'json',
+	            async: false,
+	            contentType: false,  
+	            processData: false,
+	            beforeSend: function () {
+					initLoading();
+					showLoading("加载中。。。");
+	            },	
+	            success: function (json) {
+	            	RemoveLoading();
+	            	if(json.code=="0")
+	            		window.location.href="bannerlist.html";
+	            	else {
+						alert(json.desc)
+					}
+	            },
+	            error: function () {
+	                alert("数据加载失败");
+	            }
+	        });
+			
+		}
 	</script>
 </body>
 </html>

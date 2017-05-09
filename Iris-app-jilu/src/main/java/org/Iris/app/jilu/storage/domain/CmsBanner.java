@@ -8,11 +8,11 @@ public class CmsBanner {
 	public int bannertype;
 	public String title;
 	public String summary;
-	public String imgurl;
+	public String fmUrl;
+	public String gdUrl;
+	public int gdType;
 	public String href;
 	public int ispublished;
-	public int ispush;
-	public int pushcount;
 	public long getBannerId() {
 		return bannerId;
 	}
@@ -49,11 +49,23 @@ public class CmsBanner {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-	public String getImgurl() {
-		return imgurl;
+	public String getFmUrl() {
+		return fmUrl;
 	}
-	public void setImgurl(String imgurl) {
-		this.imgurl = imgurl;
+	public void setFmUrl(String fmUrl) {
+		this.fmUrl = fmUrl;
+	}
+	public String getGdUrl() {
+		return gdUrl;
+	}
+	public void setGdUrl(String gdUrl) {
+		this.gdUrl = gdUrl;
+	}
+	public int getGdType() {
+		return gdType;
+	}
+	public void setGdType(int gdType) {
+		this.gdType = gdType;
 	}
 	public String getHref() {
 		return href;
@@ -66,18 +78,6 @@ public class CmsBanner {
 	}
 	public void setIspublished(int ispublished) {
 		this.ispublished = ispublished;
-	}
-	public int getIspush() {
-		return ispush;
-	}
-	public void setIspush(int ispush) {
-		this.ispush = ispush;
-	}
-	public int getPushcount() {
-		return pushcount;
-	}
-	public void setPushcount(int pushcount) {
-		this.pushcount = pushcount;
 	}
 	
 	

@@ -1,35 +1,40 @@
 package org.Iris.app.jilu.service.realm;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.storage.domain.BgUser;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.CmsBanner;
 import org.Iris.app.jilu.storage.domain.CmsVersion;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
-import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.IrisSecurity;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
+
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSSException;
+import com.aliyun.oss.model.OSSObject;
 
 @Service
 public class BackstageService implements Beans{
@@ -392,4 +397,62 @@ public class BackstageService implements Beans{
 		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
 		return Result.jsonSuccess();
 	}
+
+	/**
+	 * 获取公告列表
+	 * @param page
+	 * @param pagesize
+	 * @param title
+	 * @return
+	 */
+	public String getBannerList(int page, int pagesize, String title) {
+		Map<String, String> mapKV = new HashMap<String, String>();
+		mapKV.put("startIndex", String.valueOf((page-1)*pagesize));
+		mapKV.put("pageSize", String.valueOf(pagesize));
+		mapKV.put("title", String.valueOf(title));
+
+		List<CmsBanner> list = cmsBannerMapper.getAllBannerList(mapKV);
+		int count = cmsBannerMapper.getAllBannerListCount(title);
+		return Result.jsonSuccess(new Pager<>(count, list));
+	}
+
+	public String deleteBanner(long id) {
+		cmsBannerMapper.delete(id);
+		return Result.jsonSuccess();
+	}
+
+	public String publishBanner(long id) {
+		CmsBanner banner = cmsBannerMapper.getBannerById(id);
+		if (banner != null) {
+			banner.setUpdated(DateUtils.currentTime());
+			if (banner.getIspublished() == 0) {
+				banner.setIspublished(1);
+			} else {
+				banner.setIspublished(0);
+			}
+			cmsBannerMapper.update(banner);
+		}else{
+			throw IllegalConstException.errorException(JiLuParams.ID);
+		}
+		return Result.jsonSuccess();
+	}
+	
+	/**
+	 * 获取公告 fansd
+	 * 
+	 * @return
+	 */
+	public String getBanner(long id) {
+		CmsBanner banner = cmsBannerMapper.getBannerById(id);
+		AssumeRoleForm form = fileuploadService.assumeRole(0);
+		try {
+			banner.setFmUrl(aliyunService.getUrl(form, banner.getFmUrl().substring(banner.getFmUrl().indexOf("common/"))));
+			if(banner.getGdType() == 1)
+				banner.setGdUrl(aliyunService.getUrl(form, banner.getGdUrl().substring(banner.getGdUrl().indexOf("common/"))));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Result.jsonSuccess(banner);
+	}
+	
 }
