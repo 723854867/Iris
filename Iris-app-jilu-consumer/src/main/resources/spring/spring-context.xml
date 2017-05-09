@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
     			 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     			 
-   	<context:property-placeholder location="classpath:conf/yunpian.properties"/>
+   	<context:property-placeholder location="classpath:conf/yunpian.properties" file-encoding="UTF-8"/>
     			 
    	<bean id="queueNames" class="org.Iris.app.jilu.consumer.QueueNames" init-method="init">
    		<property name="env" value="${env}" />
