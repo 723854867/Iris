@@ -2,7 +2,6 @@ package org.Iris.app.jilu.service.realm;
 
 import java.io.FileNotFoundException;
 
-import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.storage.domain.CmsBanner;
@@ -23,9 +22,9 @@ public class FileuploadService implements Beans {
 	public String getUrl(long id,FileItem fileItem,int type){
 		String[] d = fileItem.getName().split("\\.");
 		if(type == 0){
-			return AppConfig.getAliyunOssFolderPrefix()+"/common/banner/fm/"+id+"/fm."+d[1];
+			return "common/banner/fm/"+id+"/fm."+d[1];
 		}else{
-			return AppConfig.getAliyunOssFolderPrefix()+"/common/banner/gd/"+id+"/gd."+d[1];
+			return "common/banner/gd/"+id+"/gd."+d[1];
 		}
 		
 	}
@@ -101,9 +100,9 @@ public class FileuploadService implements Beans {
 		
 		try {
 			if(fmItem.getInputStream().available()>0)
-				aliyunService.upload(assumeRole(0), fmItem.getInputStream(), "common/banner/fm/"+banner.getBannerId()+"/fm."+fmItem.getName().split("\\.")[1]);
+				aliyunService.upload(assumeRole(0), fmItem.getInputStream(), banner.getFmUrl());
 			if(gdItem.getInputStream().available()>0)
-				aliyunService.upload(assumeRole(0), gdItem.getInputStream(), "common/banner/gd/"+banner.getBannerId()+"/gd."+gdItem.getName().split("\\.")[1]);
+				aliyunService.upload(assumeRole(0), gdItem.getInputStream(), banner.getGdUrl());
 		} catch (Exception e) {
 		}
 		
