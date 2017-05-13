@@ -111,7 +111,7 @@
 			 success: function (json) {
 	            	if(json.code=="0"){
 	            		hideLoading();
-	            		window.location.reload();
+	            		getData(curPage)
 	            	}
 	            	else{
 	            		hideLoading();
