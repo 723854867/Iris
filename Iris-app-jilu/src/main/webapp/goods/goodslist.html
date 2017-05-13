@@ -250,7 +250,7 @@
 			 success: function (json) {
 	            	if(json.code=="0"){
 	            		hideLoading();
-	            		getData(1);
+	            		getData(curPage);
 	            	}
 	            	else{
 	            		hideLoading();
@@ -308,7 +308,7 @@
 			 success: function (json) {
 	            	if(json.code=="0"){
 	            		alert(json.desc);
-	            		getData(1);
+	            		getData(curPage);
 	            	}
 	            	else{
 	            		hideLoading();

@@ -166,7 +166,7 @@
 	            	if(json.code=="0"){
 	            		$('#versionModal').modal('hide');
 	            		alert(json.desc);
-	            		window.location.reload();
+	            		getData(curPage)
 	            	}
 	            	else{
 	            		hideLoading();
