@@ -51,6 +51,7 @@ public enum JiLuCode implements ICode {
 	
 	//后台
 	LABEL_NUM_EXIST(501,"label num is exist"),
+	EXCEL_IMPORT_FAIL(502,"excel import fail"),
 	
 	//第三方接口调用失败返回的code以及信息
 	UNIFIED_ORDER_ERROR(601,"{0}");

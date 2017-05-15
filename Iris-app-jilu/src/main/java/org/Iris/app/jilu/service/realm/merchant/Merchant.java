@@ -13,6 +13,7 @@ import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
+import org.Iris.app.jilu.common.bean.enums.CzMoneyType;
 import org.Iris.app.jilu.common.bean.enums.GoodsListType;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
@@ -46,7 +47,6 @@ import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.service.realm.wyyx.result.WyyxCreateAccountResultForm;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
-import org.Iris.app.jilu.storage.domain.CzLog;
 import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
@@ -1112,7 +1112,7 @@ public class Merchant implements Beans {
 	 * @param totalAmount
 	 * @return
 	 */
-	public String createAlipayOrder(String body, String subject, String outtradeno, float totalAmount) {
+	public String createAlipayOrder(String body, String subject, String outtradeno, int totalAmount) {
 		MemPayInfo payInfo = new MemPayInfo(memMerchant.getMerchantId(), outtradeno, PayType.ALIPAY.type(), subject, body, totalAmount);
 		memPayInfoMapper.insert(payInfo);
 		redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), outtradeno, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
@@ -1280,14 +1280,19 @@ public class Merchant implements Beans {
 	            // 交易日期  
 	            String purchase_date = item.getString("purchase_date_ms");  
 	            // 保存到数据库  
-	            CzLog czLog = czLogMapper.findByCzId(transaction_id);
-	            if(null == czLog){
-	            	czLog = new CzLog(transaction_id, memMerchant.getMerchantId(), (int)(Long.valueOf(purchase_date)/1000), product_id);
-	            	memMerchant.setMoney(memMerchant.getMoney()+czLog.getJb());
+	            MemPayInfo payInfo = memPayInfoMapper.findByOutRradeNo(transaction_id);
+	            if(null == payInfo){
+	            	int type = Integer.valueOf(product_id.substring(product_id.length()-1));
+	        		int jb = CzMoneyType.getMoney(type);
+	        		int money = jb/Integer.valueOf(Beans.backstageService.getConfigValue("czbl"));
+	            	payInfo = new MemPayInfo(memMerchant.getMerchantId(), transaction_id, PayType.APPLE.type(), "", "", money);
+	            	payInfo.setCzTime((int)(Long.valueOf(purchase_date)/1000));
+	            	payInfo.setStatus(1);
+	            	memMerchant.setMoney(memMerchant.getMoney()+payInfo.getTotalJb());
 	            	memMerchant.setUpdated(DateUtils.currentTime());
 	            	memMerchantMapper.update(memMerchant);
-	 	            czLogMapper.insert(czLog);
-	 	            redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+	            	memPayInfoMapper.insert(payInfo);
+	        		redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), transaction_id, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
 	            }else{
 	            	return Result.jsonError(JiLuCode.APPLE_PAY_NOT_EXIST);
 	            }
@@ -1363,7 +1368,7 @@ public class Merchant implements Beans {
 			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
 		if(memMerchant.getMoney() != money)
 			return Result.jsonError(JiLuCode.BALANCE_IS_ERROR);
-		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count);
+		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count,Integer.valueOf(labelBuyPrice));
 		memMerchant.setMoney(memMerchant.getMoney() - Integer.valueOf(labelBuyPrice)*count);
 		memMerchantMapper.update(memMerchant);
 		buyLabelLogMapper.insert(labelLog);

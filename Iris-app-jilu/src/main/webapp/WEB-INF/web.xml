@@ -94,4 +94,14 @@
 		<servlet-name>fileupload</servlet-name>
 		<url-pattern>/fileupload</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>download</servlet-name>
+		<servlet-class>org.Iris.app.jilu.web.servlet.DownloadServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>download</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
 </web-app>

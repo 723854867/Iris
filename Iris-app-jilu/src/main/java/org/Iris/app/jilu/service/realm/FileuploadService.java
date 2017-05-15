@@ -1,6 +1,7 @@
 package org.Iris.app.jilu.service.realm;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
@@ -126,9 +127,5 @@ public class FileuploadService implements Beans {
 //		}
 		
 		return Result.jsonSuccess();
-	}
-	public static void main(String[] args) {
-		String[] s = "2.jpg".split("\\.");
-		System.out.println(s.toString());
 	}
 }

@@ -92,8 +92,8 @@ public interface JiLuParams {
 	final IrisStrConst KEY							        = new IrisStrConst("key", 154);
 	final IrisFloatConst PRICE							    = new IrisFloatConst("price", 155);
 	final IrisStrConst PHONES 							    = new IrisStrConst("phones", 156);
-	final IrisIntConst START 								= new IrisIntConst("start", 157);
-	final IrisIntConst END 									= new IrisIntConst("end", 158);
+	final IrisIntConst START 								= new IrisIntConst("start", 0,157);
+	final IrisIntConst END 									= new IrisIntConst("end", 0,158);
 	final IrisStrConst OPERATION 							= new IrisStrConst("operation", 159);
 	final IrisIntConst STOCKTIME 							= new IrisIntConst("stockTime", 160);
 	final IrisStrConst INFO 								= new IrisStrConst("info", 161);
@@ -105,7 +105,7 @@ public interface JiLuParams {
 	final IrisStrConst BODY									= new IrisStrConst("body", 167);
 	final IrisStrConst SUBJECT								= new IrisStrConst("subject", 168);
 	final IrisStrConst OUTTRADENO							= new IrisStrConst("outtradeno", 169);
-	final IrisFloatConst TOTALAMOUNT						= new IrisFloatConst("totalAmount", 170);
+	final IrisIntConst TOTALAMOUNT							= new IrisIntConst("totalAmount", 170);
 	final IrisStrConst RECEIPT								= new IrisStrConst("receipt", 171);
 	final IrisStrConst PASSWORD								= new IrisStrConst("password", 172);
 	final IrisStrConst OLDPWD								= new IrisStrConst("oldPwd", 173);

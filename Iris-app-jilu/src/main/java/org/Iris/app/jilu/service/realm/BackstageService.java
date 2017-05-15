@@ -1,6 +1,5 @@
 package org.Iris.app.jilu.service.realm;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
+import org.Iris.app.jilu.common.bean.form.CzLogForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
@@ -22,6 +22,7 @@ import org.Iris.app.jilu.storage.domain.CmsBanner;
 import org.Iris.app.jilu.storage.domain.CmsVersion;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
@@ -31,10 +32,6 @@ import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.IrisSecurity;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
-
-import com.aliyun.oss.ClientException;
-import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.OSSObject;
 
 @Service
 public class BackstageService implements Beans{
@@ -453,6 +450,30 @@ public class BackstageService implements Beans{
 			e.printStackTrace();
 		}
 		return Result.jsonSuccess(banner);
+	}
+
+	/**
+	 * 吉币报表
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	public String getJbCzLog(int page, int pageSize,int startTime,int endTime) {
+		Map<String, Object> mapKV = new HashMap<String, Object>();
+		mapKV.put("start", (page-1)*pageSize);
+		mapKV.put("pageSize", pageSize);
+		mapKV.put("startTime", startTime);
+		mapKV.put("endTime", endTime);
+
+		long count = memPayInfoMapper.getJbCzLogCount(mapKV);
+		if(count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemPayInfo> list = memPayInfoMapper.getJbCzLog(mapKV);
+		List<CzLogForm> list2 = new ArrayList<>();
+		for(MemPayInfo memPayInfo : list){
+			list2.add(new CzLogForm(memPayInfo));
+		}
+		return Result.jsonSuccess(new Pager<>(count, list2));
 	}
 	
 }

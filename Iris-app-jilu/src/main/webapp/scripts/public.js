@@ -51,6 +51,10 @@ showLoading=function(text){
 hideLoading=function(){
 	$("#loading").modal("hide");
 }
+strToTime=function(str){
+	str = str.replace(/-/g,"/");
+	return (new Date(str)).getTime()/1000;
+}
 RemoveLoading=function(){
     $("#loading").remove();
     $(".modal-backdrop").remove();

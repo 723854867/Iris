@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/qrcode.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+</head>
+<body>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="main-nav nav nav-tabs nav-stacked" style="">
+				</ul>
+			</div>
+			<div class="col-md-10">
+			<h2 class="sub-header">打印标签</h2>
+			<div id="qrcode"></div>
+			<input type="text" id="getval" size="200"/> <button id="send">输入标签更换</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../scripts/menu.js"></script>
+	<script type="text/javascript">
+	window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 96,//设置宽高
+            height : 96
+        });
+        qrcode.makeCode("http://localhost:9005/jilu/backstage?action=label_info&labelId=2b33d3dba4b5484e80d883caafe14f48");
+        document.getElementById("send").onclick =function(){
+            qrcode.makeCode("http://localhost:9005/jilu/backstage?action=label_info&labelId="+document.getElementById("getval").value);
+        }
+    }
+</script>
+</body>
+</html>

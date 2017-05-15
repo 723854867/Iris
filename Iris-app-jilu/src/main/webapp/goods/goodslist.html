@@ -17,6 +17,68 @@
 <link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <link href="../css/dashboard.css" rel="stylesheet" />
 <link href="../css/menu.css" rel="stylesheet" />
+<style type="text/css">
+	/*a  upload */
+.a-upload {
+    padding: 4px 10px;
+    height: 30px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    color:blue;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none
+}
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+</style>
 </head>
 <body>
 	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
@@ -28,8 +90,13 @@
 				</ul>
 			</div>
 			<div class="col-md-10">
-			<h2 class="sub-header">产品列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button>
-			</h2>
+			<h2 class="sub-header">产品列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button></h2>
+			<div>
+				<a href="javascript:;" class="a-upload">
+	    			<input type="file" name="upload_goods" id="upload_goods" onchange="uploadGoods()">导入产品</font>
+				</a>
+				<a href = "/jilu/download"><font size="2px">导入产品模板下载</font></a>
+			</div>
 				<form role="form">
 				<div class="form-inline form-group">
 						<label for="zhName_">中文名称：</label> <input class="form-control"
@@ -300,25 +367,61 @@
 	}
 	
 	del = function(goodsId){
+		if (confirm("确定要删除该产品吗？")) {
+			$.ajax({
+				type:"post",
+				url: '/jilu/backstage',
+				data:{'action':"goods_remove",'goodsId':goodsId},
+				dataTyp:'json',
+				 success: function (json) {
+		            	if(json.code=="0"){
+		            		alert(json.desc);
+		            		getData(curPage);
+		            	}
+		            	else{
+		            		hideLoading();
+		            		alert(json.desc);
+		            	}
+		            },
+		            error: function () {
+		                alert("数据加载失败");
+		            }
+			});
+		}
+	}
+	
+	var file;
+	uploadGoods = function(){
+		var formData = new FormData();
+		formData.append("upload_goods", document.getElementById("upload_goods").files[0]);   
+		formData.append("action","upload_goods");
 		$.ajax({
-			type:"post",
-			url: '/jilu/backstage',
-			data:{'action':"goods_remove",'goodsId':goodsId},
-			dataTyp:'json',
-			 success: function (json) {
-	            	if(json.code=="0"){
-	            		alert(json.desc);
-	            		getData(curPage);
-	            	}
-	            	else{
-	            		hideLoading();
-	            		alert(json.desc);
-	            	}
-	            },
-	            error: function () {
-	                alert("数据加载失败");
-	            }
-		});
+            type: 'POST',
+            url: '/jilu/fileupload',
+            data: formData,
+            dataType: 'json',
+            async: false,
+            contentType: false,  
+            processData: false,
+            beforeSend: function () {
+				initLoading();
+				showLoading("导入中。。。");
+            },	
+            success: function (json) {
+            	RemoveLoading();
+            	if(json.code=="0"){
+            		alert("成功导入"+json.data+"条产品信息！");
+            		getData(1);
+            	}
+            	else {
+					alert(json.desc)
+				}
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+		$("#upload_goods").val('');
 	}
 
 </script>

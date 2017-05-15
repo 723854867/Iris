@@ -1,9 +1,12 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.Iris.app.jilu.storage.mybatis.Table;
+import org.Iris.util.lang.DateUtils;
 import org.apache.ibatis.jdbc.SQL;
+import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
 public class CfgGoodsSQLBuilder {
 
@@ -30,6 +33,33 @@ public class CfgGoodsSQLBuilder {
 				VALUES("updated", 				"#{updated}");
 			}
 		}.toString();
+	}
+	public String batchInsert(StrictMap<ArrayList<ArrayList<Object>>> map){
+		int time = DateUtils.currentTime();
+		ArrayList<ArrayList<Object>> rowList = map.get("collection");
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
+				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+		for (int i = 2;i<rowList.size();i++) {
+			stringBuilder.append("(");
+			for(int j = 0;j<13;j++){
+				if(j < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(j)+"',");
+				}
+				else{
+					if(j==8)//weight
+						stringBuilder.append("0,");
+					else if(j==12)//unit_price
+						stringBuilder.append("1,");
+					else
+						stringBuilder.append("'',");
+				}
+					
+			}
+			stringBuilder.append("0,'公共库',"+time+","+time+"),");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		return stringBuilder.toString();
 	}
 	
 	public String update() { 
@@ -146,5 +176,4 @@ public class CfgGoodsSQLBuilder {
 			builder.append("and goods_code like '%"+map.get("goodsCode")+"%' ");
 		return builder.toString();
 	}
-	
 }

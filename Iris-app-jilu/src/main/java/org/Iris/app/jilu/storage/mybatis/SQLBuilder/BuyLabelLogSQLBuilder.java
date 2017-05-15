@@ -13,6 +13,7 @@ public class BuyLabelLogSQLBuilder {
 				INSERT_INTO(Table.LOG_BUY_LABEL.mark());
 				VALUES("merchant_id", "#{merchantId}");
 				VALUES("count", "#{count}");
+				VALUES("price", "#{price}");
 				VALUES("created", "#{created}");
 			}
 		}.toString();

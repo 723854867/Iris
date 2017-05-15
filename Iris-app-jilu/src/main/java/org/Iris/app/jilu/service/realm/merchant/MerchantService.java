@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
@@ -1063,10 +1064,11 @@ public class MerchantService extends RedisCache {
 		if(memPayInfo != null){
 			int time = DateUtils.currentTime();
 			memPayInfo.setStatus(PayOrderStatus.PAY_SUCCESS.status());
+			memPayInfo.setCzTime(time);
 			memPayInfo.setUpdated(time);
 			
 			MemMerchant memMerchant = getMerchantById(memPayInfo.getMerchantId()).getMemMerchant();
-			memMerchant.setMoney(memMerchant.getMoney() + (int)(memPayInfo.getTotalAmount()*100));
+			memMerchant.setMoney(memMerchant.getMoney() + memPayInfo.getTotalJb());
 			memMerchant.setUpdated(time);
 			
 			memPayInfoMapper.update(memPayInfo);

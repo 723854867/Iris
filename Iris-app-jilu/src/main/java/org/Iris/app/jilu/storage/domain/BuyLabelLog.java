@@ -7,13 +7,15 @@ public class BuyLabelLog {
 	private long id;
 	private long merchantId;
 	private long count;
+	private int price;
 	private int created;//申请购买时间
 	private int status;
 	private int sendTime;//发货时间
 	
-	public BuyLabelLog(long merchantId, long count) {
+	public BuyLabelLog(long merchantId, long count,int price) {
 		this.merchantId = merchantId;
 		this.count = count;
+		this.price = price;
 		this.created = DateUtils.currentTime();
 	}
 
@@ -42,6 +44,14 @@ public class BuyLabelLog {
 
 	public void setCount(long count) {
 		this.count = count;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
 
 	public int getCreated() {

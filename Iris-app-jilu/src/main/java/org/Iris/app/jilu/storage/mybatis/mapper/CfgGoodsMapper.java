@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,4 +51,7 @@ public interface CfgGoodsMapper {
 	
 	@SelectProvider(type = CfgGoodsSQLBuilder.class, method = "getCount")
 	long getCount(Map<String, Object> map);
+
+	@InsertProvider(type = CfgGoodsSQLBuilder.class, method = "batchInsert")
+	long batchInsert(ArrayList<ArrayList<Object>> rowlist);
 }

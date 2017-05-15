@@ -1,5 +1,6 @@
 package org.Iris.app.jilu.storage.domain;
 
+import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.redis.RedisHashBean;
 import org.Iris.util.lang.DateUtils;
@@ -17,15 +18,17 @@ public class MemPayInfo implements RedisHashBean{
 	private int payType;
 	private String subject;
 	private String body;
-	private float totalAmount;
+	private int totalAmount;
+	private int totalJb;
 	private int status;
+	private int czTime;
 	private int created;
 	private int updated;
 	
 	public MemPayInfo() {
 	}
 
-	public MemPayInfo(long merchantId, String outTradeNo, int payType, String subject, String body, float totalAmount) {
+	public MemPayInfo(long merchantId, String outTradeNo, int payType, String subject, String body, int totalAmount) {
 		int time = DateUtils.currentTime();
 		this.merchantId = merchantId;
 		this.outTradeNo = outTradeNo;
@@ -33,6 +36,7 @@ public class MemPayInfo implements RedisHashBean{
 		this.subject = subject;
 		this.body = body;
 		this.totalAmount = totalAmount;
+		this.totalJb = totalAmount*Integer.valueOf(Beans.backstageService.getConfigValue("czbl"));
 		this.created = time;
 		this.updated = time;
 	}
@@ -85,12 +89,21 @@ public class MemPayInfo implements RedisHashBean{
 		this.body = body;
 	}
 
-	public float getTotalAmount() {
+
+	public int getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(float totalAmount) {
+	public void setTotalAmount(int totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public int getTotalJb() {
+		return totalJb;
+	}
+
+	public void setTotalJb(int totalJb) {
+		this.totalJb = totalJb;
 	}
 
 	public int getStatus() {
@@ -115,6 +128,14 @@ public class MemPayInfo implements RedisHashBean{
 
 	public void setUpdated(int updated) {
 		this.updated = updated;
+	}
+
+	public int getCzTime() {
+		return czTime;
+	}
+
+	public void setCzTime(int czTime) {
+		this.czTime = czTime;
 	}
 
 	@Override
