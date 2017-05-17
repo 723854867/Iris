@@ -37,7 +37,11 @@ public enum IgtPushType {
 	/**
 	 * 订单备注修改
 	 */
-	ORDER_MEMO_EDIT(7,"吉鹿消息","订单{0}的备注信息更新了");
+	ORDER_MEMO_EDIT(7,"吉鹿消息","订单{0}的备注信息更新了"),
+	/**
+	 * 推送公告
+	 */
+	BANNER_PUBLISH(8,"吉鹿消息","有一条新公告发布");
 	
 	private int type;
 	private String title;

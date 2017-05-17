@@ -10,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.form.AssumeRoleForm;
 import org.Iris.app.jilu.common.bean.form.CzLogForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
+import org.Iris.app.jilu.service.realm.igt.domain.PushBannerParam;
+import org.Iris.app.jilu.service.realm.igt.domain.PushOrderTransformParam;
+import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
 import org.Iris.app.jilu.storage.domain.BgUser;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
@@ -30,6 +34,7 @@ import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.IrisSecurity;
+import org.Iris.util.common.JsonAppender;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
@@ -474,6 +479,12 @@ public class BackstageService implements Beans{
 			list2.add(new CzLogForm(memPayInfo));
 		}
 		return Result.jsonSuccess(new Pager<>(count, list2));
+	}
+
+	public String bannerPush(long id) {
+		CmsBanner banner = cmsBannerMapper.getBannerById(id);
+		igtService.pushToApp(new TransmissionInfo(new PushBannerParam(banner), IgtPushType.BANNER_PUBLISH));
+		return Result.jsonSuccess();
 	}
 	
 }

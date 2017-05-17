@@ -113,6 +113,7 @@
                 	tr+="<td>";
                 	tr+="<a href='banneredit.html?id="+array['bannerId']+"' class='btn btn-info btn-xs'>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr+="<a "+" class='btn btn-info btn-xs' onclick='publish("+array['bannerId']+")'>"+publishbutton+"</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                	tr+="<a "+" class='btn btn-info btn-xs' onclick='push("+array['bannerId']+")'>推送</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr+="<a "+" class='btn btn-danger btn-xs' onclick='deleteData("+array['bannerId']+")'>删除</a>&nbsp;&nbsp;&nbsp;&nbsp;";
                 	tr +="</td>";
                 	
@@ -171,6 +172,27 @@
 	            },
 	            error: function () {
 	                alert("数据加载失败");
+	            }
+	        });
+		}
+	}
+	
+	push = function(id){
+		if(confirm("确定要推送这条数据吗？")){
+			$.ajax({
+	            type: 'POST',
+	            url: '/jilu/backstage',
+	            data: { 'id': id , 'action': 'banner_push' },
+	            dataType: 'json',
+	            beforeSend: function () {
+	                //$("#dvList ul").append("<li id='loading'>loading...</li>");//显示加载动画
+	            },
+	            success: function (json) {
+	            	getData(curPage);
+	            	alert("推送成功");
+	            },
+	            error: function () {
+	                alert("推送失败");
 	            }
 	        });
 		}
