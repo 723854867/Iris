@@ -21,6 +21,7 @@ public enum Table {
 	MEM_CID("mem_cid"),
 	MEM_ACCID("mem_accid"),
 	MEM_LABEL_BIND("mem_label_bind"),
+	MEM_JB_DETAIL("mem_jb_detail"),
 	
 	RELATION("pub_relation"),
 	LOG_STOCK_STORE("log_stock_store"),

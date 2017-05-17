@@ -23,6 +23,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemJbDetailMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemLabelBindMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
@@ -70,6 +71,7 @@ public interface Beans {
 	final UpdateStoreLogMapper updateStoreLogMapper = SpringContextUtil.getBean("updateStoreLogMapper", UpdateStoreLogMapper.class);
 	final HttpProxy httpProxy = SpringContextUtil.getBean("httpProxy", HttpProxy.class);
 	final MemPayInfoMapper memPayInfoMapper = SpringContextUtil.getBean("memPayInfoMapper", MemPayInfoMapper.class);
+	final MemJbDetailMapper memJbDetailMapper = SpringContextUtil.getBean("memJbDetailMapper", MemJbDetailMapper.class);
 	
 	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
 	final WyyxService wyyxService = SpringContextUtil.getBean("wyyxService", WyyxService.class);

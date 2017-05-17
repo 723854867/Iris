@@ -15,6 +15,7 @@ public class CfgGoodsForm {
 	private String goodsCode;
 	private String zhName;
 	private float unitPrice;
+	private String classification;
 	private String source;//目前暂时只有商户 如果是商户则存储商户id
 	private String merchantName;//来源名字
 	
@@ -27,6 +28,7 @@ public class CfgGoodsForm {
 		this.zhName = goods.getZhName();
 		this.unitPrice = goods.getUnitPrice();
 		this.source = goods.getSource();
+		this.classification = goods.getClassification();
 		this.merchantName = goods.getMerchantName();
 	}
 	
@@ -74,6 +76,12 @@ public class CfgGoodsForm {
 	}
 	public void setMerchantName(String merchantName) {
 		this.merchantName = merchantName;
+	}
+	public String getClassification() {
+		return classification;
+	}
+	public void setClassification(String classification) {
+		this.classification = classification;
 	}
 	
 	

@@ -13,6 +13,7 @@ import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+import org.Iris.app.jilu.common.bean.enums.JbDetailType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.OrderStatus;
 import org.Iris.app.jilu.common.bean.enums.PayOrderStatus;
@@ -20,6 +21,7 @@ import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.model.AccountType;
+import org.Iris.app.jilu.service.realm.BackstageService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderReceiveParam;
@@ -30,6 +32,7 @@ import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
+import org.Iris.app.jilu.storage.domain.MemJbDetail;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
@@ -41,6 +44,7 @@ import org.Iris.app.jilu.storage.domain.UpdateStoreLog;
 import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemJbDetailMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
@@ -65,34 +69,38 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mysql.cj.api.io.PacketReceivedTimeHolder;
 
 @Service
-public class MerchantService extends RedisCache {
+public class MerchantService extends RedisCache implements Beans{
 	
-	@Resource
-	private JiLuLuaOperate luaOperate;
-	@Resource
-	private MemAccountMapper memAccountMapper;
-	@Resource
-	private MemMerchantMapper memMerchantMapper;
-	@Resource
-	private MemOrderMapper memOrderMapper;
-	@Resource
-	private MemOrderGoodsMapper memOrderGoodsMapper;
-	@Resource
-	private MemOrderPacketMapper memOrderPacketMapper;
-	@Resource
-	private MemOrderStatusMapper memOrderStatusMapper;
-	@Resource
-	private CfgGoodsMapper cfgGoodsMapper;
-	@Resource
-	private MemGoodsStoreMapper memGoodsStoreMapper;
-	@Resource
-	private CourierService courierService;
-	@Resource
-	private IgtService igtService;
-	@Resource
-	private StockGoodsStoreLogMapper stockGoodsStoreLogMapper;
-	@Resource
-	private MemPayInfoMapper memPayInfoMapper;
+//	@Resource
+//	private JiLuLuaOperate luaOperate;
+//	@Resource
+//	private MemAccountMapper memAccountMapper;
+//	@Resource
+//	private MemMerchantMapper memMerchantMapper;
+//	@Resource
+//	private MemOrderMapper memOrderMapper;
+//	@Resource
+//	private MemOrderGoodsMapper memOrderGoodsMapper;
+//	@Resource
+//	private MemOrderPacketMapper memOrderPacketMapper;
+//	@Resource
+//	private MemOrderStatusMapper memOrderStatusMapper;
+//	@Resource
+//	private CfgGoodsMapper cfgGoodsMapper;
+//	@Resource
+//	private MemGoodsStoreMapper memGoodsStoreMapper;
+//	@Resource
+//	private CourierService courierService;
+//	@Resource
+//	private IgtService igtService;
+//	@Resource
+//	private StockGoodsStoreLogMapper stockGoodsStoreLogMapper;
+//	@Resource
+//	private MemPayInfoMapper memPayInfoMapper;
+//	@Resource
+//	private BackstageService backstageService;
+//	@Resource
+//	private MemJbDetail memJbDetail;
 	/**
 	 * 通过账号获取商户
 	 * 
@@ -224,6 +232,10 @@ public class MerchantService extends RedisCache {
 	 */
 	@Transactional
 	public String createOrder(MemCustomer customer,List<MemOrderGoods> list,String memo,Merchant merchant) {
+		//判断创建订单是否要钱
+		int orderCreatePrice = Integer.valueOf(backstageService.getConfigValue("orderCreatePrice"));
+		if(orderCreatePrice != 0 && merchant.getMemMerchant().getMoney() < orderCreatePrice)
+			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
 		String orderId = OrderNumberUtil.getRandomOrderId(4);
@@ -254,7 +266,13 @@ public class MerchantService extends RedisCache {
 		MemMerchant memMerchant = merchant.getMemMerchant();
 		MemOrder order = BeanCreator.newMemOrder(orderId, memMerchant.getMerchantId(), memMerchant.getName(),memMerchant.getAddress(),
 				customer.getCustomerId(), customer.getName(), customer.getMobile(), customer.getAddress(),memo,0);
-		
+		if(orderCreatePrice !=0){
+			memMerchant.setMoney(memMerchant.getMoney()-orderCreatePrice);
+			memMerchant.setUpdated(DateUtils.currentTime());
+			MemJbDetail memJbDetail = new MemJbDetail(memMerchant.getMerchantId(),orderCreatePrice,DateUtils.currentTime(),JbDetailType.ORDER.type(),orderId);
+			memMerchantMapper.update(memMerchant);
+			memJbDetailMapper.insert(memJbDetail);
+		}
 		memOrderMapper.insert(order);
 		memOrderGoodsMapper.batchInsert(list);
 		if(addStoreList.size()>0)
@@ -265,6 +283,9 @@ public class MerchantService extends RedisCache {
 		MemOrderStatus status = new MemOrderStatus(orderId);
 		memOrderStatusMapper.insert(status);
 		
+		if(orderCreatePrice !=0){
+			redisOperate.hmset(memMerchant.redisKey(), memMerchant);
+		}
 		redisOperate.hmset(order.redisKey(), order);
 		redisOperate.batchHmset(list);
 		redisOperate.hmset(MerchantKeyGenerator.merchantOrderStatusDataKey(orderId), status);
@@ -519,9 +540,25 @@ public class MerchantService extends RedisCache {
 	@Transactional
 	public String receiveOrder(List<MemOrderGoods> receiveGoodsList, String orderId, String superOrderId,
 			long merchantId,Merchant merchant) {
+		//判断创建订单是否要钱
+		int orderCreatePrice = Integer.valueOf(backstageService.getConfigValue("orderCreatePrice"));
+		int orderTransformPrice = Integer.valueOf(backstageService.getConfigValue("orderTransformPrice"));
+		if(orderCreatePrice != 0 && orderTransformPrice !=0 && merchant.getMemMerchant().getMoney() < orderTransformPrice)
+			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
+		
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
 		int time= DateUtils.currentTime();
+		//扣除创建转单金额
+		MemMerchant memMerchant = merchant.getMemMerchant();
+		if(orderCreatePrice !=0 && orderTransformPrice !=0){
+			memMerchant.setMoney(memMerchant.getMoney()-orderTransformPrice);
+			memMerchant.setUpdated(DateUtils.currentTime());
+			MemJbDetail memJbDetail = new MemJbDetail(memMerchant.getMerchantId(),orderTransformPrice,DateUtils.currentTime(),JbDetailType.ORDER.type(),orderId);
+			memMerchantMapper.update(memMerchant);
+			memJbDetailMapper.insert(memJbDetail);
+		}
+		
 		// 更新子订单状态
 		MemOrder order = redisOperate.hgetAll(MerchantKeyGenerator.merchantOrderDataKey(merchantId, orderId), new MemOrder());
 		order.setStatus(0);
@@ -620,7 +657,7 @@ public class MerchantService extends RedisCache {
 		redisOperate.batchHmset(updateList);
 		redisOperate.batchHmset(addStoreList);
 		redisOperate.batchHmset(updateStoreList);
-		
+		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
 		
 		//获取接收转单后订单信息返回给客户端
 		MemOrder superOrder = merchant.getMerchantOrderById(order.getSuperMerchantId(), superOrderId);
@@ -1070,6 +1107,10 @@ public class MerchantService extends RedisCache {
 			MemMerchant memMerchant = getMerchantById(memPayInfo.getMerchantId()).getMemMerchant();
 			memMerchant.setMoney(memMerchant.getMoney() + memPayInfo.getTotalJb());
 			memMerchant.setUpdated(time);
+			
+        	//充值记录明细
+    		MemJbDetail memJbDetail = new MemJbDetail(memMerchant.getMerchantId(), memPayInfo.getTotalJb(), time, JbDetailType.CZ.type(), null);
+    		memJbDetailMapper.insert(memJbDetail);
 			
 			memPayInfoMapper.update(memPayInfo);
 			memMerchantMapper.update(memMerchant);

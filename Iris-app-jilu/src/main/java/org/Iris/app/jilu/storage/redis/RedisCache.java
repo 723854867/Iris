@@ -1,15 +1,13 @@
 package org.Iris.app.jilu.storage.redis;
 
-import javax.annotation.Resource;
-
+import org.Iris.app.jilu.common.Beans;
 import org.Iris.redis.RedisHashBean;
-import org.Iris.redis.operate.RedisOperate;
 import org.Iris.util.reflect.BeanUtils;
 
-public abstract class RedisCache {
+public abstract class RedisCache implements Beans{
 	
-	@Resource
-	protected RedisOperate redisOperate;
+//	@Resource
+//	protected RedisOperate redisOperate;
 	
 	public <T extends RedisHashBean> T getHashBean(T bean) {
 		return redisOperate.hgetAll(bean.redisKey(), bean);

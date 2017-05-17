@@ -16,6 +16,7 @@ import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.CzMoneyType;
 import org.Iris.app.jilu.common.bean.enums.GoodsListType;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
+import org.Iris.app.jilu.common.bean.enums.JbDetailType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
 import org.Iris.app.jilu.common.bean.enums.MerchantStatusMod;
 import org.Iris.app.jilu.common.bean.enums.OrderByType;
@@ -52,6 +53,7 @@ import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
+import org.Iris.app.jilu.storage.domain.MemJbDetail;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemOrder;
@@ -1288,6 +1290,10 @@ public class Merchant implements Beans {
 	            	payInfo = new MemPayInfo(memMerchant.getMerchantId(), transaction_id, PayType.APPLE.type(), "", "", money);
 	            	payInfo.setCzTime((int)(Long.valueOf(purchase_date)/1000));
 	            	payInfo.setStatus(1);
+	            	//充值记录明细
+	        		MemJbDetail memJbDetail = new MemJbDetail(memMerchant.getMerchantId(), jb, payInfo.getCzTime(), JbDetailType.CZ.type(), null);
+	        		memJbDetailMapper.insert(memJbDetail);
+	        		
 	            	memMerchant.setMoney(memMerchant.getMoney()+payInfo.getTotalJb());
 	            	memMerchant.setUpdated(DateUtils.currentTime());
 	            	memMerchantMapper.update(memMerchant);
@@ -1370,6 +1376,9 @@ public class Merchant implements Beans {
 			return Result.jsonError(JiLuCode.BALANCE_IS_ERROR);
 		BuyLabelLog labelLog = new BuyLabelLog(getMemMerchant().getMerchantId(), count,Integer.valueOf(labelBuyPrice));
 		memMerchant.setMoney(memMerchant.getMoney() - Integer.valueOf(labelBuyPrice)*count);
+		//记录购买标签明细
+		MemJbDetail memJbDetail = new MemJbDetail(memMerchant.getMerchantId(), count*Integer.valueOf(labelBuyPrice), DateUtils.currentTime(), JbDetailType.BUE_LABEL.type(), null);
+		memJbDetailMapper.insert(memJbDetail);
 		memMerchantMapper.update(memMerchant);
 		buyLabelLogMapper.insert(labelLog);
 		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
@@ -1409,6 +1418,20 @@ public class Merchant implements Beans {
 		memLabelBind.setBindTime(time);
 		memLabelBindMapper.update(memLabelBind);
 		return Result.jsonSuccess(memLabelBind);
+	}
+
+	/**
+	 * 收支明细
+	 * @param page
+	 * @param pageSize
+	 * @return
+	 */
+	public String getJbDetail(int page, int pageSize) {
+		long count = memJbDetailMapper.getJbDetailCount(memMerchant.getMerchantId());
+		if(count == 0)
+			return Result.jsonSuccess(Pager.EMPTY);
+		List<MemJbDetail> list = memJbDetailMapper.getJbDetail(memMerchant.getMerchantId(), (page-1)*pageSize, pageSize);
+		return Result.jsonSuccess(new Pager<MemJbDetail>(count, list));
 	}
 
 }
