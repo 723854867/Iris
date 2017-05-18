@@ -1211,7 +1211,7 @@ public class Merchant implements Beans {
 	 * @param goodsId
 	 * @return
 	 */
-	public CfgGoods getGoodsById(long goodsId) {
+	public static CfgGoods getGoodsById(long goodsId) {
 		String key = CommonKeyGenerator.getMemGoodsKey(goodsId);
 		CfgGoods goods = redisOperate.hgetAll(key, new CfgGoods(goodsId));
 		if (goods != null)

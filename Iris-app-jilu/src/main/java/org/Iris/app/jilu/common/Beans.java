@@ -3,6 +3,7 @@ package org.Iris.app.jilu.common;
 import org.Iris.app.jilu.service.realm.BackstageService;
 import org.Iris.app.jilu.service.realm.CommonService;
 import org.Iris.app.jilu.service.realm.FileuploadService;
+import org.Iris.app.jilu.service.realm.MerchantWebService;
 import org.Iris.app.jilu.service.realm.aliyun.AliyunService;
 import org.Iris.app.jilu.service.realm.courier.CourierService;
 import org.Iris.app.jilu.service.realm.igt.IgtService;
@@ -54,6 +55,7 @@ public interface Beans {
 	final DistributeLock distributeLock = SpringContextUtil.getBean("distributeLock", DistributeLock.class);
 	final CourierService courierService = SpringContextUtil.getBean("courierService", CourierService.class);
 	final MerchantService merchantService = SpringContextUtil.getBean("merchantService", MerchantService.class);
+	final MerchantWebService merchantWebService = SpringContextUtil.getBean("merchantWebService", MerchantWebService.class);
 	
 	final MemOrderMapper memOrderMapper = SpringContextUtil.getBean("memOrderMapper", MemOrderMapper.class);
 	final MemMerchantMapper memMerchantMapper = SpringContextUtil.getBean("memMerchantMapper", MemMerchantMapper.class);

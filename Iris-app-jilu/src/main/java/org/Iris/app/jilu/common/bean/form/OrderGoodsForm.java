@@ -3,6 +3,8 @@ package org.Iris.app.jilu.common.bean.form;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.MemOrderGoods;
 
 public class OrderGoodsForm {
@@ -11,6 +13,7 @@ public class OrderGoodsForm {
 	private long goodsId;
 	private String orderId;
 	private String goodsName;
+	private String classification;
 	private long count;
 	private String unitPrice;
 	
@@ -19,6 +22,7 @@ public class OrderGoodsForm {
 		this.goodsId = memOrderGoods.getGoodsId();
 		this.orderId = memOrderGoods.getOrderId();
 		this.goodsName = memOrderGoods.getGoodsName();
+		this.classification = Merchant.getGoodsById(goodsId).getClassification();
 		this.count = memOrderGoods.getCount();
 		this.unitPrice = memOrderGoods.getUnitPrice();
 	}
@@ -70,4 +74,13 @@ public class OrderGoodsForm {
 	public void setUnitPrice(String unitPrice) {
 		this.unitPrice = unitPrice;
 	}
+
+	public String getClassification() {
+		return classification;
+	}
+
+	public void setClassification(String classification) {
+		this.classification = classification;
+	}
+	
 }

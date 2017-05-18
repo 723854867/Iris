@@ -452,5 +452,6 @@
     	<module>Iris-igt</module>
     	<module>Iris-app-pay</module>
     	<module>Iris.ueditor</module>
-	</modules>
+    <module>Iris-web-merchant</module>
+  </modules>
 </project>

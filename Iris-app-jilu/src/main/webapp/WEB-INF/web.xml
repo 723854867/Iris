@@ -69,6 +69,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>mweb</servlet-name>
+		<servlet-class>org.Iris.app.jilu.web.servlet.MerchantWebServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mweb</servlet-name>
+		<url-pattern>/mweb</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>alipay</servlet-name>
 		<servlet-class>org.Iris.app.jilu.web.servlet.AliPayServlet</servlet-class>
 	</servlet>
