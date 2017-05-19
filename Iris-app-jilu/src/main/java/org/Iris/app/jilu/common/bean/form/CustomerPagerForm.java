@@ -7,6 +7,7 @@ public class CustomerPagerForm {
 	private long customerId;
 	private String name;
 	private String mobile;
+	private String address;
 	private String purchaseSum;
 	private int lastPurchaseTime;
 	
@@ -14,6 +15,7 @@ public class CustomerPagerForm {
 		this.customerId = customer.getCustomerId();
 		this.name = customer.getName();
 		this.mobile = customer.getMobile();
+		this.address = customer.getAddress();
 		this.purchaseSum = customer.getPurchaseSum();
 		this.lastPurchaseTime = customer.getLastPurchaseTime();
 	}
@@ -57,4 +59,13 @@ public class CustomerPagerForm {
 	public void setLastPurchaseTime(int lastPurchaseTime) {
 		this.lastPurchaseTime = lastPurchaseTime;
 	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }
