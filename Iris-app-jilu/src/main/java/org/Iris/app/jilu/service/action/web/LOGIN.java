@@ -25,6 +25,6 @@ public class LOGIN extends BackstageAction {
 			break;
 		default:
 		}
-		return commonService.login(type, account, session.getKVParam(JiLuParams.CAPTCHA));
+		return merchantWebService.login(type, account, session.getKVParam(JiLuParams.CAPTCHA),session.getRequest());
 	}
 }

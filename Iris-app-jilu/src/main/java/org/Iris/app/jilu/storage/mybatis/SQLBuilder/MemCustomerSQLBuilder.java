@@ -1,9 +1,12 @@
 package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.Table;
+import org.Iris.util.lang.DateUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.defaults.DefaultSqlSession.StrictMap;
 
@@ -95,5 +98,26 @@ public class MemCustomerSQLBuilder {
 	public String getCountByNameOrPhone(Map<String, Object> para){
 		return "select count(1) from "+Table.MEM_CUSTOMER.mark()+" where merchant_id = #{merchantId} "
 				+ "and (name like '%"+para.get("value")+"%' or mobile like '%"+para.get("value")+"%')";
+	}
+	
+	public String getMerchantCustomersByMap(Map<String, Object> map){
+		StringBuilder builder = new StringBuilder();
+		builder.append("select * from "+Table.MEM_CUSTOMER.mark()+" where merchant_id = "+map.get("merchantId")+" ");
+		if(!map.get("name").equals(""))
+			builder.append("and name like '%"+map.get("name")+"%' ");
+		if(!map.get("mobile").equals(""))
+			builder.append("and mobile like '%"+map.get("mobile")+"%' ");
+		builder.append("order by updated desc LIMIT "+map.get("start")+","+map.get("pageSize")+"");
+		return builder.toString();
+	}
+	
+	public String getMerchantCustomersCount(Map<String, Object> map){
+		StringBuilder builder = new StringBuilder();
+		builder.append("select count(1) from "+Table.MEM_CUSTOMER.mark()+" where merchant_id = "+map.get("merchantId")+" ");
+		if(!map.get("name").equals(""))
+			builder.append("and name like '%"+map.get("name")+"%' ");
+		if(!map.get("mobile").equals(""))
+			builder.append("and mobile like '%"+map.get("mobile")+"%' ");
+		return builder.toString();
 	}
 }

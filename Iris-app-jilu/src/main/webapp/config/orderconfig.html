@@ -43,6 +43,10 @@
 				<span><input id="orderCreatePrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  value="0" /></span>
 				<button type="button" class="btn btn-primary" onclick="save('orderCreatePrice')">保存</button>
 				</h4>
+				<h4><label>接收转单价格(吉币)</label>
+				<span><input id="orderTransformPrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')"  value="0" /></span>
+				<button type="button" class="btn btn-primary" onclick="save('orderTransformPrice')">保存</button>
+				</h4>
 				<h4><label>购买标签价格(吉币)</label>
 				<span><input id="labelBuyPrice" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" value="0" /></span>
 				<button type="button" class="btn btn-primary" onclick="save('labelBuyPrice') ">保存</button>
@@ -122,6 +126,8 @@
 							$('#switch-order-transform').bootstrapSwitch('state', false);
 					 }else if(array.key == 'orderCreatePrice'){
 						 $('#orderCreatePrice').val(array.value);
+					 }else if(array.key == 'orderTransformPrice'){
+						 $('#orderTransformPrice').val(array.value);
 					 }else if(array.key == 'labelBuyPrice'){
 						 $('#labelBuyPrice').val(array.value);
 					 }else if(array.key == 'czbl'){

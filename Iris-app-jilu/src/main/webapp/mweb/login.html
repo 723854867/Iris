@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>商家后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/public.js"></script>
+<script type="text/javascript"
+	src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js"
+	charset="UTF-8"></script>
+<script type="text/javascript"
+	src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js"
+	charset="UTF-8"></script>
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+<link href="../css/signin.css" rel="stylesheet" />
+</head>
+<body>
+	<form class="form-signin" method="post">
+		<h2 class="form-signin-heading">后台登陆</h2>
+		<label for="type" class="sr-only">选择登录类型</label>
+		<select id="type" class="form-control">
+			<option value="0">手机</option>
+			<option value="0">邮箱</option>
+		</select>
+		<label for="account" class="sr-only">帐号</label> <input
+			type="text" id="account" name="account" class="form-control"
+			placeholder="输入帐号" required="required"> 
+		<label for="captcha" class="sr-only">验证码</label> <input type="text" id="captcha"
+			name="captcha" class="form-control" placeholder="输入验证码"
+			required="required"><a href="#" onclick="getCaptcha()">获取验证码</a>
+		<button class="btn btn-lg btn-primary btn-block" type="button"
+			id="login">登陆</button>
+	</form>
+
+	<script type="text/javascript">
+		window.onload = function() {
+			if (!window.applicationCache) {
+				document.write("你的浏览器版本太低，请升级你的浏览器，至少IE9+");
+			}
+		}
+		$(document).keydown(function(event) {
+			if (event.keyCode == 13) { //绑定回车 
+				$('#login').click(); //自动触发登录按钮 
+			}
+		});
+
+		$(document).ready(
+			function() {
+				$("#login").bind("click",function() {
+					var account = $("#account").val();
+					var type = $("#type option:selected").val();
+					var captcha = $("#captcha").val();
+					if(type==0){
+						data = {
+								'action' : 'login',
+								'mobile' : account,
+								'captcha' : captcha,
+								'type' : type
+							}
+					}
+					else{
+						data = {
+								'action' : 'login',
+								'email' : account,
+								'captcha' : captcha,
+								'type' : type
+							}
+					}
+						$.ajax({
+							type : 'POST',
+							url : '/jilu/mweb',
+							data : data,
+							dataType : 'json',
+							success : function(
+									json) {
+								if (json["code"] == 0) {
+									window.location.href = 'index.html';
+								} else
+									alert(json["desc"]);
+							},
+							error : function() {
+								alert("数据加载失败");
+							}
+						});
+					});
+			});
+		getCaptcha = function(){
+			var account = $("#account").val();
+			var type = $("#type option:selected").val();
+			var data;
+			if(type==0){
+				data = {
+						'action' : 'captcha_get',
+						'mobile' : account,
+						'type' : type
+					}
+			}
+			else{
+				data = {
+						'action' : 'captcha_get',
+						'email' : account,
+						'type' : type
+					}
+			}
+			$.ajax({
+				type : 'POST',
+				url : '/jilu/mweb',
+				data : data,
+				dataType : 'json',
+				success : function(json) {
+					if (json["code"] == 0) {
+						alert(json.data)
+					} else
+						alert(json["desc"]);
+				},
+				error : function() {
+					alert("数据加载失败");
+				}
+			});
+		}
+	</script>
+</body>

@@ -1,7 +1,7 @@
 package org.Iris.app.jilu.service.action.web;
 
 import org.Iris.app.jilu.common.model.AccountType;
-import org.Iris.app.jilu.service.action.CommonAction;
+import org.Iris.app.jilu.service.action.BackstageAction;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.app.jilu.web.session.IrisSession;
 
@@ -10,7 +10,7 @@ import org.Iris.app.jilu.web.session.IrisSession;
  * 
  * @author ahab
  */
-public class CAPTCHA_GET extends CommonAction {
+public class CAPTCHA_GET extends BackstageAction {
 	
 	@Override
 	protected String execute0(IrisSession session) {

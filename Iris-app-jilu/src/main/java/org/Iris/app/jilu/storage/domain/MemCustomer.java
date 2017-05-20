@@ -3,7 +3,7 @@ package org.Iris.app.jilu.storage.domain;
 import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.util.common.SerializeUtil;
 
-public class MemCustomer {
+public class MemCustomer{
 
 	private long customerId;
 	private long merchantId;

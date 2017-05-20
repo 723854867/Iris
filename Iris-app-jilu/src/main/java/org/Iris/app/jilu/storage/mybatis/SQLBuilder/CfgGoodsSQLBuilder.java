@@ -3,6 +3,7 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import java.util.ArrayList;
 import java.util.Map;
 
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.Table;
 import org.Iris.util.lang.DateUtils;
 import org.apache.ibatis.jdbc.SQL;
@@ -57,6 +58,36 @@ public class CfgGoodsSQLBuilder {
 					
 			}
 			stringBuilder.append("0,'公共库',"+time+","+time+"),");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		return stringBuilder.toString();
+	}
+	
+	public String batchInsertByMerchant(Map<String, Object> map){
+		int time = DateUtils.currentTime();
+		@SuppressWarnings("unchecked")
+		ArrayList<ArrayList<Object>> rowList = (ArrayList<ArrayList<Object>>)map.get("list");
+		MemMerchant memMerchant = (MemMerchant)map.get("memMerchant");
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
+				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+		for (int i = 2;i<rowList.size();i++) {
+			stringBuilder.append("(");
+			for(int j = 0;j<13;j++){
+				if(j < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(j)+"',");
+				}
+				else{
+					if(j==8)//weight
+						stringBuilder.append("0,");
+					else if(j==12)//unit_price
+						stringBuilder.append("1,");
+					else
+						stringBuilder.append("'',");
+				}
+					
+			}
+			stringBuilder.append(""+memMerchant.getMerchantId()+",'"+memMerchant.getName()+"',"+time+","+time+"),");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();
@@ -161,6 +192,8 @@ public class CfgGoodsSQLBuilder {
 			builder.append("and alias like '%"+map.get("alias")+"%' ");
 		if(!map.get("goodsCode").equals(""))
 			builder.append("and goods_code like '%"+map.get("goodsCode")+"%' ");
+		if(map.get("source")!=null && !map.get("source").equals(""))
+			builder.append("and source = "+map.get("source")+" ");
 		builder.append("order by updated desc LIMIT "+map.get("start")+","+map.get("pageSize")+"");
 		return builder.toString();
 	}
@@ -174,6 +207,8 @@ public class CfgGoodsSQLBuilder {
 			builder.append("and alias like '%"+map.get("alias")+"%' ");
 		if(!map.get("goodsCode").equals(""))
 			builder.append("and goods_code like '%"+map.get("goodsCode")+"%' ");
+		if(map.get("source")!=null && !map.get("source").equals(""))
+			builder.append("and source = "+map.get("source")+" ");
 		return builder.toString();
 	}
 }

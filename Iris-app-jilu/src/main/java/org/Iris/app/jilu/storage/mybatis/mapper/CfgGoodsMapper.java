@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.Iris.app.jilu.storage.domain.CfgGoods;
+import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.CfgGoodsSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -54,4 +55,7 @@ public interface CfgGoodsMapper {
 
 	@InsertProvider(type = CfgGoodsSQLBuilder.class, method = "batchInsert")
 	long batchInsert(ArrayList<ArrayList<Object>> rowlist);
+	
+	@InsertProvider(type = CfgGoodsSQLBuilder.class, method = "batchInsertByMerchant")
+	long batchInsertByMerchant(Map<String, Object> map);
 }

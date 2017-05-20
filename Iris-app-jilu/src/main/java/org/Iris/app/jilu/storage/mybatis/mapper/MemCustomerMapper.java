@@ -1,9 +1,11 @@
 package org.Iris.app.jilu.storage.mybatis.mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.mybatis.SQLBuilder.CfgGoodsSQLBuilder;
 import org.Iris.app.jilu.storage.mybatis.SQLBuilder.MemCustomerSQLBuilder;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
@@ -65,5 +67,11 @@ public interface MemCustomerMapper {
 
 	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getCountByNameOrPhone")
 	long getCountByNameOrPhone(@Param("merchantId") long merchantId,@Param("value") String value); 
+	
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMerchantCustomersByMap")
+	List<MemCustomer> getMerchantCustomersByMap(Map<String, Object> map); 
+	
+	@SelectProvider(type = MemCustomerSQLBuilder.class, method = "getMerchantCustomersCount")
+	long getMerchantCustomersCount(Map<String, Object> map); 
 
 }

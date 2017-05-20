@@ -36,6 +36,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemWaitStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.SysMenuMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.UpdateStoreLogMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.WebMenuMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
 import org.Iris.core.util.SpringContextUtil;
 import org.Iris.redis.operate.RedisOperate;
@@ -83,6 +84,7 @@ public interface Beans {
 	
 	final BgUserMapper bgUserMapper = SpringContextUtil.getBean("bgUserMapper", BgUserMapper.class);
 	final SysMenuMapper sysMenuMapper = SpringContextUtil.getBean("sysMenuMapper", SysMenuMapper.class);
+	final WebMenuMapper webMenuMapper = SpringContextUtil.getBean("webMenuMapper", WebMenuMapper.class);
 	final BgConfigMapper bgConfigMapper = SpringContextUtil.getBean("bgConfigMapper", BgConfigMapper.class);
 	final CmsVersionMapper cmsVersionMapper = SpringContextUtil.getBean("cmsVersionMapper", CmsVersionMapper.class);
 	

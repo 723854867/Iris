@@ -24,7 +24,13 @@ public class DownloadServlet extends HttpServlet{
 	@Override
 	@SuppressWarnings("all")
 	protected void  doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-		 String filePath = this.getServletContext().getRealPath("/WEB-INF/download/产品模板.xlsx");
+		 String filePath="";
+		 String type = req.getParameter("type");
+		 if(type.equals("customer")){
+			 filePath = this.getServletContext().getRealPath("/WEB-INF/download/客户模板.xlsx");
+		 }else if(type.equals("goods")){
+			 filePath = this.getServletContext().getRealPath("/WEB-INF/download/产品模板.xlsx");
+		 }
 		 File f = new File(filePath);
 		    if (!f.exists()) {
 		      response.sendError(404, "File not found!");
