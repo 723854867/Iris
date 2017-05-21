@@ -143,4 +143,12 @@ public class MemGoodsStoreSQLBuilder {
 	public String getMemGoodsStoreListByCode(){
 		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where goods_code = #{goodsCode} LIMIT #{start},#{pageSize}";
 	}
+	
+	public String getDckMemGoodsStoreListByMerchantId(){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where merchant_id = #{merchantId} and wait_count > 0";
+	}
+	
+	public String getDjhMemGoodsStoreListByMerchantId(){
+		return "select * from "+Table.MEM_GOODS_STORE.mark()+" where merchant_id = #{merchantId} and count < 0";
+	}
 }

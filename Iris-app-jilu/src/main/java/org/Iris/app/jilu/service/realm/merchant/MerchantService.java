@@ -603,12 +603,12 @@ public class MerchantService extends RedisCache implements Beans{
 				updateStoreList.add(store);
 			}
 			//转单商户仓库数据处理
-			store = merchant.getMemGoodsStore(order.getSuperMerchantId(),ogs.getGoodsId());
-			store.setCount(store.getCount()+ogs.getCount());
-			store.setUpdated(time);
-			store.setWaitCount(store.getWaitCount()-ogs.getCount());
-			store.setSellCount(store.getSellCount()+ogs.getCount());
-			updateStoreList.add(store);
+			MemGoodsStore store2 = merchant.getMemGoodsStore(order.getSuperMerchantId(),ogs.getGoodsId());
+			store2.setCount(store2.getCount()+ogs.getCount());
+			store2.setUpdated(time);
+			store2.setWaitCount(store2.getWaitCount()-ogs.getCount());
+			store2.setSellCount(store2.getSellCount()+ogs.getCount());
+			updateStoreList.add(store2);
 			
 			ogs.setGoodsId(ogs.getChangeId());
 		}

@@ -61,7 +61,7 @@
 					var captcha = $("#captcha").val();
 					if(type==0){
 						data = {
-								'action' : 'login',
+								'action' : 'web_login',
 								'mobile' : account,
 								'captcha' : captcha,
 								'type' : type
@@ -69,7 +69,7 @@
 					}
 					else{
 						data = {
-								'action' : 'login',
+								'action' : 'web_login',
 								'email' : account,
 								'captcha' : captcha,
 								'type' : type
@@ -77,7 +77,7 @@
 					}
 						$.ajax({
 							type : 'POST',
-							url : '/jilu/mweb',
+							url : '/jilu/backstage',
 							data : data,
 							dataType : 'json',
 							success : function(
@@ -113,7 +113,7 @@
 			}
 			$.ajax({
 				type : 'POST',
-				url : '/jilu/mweb',
+				url : '/jilu/backstage',
 				data : data,
 				dataType : 'json',
 				success : function(json) {

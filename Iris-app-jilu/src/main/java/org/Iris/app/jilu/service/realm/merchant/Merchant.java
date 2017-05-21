@@ -1226,7 +1226,7 @@ public class Merchant implements Beans {
 	 * 获取商户库存
 	 * @param merchantId
 	 * @param goodsId
-	 * @return
+	 * @returns
 	 */
 	public MemGoodsStore getMemGoodsStore(long merchantId,long goodsId) {
 		MemGoodsStore store = redisOperate.hgetAll(MerchantKeyGenerator.merchantGoodsStoreDataKey(merchantId, goodsId),

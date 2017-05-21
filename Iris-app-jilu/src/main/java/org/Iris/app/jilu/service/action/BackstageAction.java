@@ -8,6 +8,6 @@ public abstract class BackstageAction implements IAction<IrisSession>{
 	public void execute(IrisSession session) {
 		session.write(execute0(session));
 	}
-
+	
 	protected abstract String execute0(IrisSession session);
 }

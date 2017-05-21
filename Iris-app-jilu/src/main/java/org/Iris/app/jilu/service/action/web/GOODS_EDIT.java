@@ -1,13 +1,13 @@
 package org.Iris.app.jilu.service.action.web;
 
-import org.Iris.app.jilu.service.action.BackstageAction;
+import org.Iris.app.jilu.service.action.MerchantWebAction;
 import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.app.jilu.web.session.IrisSession;
+import org.Iris.app.jilu.web.session.MerchantWebSession;
 
-public class GOODS_EDIT extends BackstageAction{
+public class GOODS_EDIT extends MerchantWebAction{
 
 	@Override
-	protected String execute0(IrisSession session) {
+	protected String execute0(MerchantWebSession session) {
 		long goodsId = session.getKVParam(JiLuParams.GOODS_ID);
 		String zhName = session.getKVParamOptional(JiLuParams.ZH_NAME);
 		String goodsFormat = session.getKVParamOptional(JiLuParams.GOODS_FORMAT);
@@ -21,7 +21,7 @@ public class GOODS_EDIT extends BackstageAction{
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
 		long unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
-		return backstageService.updateGoods(goodsId, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit,weight, alias, barcode, sku, unitPrice);
+		return merchantWebService.updateGoods(goodsId, zhName, usName, goodsFormat, classification, zhBrand, usBrand, unit,weight, alias, barcode, sku, unitPrice);
 
 	}
 	

@@ -1,20 +1,20 @@
 package org.Iris.app.jilu.service.action.web;
 
 import org.Iris.app.jilu.common.BeanCreator;
-import org.Iris.app.jilu.service.action.BackstageAction;
+import org.Iris.app.jilu.service.action.MerchantWebAction;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.app.jilu.web.session.IrisSession;
+import org.Iris.app.jilu.web.session.MerchantWebSession;
 
 /**
  * 商户添加产品
  * 
  * @author fansd
  */
-public class GOODS_ADD extends BackstageAction {
+public class GOODS_ADD extends MerchantWebAction {
 	
 	@Override
-	protected String execute0(IrisSession session) {
+	protected String execute0(MerchantWebSession session) {
 		String goodsCode = session.getKVParam(JiLuParams.GOODS_CODE);
 		String zhName = session.getKVParam(JiLuParams.ZH_NAME);
 		String goodsFormat = session.getKVParam(JiLuParams.GOODS_FORMAT);
@@ -28,7 +28,7 @@ public class GOODS_ADD extends BackstageAction {
 		String sku = session.getKVParamOptional(JiLuParams.SKU);
 		String barcode = session.getKVParamOptional(JiLuParams.BARCODE);
 		long unitPrice = session.getKVParamOptional(JiLuParams.UNITPRICE);
-		MemMerchant memMerchant = (MemMerchant)session.getRequest().getSession().getAttribute("merchant");
+		MemMerchant memMerchant = session.getMemMerchant();
 		return merchantWebService.insertGoods(BeanCreator.newMemGoods(goodsCode, zhName, usName, goodsFormat, classification, zhBrand, 
 				usBrand, unit, weight, alias, barcode, sku,unitPrice,memMerchant));
 	}

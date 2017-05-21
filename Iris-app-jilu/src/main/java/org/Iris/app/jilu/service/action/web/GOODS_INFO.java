@@ -1,15 +1,15 @@
 package org.Iris.app.jilu.service.action.web;
 
-import org.Iris.app.jilu.service.action.BackstageAction;
+import org.Iris.app.jilu.service.action.MerchantWebAction;
 import org.Iris.app.jilu.web.JiLuParams;
-import org.Iris.app.jilu.web.session.IrisSession;
+import org.Iris.app.jilu.web.session.MerchantWebSession;
 
-public class GOODS_INFO extends BackstageAction{
+public class GOODS_INFO extends MerchantWebAction{
 
 	@Override
-	protected String execute0(IrisSession session) {
+	protected String execute0(MerchantWebSession session) {
 		long goodsId = session.getKVParam(JiLuParams.GOODS_ID);
-		return backstageService.getGoodsInfo(goodsId);
+		return merchantWebService.getGoodsInfo(goodsId);
 	}
 
 }

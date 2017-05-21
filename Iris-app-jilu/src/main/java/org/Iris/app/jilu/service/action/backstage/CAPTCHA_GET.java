@@ -1,4 +1,4 @@
-package org.Iris.app.jilu.service.action.web;
+package org.Iris.app.jilu.service.action.backstage;
 
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.service.action.BackstageAction;

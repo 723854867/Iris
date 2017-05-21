@@ -47,4 +47,10 @@ public interface MemGoodsStoreMapper {
 	
 	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getMemGoodsStoreListByCode")
 	List<MemGoodsStore> getMemGoodsStoreListByCode(@Param("start")int page,@Param("pageSize")int pageSize,@Param("goodsCode")String goodsCode);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getDckMemGoodsStoreListByMerchantId")
+	List<MemGoodsStore> getDckMemGoodsStoreListByMerchantId(@Param("merchantId")long merhcantId);
+	
+	@SelectProvider(type = MemGoodsStoreSQLBuilder.class, method = "getDjhMemGoodsStoreListByMerchantId")
+	List<MemGoodsStore> getDjhMemGoodsStoreListByMerchantId(@Param("merchantId")long merhcantId);
 }
