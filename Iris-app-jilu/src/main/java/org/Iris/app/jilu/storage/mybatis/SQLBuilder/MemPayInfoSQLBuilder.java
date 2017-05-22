@@ -3,6 +3,7 @@ package org.Iris.app.jilu.storage.mybatis.SQLBuilder;
 import java.util.Map;
 
 import org.Iris.app.jilu.storage.mybatis.Table;
+import org.apache.activemq.filter.function.splitFunction;
 import org.apache.ibatis.jdbc.SQL;
 
 public class MemPayInfoSQLBuilder {
@@ -40,7 +41,8 @@ public class MemPayInfoSQLBuilder {
 	public String findByOutRradeNo(){
 		return new SQL(){
 			{
-				SELECT(Table.MEM_PAY_INFO.mark());
+				SELECT("*");
+				FROM(Table.MEM_PAY_INFO.mark());
 				WHERE("out_trade_no=#{outTradeNo}");
 			}
 		}.toString();
