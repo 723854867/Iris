@@ -1299,6 +1299,7 @@ public class Merchant implements Beans {
 	            	memMerchantMapper.update(memMerchant);
 	            	memPayInfoMapper.insert(payInfo);
 	        		redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), transaction_id, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
+	        		redisOperate.hmset(memMerchant.redisKey(), memMerchant);
 	            }else{
 	            	return Result.jsonError(JiLuCode.APPLE_PAY_NOT_EXIST);
 	            }
