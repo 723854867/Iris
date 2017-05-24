@@ -19,6 +19,7 @@ public class MemPayInfoSQLBuilder {
 				VALUES("body", "#{body}");
 				VALUES("total_amount", "#{totalAmount}");
 				VALUES("total_jb", "#{totalJb}");
+				VALUES("status", "#{status}");
 				VALUES("cz_time", "#{czTime}");
 				VALUES("created", "#{created}");
 				VALUES("updated", "#{updated}");

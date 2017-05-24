@@ -5,6 +5,7 @@ import org.Iris.app.jilu.storage.domain.MemOrder;
 public class OrderForm {
 
 	private String orderId;
+	private String rootOrderId;
 	private long merchantId;
 	private String merchantName;
 	private long customerId;
@@ -16,6 +17,7 @@ public class OrderForm {
 	
 	public OrderForm(MemOrder order){
 		this.orderId = order.getOrderId();
+		this.rootOrderId = order.getRootOrderId();
 		this.merchantId = order.getMerchantId();
 		this.merchantName = order.getMerchantName();
 		this.customerId = order.getCustomerId();
@@ -32,6 +34,14 @@ public class OrderForm {
 
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+
+	public String getRootOrderId() {
+		return rootOrderId;
+	}
+
+	public void setRootOrderId(String rootOrderId) {
+		this.rootOrderId = rootOrderId;
 	}
 
 	public long getMerchantId() {
