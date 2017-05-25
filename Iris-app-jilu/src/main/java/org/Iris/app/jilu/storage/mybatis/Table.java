@@ -22,6 +22,7 @@ public enum Table {
 	MEM_ACCID("mem_accid"),
 	MEM_LABEL_BIND("mem_label_bind"),
 	MEM_JB_DETAIL("mem_jb_detail"),
+	MEM_FEEDBACK("mem_feedback"),
 	
 	RELATION("pub_relation"),
 	LOG_STOCK_STORE("log_stock_store"),
@@ -30,7 +31,12 @@ public enum Table {
 	
 	LOG_UPDATE_STORE("log_update_store"),
 	MEM_WAIT_STORE("mem_wait_store"),
-	MEM_PAY_INFO("mem_pay_info");
+	MEM_PAY_INFO("mem_pay_info"),
+	SYS_ROLE_PERMISSION("sys_role_permission"),
+	SYS_PERMISSION("sys_permission"),
+	SYS_USER_ROLE("sys_user_role"),
+	SYS_ROLE("sys_role"),
+	SYS_USER("sys_user");
 
 	
 	private String mark;

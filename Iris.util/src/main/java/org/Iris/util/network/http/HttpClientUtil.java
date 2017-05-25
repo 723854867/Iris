@@ -1,7 +1,9 @@
 package org.Iris.util.network.http;
 
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;

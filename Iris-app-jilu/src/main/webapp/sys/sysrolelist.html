@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>后台管理系统</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<script type="text/javascript" src="../scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../scripts/public.js"></script>
+<script type="text/javascript" src="../scripts/islogin.js"></script>
+<script type="text/javascript" src="../scripts/mydate.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../zTree_v3-master/js/jquery.ztree.core.js"></script>  
+<script type="text/javascript" src="../zTree_v3-master/js/jquery.ztree.excheck.js"></script>  
+<link rel="stylesheet" href="../zTree_v3-master/css/demo.css" type="text/css" />  
+<link rel="stylesheet" href="../zTree_v3-master/css/metroStyle/metroStyle.css" type="text/css" />  
+<link href="../bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="../bootstrap-3.3.5-dist/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="../css/dashboard.css" rel="stylesheet" />
+<link href="../css/menu.css" rel="stylesheet" />
+<script type="text/javascript" src="../bootstrap-3.3.5-dist/css/bootstrap.min.css"></script>
+</head>
+<body>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-2">
+				<ul id="main-nav" class="main-nav nav nav-tabs nav-stacked" style="">
+				</ul>
+			</div>
+			<div class="col-md-10">	
+				<h2 class="sub-header">角色列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button></h2>
+				
+				<form role="form" onsubmit="save();return false;">
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>角色名</th>
+									<th>创建时间</th>
+									<th width="240px">操作</th>
+								</tr>
+							</thead>
+							<tbody id="list">
+							</tbody>
+						</table>
+						<nav aria-label="Page navigation">
+						  <ul class="pagination" id="pagecount">
+						  </ul>
+						</nav>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+   <div class='modal fade' id="menuContent2"  tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>
+	   <div class='modal-dialog modal-sm' role='document'>
+		   <div class='modal-content'>
+		   <div class='modal-header'><button type='button' class='close' onclick='removeMyModal()'><span>&times;</span></button></div>
+		   <div id='loadingText1' class='modal-body'>
+		     <ul id="permission-tree" class="ztree" style="margin-top:0; width:95%; height:auto;"></ul>
+		     </div>
+		      <div class='modal-footer'><button class='btn btn-info' href='javascript:void(0)' onclick='savePerms()'>提交</button></div>
+		   </div>
+	   </div>
+   </div>
+   
+   <div  class='modal fade' id='myModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>
+    	<div class='modal-dialog modal-sm' role='document'>
+    		<div class='modal-content'>
+    			<div class='modal-header'><button type='button' class='close' onclick='removeModal()'><span>&times;</span></button><h4 class='modal-title'>编辑角色</h4></div>
+    			<div id='loadingText1' class='modal-body'>
+    				<table class='table'><tr><td>角色名：<input class='form-control' id='role-name' placeholder='角色名'></td></tr>
+    				<input class="hidden" id='hideId'>
+    				</table>
+    			</div> 
+    			<div class='modal-footer'><a  class='btn btn-info' href='javascript:void(0)' onclick='operate()'>保存</a></div>
+    		</div> 
+    	</div> 
+    </div>
+    
+    <div class='modal fade' id='addModal' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' data-backdrop='static'>
+    	<div class='modal-dialog modal-sm' role='document'>
+    		<div class='modal-content'>
+    			<div class='modal-header'><button type='button' class='close' onclick='removeModal()'><span>&times;</span></button><h4 class='modal-title'>添加角色</h4></div>
+    			<div id='loadingText1' class='modal-body'>
+    				<table class='table'><tr><td>角色名：<input class='form-control' id='roleName' placeholder='角色名'></td></tr>
+    				</table>
+    			</div> 
+    			<div class='modal-footer'><a  class='btn btn-info' href='javascript:void(0)' onclick='save()'>保存</a></div>
+    		</div> 
+    	</div> 
+    </div>
+
+	<script type="text/javascript" src="../scripts/menu.js"></script>
+<!-- 	<script type="text/javascript" src="/static/scripts/public.js"></script> -->
+	<script type="text/javascript">
+	var roId;
+	$(function() {
+		getData(1);
+	});
+	var total,totalPage,curPage; //总记录数，每页显示数，总页数
+	var pageSize=10;
+	var title='';
+	var publishtxt='';
+	var publishbutton='';
+	getData=function(page) {
+		title=$("#txtTitle").val();
+        $.ajax({
+            type: 'POST',
+            url: '/jilu/backstage?action=sysrole_list',
+            data: { 'page': page, 'pageSize': pageSize},
+            dataType: 'json',
+            beforeSend: function () {
+            },
+            success: function (json) {
+            	$("#list").empty();//清空数据区
+            	var tr= "";
+            	var list = json.data.list;
+            	total = json.data.total; //总记录数
+            	curPage = page; //当前页
+                totalPage = Div(total, pageSize);
+                $.each(list, function (index, array) { //遍历json数据列
+
+                	tr+="<tr>";
+                	tr+="<td>" + array['roleId'] + "</td>";
+                	tr+="<td>" + array['roleName'] + "</td>";
+                	
+                	tr+="<td>";
+                	tr+=DateFormat.prototype.format(new Date(array['created']*1000),DateFormat.prototype.DEFAULT_DATE_FORMAT);
+                	tr +="</td>";
+
+                	tr+="<td>";
+                	tr+="<a  class='btn btn-info btn-xs' href='javascript:void(0)' onclick='showEvaluate("+JSON.stringify(array)+")'>编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                	tr+="<a  class='btn btn-info btn-xs' onclick='confPermission("+array['roleId']+")'>设置权限</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+                	tr+="<a  class='btn btn-danger btn-xs' onclick='del("+array['roleId']+")'>删除</a>";
+                	tr +="</td>";
+                	
+                	tr+="</tr>";
+                });
+                
+                $("#list").append(tr);            	
+            },
+            complete: function () { //生成分页条
+            	if(totalPage>1)
+            		getPageBar();
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+    }
+	showEvaluate=function(data){
+		$('#role-name').val(data.roleName);
+		$('#hideId').val(data.roleId);
+		$('#myModal').modal('show');
+	}
+
+	removeModal=function(){
+		$('#myModal').modal('hide');
+		$('#addModal').modal('hide');
+	}
+	removeMyModal=function(){
+		$('#menuContent2').modal('hide');
+	}
+	operate=function(id){
+		var roleName = $('#role-name').val();
+		var id = $('#hideId').val();
+		$.ajax({
+            type: 'POST',
+            url: '/jilu/backstage?action=sysrole_edit',
+            data: { 'name': roleName ,'roleId':id},
+            dataType: 'json',
+            beforeSend: function () {
+//             	initLoading();
+//             	showLoading("正在处理，请稍候。。。");
+            },
+            success: function (json) {
+            	if(json.code=="0"){
+//             		hideLoading();
+            		window.location.reload();
+            	}
+            	else{
+//             		hideLoading();
+            		alert(json.desc);
+            	}
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+	}
+	add = function(){$('#addModal').modal('show');}
+	
+	save = function(){
+		var roleName = $('#roleName').val();
+		if(roleName == "")
+			return;
+		$.ajax({
+            type: 'POST',
+            url: '/jilu/backstage?action=sysrole_add',
+            data: { 'name': roleName},
+            dataType: 'json',
+            success: function (json) {
+            	if(json.code=="0"){
+            		$('#addModal').modal('hide');
+            		getData(curPage);
+            	}
+            	else{
+            		alert(json.desc);
+            		$('#addModal').modal('hide');
+            	}
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+	}
+	del =function(id){
+		$.ajax({
+            type: 'POST',
+            url: '/jilu/backstage?action=sysrole_del',
+            data: { 'roleId': id},
+            dataType: 'json',
+            success: function (json) {
+            	if(json.code=="0"){
+            		getData(curPage);
+            	}
+            	else{
+            		alert(json.desc);
+            	}
+            },
+            error: function () {
+                alert("数据加载失败");
+            }
+        });
+	}
+	var zTreeObj;  
+	var setting = {  
+	    check : { 
+	    	chkboxType:{"Y":"ps","N":"ps"},
+	    	chkStyle:"checkbox", 
+	    	enable : true  
+	    },  
+	    data : {  
+	        simpleData : {  
+	            enable : true  
+	        }  
+	    }  
+	};  
+	confPermission = function(data){
+		roId=data;
+		 $.ajax({
+	            type: 'POST',
+	            url: '/jilu/backstage?action=permission_tree',
+	            data: { 'roleId': data},
+	            dataType: 'json',
+	            success: function (json) {
+	            initZtree(json);
+	            }
+		 });
+	}
+
+	function initZtree(json) {  
+	    var zNodes = eval(json.data); 
+	    zTreeObj = $.fn.zTree.init($('#permission-tree'), setting, zNodes);  
+	    $('#menuContent2').modal('show');
+	}  
+	savePerms = function(){
+		var nodes = zTreeObj.getCheckedNodes(true);
+		var ids="";
+		 for (index in nodes) {
+           ids += nodes[index].id + ",";
+       }
+		 $.ajax({
+	            type: 'POST',
+	            url: '/jilu/backstage?action=update_role_permission',
+	            data: { 'ids': ids ,'roleId':roId},
+	            dataType: 'json',
+// 	            beforeSend: function () {
+// 	            	initLoading();
+// 	            	showLoading("正在处理，请稍候。。。");
+// 	            },
+	            success: function (json) {
+	            	if(json.code=="0"){
+// 	            		hideLoading();
+	            		window.location.reload();
+	            	}
+	            	else{
+	            		hideLoading();
+	            		alert(json.desc);
+	            	}
+	            },
+	            error: function () {
+	                alert("数据加载失败");
+	            }
+	        });
+	}
+// 	showLoading=function(text){
+// 	    $("#loadingText").html(text);
+// 	    $("#loading").modal("show");
+// 	}
+// 	hideLoading=function(){
+// 		$("#loading").modal("hide");
+// 	}
+	</script>
+</body>
+</html>

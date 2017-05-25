@@ -127,4 +127,9 @@ public interface JiLuParams {
 	final IrisStrConst FM_URL								= new IrisStrConst("fmUrl", 189);
 	final IrisStrConst GD_URL								= new IrisStrConst("gdUrl", 190);
 	final IrisStrConst HREF									= new IrisStrConst("href", 191);
+	final IrisStrConst CONTACT								= new IrisStrConst("contact", 192);
+	final IrisStrConst LOGINNO								= new IrisStrConst("loginNo", 193);
+	final IrisStrConst USERNAME								= new IrisStrConst("userName", 194);
+	final IrisStrConst ROLEID								= new IrisStrConst("roleId", 195);
+	final IrisIntConst ADMINID							    = new IrisIntConst("adminId",0, 196);
 }

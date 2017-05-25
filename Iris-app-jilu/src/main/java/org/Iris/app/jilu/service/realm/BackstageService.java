@@ -16,10 +16,9 @@ import org.Iris.app.jilu.common.bean.form.CzLogForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.LabelApplyForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
+import org.Iris.app.jilu.common.http.HttpClientUtil;
 import org.Iris.app.jilu.service.realm.igt.domain.PushBannerParam;
-import org.Iris.app.jilu.service.realm.igt.domain.PushOrderTransformParam;
 import org.Iris.app.jilu.service.realm.igt.domain.TransmissionInfo;
-import org.Iris.app.jilu.storage.domain.BgUser;
 import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.CmsBanner;
@@ -28,13 +27,14 @@ import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.SysPage;
+import org.Iris.app.jilu.storage.domain.SysPermission;
+import org.Iris.app.jilu.storage.domain.SysUser;
 import org.Iris.app.jilu.storage.redis.BgkeyGenerator;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.util.common.IrisSecurity;
-import org.Iris.util.common.JsonAppender;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.stereotype.Service;
 
@@ -48,30 +48,40 @@ public class BackstageService implements Beans{
 	 * @return
 	 */
 	public String login(String account, String password,HttpServletRequest request) {
-		BgUser user = getBgUser(account);
+		SysUser user = getSysUser(account);
 		if(user == null)
 			throw IllegalConstException.errorException(JiLuParams.ACCOUNT);
 		if(!user.getPassword().equals(IrisSecurity.toMd5(password)))
 			throw IllegalConstException.errorException(JiLuParams.PASSWORD);
 		user.setLastLoginTime(DateUtils.currentTime());
-		user.setUpdated(DateUtils.currentTime());
-		bgUserMapper.update(user);
-		redisOperate.hsetByJson(BgkeyGenerator.bgUserDataKey(), account, user);
+		user.setLastLoginIp(HttpClientUtil.getIpAddr(request));
+		sysUserMapper.update(user);
+		redisOperate.hsetByJson(BgkeyGenerator.sysUserDataKey(), account, user);
 		
 		HttpSession session = request.getSession();
-		session.setAttribute("account", account);
+		session.setAttribute("user", user);
 
 		return Result.jsonSuccess(user);
 	}
 	
-	public BgUser getBgUser(String account){
-		BgUser bgUser = redisOperate.hgetBean(BgkeyGenerator.bgUserDataKey(), account, BgUser.class);
-		if(bgUser==null){
-			bgUser = bgUserMapper.find(account);
-			if(null != bgUser)
-				redisOperate.hsetByJson(BgkeyGenerator.bgUserDataKey(), account, bgUser);
+//	public BgUser getBgUser(String account){
+//		BgUser bgUser = redisOperate.hgetBean(BgkeyGenerator.bgUserDataKey(), account, BgUser.class);
+//		if(bgUser==null){
+//			bgUser = bgUserMapper.find(account);
+//			if(null != bgUser)
+//				redisOperate.hsetByJson(BgkeyGenerator.bgUserDataKey(), account, bgUser);
+//		}
+//		return bgUser;
+//	}
+	
+	public SysUser getSysUser(String account){
+		SysUser sysUser = redisOperate.hgetBean(BgkeyGenerator.sysUserDataKey(), account, SysUser.class);
+		if(sysUser==null){
+			sysUser = sysUserMapper.getUserByLoginNo(account);
+			if(null != sysUser)
+				redisOperate.hsetByJson(BgkeyGenerator.sysUserDataKey(), account, sysUser);
 		}
-		return bgUser;
+		return sysUser;
 	}
 
 	/**
@@ -82,15 +92,14 @@ public class BackstageService implements Beans{
 	 * @return
 	 */
 	public String updatePwd(String account, String oldPwd, String newPwd) {
-		BgUser user = getBgUser(account);
+		SysUser user = getSysUser(account);
 		if(user == null)
 			throw IllegalConstException.errorException(JiLuParams.ACCOUNT);
 		if(!user.getPassword().equals(IrisSecurity.toMd5(oldPwd)))
 			throw IllegalConstException.errorException(JiLuParams.OLDPWD);
 		user.setPassword(IrisSecurity.toMd5(newPwd));
-		user.setUpdated(DateUtils.currentTime());
-		bgUserMapper.update(user);
-		redisOperate.hsetByJson(BgkeyGenerator.bgUserDataKey(), account, user);
+		sysUserMapper.update(user);
+		redisOperate.hsetByJson(BgkeyGenerator.sysUserDataKey(), account, user);
 		return Result.jsonSuccess(user);
 	}
 
@@ -99,8 +108,10 @@ public class BackstageService implements Beans{
 	 * 
 	 * @return
 	 */
-	public String GetMenuList() {
-		return Result.jsonSuccess(sysMenuMapper.getSysMenuList());
+	public String GetMenuList(SysUser sysUser) {
+		//return Result.jsonSuccess(sysMenuMapper.getSysMenuList());
+		List<SysPermission> sysPermissions = sysPermissionMapper.getByUserId(sysUser.getAdminId());
+		return Result.jsonSuccess(sysPermissions);
 	}
 	
 	/**

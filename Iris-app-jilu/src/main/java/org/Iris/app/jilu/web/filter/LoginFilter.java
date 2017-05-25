@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.SysUser;
 
 public class LoginFilter implements Filter{
 
@@ -31,7 +32,7 @@ public class LoginFilter implements Filter{
 		//获得请求URI
 		String path = servletRequest.getRequestURI();
 		//从session中获取后台登陆用户
-		String account = (String)session.getAttribute("account");
+		SysUser sysUser = (SysUser)session.getAttribute("user");
 		MemMerchant memMerchant = (MemMerchant)session.getAttribute("merchant");
 		//过滤不需要验证登陆的页面
 		for(String string :Constants.noFilterPage){
@@ -44,7 +45,7 @@ public class LoginFilter implements Filter{
 			if(memMerchant==null)
 				servletResponse.sendRedirect("/jilu/mweb/login.html");
 		}else{
-			if(account == null || "".equals(account))
+			if(sysUser == null)
 				servletResponse.sendRedirect("/jilu/login.html");
 		}
 		chain.doFilter(request, response);

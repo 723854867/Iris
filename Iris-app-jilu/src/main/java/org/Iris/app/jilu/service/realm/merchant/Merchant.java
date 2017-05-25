@@ -52,6 +52,7 @@ import org.Iris.app.jilu.storage.domain.MemAccid;
 import org.Iris.app.jilu.storage.domain.MemAccount;
 import org.Iris.app.jilu.storage.domain.MemCid;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
+import org.Iris.app.jilu.storage.domain.MemFeedBack;
 import org.Iris.app.jilu.storage.domain.MemGoodsStore;
 import org.Iris.app.jilu.storage.domain.MemJbDetail;
 import org.Iris.app.jilu.storage.domain.MemLabelBind;
@@ -1433,6 +1434,18 @@ public class Merchant implements Beans {
 			return Result.jsonSuccess(Pager.EMPTY);
 		List<MemJbDetail> list = memJbDetailMapper.getJbDetail(memMerchant.getMerchantId(), (page-1)*pageSize, pageSize);
 		return Result.jsonSuccess(new Pager<MemJbDetail>(count, list));
+	}
+
+	/**
+	 * 添加商户反馈
+	 * @param content
+	 * @param contact
+	 * @return
+	 */
+	public String addFeedBack(String content, String contact) {
+		MemFeedBack memFeedBack = new MemFeedBack(content, contact, memMerchant.getMerchantId());
+		memFeedBackMapper.insert(memFeedBack);
+		return Result.jsonSuccess();
 	}
 
 }

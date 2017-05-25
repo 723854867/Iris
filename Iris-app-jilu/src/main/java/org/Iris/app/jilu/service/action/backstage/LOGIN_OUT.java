@@ -13,7 +13,7 @@ public class LOGIN_OUT extends BackstageAction {
 
 		HttpSession session1 = session.getRequest().getSession(true); 
         //删除以前的
-        session1.removeAttribute("account");
+        session1.removeAttribute("user");
         
         return Result.jsonSuccess();
 	}

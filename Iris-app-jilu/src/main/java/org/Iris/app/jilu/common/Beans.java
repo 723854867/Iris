@@ -23,6 +23,7 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemAccidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCidMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemCustomerMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.MemFeedBackMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemJbDetailMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemLabelBindMapper;
@@ -35,6 +36,11 @@ import org.Iris.app.jilu.storage.mybatis.mapper.MemPayInfoMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.MemWaitStoreMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.SysMenuMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysPermissionMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysRoleMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysRolePermissionMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysUserMapper;
+import org.Iris.app.jilu.storage.mybatis.mapper.SysUserRoleMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.UpdateStoreLogMapper;
 import org.Iris.app.jilu.storage.mybatis.mapper.WebMenuMapper;
 import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
@@ -75,6 +81,7 @@ public interface Beans {
 	final HttpProxy httpProxy = SpringContextUtil.getBean("httpProxy", HttpProxy.class);
 	final MemPayInfoMapper memPayInfoMapper = SpringContextUtil.getBean("memPayInfoMapper", MemPayInfoMapper.class);
 	final MemJbDetailMapper memJbDetailMapper = SpringContextUtil.getBean("memJbDetailMapper", MemJbDetailMapper.class);
+	final MemFeedBackMapper memFeedBackMapper = SpringContextUtil.getBean("memFeedBackMapper", MemFeedBackMapper.class);
 	
 	final IgtService igtService = SpringContextUtil.getBean("igtService", IgtService.class);
 	final WyyxService wyyxService = SpringContextUtil.getBean("wyyxService", WyyxService.class);
@@ -92,6 +99,12 @@ public interface Beans {
 	final MemLabelBindMapper memLabelBindMapper = SpringContextUtil.getBean("memLabelBindMapper", MemLabelBindMapper.class);
 	
 	final CmsBannerMapper cmsBannerMapper = SpringContextUtil.getBean("cmsBannerMapper", CmsBannerMapper.class);
+	
+	final SysUserMapper sysUserMapper = SpringContextUtil.getBean("sysUserMapper", SysUserMapper.class);
+	final SysPermissionMapper sysPermissionMapper = SpringContextUtil.getBean("sysPermissionMapper", SysPermissionMapper.class);
+	final SysRoleMapper sysRoleMapper = SpringContextUtil.getBean("sysRoleMapper", SysRoleMapper.class);
+	final SysRolePermissionMapper sysRolePermissionMapper = SpringContextUtil.getBean("sysRolePermissionMapper", SysRolePermissionMapper.class);
+	final SysUserRoleMapper sysUserRoleMapper = SpringContextUtil.getBean("sysUserRoleMapper", SysUserRoleMapper.class);
 	
 	
 }

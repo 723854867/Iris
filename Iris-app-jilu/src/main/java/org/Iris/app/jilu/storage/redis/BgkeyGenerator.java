@@ -3,8 +3,13 @@ package org.Iris.app.jilu.storage.redis;
 public final class BgkeyGenerator {
 
 	private static final String BG_USER_DATA						= "bg:hash:user:data";					// 后台用户
+	private static final String SYS_USER_DATA						= "sys:hash:user:data";					// 后台用户
 	
 	public static final String bgUserDataKey() {
 		return BG_USER_DATA;
+	}
+	
+	public static final String sysUserDataKey() {
+		return SYS_USER_DATA;
 	}
 }

@@ -48,7 +48,7 @@ passwordEdit=function(){
 	    success: function (json) {
 	    	if(json["code"]==0){
 	    		alert(json.desc)
-	    		$("#passwordModal").remove();
+	    		removePasswordModal();
 	    	}else{
 	    		alert(json.desc)
 	    	}
