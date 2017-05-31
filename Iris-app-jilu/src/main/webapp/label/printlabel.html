@@ -38,7 +38,7 @@
         });
         qrcode.makeCode("http://localhost:9005/jilu/backstage?action=label_info&labelId=2b33d3dba4b5484e80d883caafe14f48");
         document.getElementById("send").onclick =function(){
-            qrcode.makeCode("http://localhost:9005/jilu/backstage?action=label_info&labelId="+document.getElementById("getval").value);
+            qrcode.makeCode(document.getElementById("getval").value);
         }
     }
 </script>
