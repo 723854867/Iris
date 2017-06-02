@@ -102,9 +102,6 @@
 			<properties>
 				<env>local</env>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 
 		<profile>
@@ -115,10 +112,13 @@
 		</profile>
 
 		<profile>
-			<id>onlie</id>
+			<id>online</id>
 			<properties>
-				<env>onlie</env>
+				<env>online</env>
 			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 		</profile>
 	</profiles>
 </project>

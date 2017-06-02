@@ -170,9 +170,6 @@
 			<properties>
 				<env>local</env>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 
 		<profile>
@@ -187,6 +184,9 @@
 			<properties>
 				<env>online</env>
 			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 		</profile>
 	</profiles>
 </project>

@@ -1,12 +1,13 @@
 package org.Iris.app.jilu.common.util;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.I0Itec.zkclient.ZkClient;
-import org.Iris.app.jilu.common.model.Env;
 import org.Iris.app.jilu.common.model.Config;
+import org.Iris.app.jilu.common.model.Env;
 import org.Iris.util.common.IpUtil;
 import org.Iris.util.common.SerializeUtil;
 import org.slf4j.Logger;
@@ -37,4 +38,21 @@ public class ZkUtil {
 		logger.info("JiLu zookeeper configuration load success, load {} queue names -- {}", map.size(), map);
 		return map;
 	}
+}
+class Captcha implements Serializable{
+	private static final long serialVersionUID = 1L;
+	private String captcha;
+	public Captcha(){
+		
+	}
+	public Captcha(String captcha){
+		this.captcha = captcha;
+	}
+	public String getCaptcha() {
+		return captcha;
+	}
+	public void setCaptcha(String captcha) {
+		this.captcha = captcha;
+	}
+	
 }
