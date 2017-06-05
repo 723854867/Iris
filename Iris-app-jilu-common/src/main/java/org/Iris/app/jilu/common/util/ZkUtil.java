@@ -18,7 +18,7 @@ public class ZkUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ZkUtil.class);
 
 	@SuppressWarnings("unchecked")
-	public static Map<String, String> loadConfiguration(ZkClient zkClient, Env env) { 
+	public static Map<String, String> loadConfiguration(ZkClient zkClient, Env env) {
 		byte[] buffer = zkClient.readData(Config.ZK_CONFIGURATION_PATH, true);
 		if (null == buffer) {
 			logger.warn("Zookeeper /configuration/jilu has no data to read!");
