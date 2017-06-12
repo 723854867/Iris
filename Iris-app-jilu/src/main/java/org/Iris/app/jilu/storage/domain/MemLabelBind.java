@@ -1,32 +1,37 @@
 package org.Iris.app.jilu.storage.domain;
 
-import org.Iris.util.lang.DateUtils;
-
 public class MemLabelBind {
 
 	private String labelId;
 	private long merchantId;
-	private int status;
 	private int bindType;
 	private String bindId;
-	private long buyId;//用户购买的日志id 
 	private String latitude;
 	private String longitude;
+	private String address;
+	private String bindShow;
 	private String memo;
 	private int bindTime;
-	private int created;
-	private int updated;
 	
 	public MemLabelBind() {
 	}
-	public MemLabelBind(String labelId, long merchantId,long buyId) {
-		int time = DateUtils.currentTime();
+	
+	public MemLabelBind(String labelId, long merchantId, int bindType, String bindId, String latitude, String longitude,
+			String address, String bindShow, String memo, int bindTime) {
 		this.labelId = labelId;
 		this.merchantId = merchantId;
-		this.buyId = buyId;
-		this.created = time;
-		this.updated = time;
+		this.bindType = bindType;
+		this.bindId = bindId;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.address = address;
+		this.bindShow = bindShow;
+		this.memo = memo;
+		this.bindTime = bindTime;
 	}
+
+
+
 	public String getLabelId() {
 		return labelId;
 	}
@@ -38,12 +43,6 @@ public class MemLabelBind {
 	}
 	public void setMerchantId(long merchantId) {
 		this.merchantId = merchantId;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
 	}
 	public int getBindType() {
 		return bindType;
@@ -57,14 +56,6 @@ public class MemLabelBind {
 	public void setBindId(String bindId) {
 		this.bindId = bindId;
 	}
-	
-	public long getBuyId() {
-		return buyId;
-	}
-	public void setBuyId(long buyId) {
-		this.buyId = buyId;
-	}
-	
 	public String getLatitude() {
 		return latitude;
 	}
@@ -76,6 +67,18 @@ public class MemLabelBind {
 	}
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getBindShow() {
+		return bindShow;
+	}
+	public void setBindShow(String bindShow) {
+		this.bindShow = bindShow;
 	}
 	public String getMemo() {
 		return memo;
@@ -89,19 +92,5 @@ public class MemLabelBind {
 	public void setBindTime(int bindTime) {
 		this.bindTime = bindTime;
 	}
-	public int getCreated() {
-		return created;
-	}
-	public void setCreated(int created) {
-		this.created = created;
-	}
-	public int getUpdated() {
-		return updated;
-	}
-	public void setUpdated(int updated) {
-		this.updated = updated;
-	}
-	
-	
 	
 }

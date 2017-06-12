@@ -15,6 +15,8 @@ public class AppConfig extends Config {
 	private static String aliyunOssEndpoint;					// 阿里云 oss 的endpoint
 	private static String aliyunOssFolderPrefix;				// 阿里云 oss 文件夹前缀
 	
+	private static String labelPathPrefix;						// 标签二维码的连接地址前缀
+	
 	public static int getCaptchaDigit() {
 		return captchaDigit;
 	}
@@ -86,4 +88,13 @@ public class AppConfig extends Config {
 	public static void setRedisLockTimeout(int redisLockTimeout) {
 		AppConfig.redisLockTimeout = redisLockTimeout;
 	}
+
+	public static String getLabelPathPrefix() {
+		return labelPathPrefix;
+	}
+
+	public static void setLabelPathPrefix(String labelPathPrefix) {
+		AppConfig.labelPathPrefix = labelPathPrefix;
+	}
+	
 }

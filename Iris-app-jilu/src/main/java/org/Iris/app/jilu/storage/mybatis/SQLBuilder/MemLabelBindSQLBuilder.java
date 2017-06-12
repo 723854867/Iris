@@ -15,9 +15,14 @@ public class MemLabelBindSQLBuilder {
 				INSERT_INTO(Table.MEM_LABEL_BIND.mark());
 				VALUES("label_id", "#{labelId}");
 				VALUES("merchant_id", "#{merchantId}");
-				VALUES("buy_id", "#{buyId}");
-				VALUES("created", "#{created}");
-				VALUES("updated", "#{updated}");
+				VALUES("bind_type", "#{bindType}");
+				VALUES("bind_id", "#{bindId}");
+				VALUES("latitude", "#{latitude}");
+				VALUES("longitude", "#{longitude}");
+				VALUES("bind_time", "#{bindTime}");
+				VALUES("address", "#{address}");
+				VALUES("bind_show", "#{bindShow}");
+				VALUES("memo", "#{memo}");
 			}
 		}.toString();
 	}
@@ -26,11 +31,9 @@ public class MemLabelBindSQLBuilder {
 		List<MemLabelBind> list = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.MEM_LABEL_BIND.mark()
-				+ " (label_id,merchant_id,buy_id,created,updated) values ");
+				+ " (label_id,merchant_id) values ");
 		for (MemLabelBind memLabelBind : list) {
-			stringBuilder.append("('" + memLabelBind.getLabelId() + "','" + memLabelBind.getMerchantId() + "','"
-					+ memLabelBind.getBuyId() + "','" 
-					+ memLabelBind.getCreated() + "','" + memLabelBind.getUpdated() + "'),");
+			stringBuilder.append("('" + memLabelBind.getLabelId() + "','" + memLabelBind.getMerchantId() + "','");
 		}
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();

@@ -23,15 +23,16 @@
 				</ul>
 			</div>
 			<div class="col-md-10">
-			<h2 class="sub-header">打印标签</h2>
-			<div id="qrcode"></div>
-			<input type="text" id="getval" size="200"/> <button id="send">输入标签更换</button>
+			<h2 class="sub-header">生成标签</h2>
+			<!--  <div id="qrcode"></div>-->
+			<label>请输入要生成的标签数量</label>
+			<input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" id="count"/> <button id="send">生成标签并下载</button>
 			</div>
 		</div>
 	</div>
 	<script type="text/javascript" src="../scripts/menu.js"></script>
 	<script type="text/javascript">
-	window.onload =function(){
+	/* window.onload =function(){
         var qrcode = new QRCode(document.getElementById("qrcode"), {
             width : 96,//设置宽高
             height : 96
@@ -40,7 +41,13 @@
         document.getElementById("send").onclick =function(){
             qrcode.makeCode(document.getElementById("getval").value);
         }
-    }
+    } */
+    $('#send').click(function(){
+    	var count = $("#count").val();
+    	if(count=="" || Number(count)<=0)
+    		return;
+    	window.open('/jilu/download?type=label&count='+count);
+    });
 </script>
 </body>
 </html>

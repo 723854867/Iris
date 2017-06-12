@@ -1393,11 +1393,10 @@ public class Merchant implements Beans {
 	 * @param bindId
 	 * @return
 	 */
-	public String bindingLabel(String labelId, int type, String bindId,String latitude,String longitude,String memo) {
+	public String bindingLabel(String labelId, int type, String bindId,String latitude,String longitude,String address,String bindShow,String memo) {
 		MemLabelBind memLabelBind = memLabelBindMapper.findById(labelId);
-		if(memLabelBind == null || memLabelBind.getStatus() == 1)
+		if(memLabelBind != null)
 			return Result.jsonError(JiLuCode.LABEL_IS_NOT_AVALIABEL);
-		memLabelBind.setBindId(bindId);
 		switch (type) {
 		case 0://绑定邮包
 			if(getMemOrderPacket(bindId) == null)
@@ -1411,14 +1410,8 @@ public class Merchant implements Beans {
 			throw IllegalConstException.errorException(JiLuParams.TYPE);
 		}
 		int time = DateUtils.currentTime();
-		memLabelBind.setBindType(type);
-		memLabelBind.setStatus(1);
-		memLabelBind.setUpdated(time);
-		memLabelBind.setLatitude(latitude);
-		memLabelBind.setLongitude(longitude);
-		memLabelBind.setMemo(memo);
-		memLabelBind.setBindTime(time);
-		memLabelBindMapper.update(memLabelBind);
+		memLabelBind = new MemLabelBind(labelId, getMemMerchant().getMerchantId(), type, bindId, latitude, longitude,address,bindShow, memo, time);
+		memLabelBindMapper.insert(memLabelBind);
 		return Result.jsonSuccess(memLabelBind);
 	}
 

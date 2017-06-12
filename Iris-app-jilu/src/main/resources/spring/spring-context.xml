@@ -17,6 +17,8 @@
 		<property name="aliyunStsRoleArn" value="${aliyun.sts.role.arn}" />
 		<property name="aliyunOssEndpoint" value="${aliyun.oss.endpoint}" />
 		<property name="aliyunOssFolderPrefix" value="${aliyun.oss.folder.prefix}" />
+		
+		<property name="labelPathPrefix" value="${label.path.prefix}" />
 	</bean>
 	
 	<context:component-scan base-package="org.Iris.app.jilu" />

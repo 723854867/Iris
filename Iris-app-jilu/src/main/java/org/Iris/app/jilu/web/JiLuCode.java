@@ -48,6 +48,7 @@ public enum JiLuCode implements ICode {
 	ACCOUNT_IS_CLOSE(236," account is close"),
 	APPLE_PAY_NOT_EXIST(237," apple pay is not exist"),
 	APPLE_PAY_NOT_AVAILABEL(238," apple pay is not availabel"),
+	LABEL_IS_ALREADY_BINDING(239," label is already bingding"),
 	
 	//后台
 	LABEL_NUM_EXIST(501,"label num is exist"),

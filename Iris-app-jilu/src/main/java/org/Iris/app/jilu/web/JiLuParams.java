@@ -132,4 +132,5 @@ public interface JiLuParams {
 	final IrisStrConst USERNAME								= new IrisStrConst("userName", 194);
 	final IrisStrConst ROLEID								= new IrisStrConst("roleId", 195);
 	final IrisIntConst ADMINID							    = new IrisIntConst("adminId",0, 196);
+	final IrisStrConst BINDSHOW							    = new IrisStrConst("bindShow",197);
 }

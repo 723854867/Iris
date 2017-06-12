@@ -231,22 +231,22 @@ public class BackstageService implements Beans{
 		BuyLabelLog labelLog = buyLabelLogMapper.findById(id);
 		if(null == labelLog)
 			throw IllegalConstException.errorException(JiLuParams.ID);
-		List<MemLabelBind> memLabelBinds = new ArrayList<>();
-		long count = labelLog.getCount();
-		int time = DateUtils.currentTime();
-		for(int i = 0 ; i < count ; i++){
-			MemLabelBind memLabelBind = new MemLabelBind();
-			memLabelBind.setLabelId(UUID.randomUUID().toString().replace("-", ""));
-			memLabelBind.setMerchantId(labelLog.getMerchantId());
-			memLabelBind.setBuyId(labelLog.getId());
-			memLabelBind.setCreated(time);
-			memLabelBind.setUpdated(time);
-			memLabelBinds.add(memLabelBind);
-		}
+//		List<MemLabelBind> memLabelBinds = new ArrayList<>();
+//		long count = labelLog.getCount();
+//		int time = DateUtils.currentTime();
+//		for(int i = 0 ; i < count ; i++){
+//			MemLabelBind memLabelBind = new MemLabelBind();
+//			memLabelBind.setLabelId(UUID.randomUUID().toString().replace("-", ""));
+//			memLabelBind.setMerchantId(labelLog.getMerchantId());
+//			memLabelBind.setBuyId(labelLog.getId());
+//			memLabelBind.setCreated(time);
+//			memLabelBind.setUpdated(time);
+//			memLabelBinds.add(memLabelBind);
+//		}
 		labelLog.setStatus(1);
 		labelLog.setSendTime(DateUtils.currentTime());
 		buyLabelLogMapper.update(labelLog);
-		memLabelBindMapper.batchInsert(memLabelBinds);
+//		memLabelBindMapper.batchInsert(memLabelBinds);
 		return Result.jsonSuccess();
 	}
 
