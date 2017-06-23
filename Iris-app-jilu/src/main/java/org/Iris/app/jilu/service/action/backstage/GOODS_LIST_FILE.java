@@ -41,7 +41,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * 2017年6月19日
  */
 public class GOODS_LIST_FILE extends BackstageAction {
-
+	//条形码（必须）	中文名称（必须）	规格（必须）	英文名称	分类	中文品牌	计量单位	重量	别名	sku	barcode	单价
+	String[] strTitles=	{	"条形码（必须）",
+							"中文名称（必须）",
+							"规格（必须）",
+							"英文名称",
+							"分类",
+							"中文品牌",
+							"计量单位",
+							"重量",
+							"别名",
+							"sku",
+							"barcode",
+							"单价",
+						};
+	String strDes = "注:有“必须”标记的列是必须有内容的；其它列可以根据需要选择输入；添加数据就按这个模板往下加即从“第三行”开始";
 	@Override
 	protected String execute0(IrisSession session){
 		
@@ -53,7 +67,7 @@ public class GOODS_LIST_FILE extends BackstageAction {
 
 	    HttpServletResponse response = session.getResponse();
 	    
-		String filePath= session.getRequest().getSession().getServletContext().getRealPath("/WEB-INF/download/产品模板.xlsx");
+		String filePath= session.getRequest().getSession().getServletContext().getRealPath("/WEB-INF/download/产品列表.xlsx");
 		File f = new File(filePath);
 	    if (!f.exists()) {
 	    	try {
@@ -87,14 +101,29 @@ public class GOODS_LIST_FILE extends BackstageAction {
 			
 			Workbook wb = new XSSFWorkbook();	//	xlsx
 			// 创建sheet对象
-			Sheet sheet1 = (Sheet) wb.createSheet("sheet1");
+			Sheet sheet1 = (Sheet) wb.createSheet("Sheet1");
 			// 循环写入行数据
-			int i = 0;
+			Row row;
+			Cell cell;
+			
+			//	第一行标题
+			row = (Row) sheet1.createRow(0);
+			for (int i = 0; i < strTitles.length; i++){
+				cell = row.createCell(i);
+				cell.setCellValue(strTitles[i]);
+			}
+			
+			//	第二行备注
+			row = (Row) sheet1.createRow(1);
+			cell = row.createCell(0);
+			cell.setCellValue(strDes);
+			
+			//	第三行开始是数据
+			int i = 2;
 			for (CfgGoods cfgGoods :list) {
-				Row row = (Row) sheet1.createRow(i);
+				row = (Row) sheet1.createRow(i);				
 
 				int j = 0;
-				Cell cell;
 				//条形码（必须）	中文名称（必须）	规格（必须）	英文名称	分类	中文品牌	计量单位	重量	别名	sku	barcode	单价
 				
 				cell = row.createCell(j++);
