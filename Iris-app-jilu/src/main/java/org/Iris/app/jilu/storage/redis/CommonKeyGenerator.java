@@ -18,6 +18,8 @@ public final class CommonKeyGenerator {
 	private static final String BG_VERSION_ACCOUNT					= "hash:cache:version:{0}";									// 版本控制
 	private static final String BG_LABEL_INFO						= "hash:cache:label";									// 版本控制
 	
+	private static final String ORDER_NUM_INCR						= "string:ordernum:incr";								// 订单号后4位自增值
+	
 	public static final String accountCaptchaKey(AccountType type, String account) {
 		return MessageFormat.format(ACCOUNT_CAPTCHA, type.name().toLowerCase(), account);
 	}
@@ -60,5 +62,8 @@ public final class CommonKeyGenerator {
 	
 	public static final String getLabel(){
 		return BG_LABEL_INFO;
+	}
+	public static final String getOrderNumIncr(){
+		return ORDER_NUM_INCR;
 	}
 }

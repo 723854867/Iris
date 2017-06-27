@@ -81,9 +81,7 @@
 </style>
 </head>
 <body>
-	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top"><a href="javascript:;" class="a-upload">
-	  <input type="file" name="upload_goods" id="upload_goods" onChange="uploadGoods()">
-	</a>
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
 	</nav>
 	<div class="container-fluid">
 		<div class="row">
@@ -94,7 +92,9 @@
 			<div class="col-md-10">
 			<h2 class="sub-header">产品列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button></h2>
 			<div>
-				<a href="javascript:;" class="a-upload">导入产品</a>
+				<a href="javascript:;" class="a-upload">
+					<input type="file" name="upload_goods" id="upload_goods" onChange="uploadGoods()">导入产品
+				</a>
                 <a href ="/jilu/backstage?action=goods_list_file" class="a-upload">导出产品</a>
 				<a href = "javascript:downlist();"><font size="2px">导入产品模板下载</font></a>
                 

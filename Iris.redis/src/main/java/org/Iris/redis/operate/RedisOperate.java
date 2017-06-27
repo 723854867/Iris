@@ -101,6 +101,15 @@ public class RedisOperate {
 			}
 		});
 	}
+	//自增
+	public Long incr(String key) {
+		return invoke(new RedisInvocation<Long>() {
+			@Override
+			public Long invok(Jedis jedis) {
+				return jedis.incr(key);
+			}
+		});
+	}
 
 	/**
 	 * 有条件的设置
