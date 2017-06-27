@@ -271,6 +271,52 @@ public class BackstageService implements Beans{
 			cfgGoods.setUpdateTime(DateUtils.getUTCDate((long)cfgGoods.getUpdated()*1000));
 		return Result.jsonSuccess(new Pager<CfgGoods>(count, list));
 	}
+	
+	public String getGoodsListFileString(String zhName,String alias,String goodsCode) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("start", 0);
+		map.put("pageSize", 65535);
+		map.put("zhName", zhName);
+		map.put("alias", alias);
+		map.put("goodsCode", goodsCode);
+		long count = cfgGoodsMapper.getCount(map);
+		if(count == 0)
+			return "";
+		List<CfgGoods> list = cfgGoodsMapper.getGoodsList(map);
+		String ret = "";
+		for(CfgGoods cfgGoods :list){
+
+			//条形码（必须）	中文名称（必须）	规格（必须）	英文名称	分类	中文品牌	计量单位	重量	别名	sku	barcode	单价
+			ret =	ret +	
+					cfgGoods.getGoodsCode() 	+ "	" +
+					cfgGoods.getZhName() 		+ "	" +
+					cfgGoods.getGoodsFormat() 	+ "	" + 
+					cfgGoods.getUsName() 		+ "	" + 
+					cfgGoods.getClassification()+ "	" +
+					cfgGoods.getZhBrand()		+ "	" +
+					cfgGoods.getUnit()			+ "	" +
+					cfgGoods.getWeight()		+ "	" +
+					cfgGoods.getAlias()			+ "	" +
+					cfgGoods.getSku()			+ "	" +
+					cfgGoods.getBarcode()		+ "	" +
+					cfgGoods.getUnitPrice()		+ "\r\n";
+			//cfgGoods.setUpdateTime(DateUtils.getUTCDate((long)cfgGoods.getUpdated()*1000));
+		}
+		return ret;//Result.jsonSuccess(new Pager<CfgGoods>(count, list));
+	}
+	
+	public List<CfgGoods> getGoodsList() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("start", 0);
+		map.put("pageSize", 65535);
+		map.put("zhName", "");
+		map.put("alias", "");
+		map.put("goodsCode", "");
+		long count = cfgGoodsMapper.getCount(map);
+		if(count == 0)
+			return null;
+		return cfgGoodsMapper.getGoodsList(map);
+	}
 
 	/**
 	 * 插入商品

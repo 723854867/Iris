@@ -25,7 +25,7 @@
     line-height: 20px;
     position: relative;
     cursor: pointer;
-    color: #888;
+    color: #888; 
     background: #fafafa;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -81,7 +81,9 @@
 </style>
 </head>
 <body>
-	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top">
+	<nav id="main-top" class="navbar navbar-inverse navbar-fixed-top"><a href="javascript:;" class="a-upload">
+	  <input type="file" name="upload_goods" id="upload_goods" onChange="uploadGoods()">
+	</a>
 	</nav>
 	<div class="container-fluid">
 		<div class="row">
@@ -92,10 +94,10 @@
 			<div class="col-md-10">
 			<h2 class="sub-header">产品列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button></h2>
 			<div>
-				<a href="javascript:;" class="a-upload">
-	    			<input type="file" name="upload_goods" id="upload_goods" onchange="uploadGoods()">导入产品</font>
-				</a>
-				<a href = "/jilu/download?type=goods"><font size="2px">导入产品模板下载</font></a>
+				<a href="javascript:;" class="a-upload">导入产品</a>
+                <a href ="/jilu/backstage?action=goods_list_file" class="a-upload">导出产品</a>
+				<a href = "javascript:downlist();"><font size="2px">导入产品模板下载</font></a>
+                
 			</div>
 				<form role="form">
 				<div class="form-inline form-group">
@@ -281,6 +283,28 @@
             }
         });
     }
+	downlist = function(){
+		$.ajax({
+            type: 'POST',
+            url: '/jilu/backstage',
+            data: { 'action': 'goods_list_file',
+            	'zhName':$("#zhName_").val(),'alias':$("#alias_").val(),'goodsCode':$("#goodsCode_").val()},
+            dataType: 'json',
+            beforeSend: function () {
+            	initLoading();
+            	showLoading("正在加载数据，请稍候。。。");
+            },
+            success: function (json) {
+            	hideLoading();
+            	RemoveLoading();
+            },
+            complete: function () { 
+            },
+            error: function () {
+                alert("数据下载失败");
+            }
+        });	
+	}
 	add = function(){
 		$('#zhName').val("");
 		$('#goodsCode').val("");
