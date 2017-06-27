@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JbDetailType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
@@ -874,9 +875,12 @@ public class MerchantService extends RedisCache implements Beans{
 		memOrderPacketMapper.update(packet);
 		redisOperate.hmset(packet.redisKey(), packet);
 		//设置产品状态运输中
+		double money=0;//定义这次邮单的消费金额
 		List<MemOrderGoods> list = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(packetId);
-		for(MemOrderGoods goods : list)
+		for(MemOrderGoods goods : list){
 			goods.setStatus(OrderStatus.TRANSPORT.status());
+			money+=goods.getCount()*Double.valueOf(goods.getUnitPrice());
+		}
 		memOrderGoodsMapper.batchUpdate(list);
 		redisOperate.batchHmset(list);
 		/*更新订单状态 和 订单状态表 开始*/
@@ -885,6 +889,24 @@ public class MerchantService extends RedisCache implements Beans{
 		status.setTransportCount(status.getTransportCount()+1);
 		setOrderStatus(merchant, packet.getOrderId(), packet.getMerchantId(), status);
 		/*更新订单状态 和 订单状态表 结束*/
+		
+		//更新商户的客户排序列表
+		MemOrder order = merchant.getMerchantOrderById(packet.getMerchantId(), packet.getOrderId());
+		long customerId = order.getCustomerId();
+		MemCustomer customer = merchant.getCustomer(customerId);
+		int time = DateUtils.currentTime();
+		customer.setLastPurchaseTime(time);//更新最后消费时间
+		customer.setPurchaseSum(String.valueOf(Double.valueOf(customer.getPurchaseSum())+money));//更新消费总额
+		customer.setUpdated(time);
+		memCustomerMapper.update(customer);
+		redisOperate.hmset(MerchantKeyGenerator.customerDataKey(packet.getMerchantId()), customer);
+		luaOperate.evalLua(JiLuLuaCommand.FINISH_ORDER.name(), 4,
+				MerchantKeyGenerator.customerListLoadTimeKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_SUM.redisCustomerListKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_RECENT.redisCustomerListKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(packet.getMerchantId()),
+				String.valueOf(customerId),String.valueOf(time),String.valueOf(money));
+		
 		return Result.jsonSuccess(packet);
 	}
 	
