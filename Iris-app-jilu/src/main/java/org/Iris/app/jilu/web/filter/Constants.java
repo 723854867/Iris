@@ -18,5 +18,6 @@ public class Constants {
 		noFilterPage.add("/login.html");
 		noFilterPage.add("/login.jsp");
 		noFilterPage.add("/anno/index.html");
+		noFilterPage.add("/share");
 	}
 }

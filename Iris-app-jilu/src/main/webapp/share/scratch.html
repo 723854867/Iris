@@ -37,14 +37,42 @@
         var r = window.location.search.substr(1).match(reg);
         if(r!=null)return  unescape(r[2]); return null;
     }
+    
 
-    alert(GetQueryString("token"));
+//    alert(GetQueryString("token"));
 
     var token = GetQueryString("token");
     var accessKeyId = GetQueryString("accessKeyId");
     var accessKeySecret = GetQueryString("accessKeySecret");
     var bucket = GetQueryString("bucket");
-    var storeAs = GetQueryString("storeAs");
+    var customerId = GetQueryString("customerId");
+    var loginToken = GetQueryString("loginToken");
+    var userId = GetQueryString("userId");
+
+    function TellToServer(mod) {
+        $.ajax({
+            type: "POST",
+            url: "/jilu/merchant",
+            data:{
+                action:"customer_idcard_edit",
+                customerId:customerId,
+                mod:mod
+            },
+            dataType:"json",
+            beforeSend: function(request) {
+                request.setRequestHeader("token", loginToken);
+            },
+            success: function(data) {
+            	if(data.code==0)
+                	alert("已经通知到服务端");
+            	else
+            		alert(data.desc);
+            },
+            error: function(data){
+                alert("error");
+            }
+        });
+    }
 
     var imgfile0;
     var imgfile1;
@@ -75,7 +103,7 @@
 //accessKeyId=&
         $('#upbtn1').click(function(){
 //            var token = 'CAIS4QN1q6Ft5B2yfSjIqoHyfPHSj4ZM7o+pSBXaqGhhNNgeu7//hTz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4utsyOX7w1wMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhYK24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUYic1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABnNqU5ZfqdDG/cQ5otymxmbeqzPXdsZR0ABnz+CcWNRd8hWjbrz4FCARSbALHHZMVTp5FERid6R0qhVK8yRPGJbhwVdJnNq3kmH51/rTftR4Xr9uqTHwXgZolCmXDWxBysRAJb11FHUqyByotIoenYzYnx/XGV0PT9ovB6d6JALU=';
-//            var storeAs = 'common/merchant/91/avatar.jpg';
+            var storeAs = 'common/merchant/'+ userId + '/customer/' +customerId +'/IDFrontage.jpg';
             var client = new OSS.Wrapper({
                 region: 'oss-cn-shanghai',
                 accessKeyId: accessKeyId,
@@ -87,6 +115,7 @@
             client.multipartUpload(storeAs, imgfile0).then(function (result) {
                 console.log(result);
                 alert("上传成功！");
+                TellToServer(2);
                 $('#upbtn1').attr("disabled",true);
             }).catch(function (err) {
                 console.log(err);
@@ -124,8 +153,9 @@
         });
 
         $('#upbtn2').click(function(){
-            var token = 'CAIS4QN1q6Ft5B2yfSjIqoHyfPHSj4ZM7o+pSBXaqGhhNNgeu7//hTz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4utsyOX7w1wMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhYK24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUYic1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABnNqU5ZfqdDG/cQ5otymxmbeqzPXdsZR0ABnz+CcWNRd8hWjbrz4FCARSbALHHZMVTp5FERid6R0qhVK8yRPGJbhwVdJnNq3kmH51/rTftR4Xr9uqTHwXgZolCmXDWxBysRAJb11FHUqyByotIoenYzYnx/XGV0PT9ovB6d6JALU=';
-//            var storeAs = 'common/merchant/91/avatar.jpg';
+//            var token = 'CAIS4QN1q6Ft5B2yfSjIqoHyfPHSj4ZM7o+pSBXaqGhhNNgeu7//hTz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4utsyOX7w1wMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhYK24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUYic1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABnNqU5ZfqdDG/cQ5otymxmbeqzPXdsZR0ABnz+CcWNRd8hWjbrz4FCARSbALHHZMVTp5FERid6R0qhVK8yRPGJbhwVdJnNq3kmH51/rTftR4Xr9uqTHwXgZolCmXDWxBysRAJb11FHUqyByotIoenYzYnx/XGV0PT9ovB6d6JALU=';
+
+            var storeAs = 'common/merchant/'+ userId + '/customer/' +customerId +'/IDBehinde.jpg';
             var client = new OSS.Wrapper({
                 region: 'oss-cn-shanghai',
                 accessKeyId: accessKeyId,
@@ -136,7 +166,8 @@
 
             client.multipartUpload(storeAs, imgfile1).then(function (result) {
                 console.log(result);
-                alert(result);
+                alert("上传成功！");
+                TellToServer(1);
                 $('#upbtn2').attr("disabled",true);
             }).catch(function (err) {
                 console.log(err);

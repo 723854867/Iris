@@ -1603,4 +1603,16 @@ public class Merchant implements Beans {
 		return Result.jsonSuccess();
 	}
 
+	public String editCustomerIdcard(long customerId, int mod) {
+		MemCustomer customer = getCustomer(customerId);
+		if (null == customer)
+			return Result.jsonError(JiLuCode.CUSTOMER_NOT_EXIST);
+		customer.setStatusMod(mod);
+		customer.setUpdated(DateUtils.currentTime());
+		memCustomerMapper.update(customer);
+		redisOperate.hset(MerchantKeyGenerator.customerDataKey(memMerchant.getMerchantId()),
+				String.valueOf(customer.getCustomerId()), customer.toString());
+		return Result.jsonSuccess();
+	}
+
 }
