@@ -94,9 +94,11 @@
 			<div class="col-md-10">
 			<h2 class="sub-header">产品列表<button type="button" class="btn btn-default" onclick="add()"><span class="glyphicon glyphicon-plus"></span> 添加</button></h2>
 			<div>
-				<a href="javascript:;" class="a-upload">导入产品</a>
+				<a href="javascript:;" class="a-upload">
+	    			<input type="file" name="upload_goods" id="upload_goods" onchange="uploadGoods()">导入产品</font>
+				</a>
                 <a href ="/jilu/backstage?action=goods_list_file" class="a-upload">导出产品</a>
-				<a href = "javascript:downlist();"><font size="2px">导入产品模板下载</font></a>
+				<a href = "/jilu/download?type=goods"><font size="2px">导入产品模板下载</font></a>
                 
 			</div>
 				<form role="form">
@@ -212,6 +214,7 @@
 						<label for="alias">别名：</label> 
 						<input class="form-control" id="alias" >
 					</div>
+                    <!--
 					<div class="form-group">
 						<label for="sku">sku：</label> 
 						<input class="form-control" id="sku" >
@@ -220,6 +223,7 @@
 						<label for="barcode">barcode：</label> 
 						<input class="form-control" id="barcode" >
 					</div>
+                    -->
 					<div class="form-group">
 						<label for="unitPrice">单价：</label> 
 						<input class="form-control" id="unitPrice" >
@@ -336,7 +340,7 @@
 			url: '/jilu/backstage',
 			data:{'action': goodsId==''?'goods_add':'goods_edit','goodsId':goodsId,'goodsCode':goodsCode,'zhName':zhName,'goodsFormat':goodsFormat,'usName':$("#usName").val(),
 				'classification':$("#classification").val(),'zhBrand':$("#zhBrand").val(),'usBrand':$("#usBrand").val(),'unit':$("#unit").val(),
-				'weight':$("#weight").val(),'alias':$("#alias").val(),'sku':$("#sku").val(),'barcode':$("#barcode").val(),'unitPrice':$("#unitPrice").val()},
+				'weight':$("#weight").val(),'alias':$("#alias").val(),'unitPrice':$("#unitPrice").val()},
 			dataTyp:'json',
 			 success: function (json) {
 	            	if(json.code=="0"){

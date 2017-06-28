@@ -56,6 +56,12 @@ public interface CfgGoodsMapper {
 	@InsertProvider(type = CfgGoodsSQLBuilder.class, method = "batchInsert")
 	long batchInsert(ArrayList<ArrayList<Object>> rowlist);
 	
+	@UpdateProvider(type = CfgGoodsSQLBuilder.class, method = "batchUpdate")
+	long batchUpdate(ArrayList<ArrayList<Object>> rowlist);
+	
 	@InsertProvider(type = CfgGoodsSQLBuilder.class, method = "batchInsertByMerchant")
 	long batchInsertByMerchant(Map<String, Object> map);
+	
+	@UpdateProvider(type = CfgGoodsSQLBuilder.class, method = "batchUpdateByMerchant")
+	long batchUpdateByMerchant(ArrayList<ArrayList<Object>> rowlist);
 }

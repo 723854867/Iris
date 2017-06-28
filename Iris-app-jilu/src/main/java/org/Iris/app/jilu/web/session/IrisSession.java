@@ -93,7 +93,8 @@ public class IrisSession {
 
 	public IrisSession write(String reply) {
 		try {
-			response.getWriter().write(reply);
+			if (reply != null)
+				response.getWriter().write(reply);
 		} catch (IOException e) {
 			throw new IrisRuntimeException("Servlet Response writer failure!", e);
 		}

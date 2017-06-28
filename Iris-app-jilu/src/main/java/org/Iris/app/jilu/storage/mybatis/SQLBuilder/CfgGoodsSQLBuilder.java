@@ -41,16 +41,24 @@ public class CfgGoodsSQLBuilder {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
 				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
-		for (int i = 2;i<rowList.size();i++) {
+		for (int i = 0;i<rowList.size();i++) {
 			stringBuilder.append("(");
 			for(int j = 0;j<13;j++){
-				if(j < rowList.get(i).size()){
-					stringBuilder.append("'"+rowList.get(i).get(j)+"',");
+				int idx = j;
+				
+				//	20170625 excel表格去掉barcode
+				if (j == 11)
+					idx = 13;
+				else if (j == 12)
+					idx = 11;
+				
+				if(idx < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
-					if(j==8)//weight
+					if(idx==8)//weight
 						stringBuilder.append("0,");
-					else if(j==12)//unit_price
+					else if(idx==12)//unit_price
 						stringBuilder.append("1,");
 					else
 						stringBuilder.append("'',");
@@ -63,6 +71,65 @@ public class CfgGoodsSQLBuilder {
 		return stringBuilder.toString();
 	}
 	
+
+	public String batchUpdate(StrictMap<ArrayList<ArrayList<Object>>> map){
+		int time = DateUtils.currentTime();
+		ArrayList<ArrayList<Object>> rowList = map.get("collection");
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		
+		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
+				+ " (goods_id, goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+		for (int i = 0;i<rowList.size();i++) {
+			stringBuilder.append("("+rowList.get(i).get(10)+",");
+			for(int j = 0;j<13;j++){
+				int idx = j;
+				
+				//	20170625 excel表格去掉barcode
+				if (j == 11)
+					idx = 13;
+				else if (j == 12)
+					idx = 11;
+				
+				if(idx < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
+				}
+				else{
+					if(idx==8)//weight
+						stringBuilder.append("0,");
+					else if(idx==12)//unit_price
+						stringBuilder.append("1,");
+					else
+						stringBuilder.append("'',");
+				}
+					
+			}
+			stringBuilder.append("0,'公共库',"+time+","+time+"),");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		stringBuilder.append("on duplicate key update " +
+								"goods_code=values(goods_code),"+
+								"zh_name=values(zh_name),"+
+								"goods_format=values(goods_format),"+
+								"us_name=values(us_name),"+
+								"classification=values(classification),"+
+								"zh_brand=values(zh_brand),"+
+								"us_brand=values(us_brand),"+
+								"unit=values(unit),"+
+								"weight=values(weight),"+
+								"alias=values(alias),"+
+								"sku=values(sku),"+
+								"barcode=values(barcode),"+
+								"unit_price=values(unit_price),"+
+								"source=values(source),"+
+								"merchant_name=values(merchant_name),"+
+								"created=values(created),"+
+								"updated=values(updated),"
+				);
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		return stringBuilder.toString();
+	}
+	
 	public String batchInsertByMerchant(Map<String, Object> map){
 		int time = DateUtils.currentTime();
 		@SuppressWarnings("unchecked")
@@ -71,11 +138,20 @@ public class CfgGoodsSQLBuilder {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
 				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
-		for (int i = 2;i<rowList.size();i++) {
+		for (int i = 0;i<rowList.size();i++) {
+			
 			stringBuilder.append("(");
 			for(int j = 0;j<13;j++){
-				if(j < rowList.get(i).size()){
-					stringBuilder.append("'"+rowList.get(i).get(j)+"',");
+				int idx = j;
+				
+				//	20170625 excel表格去掉barcode
+				if (j == 11)
+					idx = 13;
+				else if (j == 12)
+					idx = 11;
+				
+				if(idx < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
 					if(j==8)//weight
@@ -89,6 +165,66 @@ public class CfgGoodsSQLBuilder {
 			}
 			stringBuilder.append(""+memMerchant.getMerchantId()+",'"+memMerchant.getName()+"',"+time+","+time+"),");
 		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		return stringBuilder.toString();
+	}
+	
+
+	public String batchUpdateByMerchant(Map<String, Object> map){
+		int time = DateUtils.currentTime();
+		@SuppressWarnings("unchecked")
+		ArrayList<ArrayList<Object>> rowList = (ArrayList<ArrayList<Object>>)map.get("list");
+		MemMerchant memMerchant = (MemMerchant)map.get("memMerchant");
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
+				+ " (goods_id, goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+		for (int i = 0; i<rowList.size(); i++) {
+			
+			stringBuilder.append("(");
+			for(int j = 0;j<13;j++){
+				int idx = j;
+				
+				//	20170625 excel表格去掉barcode
+				if (j == 11)
+					idx = 13;
+				else if (j == 12)
+					idx = 11;
+				
+				if(idx < rowList.get(i).size()){
+					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
+				}
+				else{
+					if(j==8)//weight
+						stringBuilder.append("0,");
+					else if(j==12)//unit_price
+						stringBuilder.append("1,");
+					else
+						stringBuilder.append("'',");
+				}
+					
+			}
+			stringBuilder.append(""+memMerchant.getMerchantId()+",'"+memMerchant.getName()+"',"+time+","+time+"),");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 1);
+		stringBuilder.append("on duplicate key update " +
+				"goods_code=values(goods_code),"+
+				"zh_name=values(zh_name),"+
+				"goods_format=values(goods_format),"+
+				"us_name=values(us_name),"+
+				"classification=values(classification),"+
+				"zh_brand=values(zh_brand),"+
+				"us_brand=values(us_brand),"+
+				"unit=values(unit),"+
+				"weight=values(weight),"+
+				"alias=values(alias),"+
+				"sku=values(sku),"+
+				"barcode=values(barcode),"+
+				"unit_price=values(unit_price),"+
+				"source=values(source),"+
+				"merchant_name=values(merchant_name),"+
+				"created=values(created),"+
+				"updated=values(updated),"
+				);
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		return stringBuilder.toString();
 	}

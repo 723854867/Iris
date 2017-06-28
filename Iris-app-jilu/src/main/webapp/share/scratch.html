@@ -1,0 +1,160 @@
+﻿<!doctype html>
+<html class="no-js" lang="" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>请上传您的身份证信息</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+</head>
+<br>
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<p>请选择身份证正面</p>
+<input id="upload_image0" type="file" name="image" accept="image/*;video/*;capture=camcorder" /></br></br>
+<img id="showImg0" width="300" height="300"/></br></br>
+<button id="upbtn1" disabled = false>点击上传正面</button></br></br>
+<p>请选择身份证反面</p>
+<input id="upload_image1" type="file" name="image" accept="image/*;video/*;capture=camcorder" /></br></br>
+<img id="showImg1" width="300" height="300"/></br></br>
+<button id="upbtn2" disabled = false>点击上传反面</button>
+
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<!--<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>-->
+<script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script type="text/javascript">
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
+    alert(GetQueryString("token"));
+
+    var token = GetQueryString("token");
+    var accessKeyId = GetQueryString("accessKeyId");
+    var accessKeySecret = GetQueryString("accessKeySecret");
+    var bucket = GetQueryString("bucket");
+    var storeAs = GetQueryString("storeAs");
+
+    var imgfile0;
+    var imgfile1;
+    $(function() {
+        $('#upload_image0').change(function(event) {
+
+            var files = event.target.files, file;
+            if (files && files.length > 0) {
+
+                file = files[0];
+
+                console.log(file);
+
+                if(file.size > 1024 * 1024 * 6) {
+                    alert('图片不能超过 6MB!');
+                    return false;
+                }
+
+                var URL = window.URL || window.webkitURL;
+                var imgURL = URL.createObjectURL(file);
+
+                $('#showImg0').attr("src", imgURL);
+                imgfile0 = file;
+                $('#upbtn1').removeAttr("disabled");
+                // URL.revokeObjectURL(imgURL);
+            }
+        });
+//accessKeyId=&
+        $('#upbtn1').click(function(){
+//            var token = 'CAIS4QN1q6Ft5B2yfSjIqoHyfPHSj4ZM7o+pSBXaqGhhNNgeu7//hTz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4utsyOX7w1wMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhYK24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUYic1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABnNqU5ZfqdDG/cQ5otymxmbeqzPXdsZR0ABnz+CcWNRd8hWjbrz4FCARSbALHHZMVTp5FERid6R0qhVK8yRPGJbhwVdJnNq3kmH51/rTftR4Xr9uqTHwXgZolCmXDWxBysRAJb11FHUqyByotIoenYzYnx/XGV0PT9ovB6d6JALU=';
+//            var storeAs = 'common/merchant/91/avatar.jpg';
+            var client = new OSS.Wrapper({
+                region: 'oss-cn-shanghai',
+                accessKeyId: accessKeyId,
+                accessKeySecret: accessKeySecret,
+                stsToken: token,
+                bucket: bucket
+            });
+
+            client.multipartUpload(storeAs, imgfile0).then(function (result) {
+                console.log(result);
+                alert("上传成功！");
+                $('#upbtn1').attr("disabled",true);
+            }).catch(function (err) {
+                console.log(err);
+//                $('#showImg0').removeAttr("src");
+                if(err.status == 403){
+                    alert("链接已过期，请重新获取分享链接！");
+                }else{
+                    alert(err.status);
+                }
+            });
+        });
+
+
+        $('#upload_image1').change(function(event) {
+
+            var files = event.target.files, file;
+            if (files && files.length > 0) {
+
+                file = files[0];
+
+                console.log(file);
+
+                if(file.size > 1024 * 1024 * 6) {
+                    alert('图片不能超过 6MB!');
+                    return false;
+                }
+
+                var URL = window.URL || window.webkitURL;
+                var imgURL = URL.createObjectURL(file);
+
+                $('#showImg1').attr("src", imgURL);
+                $('#upbtn2').removeAttr("disabled");
+                imgfile1 = file;
+            }
+        });
+
+        $('#upbtn2').click(function(){
+            var token = 'CAIS4QN1q6Ft5B2yfSjIqoHyfPHSj4ZM7o+pSBXaqGhhNNgeu7//hTz2IHpMdHBuAOAfsfswlWpT6v8alqJWRoVORUXCcY4utsyOX7w1wMmT1fau5Jko1bd6cwr6UmwXta2/SuH9S8ynDZXJQlvYlyh17KLnfDG5JTKMOoGIjpgVAbZ6WRKjP3g8NrUwHAZ5r9IAPnb8LOukNgWQ4lDdF011oAFx+zUdna202Z+b8QGMzg+4mO0Uo5m0PpW/c45nO5J6VNHXquV9bfjGyzUCqUoIpqV3iLEB5TrcopaWBFxU5BPBcZgWm78CBQt9YbdAXswghfPglPp+l/XOnoDssXhkNv1UVCKtOeLAx9DfSsykKpRbFLHgICbp08uTdOPv0WUebGkcKRlBdvc4N3Z0EmZMcDzBLbK98124XGXjQqOegqYtysg3nRe6/9uOOh2TTq6Fli0fP5o7aQQtOgQd3WXnbuhYK24Oelh8VbGOVtcxPlIMq6LsoEjOWzZ8iXpQuvj5YbTTt7oUaYz5QtUYic1fRuwf7ztyFgmpGuzz1RtLKTQ5e9sMjvmxY63YwaSe3eCebdTBDv06oVhAeVjT1XHXESMJc3Shv4J8NgvCoJiIlLat8ZJkDU4y68tDHdkbhw+bAeQMGoABnNqU5ZfqdDG/cQ5otymxmbeqzPXdsZR0ABnz+CcWNRd8hWjbrz4FCARSbALHHZMVTp5FERid6R0qhVK8yRPGJbhwVdJnNq3kmH51/rTftR4Xr9uqTHwXgZolCmXDWxBysRAJb11FHUqyByotIoenYzYnx/XGV0PT9ovB6d6JALU=';
+//            var storeAs = 'common/merchant/91/avatar.jpg';
+            var client = new OSS.Wrapper({
+                region: 'oss-cn-shanghai',
+                accessKeyId: accessKeyId,
+                accessKeySecret: accessKeySecret,
+                stsToken: token,
+                bucket: bucket
+            });
+
+            client.multipartUpload(storeAs, imgfile1).then(function (result) {
+                console.log(result);
+                alert(result);
+                $('#upbtn2').attr("disabled",true);
+            }).catch(function (err) {
+                console.log(err);
+                if(err.status == 403){
+                    alert("链接已过期，请重新获取分享链接！");
+                }else{
+                    alert(err.status);
+                }
+            });
+        });
+    });
+
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='https://www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-XXXXX-X','auto');ga('send','pageview');
+</script>
+</body>
+</html>
