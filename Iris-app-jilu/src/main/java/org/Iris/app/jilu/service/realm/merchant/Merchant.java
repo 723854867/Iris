@@ -1238,14 +1238,24 @@ public class Merchant implements Beans {
 	 * @return
 	 */
 	public String allOrderGoodsSum(int start, int end) {
-		List<AllOrderGoodsSumForm> list = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByMerchantId(memMerchant.getMerchantId(),start,end);
+		/*List<AllOrderGoodsSumForm> list = memOrderGoodsMapper.getNotFinishMerchantOrderGoodsByMerchantId(memMerchant.getMerchantId(),start,end);
 		for(AllOrderGoodsSumForm form : list){
 			CfgGoods goods = getGoodsById(form.getGoodsId());
 			form.setGoodsName(goods.getZhName());
 			form.setMerchantName(goods.getMerchantName());
 			form.setUnitPrice(goods.getUnitPrice());
 		}
-		return Result.jsonSuccess(list);
+		return Result.jsonSuccess(list);*/
+		List<MemGoodsStore> list = memGoodsStoreMapper.getDjhMemGoodsStoreListByMerchantId(memMerchant.getMerchantId());
+		List<AllOrderGoodsSumForm> djhList = new ArrayList<AllOrderGoodsSumForm>();
+		for(MemGoodsStore memGoodsStore : list){
+			AllOrderGoodsSumForm form = new AllOrderGoodsSumForm();
+			form.setGoodsName(memGoodsStore.getGoodsName());
+			form.setMerchantName(memGoodsStore.getMerchantName());
+			form.setCount(-memGoodsStore.getCount());
+			djhList.add(form);
+		}
+		return Result.jsonSuccess(djhList);
 	}
 	
 	/**

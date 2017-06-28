@@ -7,11 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.BeanCreator;
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.enums.CustomerListType;
 import org.Iris.app.jilu.common.bean.enums.IgtPushType;
 import org.Iris.app.jilu.common.bean.enums.JbDetailType;
 import org.Iris.app.jilu.common.bean.enums.JiLuLuaCommand;
@@ -21,9 +19,6 @@ import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.OrderGoodsForm;
 import org.Iris.app.jilu.common.bean.model.OrderDetailedModel;
 import org.Iris.app.jilu.common.model.AccountType;
-import org.Iris.app.jilu.service.realm.BackstageService;
-import org.Iris.app.jilu.service.realm.courier.CourierService;
-import org.Iris.app.jilu.service.realm.igt.IgtService;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderReceiveParam;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderStatusChangeParam;
 import org.Iris.app.jilu.service.realm.igt.domain.PushOrderTransformParam;
@@ -41,32 +36,18 @@ import org.Iris.app.jilu.storage.domain.MemOrderStatus;
 import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.StockGoodsStoreLog;
 import org.Iris.app.jilu.storage.domain.UpdateStoreLog;
-import org.Iris.app.jilu.storage.mybatis.mapper.CfgGoodsMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemAccountMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemGoodsStoreMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemJbDetailMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemMerchantMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderGoodsMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderPacketMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemOrderStatusMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.MemPayInfoMapper;
-import org.Iris.app.jilu.storage.mybatis.mapper.StockGoodsStoreLogMapper;
-import org.Iris.app.jilu.storage.redis.JiLuLuaOperate;
+import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.MerchantKeyGenerator;
 import org.Iris.app.jilu.storage.redis.RedisCache;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
-import org.Iris.util.common.OrderNumberUtil;
 import org.Iris.util.common.SerializeUtil;
 import org.Iris.util.lang.DateUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mysql.cj.api.io.PacketReceivedTimeHolder;
 
 @Service
 public class MerchantService extends RedisCache implements Beans{
@@ -238,10 +219,10 @@ public class MerchantService extends RedisCache implements Beans{
 			return Result.jsonError(JiLuCode.BALANCE_IS_NOT_ENOUGH);
 		List<MemGoodsStore> addStoreList = new ArrayList<MemGoodsStore>();
 		List<MemGoodsStore> updateStoreList = new ArrayList<MemGoodsStore>();
-		String orderId = OrderNumberUtil.getRandomOrderId(4);
+		String orderId = getRandomOrderId();
 		List<OrderGoodsForm> orderGoodsForms = new ArrayList<OrderGoodsForm>();
 		for(MemOrderGoods ogs: list){
-			CfgGoods goods = merchant.getGoodsById(ogs.getGoodsId());
+			CfgGoods goods = Merchant.getGoodsById(ogs.getGoodsId());
 			if(goods == null)
 				return Result.jsonError(JiLuCode.GOODS_NOT_EXIST.constId(), MessageFormat.format(JiLuCode.GOODS_NOT_EXIST.defaultValue(), ogs.getGoodsId()));
 			ogs.setOrderId(orderId);
@@ -387,7 +368,7 @@ public class MerchantService extends RedisCache implements Beans{
 	@Transactional
 	public String orderChange(MemOrder order,MemMerchant memMerchant,List<MemOrderGoods> changeOrderGoods,Merchant merchant){
 		order.setSuperOrderId(order.getOrderId());
-		order.setOrderId(OrderNumberUtil.getRandomOrderId(4));
+		order.setOrderId(getRandomOrderId());
 		int time = DateUtils.currentTime();
 		order.setCreated(time);
 		order.setUpdated(time);
@@ -735,7 +716,7 @@ public class MerchantService extends RedisCache implements Beans{
 		StringBuilder builder = new StringBuilder();
 		for(List<MemOrderGoods> packet : packets){
 			//packet 代表一个分包中的所有产品
-			String packetId = "p_"+OrderNumberUtil.getRandomOrderId(2);
+			String packetId = "p"+getRandomOrderId();
 			MemOrderPacket memOrderPacket = BeanCreator.newMemOrderPacket(packetId, orderId,merchant.getMemMerchant().getMerchantId());
 			packetList.add(memOrderPacket);
 			builder.append(packetId+";");
@@ -874,9 +855,12 @@ public class MerchantService extends RedisCache implements Beans{
 		memOrderPacketMapper.update(packet);
 		redisOperate.hmset(packet.redisKey(), packet);
 		//设置产品状态运输中
+		double money=0;//定义这次邮单的消费金额
 		List<MemOrderGoods> list = memOrderGoodsMapper.getPacketMerchantOrderGoodsByPacketId(packetId);
-		for(MemOrderGoods goods : list)
+		for(MemOrderGoods goods : list){
 			goods.setStatus(OrderStatus.TRANSPORT.status());
+			money+=goods.getCount()*Double.valueOf(goods.getUnitPrice());
+		}
 		memOrderGoodsMapper.batchUpdate(list);
 		redisOperate.batchHmset(list);
 		/*更新订单状态 和 订单状态表 开始*/
@@ -885,6 +869,24 @@ public class MerchantService extends RedisCache implements Beans{
 		status.setTransportCount(status.getTransportCount()+1);
 		setOrderStatus(merchant, packet.getOrderId(), packet.getMerchantId(), status);
 		/*更新订单状态 和 订单状态表 结束*/
+		
+		//更新商户的客户排序列表
+		MemOrder order = merchant.getMerchantOrderById(packet.getMerchantId(), packet.getOrderId());
+		long customerId = order.getCustomerId();
+		MemCustomer customer = merchant.getCustomer(customerId);
+		int time = DateUtils.currentTime();
+		customer.setLastPurchaseTime(time);//更新最后消费时间
+		customer.setPurchaseSum(String.valueOf(Double.valueOf(customer.getPurchaseSum())+money));//更新消费总额
+		customer.setUpdated(time);
+		memCustomerMapper.update(customer);
+		redisOperate.hmset(MerchantKeyGenerator.customerDataKey(packet.getMerchantId()), customer);
+		luaOperate.evalLua(JiLuLuaCommand.FINISH_ORDER.name(), 4,
+				MerchantKeyGenerator.customerListLoadTimeKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_SUM.redisCustomerListKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_RECENT.redisCustomerListKey(packet.getMerchantId()),
+				CustomerListType.PURCHASE_FREQUENCY.redisCustomerListKey(packet.getMerchantId()),
+				String.valueOf(customerId),String.valueOf(time),String.valueOf(money));
+		
 		return Result.jsonSuccess(packet);
 	}
 	
@@ -1128,5 +1130,26 @@ public class MerchantService extends RedisCache implements Beans{
 				redisOperate.hset(MerchantKeyGenerator.merchantPayDataKey(), outTradeNo, SerializeUtil.JsonUtil.GSON.toJson(payInfo));
 		}
 		return payInfo;
+	}
+	
+	/**
+	 * 订单号规则 时间戳前8位加后4位自增
+	 * @param incre 递增数 从redis中取出 在这里要进行4位补齐操作
+	 * @return
+	 */
+	public String getRandomOrderId(){
+		long incr = 0;
+		synchronized (this) {
+			incr = redisOperate.incr(CommonKeyGenerator.getOrderNumIncr());
+			if(incr > 9999){
+				incr = 0;
+				redisOperate.set(CommonKeyGenerator.getOrderNumIncr(), "0");
+			}
+		}
+		String string = String.valueOf(incr);
+		while(string.length()<4){
+			string = "0"+string;
+		}
+		return (DateUtils.currentTime()+"").substring(0, 8)+string;
 	}
 }
