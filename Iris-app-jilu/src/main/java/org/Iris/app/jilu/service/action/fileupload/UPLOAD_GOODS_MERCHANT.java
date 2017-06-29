@@ -40,7 +40,7 @@ public class UPLOAD_GOODS_MERCHANT extends FileUploadAction{
 
 					//	如果sku字段不为空，放入updatelist
 					//	否则放入insertlist
-					if (row.size() > 10 && row.get(10).toString().length() > 0){
+					if (row.size() > 4 && row.get(3).toString().length() > 0){
 						updatelist.add(row);
 					}else{
 						insertlist.add(row);
@@ -58,7 +58,7 @@ public class UPLOAD_GOODS_MERCHANT extends FileUploadAction{
 					Map<String,Object> map = new HashMap<String,Object>();
 					map.put("list", updatelist);
 					map.put("memMerchant", memMerchant);
-					count += cfgGoodsMapper.batchUpdateByMerchant(updatelist) / 2;
+					count += cfgGoodsMapper.batchUpdateByMerchant(map) / 2;
 				}
 //				
 //				Map<String,Object> map = new HashMap<String,Object>();

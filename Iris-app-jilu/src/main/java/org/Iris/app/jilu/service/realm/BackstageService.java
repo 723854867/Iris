@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +30,6 @@ import org.Iris.app.jilu.storage.domain.BuyLabelLog;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.CmsBanner;
 import org.Iris.app.jilu.storage.domain.CmsVersion;
-import org.Iris.app.jilu.storage.domain.MemLabelBind;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
 import org.Iris.app.jilu.storage.domain.MemPayInfo;
 import org.Iris.app.jilu.storage.domain.SysPage;
@@ -358,8 +356,7 @@ public class BackstageService implements Beans{
 				row = (Row) sheet1.createRow(i);				
 
 				int j = 0;
-				//条形码（必须）	中文名称（必须）	规格（必须）	英文名称	分类	中文品牌	英文品牌	计量单位	重量	别名	sku	barcode	单价
-				
+				//条形码（必须）	中文名称（必须）	规格（必须）	产品唯一ID	英文名称	分类	中文品牌	英文品牌	计量单位	重量	别名	单价				
 				cell = row.createCell(j++);
 				cell.setCellValue(cfgGoods.getGoodsCode());
 
@@ -369,6 +366,9 @@ public class BackstageService implements Beans{
 				cell = row.createCell(j++);
 				cell.setCellValue(cfgGoods.getGoodsFormat());
 
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getGoodsId() );
+				
 				cell = row.createCell(j++);
 				cell.setCellValue(cfgGoods.getUsName());
 
@@ -389,9 +389,6 @@ public class BackstageService implements Beans{
 
 				cell = row.createCell(j++);
 				cell.setCellValue(cfgGoods.getAlias());
-
-				cell = row.createCell(j++);
-				cell.setCellValue(cfgGoods.getGoodsId() );
 
 				cell = row.createCell(j++);
 				cell.setCellValue(cfgGoods.getUnitPrice());

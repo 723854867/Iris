@@ -1,15 +1,27 @@
 package org.Iris.app.jilu.service.realm;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.Iris.app.jilu.common.AppConfig;
 import org.Iris.app.jilu.common.Beans;
+import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
+import org.Iris.app.jilu.common.bean.form.CfgGoodsListForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.model.AccountType;
@@ -24,11 +36,17 @@ import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.WebKeyGenerator;
 import org.Iris.app.jilu.web.JiLuCode;
 import org.Iris.app.jilu.web.JiLuParams;
+import org.Iris.app.jilu.web.session.IrisSession;
 import org.Iris.core.exception.IllegalConstException;
 import org.Iris.core.service.bean.Result;
 import org.Iris.core.service.locale.ICode;
 import org.Iris.util.common.KeyUtil;
 import org.Iris.util.lang.DateUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -228,6 +246,153 @@ public class MerchantWebService implements Beans{
 			redisOperate.hmset(key, goods);
 		return goods;
 	}
+	
+	
+	public String getGoodsListFile(IrisSession session, String[] strTitles, String strDes, MemMerchant memMerchant){
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("start", 0);
+		map.put("pageSize", 65535);
+		map.put("zhName", "");
+		map.put("alias", "");
+		map.put("goodsCode", "");
+		map.put("source", memMerchant.getMerchantId());
+		long count = cfgGoodsMapper.getCount(map);
+		if(count == 0)
+			return null;
+		List<CfgGoods> list = cfgGoodsMapper.getGoodsList(map);
+
+		HttpServletResponse response = session.getResponse();
+	    
+		String filePath= session.getRequest().getSession().getServletContext().getRealPath("/WEB-INF/download/产品列表.xlsx");
+		File f = new File(filePath);
+	    if (!f.exists()) {
+	    	try {
+				response.sendError(404, "File not found!");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	      return null;
+	    }
+	    
+	    
+		//if(ret.length() == 0)
+	    if (list == null)
+		{
+			filePath = session.getRequest().getSession().getServletContext().getRealPath("/WEB-INF/download/产品模板.xlsx");
+			f = new File(filePath);
+			if (!f.exists()) {
+				try {
+					response.sendError(404, "File not found!");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+		
+		//	正常输出
+		try {
+			
+			Workbook wb = new XSSFWorkbook();	//	xlsx
+			// 创建sheet对象
+			Sheet sheet1 = (Sheet) wb.createSheet("Sheet1");
+			// 循环写入行数据
+			Row row;
+			Cell cell;
+			
+			//	第一行标题
+			row = (Row) sheet1.createRow(0);
+			for (int i = 0; i < strTitles.length; i++){
+				cell = row.createCell(i);
+				cell.setCellValue(strTitles[i]);
+			}
+			
+			//	第二行备注
+			row = (Row) sheet1.createRow(1);
+			cell = row.createCell(0);
+			cell.setCellValue(strDes);
+			
+			//	第三行开始是数据
+			int i = 2;
+			for (CfgGoods cfgGoods :list) {
+				row = (Row) sheet1.createRow(i);				
+
+				int j = 0;
+				//条形码（必须）	中文名称（必须）	规格（必须）	产品唯一ID	英文名称	分类	中文品牌	英文品牌	计量单位	重量	别名	单价
+				
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getGoodsCode());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getZhName());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getGoodsFormat());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getGoodsId() );
+				
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getUsName());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getClassification());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getZhBrand());
+				
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getUsBrand());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getUnit());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getWeight());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getAlias());
+
+				cell = row.createCell(j++);
+				cell.setCellValue(cfgGoods.getUnitPrice());
+				
+				i++;
+			}
+			
+			FileOutputStream stream = new FileOutputStream(filePath);
+			wb.write(stream);
+			stream.close();
+			wb.close();
+			
+			BufferedInputStream br = new BufferedInputStream(new FileInputStream(f));
+		    byte[] buf = new byte[1024];
+		    int len = 0;
+		    
+		    response.setContentType(session.getRequest().getSession().getServletContext().getMimeType(f.getName()));
+			response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(f.getName(), "UTF-8"));
+			
+		    OutputStream out = response.getOutputStream();
+			while ((len = br.read(buf)) > 0)
+				out.write(buf, 0, len);
+			
+			//out.flush();
+    		//out.close();
+			br.close();
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    return null;
+	}
+	
+	
 	
 	
 	/**

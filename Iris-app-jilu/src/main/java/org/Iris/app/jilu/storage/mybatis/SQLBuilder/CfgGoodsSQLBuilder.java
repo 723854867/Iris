@@ -40,30 +40,26 @@ public class CfgGoodsSQLBuilder {
 		ArrayList<ArrayList<Object>> rowList = map.get("collection");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
-				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,unit_price,sku,barcode,source,merchant_name,created,updated) values ");
 		for (int i = 0;i<rowList.size();i++) {
 			stringBuilder.append("(");
-			for(int j = 0;j<13;j++){
+			
+			for(int j = 0;j<14;j++){
 				int idx = j;
-				
-				//	20170625 excel表格去掉barcode
-				if (j == 11)
-					idx = 13;
-				else if (j == 12)
-					idx = 11;
-				
+				if (j == 3)	//	该列为id，略过
+					continue;
+								
 				if(idx < rowList.get(i).size()){
 					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
-					if(idx==8)//weight
+					if(idx==9)//weight
 						stringBuilder.append("0,");
-					else if(idx==12)//unit_price
+					else if(idx==11)//unit_price
 						stringBuilder.append("1,");
 					else
 						stringBuilder.append("'',");
 				}
-					
 			}
 			stringBuilder.append("0,'公共库',"+time+","+time+"),");
 		}
@@ -79,25 +75,19 @@ public class CfgGoodsSQLBuilder {
 		
 		
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
-				+ " (goods_id, goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+				+ " (goods_code,zh_name,goods_format,goods_id,us_name,classification,zh_brand,us_brand,unit,weight,alias,unit_price,sku,barcode,source,merchant_name,created,updated) values ");
 		for (int i = 0;i<rowList.size();i++) {
-			stringBuilder.append("("+rowList.get(i).get(10)+",");
-			for(int j = 0;j<13;j++){
+			stringBuilder.append("(");
+			for(int j = 0;j<14;j++){
 				int idx = j;
-				
-				//	20170625 excel表格去掉barcode
-				if (j == 11)
-					idx = 13;
-				else if (j == 12)
-					idx = 11;
 				
 				if(idx < rowList.get(i).size()){
 					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
-					if(idx==8)//weight
+					if(idx==9)//weight
 						stringBuilder.append("0,");
-					else if(idx==12)//unit_price
+					else if(idx==11)//unit_price
 						stringBuilder.append("1,");
 					else
 						stringBuilder.append("'',");
@@ -118,9 +108,9 @@ public class CfgGoodsSQLBuilder {
 								"unit=values(unit),"+
 								"weight=values(weight),"+
 								"alias=values(alias),"+
+								"unit_price=values(unit_price),"+
 								"sku=values(sku),"+
 								"barcode=values(barcode),"+
-								"unit_price=values(unit_price),"+
 								"source=values(source),"+
 								"merchant_name=values(merchant_name),"+
 								"created=values(created),"+
@@ -137,26 +127,22 @@ public class CfgGoodsSQLBuilder {
 		MemMerchant memMerchant = (MemMerchant)map.get("memMerchant");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
-				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+				+ " (goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,unit_price,sku,barcode,source,merchant_name,created,updated) values ");
 		for (int i = 0;i<rowList.size();i++) {
 			
 			stringBuilder.append("(");
-			for(int j = 0;j<13;j++){
+			for(int j = 0;j<14;j++){
 				int idx = j;
-				
-				//	20170625 excel表格去掉barcode
-				if (j == 11)
-					idx = 13;
-				else if (j == 12)
-					idx = 11;
+				if (j == 3)	//	该列为id，略过
+					continue;
 				
 				if(idx < rowList.get(i).size()){
 					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
-					if(j==8)//weight
+					if(j==9)//weight
 						stringBuilder.append("0,");
-					else if(j==12)//unit_price
+					else if(j==11)//unit_price
 						stringBuilder.append("1,");
 					else
 						stringBuilder.append("'',");
@@ -177,26 +163,20 @@ public class CfgGoodsSQLBuilder {
 		MemMerchant memMerchant = (MemMerchant)map.get("memMerchant");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("insert into " + Table.CFG_GOODS.mark()
-				+ " (goods_id, goods_code,zh_name,goods_format,us_name,classification,zh_brand,us_brand,unit,weight,alias,sku,barcode,unit_price,source,merchant_name,created,updated) values ");
+				+ " (goods_code,zh_name,goods_format,goods_id,us_name,classification,zh_brand,us_brand,unit,weight,alias,unit_price,sku,barcode,source,merchant_name,created,updated) values ");
 		for (int i = 0; i<rowList.size(); i++) {
 			
 			stringBuilder.append("(");
-			for(int j = 0;j<13;j++){
+			for(int j = 0;j<14;j++){
 				int idx = j;
-				
-				//	20170625 excel表格去掉barcode
-				if (j == 11)
-					idx = 13;
-				else if (j == 12)
-					idx = 11;
 				
 				if(idx < rowList.get(i).size()){
 					stringBuilder.append("'"+rowList.get(i).get(idx)+"',");
 				}
 				else{
-					if(j==8)//weight
+					if(j==9)//weight
 						stringBuilder.append("0,");
-					else if(j==12)//unit_price
+					else if(j==11)//unit_price
 						stringBuilder.append("1,");
 					else
 						stringBuilder.append("'',");
@@ -217,9 +197,9 @@ public class CfgGoodsSQLBuilder {
 				"unit=values(unit),"+
 				"weight=values(weight),"+
 				"alias=values(alias),"+
+				"unit_price=values(unit_price),"+
 				"sku=values(sku),"+
 				"barcode=values(barcode),"+
-				"unit_price=values(unit_price),"+
 				"source=values(source),"+
 				"merchant_name=values(merchant_name),"+
 				"created=values(created),"+
