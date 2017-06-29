@@ -17,6 +17,7 @@ function reqMenu(){
 function printMenu(menulist){
 	var htmlMenu="";
 	htmlMenu=htmlMenu+"<li><a href='#'> <i class='glyphicon glyphicon-home'></i> 首页</a></li>";
+	htmlMenu=htmlMenu+"<li><a href='https://www.dataeye.com/store/pages/main.jsp?appID=C652EBDB2F91903ED0149E1008B5F5DE9#/overview/realtime' target='_blank'> <i class='glyphicon glyphicon-th-large'></i> DataEye统计</a></li>";
 	$.each( menulist, function(index1, content1)
 	{ 
 		if(content1.type==0&&content1.permissionId!=1)

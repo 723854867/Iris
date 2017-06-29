@@ -22,26 +22,86 @@
 <link href="../css/dashboard.css" rel="stylesheet" />
 <link href="../css/menu.css" rel="stylesheet" />
 <link href="../css/signin.css" rel="stylesheet" />
+<link href="../css/style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body {
+	background-color: #FFF;
+}
+</style>
+<meta charset="utf-8">
 </head>
 <body>
-	<form class="form-signin" method="post">
-		<h2 class="form-signin-heading">后台登陆</h2>
-		<label for="type" class="sr-only">选择登录类型</label>
-		<select id="type" class="form-control">
-			<option value="0">手机</option>
-			<option value="1">邮箱</option>
-		</select>
-		<label for="account" class="sr-only">帐号</label> <input
-			type="text" id="account" name="account" class="form-control"
-			placeholder="输入帐号" required="required"> 
-		<label for="captcha" class="sr-only">验证码</label> <input type="text" id="captcha"
-			name="captcha" class="form-control" placeholder="输入验证码"
-			required="required"><a href="#" onclick="getCaptcha()">获取验证码</a>
-		<button class="btn btn-lg btn-primary btn-block" type="button"
-			id="login">登陆</button>
-	</form>
 
-	<script type="text/javascript">
+<table width="1024"  border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><table width="100%"  border="0" cellpadding="0" cellspacing="0" class="guildbar">
+          <tr>
+            <td valign="top" width="772">&nbsp;&nbsp;&nbsp;&nbsp;<img src="image/LOGO.png" width="102" height="41"></td>
+            <td width="252" align="right"><ul class="guild" id="nav">
+              <li id="nav_homepage"><a href="#">&nbsp;&nbsp;首页&nbsp;&nbsp;</a></li>
+              <li id="nav_center"><a href="#">&nbsp;&nbsp;手机&nbsp;&nbsp;</a></li>
+              <li id="nav_about"><a href="#">&nbsp;&nbsp;关于&nbsp;&nbsp;</a></li>
+            </ul></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td valign="top" class="mindexbar">
+    <table width="300" border="0" align="right">
+      <tr>
+        <td width="368" height="23"></td>
+        <td width="22">&nbsp;</td>
+        </tr>
+      <tr>
+        <td><table width="100%" border="0" class="loginframe">
+          <tr>
+            <td height="50" colspan="10" valign="middle" class="product_title">&nbsp;&nbsp;&nbsp;登陆吉鹿商户后台</td>
+          </tr>
+          <tr>
+          	<td width="30"></td>
+            <form class="form-signin" method="post">
+              <td align="right" bgcolor="#FFFFFF">
+                <label for="type3" class="sr-only">选择登录类型</label>
+                <select name="type" class="form-control" id="type3">
+                  <option value="0">手机</option>
+                  <option value="1">邮箱</option>
+                </select>
+                <br>
+<label for="account" class="sr-only">帐号</label>
+                <input
+			type="text" id="account" name="account" class="form-control"
+			placeholder="输入帐号" required>
+                <label for="captcha" class="sr-only">验证码</label>
+                <br>
+                <input type="text" id="captcha"
+			name="captcha" class="form-control" placeholder="输入验证码"
+			required="required">
+                <a href="#" onclick="getCaptcha()"><br>
+                  获取验证码</a><br><br>
+<button class="btn btn-lg btn-primary btn-block" type="button"
+			id="login"> 登陆</button>
+                <br></td>
+            </form>
+          	<td width="30"></td>
+          </tr>
+          <tr>
+            <td colspan="10">&nbsp;</td>
+          </tr>
+        </table></td>
+        <td>&nbsp;</td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr >
+    <td height="40"><div align="center" class="font12_gray">Copyright Reserved 2011© www.......net 浙ICP备000000号-1</div></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<script type="text/javascript">
 		window.onload = function() {
 			if (!window.applicationCache) {
 				document.write("你的浏览器版本太低，请升级你的浏览器，至少IE9+");
