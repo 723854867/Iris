@@ -23,6 +23,7 @@ import org.Iris.app.jilu.common.Beans;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsForm;
 import org.Iris.app.jilu.common.bean.form.CfgGoodsListForm;
 import org.Iris.app.jilu.common.bean.form.GoodsPagerForm;
+import org.Iris.app.jilu.common.bean.form.OrderForm;
 import org.Iris.app.jilu.common.bean.form.Pager;
 import org.Iris.app.jilu.common.model.AccountType;
 import org.Iris.app.jilu.common.model.Env;
@@ -31,6 +32,7 @@ import org.Iris.app.jilu.service.realm.merchant.Merchant;
 import org.Iris.app.jilu.storage.domain.CfgGoods;
 import org.Iris.app.jilu.storage.domain.MemCustomer;
 import org.Iris.app.jilu.storage.domain.MemMerchant;
+import org.Iris.app.jilu.storage.domain.MemOrder;
 import org.Iris.app.jilu.storage.domain.SysPage;
 import org.Iris.app.jilu.storage.redis.CommonKeyGenerator;
 import org.Iris.app.jilu.storage.redis.WebKeyGenerator;
@@ -48,6 +50,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class MerchantWebService implements Beans{
@@ -391,7 +394,34 @@ public class MerchantWebService implements Beans{
 		
 	    return null;
 	}
-	
+
+	/**
+	 * 获取订单
+	 * @param goodsId
+	 * @return
+	 */
+	public String getOrderList(int page, int pageSize, int type, MemMerchant merchant) {
+		long count=0;
+		
+		List<MemOrder> list = new ArrayList<>();
+		if(type == 0){
+			count = memOrderMapper.getOrderCountByMerchantId(merchant.getMerchantId());
+			if (count == 0)
+				return Result.jsonSuccess(Pager.EMPTY);
+			list = memOrderMapper.getOrderListByMerchantId(merchant.getMerchantId(),
+					(page - 1) * pageSize, pageSize);
+		}else{
+			count = memOrderMapper.getWaitOrderCountByMerchantId(merchant.getMerchantId());
+			if (count == 0)
+				return Result.jsonSuccess(Pager.EMPTY);
+			list = memOrderMapper.getWaitOrderListByMerchantId(merchant.getMerchantId(),
+					(page - 1) * pageSize, pageSize);
+		}
+		List<OrderForm> orderForms = new ArrayList<OrderForm>();
+		for (MemOrder order : list)
+			orderForms.add(new OrderForm(order));
+		return Result.jsonSuccess(new Pager<OrderForm>(count, orderForms));
+	}
 	
 	
 	
