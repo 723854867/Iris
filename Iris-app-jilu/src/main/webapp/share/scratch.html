@@ -1,5 +1,103 @@
 ﻿<!doctype html>
 <html class="no-js" lang="" xmlns="http://www.w3.org/1999/html">
+<style type="text/css">
+{ 
+ margin:0px; 
+ padding:0px; 
+} 
+.zhezhao 
+{ 
+ width:100%; 
+ height:100%; 
+ background-color:#000; 
+ filter:alpha(opacity=50); 
+ -moz-opacity:0.5; 
+ opacity:0.5; 
+ position:absolute; 
+ left:0px; 
+ top:0px; 
+ display:none; 
+ z-index:1000; 
+} 
+	/*a  upload */
+.a-upload {
+	height: 30px;
+	line-height: 20px;
+	position: relative;
+	cursor: pointer;
+	color: #FFF;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+	display: inline-block;
+    *display: inline;
+    *zoom: 1
+; 					background-color: #00CC00;
+	width: 90%;
+	padding-top: 4px;
+	padding-right: 10px;
+	padding-bottom: 4px;
+	padding-left: 10px;
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    color:blue;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+	color: #FFF;
+	border-color: #ccc;
+	text-decoration: none;
+	background-color: #090;
+}
+
+.a-upload:disabled {
+	color: #FFF;
+	border-color: #ccc;
+	text-decoration: none;
+	background-color: #999;
+}
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #CCC;
+}
+</style>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -8,23 +106,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link href="../css/style.css" rel="stylesheet" type="text/css">
     <!-- Place favicon.ico in the root directory -->
 </head>
-<br>
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
 <!-- Add your site or application content here -->
-<p>请选择身份证正面</p>
-<input id="upload_image0" type="file" name="image" accept="image/*;video/*;capture=camcorder" /></br></br>
-<img id="showImg0" width="300" height="300"/></br></br>
-<button id="upbtn1" disabled = false>点击上传正面</button></br></br>
-<p>请选择身份证反面</p>
-<input id="upload_image1" type="file" name="image" accept="image/*;video/*;capture=camcorder" /></br></br>
-<img id="showImg1" width="300" height="300"/></br></br>
-<button id="upbtn2" disabled = false>点击上传反面</button>
-
+<body topmargin="0">
+<p class="uploadPHeader">请选择身份证正面</p>
+<p align="center" class="uploadPView">
+<label id="realBtn">
+	<input id="upload_image0" type="file" name="image" accept="image/*;video/*;capture=camcorder" style="left:-9999px;position:absolute;">
+    <img src="image/defaultid.png" name="showImg0" id="showImg0" style="display:block;width:85%;"/>
+</label>
+<button id="upbtn1" disabled = false class="a-upload">点击上传正面</button></br>
+</p>
+<p class="uploadPHeader">请选择身份证反面</p>
+<p align="center" class="uploadPView">
+<label id="realBtn">
+	<input id="upload_image1" type="file" name="image" accept="image/*;video/*;capture=camcorder" style="left:-9999px;position:absolute;">
+     <img src="image/defaultid.png" name="showImg1" id="showImg1" style="display:block;width:85%;"/>
+</label>
+<button id="upbtn2" disabled = false class="a-upload">点击上传反面</button>
+</p>
+<p class="uploadPHeader">温馨提示：<br>
+为确保您购物的顺利进行，请上传真实有效、清晰的证件照图片</p>
 <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
 <!--<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>-->
 <script src="http://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
