@@ -94,25 +94,7 @@
 				<div class="form-inline form-group">
 						<label for="zhName_">订单号/快递单号：</label> <input class="form-control"
 							id="zhName_" placeholder="输入订单号/快递单号进行查询">
-						<!--
-						<label for="begindate">注册时间：</label>
-						<div class="input-group date form_date" data-date=""
-							data-date-format="yyyy-mm-dd" data-link-field="begindate"
-							data-link-format="yyyy-mm-dd">
-							<input class="form-control" size="16" type="text" value=""
-								readonly> <span class="input-group-addon"><span
-								class="glyphicon glyphicon-calendar"></span></span>
-						</div>
-						<input type="hidden" id="begindate" value="" />
-						<div class="input-group date form_date" data-date=""
-							data-date-format="yyyy-mm-dd" data-link-field="enddate"
-							data-link-format="yyyy-mm-dd">
-							<input class="form-control" size="16" type="text" value=""
-								readonly> <span class="input-group-addon"><span
-								class="glyphicon glyphicon-calendar"></span></span>
-						</div>
-						<input type="hidden" id="enddate" value="" />
-						-->
+						
 						<button type="button" class="btn btn-default" onclick="search()">
 							<span class="glyphicon glyphicon-search"></span> 查询
 						</button>
@@ -152,7 +134,7 @@
         $.ajax({
             type: 'POST',
             url: '/jilu/mweb',
-            data: { 'page': page, 'pageSize': pageSize, 'action': 'order_list',
+            data: { 'page': page, 'pageSize': 20, 'action': 'order_list',
             	'zhName':$("#zhName_").val()},
             dataType: 'json',
             beforeSend: function () {
@@ -172,12 +154,10 @@
             	curPage = page; //当前页
                 totalPage = Div(total, pageSize);
                 $.each(list, function (index, array) { //遍历json数据列
-               		tr +="<tr><td>" + array['goodsCode'] + 
-               		"</td><td>" + array['zhName'] + "</td><td>" + array['usName'] + "</td><td>" 
-               		+ array['goodsFormat'] + "</td><td>" + array['classification'] + "</td><td>" 
-               		+ array['alias'] + "</td><td>" + array['unitPrice'] + "</td><td>" + array['merchantName'] + "</td><td>" + array['updateTime'] + "</td>"+
-               		"<td><a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='info("+array['goodsId']+")'>编辑</a>"+
-               		"&nbsp;&nbsp;&nbsp;&nbsp;+
+               		tr +="<tr><td>" + array['orderId'] + 
+               		"</td><td>" + array['customerName'] + "</td><td>" + array['status'] + "</td><td>" 
+               		+ array['updated'] + "</td><td>" + "<a href='javascript:void(0)' class='btn btn-info btn-xs' onclick='info("+array['orderId']+")'>详情</a>"+
+               		"&nbsp;&nbsp;&nbsp;&nbsp;"+
                		"</td></tr>";
                 });
                 
@@ -196,41 +176,6 @@
             }
         });
     }
-	
-	info = function(goodsId){
-		$.ajax({
-			type:"post",
-			url: '/jilu/mweb',
-			data:{'action': 'goods_info','goodsId':goodsId},
-			dataTyp:'json',
-			success: function (json) {
-            	if(json.code=="0"){
-            		var goods = json.data;
-            		$('#goodsId').val(goodsId);
-            		$('#zhName').val(goods.zhName);
-            		$('#goodsCode').val(goods.goodsCode);
-            		$('#goodsFormat').val(goods.goodsFormat);
-            		$('#usName').val(goods.usName);
-            		$('#classification').val(goods.classification);
-            		$('#zhBrand').val(goods.zhBrand);
-            		$('#usBrand').val(goods.usBrand);
-            		$('#unit').val(goods.unit);
-            		$('#weight').val(goods.weight);
-            		$('#alias').val(goods.alias);
-            		$('#sku').val(goods.sku);
-            		$('#barcode').val(goods.barcode);
-            		$('#unitPrice').val(goods.unitPrice);
-            	}
-            	else{
-            		alert(json.desc);
-            	}
-	        },
-            error: function () {
-                alert("数据加载失败");
-            }
-		});
-		$('#modal').modal('show');
-	}
 	
 
 </script>
